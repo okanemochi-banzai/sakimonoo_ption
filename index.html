@@ -260,63 +260,79 @@ a{color:inherit;text-decoration:none}
 <div class="forecast"><div style="font-size:11px;color:#8892b0;margin-bottom:4px">SQ（3/13）短期予想レンジ</div><div class="forecast-range">57,500 <span style="color:#6366f1;font-size:16px">〜</span> 61,000</div></div>
 </div>
 <div id="outlook-cards"></div>
+<div id="cashflow-card"></div>
 </div>
 
 <!-- TAB 5: 参加者分析 -->
 <div id="t5" class="tab-content">
 <div class="sec-title"><div class="sec-num">⑨</div><span class="sec-text">参加者別建玉分析（2/20時点・3月限）</span></div>
 
-<!-- 海外 vs 国内 サマリー -->
+<!-- 海外 vs 国内 サマリー（先物+OP統合） -->
 <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px">
 <div class="card" style="flex:1 1 300px;padding:20px">
 <div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:14px">🌏 海外勢</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-<div style="width:50px;font-size:11px;color:#f87171;text-align:right;font-weight:700;flex-shrink:0">PUT</div>
-<div style="flex:1;display:flex;justify-content:flex-start;height:26px"><div style="width:35%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:90px;flex-shrink:0">+767 買い超</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<div style="width:55px;font-size:11px;color:#8892b0;text-align:right;font-weight:700;flex-shrink:0">先物</div>
+<div style="flex:1;display:flex;justify-content:flex-end;height:22px"><div style="width:30%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
+<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:100px;flex-shrink:0">-7,088 売り超</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<div style="width:55px;font-size:11px;color:#f87171;text-align:right;font-weight:700;flex-shrink:0">PUT</div>
+<div style="flex:1;display:flex;justify-content:flex-start;height:22px"><div style="width:25%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
+<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:100px;flex-shrink:0">+767 買い超</div>
 </div>
 <div style="display:flex;align-items:center;gap:8px">
-<div style="width:50px;font-size:11px;color:#60a5fa;text-align:right;font-weight:700;flex-shrink:0">CALL</div>
-<div style="flex:1;display:flex;justify-content:flex-end;height:26px"><div style="width:55%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:90px;flex-shrink:0">-1,244 売り超</div>
+<div style="width:55px;font-size:11px;color:#60a5fa;text-align:right;font-weight:700;flex-shrink:0">CALL</div>
+<div style="flex:1;display:flex;justify-content:flex-end;height:22px"><div style="width:45%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
+<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:100px;flex-shrink:0">-1,244 売り超</div>
 </div>
-<div style="margin-top:12px;font-size:11px;color:#8892b0;line-height:1.6">プット買い＋コール売り＝<span style="color:#fbbf24;font-weight:700">プロテクティブ・カラー</span>（下値ヘッジ＋上値の蓋）</div>
+<div style="margin-top:12px;font-size:11px;color:#8892b0;line-height:1.6">→ <span style="color:#fbbf24;font-weight:700">プロテクティブ・カラー</span>（先物ショート＋P買い＋C売り＝守り）</div>
 </div>
 <div class="card" style="flex:1 1 300px;padding:20px">
 <div style="font-size:13px;font-weight:700;color:#f87171;margin-bottom:14px">🏠 国内勢</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-<div style="width:50px;font-size:11px;color:#f87171;text-align:right;font-weight:700;flex-shrink:0">PUT</div>
-<div style="flex:1;display:flex;justify-content:flex-end;height:26px"><div style="width:35%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:90px;flex-shrink:0">-762 売り超</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<div style="width:55px;font-size:11px;color:#8892b0;text-align:right;font-weight:700;flex-shrink:0">先物</div>
+<div style="flex:1;display:flex;justify-content:flex-start;height:22px"><div style="width:30%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
+<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:100px;flex-shrink:0">+6,799 買い超</div>
+</div>
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+<div style="width:55px;font-size:11px;color:#f87171;text-align:right;font-weight:700;flex-shrink:0">PUT</div>
+<div style="flex:1;display:flex;justify-content:flex-end;height:22px"><div style="width:25%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
+<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:100px;flex-shrink:0">-762 売り超</div>
 </div>
 <div style="display:flex;align-items:center;gap:8px">
-<div style="width:50px;font-size:11px;color:#60a5fa;text-align:right;font-weight:700;flex-shrink:0">CALL</div>
-<div style="flex:1;display:flex;justify-content:flex-start;height:26px"><div style="width:55%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:90px;flex-shrink:0">+1,260 買い超</div>
+<div style="width:55px;font-size:11px;color:#60a5fa;text-align:right;font-weight:700;flex-shrink:0">CALL</div>
+<div style="flex:1;display:flex;justify-content:flex-start;height:22px"><div style="width:45%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
+<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:100px;flex-shrink:0">+1,260 買い超</div>
 </div>
-<div style="margin-top:12px;font-size:11px;color:#8892b0;line-height:1.6">プット売り＋コール買い＝<span style="color:#fbbf24;font-weight:700">リスクテイク</span>（上値追い＋プレミアム収入）</div>
+<div style="margin-top:12px;font-size:11px;color:#8892b0;line-height:1.6">→ <span style="color:#fbbf24;font-weight:700">リスクテイク</span>（先物ロング＋P売り＋C買い＝攻め）</div>
 </div>
+</div>
+
+<!-- 先物ポジション ランキング -->
+<div class="sec-title"><div class="sec-num" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">📈</div><span class="sec-text">先物ポジション ランキング</span></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px" id="futures-rankings"></div>
+
+<!-- 統合プロファイル -->
+<div class="sec-title"><div class="sec-num" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🏆</div><span class="sec-text">統合プロファイル（先物×オプション）</span></div>
+<div class="card" style="overflow:hidden;margin-bottom:16px">
+<table class="tbl">
+<thead><tr>
+<th style="width:30px"></th>
+<th>参加者</th>
+<th style="text-align:right">先物Net</th>
+<th style="text-align:right">P Net</th>
+<th style="text-align:right">C Net</th>
+<th style="text-align:center">推定戦略</th>
+</tr></thead>
+<tbody id="participant-table"></tbody>
+</table>
 </div>
 
 <!-- 構造の解説 -->
 <div class="card" style="padding:16px 20px;margin-bottom:24px;border-left:3px solid #fbbf24">
 <div style="font-size:12px;color:#fbbf24;font-weight:700;margin-bottom:6px">💡 ポジション構造の読み方</div>
-<div style="font-size:12px;color:#c9d1d9;line-height:1.8">海外勢は「プット買い＋コール売り」＝高値圏での<strong style="color:#60a5fa">プロテクティブ・カラー戦略</strong>。下値リスクをヘッジしながら上値ではプレミアムを受け取る守りの姿勢。一方、国内勢は「プット売り＋コール買い」＝<strong style="color:#f87171">強気のリスクテイク</strong>。海外が売ったプットを国内が引き受け、上値追いのコールを積む対照的な構図。</div>
-</div>
-
-<!-- Top参加者テーブル -->
-<div class="sec-title" style="margin-top:8px"><div class="sec-num" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🏆</div><span class="sec-text">主要参加者ネットポジション</span></div>
-<div class="card" style="overflow:hidden">
-<table class="tbl">
-<thead><tr>
-<th style="width:30px"></th>
-<th>参加者</th>
-<th style="text-align:right">プットNet</th>
-<th style="text-align:right">コールNet</th>
-<th style="text-align:center">推定戦略</th>
-</tr></thead>
-<tbody id="participant-table"></tbody>
-</table>
+<div style="font-size:12px;color:#c9d1d9;line-height:1.8">海外勢は先物で-7,088枚の売り超に加え、オプションで「P買い＋C売り」＝高値圏での<strong style="color:#60a5fa">プロテクティブ・カラー戦略</strong>。ただし個社別ではABNクリアリンが先物+8,554枚のロングでカバードコールを組むなど、海外勢内でも方向が割れている。国内勢は先物ロング＋「P売り＋C買い」＝<strong style="color:#f87171">攻めのリスクテイク</strong>。特に野村が先物+16,518枚で最大のロングポジション。</div>
 </div>
 </div>
 
@@ -518,37 +534,91 @@ function buildOIChange() {
 
 function buildParticipantTable() {
   var data = [
-    {name:"ＡＢＮクリアリン証券",cat:"海外",pn:-193,cn:-1290,strategy:"カラー売り（上値の蓋）"},
-    {name:"モルガンＭＵＦＧ証券",cat:"海外",pn:926,cn:-348,strategy:"プロテクティブ・プット"},
-    {name:"野村証券",cat:"国内",pn:-500,cn:500,strategy:"リバーサル（強気転換）"},
-    {name:"シティグループ証券",cat:"海外",pn:-480,cn:-350,strategy:"ダブル売り（プレミアム収入）"},
-    {name:"ビーオブエー証券",cat:"海外",pn:0,cn:655,strategy:"コール買い（上値追い）"},
-    {name:"大和証券",cat:"国内",pn:-275,cn:365,strategy:"リバーサル（強気転換）"},
-    {name:"ＪＰモルガン証券",cat:"海外",pn:455,cn:130,strategy:"プット買い＋コール買い（ロングボラ）"},
-    {name:"ＵＢＳ証券",cat:"海外",pn:29,cn:505,strategy:"コール買い（上値追い）"},
-    {name:"みずほ証券",cat:"国内",pn:10,cn:415,strategy:"コール買い（上値追い）"},
-    {name:"ゴールドマン証券",cat:"海外",pn:-6,cn:-224,strategy:"コール売り（上値の蓋）"},
-    {name:"ＢＮＰパリバ証券",cat:"海外",pn:99,cn:-104,strategy:"カラー（ヘッジ）"},
-    {name:"バークレイズ証券",cat:"海外",pn:-28,cn:-173,strategy:"コール売り（上値の蓋）"}
+    {name:"野村証券",cat:"国内",fn:16518,pn:-500,cn:500,strategy:"先物ロング＋リバーサル（最強気）"},
+    {name:"ＡＢＮクリアリン証券",cat:"海外",fn:8554,pn:-193,cn:-1290,strategy:"カバードコール（利確ゾーン設定）"},
+    {name:"ＨＳＢＣ証券",cat:"海外",fn:-33988,pn:0,cn:0,strategy:"先物ショート（最大の売り手）"},
+    {name:"モルガンＭＵＦＧ証券",cat:"海外",fn:-13311,pn:926,cn:-348,strategy:"ベア＋プロテクティブ・プット"},
+    {name:"ＪＰモルガン証券",cat:"海外",fn:9183,pn:455,cn:130,strategy:"先物ロング＋ロングボラ"},
+    {name:"三菱ＵＦＪ証券",cat:"国内",fn:-8102,pn:-3,cn:-10,strategy:"先物ショート"},
+    {name:"みずほ証券",cat:"国内",fn:-7694,pn:10,cn:415,strategy:"先物ショート＋コール買い"},
+    {name:"バークレイズ証券",cat:"海外",fn:7043,pn:-28,cn:-173,strategy:"先物ロング＋コール売り"},
+    {name:"大和証券",cat:"国内",fn:269,pn:-275,cn:365,strategy:"リバーサル（強気転換）"},
+    {name:"ソシエテＧ証券",cat:"海外",fn:5400,pn:4,cn:-46,strategy:"先物ロング"},
+    {name:"ゴールドマン証券",cat:"海外",fn:-3081,pn:-6,cn:-224,strategy:"ベア（全方位弱気）"},
+    {name:"ビーオブエー証券",cat:"海外",fn:1250,pn:0,cn:655,strategy:"先物ロング＋コール買い（強気）"}
   ];
   var html = '';
   data.forEach(function(d, i) {
     var catColor = d.cat === '海外' ? '#60a5fa' : '#f87171';
     var catIcon = d.cat === '海外' ? '🌏' : '🏠';
+    var fColor = d.fn >= 0 ? '#4ade80' : '#f87171';
     var pColor = d.pn >= 0 ? '#4ade80' : '#f87171';
     var cColor = d.cn >= 0 ? '#4ade80' : '#f87171';
-    var pSign = d.pn >= 0 ? '+' : '';
-    var cSign = d.cn >= 0 ? '+' : '';
-    var bgColor = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,.02)';
-    html += '<tr style="border-bottom:1px solid #1e1e3a;background:' + bgColor + '">';
-    html += '<td style="padding:8px 8px;text-align:center;font-size:14px">' + catIcon + '</td>';
-    html += '<td style="padding:8px 12px;color:#e6f1ff;font-weight:500">' + d.name + '<span style="margin-left:6px;font-size:9px;color:' + catColor + ';border:1px solid ' + catColor + '40;border-radius:3px;padding:1px 5px">' + d.cat + '</span></td>';
-    html += '<td style="padding:8px 12px;text-align:right;font-family:var(--mono);font-weight:700;color:' + pColor + '">' + pSign + d.pn.toLocaleString() + '</td>';
-    html += '<td style="padding:8px 12px;text-align:right;font-family:var(--mono);font-weight:700;color:' + cColor + '">' + cSign + d.cn.toLocaleString() + '</td>';
-    html += '<td style="padding:8px 12px;text-align:center;font-size:10px;color:#8892b0">' + d.strategy + '</td>';
+    var fs = function(n){return(n>=0?'+':'')+n.toLocaleString()};
+    var bg = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,.02)';
+    html += '<tr style="border-bottom:1px solid #1e1e3a;background:' + bg + '">';
+    html += '<td style="padding:8px 6px;text-align:center;font-size:14px">' + catIcon + '</td>';
+    html += '<td style="padding:8px 10px;color:#e6f1ff;font-weight:500;font-size:12px">' + d.name + '</td>';
+    html += '<td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-weight:700;color:' + fColor + ';font-size:11px">' + fs(d.fn) + '</td>';
+    html += '<td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-weight:700;color:' + pColor + ';font-size:11px">' + fs(d.pn) + '</td>';
+    html += '<td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-weight:700;color:' + cColor + ';font-size:11px">' + fs(d.cn) + '</td>';
+    html += '<td style="padding:8px 10px;text-align:center;font-size:10px;color:#8892b0">' + d.strategy + '</td>';
     html += '</tr>';
   });
   document.getElementById('participant-table').innerHTML = html;
+}
+
+function buildFuturesRankings() {
+  var rankings = [
+    {title:"N225ラージ 売超",data:[["ＨＳＢＣ",33988],["モルガンMUFG",13311],["三菱UFJ",8102],["みずほ",7694],["ゴールドマン",3081]],color:"#f87171"},
+    {title:"N225ラージ 買超",data:[["野村",16518],["ＪＰモルガン",9183],["ＡＢＮクリアリン",8554],["バークレイズ",7043],["ソシエテＧ",5400]],color:"#4ade80"},
+    {title:"TOPIX 売超",data:[["ゴールドマン",48635],["ＢＮＰパリバ",21618],["三菱UFJ",17086],["ＳＭＢＣ日興",14493],["みずほ",13254]],color:"#f87171"},
+    {title:"TOPIX 買超",data:[["ビーオブエー",28686],["モルガンMUFG",27444],["バークレイズ",24650],["シティ",22211],["ＪＰモルガン",22139]],color:"#4ade80"}
+  ];
+  var html = '';
+  rankings.forEach(function(r) {
+    var max = r.data[0][1];
+    html += '<div class="card" style="flex:1 1 240px;min-width:240px;padding:14px 16px">';
+    html += '<div style="font-size:11px;font-weight:700;color:' + r.color + ';margin-bottom:10px">' + r.title + '</div>';
+    r.data.forEach(function(d) {
+      var w = Math.round(d[1] / max * 100);
+      html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">';
+      html += '<div style="width:80px;font-size:10px;color:#c9d1d9;text-align:right;flex-shrink:0;overflow:hidden;white-space:nowrap">' + d[0] + '</div>';
+      html += '<div style="flex:1;height:16px;background:#0f0f23;border-radius:3px"><div style="width:' + w + '%;height:100%;background:' + r.color + ';opacity:.7;border-radius:3px"></div></div>';
+      html += '<div style="font-family:var(--mono);font-size:10px;color:' + r.color + ';width:50px;flex-shrink:0;text-align:right">' + d[1].toLocaleString() + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('futures-rankings').innerHTML = html;
+}
+
+function buildCashflowCard() {
+  var flows = [
+    {name:"海外投資家",val:-101266,unit:"千株"},
+    {name:"個人",val:466184,unit:"千株"},
+    {name:"法人",val:-366033,unit:"千株"},
+    {name:"投資信託",val:-73941,unit:"千株"},
+    {name:"自己",val:-36709,unit:"千株"}
+  ];
+  var html = '<div class="card oc" style="border-left:3px solid #818cf8">';
+  html += '<div class="oc-head"><span class="oc-icon">📊</span><span class="oc-title">現物フロー（TSEプライム・2/16〜2/20）</span></div>';
+  html += '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">';
+  flows.forEach(function(f) {
+    var mShares = (f.val / 10000).toFixed(2);
+    var color = f.val >= 0 ? '#4ade80' : '#f87171';
+    var label = f.val >= 0 ? '買い越し' : '売り越し';
+    var sign = f.val >= 0 ? '+' : '';
+    html += '<div style="display:flex;align-items:center;gap:8px">';
+    html += '<div style="width:75px;font-size:11px;color:#c9d1d9;text-align:right;flex-shrink:0">' + f.name + '</div>';
+    html += '<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:' + color + '">' + sign + mShares + '万株（' + label + '）</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div style="font-size:11px;color:#8892b0;line-height:1.7">→ 海外が現物で売り越す中、⑨の先物ポジションではABNクリアリンが+8,554枚の買い超を維持 ＝ <span style="color:#fbbf24;font-weight:700">ヘッジ回転</span>の構図。個人が+46.6万株の大幅買い越しで受け皿に。</div>';
+  html += '<div class="tags" style="margin-top:8px"><span class="tag t-red">海外 売り越し</span><span class="tag t-green">個人 買い越し</span><span class="tag t-purple">ヘッジ回転</span></div>';
+  html += '</div>';
+  document.getElementById('cashflow-card').innerHTML = html;
 }
 
 // Initialize all
@@ -559,6 +629,8 @@ buildLevels();
 buildOutlookCards();
 buildOIChange();
 buildParticipantTable();
+buildFuturesRankings();
+buildCashflowCard();
 </script>
 </body>
 </html>
