@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPX Derivatives Portal – 2026.02.26</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#06060f;--panel:#0c0c1d;--card:#1a1a2e;--border:#22223a;
+--text:#c9d1d9;--text2:#8892b0;--white:#e6f1ff;
+--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--green:#4ade80;--red:#ef4444;
+--accent:#6366f1;--accent2:#8b5cf6;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP','Outfit',sans-serif;font-size:13px;line-height:1.6;min-height:100vh}
+.mono{font-family:'DM Mono',monospace}
+.outfit{font-family:'Outfit','Noto Sans JP',sans-serif}
+
+/* ─── Topbar ─── */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:48px}
+.topbar-logo{font-family:'Outfit';font-weight:800;font-size:15px;color:var(--white);letter-spacing:-.5px}
+.topbar-logo span{color:var(--accent)}
+.topbar-nav{display:flex;gap:20px}
+.topbar-nav a{color:var(--text2);text-decoration:none;font-size:12px;font-weight:500;transition:.2s}
+.topbar-nav a:hover{color:var(--white)}
+@media(max-width:768px){.topbar-nav{display:none}}
+
+/* ─── Hero ─── */
+.hero{position:relative;padding:40px 24px 32px;overflow:hidden;
+background:linear-gradient(180deg,#0c0c2a 0%,var(--bg) 100%)}
+.hero::before{content:'';position:absolute;inset:0;
+background-image:linear-gradient(rgba(99,102,241,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.06) 1px,transparent 1px);
+background-size:40px 40px;pointer-events:none}
+.hero-glow{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:300px;
+background:radial-gradient(ellipse,rgba(99,102,241,.12),transparent 70%);pointer-events:none}
+.hero-inner{position:relative;max-width:1100px;margin:0 auto}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.hero-label{font-size:10px;color:var(--accent);letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.hero-title{font-family:'Outfit';font-size:26px;font-weight:900;color:var(--white);animation:fadeUp .6s ease}
+.hero-date{text-align:right}
+.hero-date-val{font-size:22px;font-weight:800;color:var(--white);font-family:'DM Mono'}
+.hero-date-sub{font-size:11px;color:var(--text2)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* KPI ticker */
+.kpi-row{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp .7s ease}
+.kpi{background:linear-gradient(135deg,var(--card) 0%,#16213e 100%);border:1px solid var(--border);border-radius:12px;padding:14px 18px;flex:1 1 200px;min-width:180px}
+.kpi-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
+.kpi-val{font-size:22px;font-weight:800;color:var(--white);font-family:'DM Mono';line-height:1.1}
+.kpi-sub{font-size:11px;margin-top:4px}
+.kpi-sub.up{color:var(--green)}.kpi-sub.down{color:var(--red)}.kpi-sub.muted{color:var(--text2)}
+
+/* Mobile nav */
+.mobile-nav{display:none;gap:0;margin-top:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.mobile-nav a{flex:1;text-align:center;padding:10px 4px;font-size:11px;color:var(--text2);text-decoration:none;background:var(--card);border-right:1px solid var(--border);font-weight:500}
+.mobile-nav a:last-child{border-right:none}
+.mobile-nav a:hover{color:var(--white);background:var(--panel)}
+@media(max-width:768px){.mobile-nav{display:flex!important}}
+
+/* ─── Dashboard Section ─── */
+.dash-section{max-width:1100px;margin:0 auto;padding:0 24px 60px}
+
+/* Browser frame */
+.browser{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:28px;animation:fadeUp .8s ease}
+.browser-toolbar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#0a0a1a;border-bottom:1px solid var(--border)}
+.dots{display:flex;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.url-bar{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:11px;color:var(--text2);font-family:'DM Mono'}
+
+/* KPI header inside browser */
+.dash-kpi{display:flex;gap:12px;padding:20px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+
+/* Tabs */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:#0a0a1a;overflow-x:auto}
+.tab-btn{padding:12px 20px;font-size:13px;font-weight:400;color:var(--text2);background:transparent;border:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:'Noto Sans JP'}
+.tab-btn.active{color:var(--white);font-weight:700;border-bottom-color:var(--accent)}
+.tab-btn:hover{color:var(--white)}
+.tab-content{display:none;padding:24px 20px}
+.tab-content.active{display:block}
+
+/* Section titles */
+.sec-title{display:flex;align-items:center;gap:12px;margin:28px 0 14px}
+.sec-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
+.sec-text{font-family:'Outfit';font-size:16px;font-weight:700;color:var(--white)}
+
+/* Cards row */
+.cards{display:flex;gap:12px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;flex:1 1 160px;min-width:150px}
+.card-label{font-size:10px;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.card-val{font-size:22px;font-weight:800;font-family:'DM Mono';line-height:1.1}
+.card-sub{font-size:10px;color:var(--text2);margin-top:4px}
+.card-sub2{font-size:11px;color:var(--accent);margin-top:6px}
+
+/* Bar charts */
+.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;overflow:hidden}
+.bar-row{display:flex;align-items:center;margin-bottom:8px;gap:8px}
+.bar-label{width:90px;font-size:10px;color:var(--text2);text-align:right;flex-shrink:0;white-space:pre-line;line-height:1.3}
+.bar-track{flex:1;height:22px;background:#111128;border-radius:4px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.bar-value{width:70px;font-size:11px;font-family:'DM Mono';font-weight:700;flex-shrink:0;text-align:right}
+
+/* Zero-center diverging bars (④) */
+.oi-change-group{margin-bottom:16px}
+.oi-change-label{font-size:12px;font-weight:700;color:var(--white);margin-bottom:8px;padding-left:4px}
+.oi-row{display:flex;align-items:center;height:28px;margin-bottom:4px;gap:4px}
+.oi-type{width:50px;font-size:10px;font-weight:700;text-align:right;flex-shrink:0}
+.oi-bar-area{flex:1;position:relative;height:20px}
+.oi-zero{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#555;z-index:1}
+.oi-bar{position:absolute;top:2px;height:16px;border-radius:3px;transition:width .5s ease}
+.oi-val{width:70px;font-size:11px;font-family:'DM Mono';font-weight:700;flex-shrink:0}
+.oi-guide{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:4px;padding:0 54px}
+
+/* Butterfly (⑥) */
+.bf-header,.bf-row{display:flex;align-items:center;height:26px}
+.bf-header{border-bottom:1px solid var(--border);margin-bottom:4px;font-size:9px;font-weight:700;color:var(--text2)}
+.bf-row{border-bottom:1px solid #12122a}
+.bf-row.atm-row{background:rgba(251,191,36,.06)}
+.bf-oi{width:55px;text-align:right;padding-right:4px;font-size:10px;font-family:'DM Mono';color:var(--text);flex-shrink:0}
+.bf-chg{width:48px;text-align:right;padding-right:4px;font-size:9px;font-family:'DM Mono';flex-shrink:0}
+.bf-bar-area{flex:1;display:flex;align-items:center}
+.bf-bar-left{flex:1;display:flex;justify-content:flex-end;padding-right:1px}
+.bf-bar-right{flex:1;display:flex;justify-content:flex-start;padding-left:1px}
+.bf-bar{height:12px;border-radius:3px;min-width:1px}
+.bf-strike{width:56px;text-align:center;font-size:10px;font-family:'DM Mono';font-weight:500;color:var(--text);flex-shrink:0;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+.bf-strike.atm{font-weight:800;color:var(--atm);background:rgba(251,191,36,.08)}
+
+/* Table (⑦) */
+.flow-table{width:100%;border-collapse:collapse;font-size:12px}
+.flow-table th{padding:10px 14px;text-align:left;color:var(--text2);border-bottom:2px solid var(--border);font-weight:500;font-size:11px}
+.flow-table td{padding:8px 14px;border-bottom:1px solid #1a1a30}
+.flow-table tr.pair-row{background:rgba(251,191,36,.04)}
+.pair-badge{font-size:9px;color:var(--atm);border:1px solid rgba(251,191,36,.3);border-radius:4px;padding:1px 6px;margin-left:8px}
+
+/* Pair cards */
+.pair-card{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--card);border-radius:10px;border:1px solid rgba(251,191,36,.2);flex-wrap:wrap;margin-bottom:8px}
+.pair-arrow{font-size:14px;color:var(--accent)}
+
+/* Levels (⑧) */
+.level-row{display:flex;align-items:center;gap:12px;padding:8px 0}
+.level-price{width:72px;font-size:16px;font-weight:800;text-align:right;font-family:'DM Mono';flex-shrink:0}
+.level-bar{height:8px;flex:1;border-radius:4px}
+.level-info{min-width:180px}
+.level-name{font-size:12px;font-weight:700}
+.level-sub{font-size:10px;color:var(--text2)}
+.level-atm{border-bottom:2px solid var(--atm);padding-bottom:8px}
+
+/* Forecast box */
+.forecast{margin-top:16px;padding:14px 18px;border-radius:10px;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.2);text-align:center}
+.forecast-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.forecast-val{font-size:26px;font-weight:900;color:var(--white);font-family:'DM Mono'}
+.forecast-tilde{color:var(--accent);font-size:16px}
+
+/* Outlook cards */
+.outlook-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:12px}
+.outlook-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.outlook-icon{font-size:20px}
+.outlook-title{font-family:'Outfit';font-size:15px;font-weight:700;color:var(--white)}
+.outlook-body{font-size:12.5px;line-height:1.8;color:var(--text);margin-bottom:10px}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
+.tag-red{background:rgba(248,113,113,.12);color:var(--put);border:1px solid rgba(248,113,113,.25)}
+.tag-green{background:rgba(74,222,128,.12);color:var(--green);border:1px solid rgba(74,222,128,.25)}
+.tag-purple{background:rgba(99,102,241,.12);color:#818cf8;border:1px solid rgba(99,102,241,.25)}
+
+/* Footer */
+.footer{border-top:1px solid var(--border);padding:20px 24px;text-align:center;font-size:11px;color:var(--text2)}
+.footer a{color:var(--accent);text-decoration:none;margin:0 10px}
+.footer a:hover{color:var(--white)}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<header class="topbar">
+  <div class="topbar-logo"><span>JPX</span> Derivatives Portal</div>
+  <nav class="topbar-nav">
+    <a href="#hero">ホーム</a>
+    <a href="#dashboard">ダッシュボード</a>
+    <a href="archive.html">📂 アーカイブ</a>
+  </nav>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-top">
+      <div>
+        <div class="hero-label">JPX Derivatives Intelligence</div>
+        <h1 class="hero-title">市場分析ダッシュボード</h1>
+      </div>
+      <div class="hero-date">
+        <div class="hero-date-val mono">2026.02.26</div>
+        <div class="hero-date-sub">木曜日 大引け</div>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">日経平均（現物）</div>
+        <div class="kpi-val mono">58,753.39 円</div>
+        <div class="kpi-sub up">+170.27 円</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">日経VI</div>
+        <div class="kpi-val mono" style="color:var(--green)">26.89</div>
+        <div class="kpi-sub down">-3.91</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">TOPIX先物 建玉前日比</div>
+        <div class="kpi-val mono" style="color:var(--green)">+11,556</div>
+        <div class="kpi-sub muted">機関積み増し</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">ATM（先物清算値）</div>
+        <div class="kpi-val mono" style="color:var(--atm)">58,850</div>
+        <div class="kpi-sub muted">3月限</div>
+      </div>
+    </div>
+
+    <div class="mobile-nav" style="display:none">
+      <a href="#dashboard">最新</a>
+      <a href="archive.html">📂 アーカイブ一覧</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DASHBOARD ═══ -->
+<section class="dash-section" id="dashboard">
+  <div class="browser">
+    <div class="browser-toolbar">
+      <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+      <div class="url-bar">jpx-derivatives.github.io/portal/2026-02-26</div>
+    </div>
+
+    <!-- Dash KPI -->
+    <div class="dash-kpi">
+      <div class="kpi" style="flex:1 1 180px;min-width:150px">
+        <div class="kpi-label">日経平均</div>
+        <div class="kpi-val mono" style="font-size:18px">58,753.39</div>
+        <div class="kpi-sub up">+170.27</div>
+      </div>
+      <div class="kpi" style="flex:1 1 120px;min-width:110px">
+        <div class="kpi-label">VI</div>
+        <div class="kpi-val mono" style="font-size:18px;color:var(--green)">26.89</div>
+        <div class="kpi-sub down">-3.91</div>
+      </div>
+      <div class="kpi" style="flex:1 1 200px;min-width:180px">
+        <div class="kpi-label">デイリー予測値幅</div>
+        <div class="kpi-val mono" style="font-size:16px;color:#818cf8">57,754 ~ 59,753</div>
+        <div class="kpi-sub muted">VI÷√250</div>
+      </div>
+      <div class="kpi" style="flex:1 1 200px;min-width:180px">
+        <div class="kpi-label">ウィークリー予測値幅</div>
+        <div class="kpi-val mono" style="font-size:16px;color:#818cf8">56,562 ~ 60,944</div>
+        <div class="kpi-sub muted">VI÷√52</div>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('overview',this)">概要</button>
+      <button class="tab-btn" onclick="switchTab('oi',this)">建玉分布</button>
+      <button class="tab-btn" onclick="switchTab('flow',this)">手口</button>
+      <button class="tab-btn" onclick="switchTab('outlook',this)">総合評価</button>
+    </div>
+
+    <!-- ── Tab: 概要 ── -->
+    <div id="tab-overview" class="tab-content active">
+      <div class="sec-title"><div class="sec-num">②</div><div class="sec-text">先物建玉残高（前日比）</div></div>
+      <div class="chart-wrap" id="futures-chart"></div>
+
+      <div class="sec-title"><div class="sec-num">③</div><div class="sec-text">オプション総取引代金</div></div>
+      <div class="cards" id="turnover-cards"></div>
+
+      <div class="sec-title"><div class="sec-num">④</div><div class="sec-text">オプション建玉増減</div></div>
+      <div class="chart-wrap" id="oi-change"></div>
+
+      <div class="sec-title"><div class="sec-num">⑤</div><div class="sec-text">重要建玉変化（±300枚以上）</div></div>
+      <div class="chart-wrap" id="sig-chart"></div>
+    </div>
+
+    <!-- ── Tab: 建玉分布 ── -->
+    <div id="tab-oi" class="tab-content">
+      <div class="sec-title"><div class="sec-num">⑥</div><div class="sec-text">建玉分布（3月限・500円刻み）</div></div>
+      <div style="display:flex;align-items:center;gap:16px;font-size:11px;color:var(--text2);margin-bottom:12px">
+        <span>ATM: <span style="color:var(--atm);font-weight:700" class="mono">58,850円</span></span>
+        <span><span style="color:var(--put)">■</span> プット</span>
+        <span><span style="color:var(--call)">■</span> コール</span>
+      </div>
+      <div class="chart-wrap" id="butterfly"></div>
+    </div>
+
+    <!-- ── Tab: 手口 ── -->
+    <div id="tab-flow" class="tab-content">
+      <div class="sec-title"><div class="sec-num">⑦</div><div class="sec-text">大口手口（J-NET：NIKKEI 225 OOP）</div></div>
+      <p style="font-size:11px;color:var(--text2);margin-bottom:10px">SBI証券除外 | 100枚以上 | <span style="color:var(--atm)">■</span> 対当ペア</p>
+      <div class="chart-wrap" style="padding:0;overflow:hidden" id="flow-table-wrap"></div>
+      <h3 style="font-size:14px;color:var(--white);font-weight:700;margin:16px 0 8px">同一数量の対当ペア</h3>
+      <div id="pair-cards"></div>
+    </div>
+
+    <!-- ── Tab: 総合評価 ── -->
+    <div id="tab-outlook" class="tab-content">
+      <div class="sec-title"><div class="sec-num">⑧</div><div class="sec-text">総合評価と今後の先物予想</div></div>
+      <div class="chart-wrap" id="levels-area"></div>
+      <div id="outlook-cards"></div>
+    </div>
+  </div><!-- /browser -->
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <a href="#hero">最新</a> | <a href="archive.html">📂 アーカイブ一覧</a>
+  <div style="margin-top:8px">JPX Derivatives Portal © 2026 – Data: JPX Open Interest / Market Data / J-NET</div>
+</footer>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+var futuresData=[
+  {name:"N225ラージ\n合計",value:3911},
+  {name:"N225ラージ\n3月限",value:1113},
+  {name:"N225 mini\n合計",value:-4105},
+  {name:"N225 mini\n3月限",value:-6691},
+  {name:"TOPIX\n合計",value:11556},
+  {name:"TOPIX\n3月限",value:11546}
+];
+var turnover={putTotal:15578,callTotal:29011,grandTotal:44590,putJnet:13098,callJnet:24638,jnetTotal:37737};
+var oiChange=[
+  {group:"全限月",put:4562,call:3719},
+  {group:"3月限（メジャー）",put:3614,call:-592}
+];
+var sigData=[
+  {id:"P40000 (2603)",v:627},{id:"P55250 (2603)",v:918},{id:"P56000 (2603)",v:988},{id:"P59000 (2603)",v:890},
+  {id:"C60000 (2603)",v:-1109},{id:"C62500 (2603)",v:310},{id:"C65000 (2603)",v:-1515},{id:"C68000 (2603)",v:985},
+  {id:"P25000 (2604)",v:-994},{id:"P38000 (2604)",v:604},{id:"P50000 (2605)",v:-750}
+];
+var bfData=[
+  {s:54000,p:3889,pc:-35,c:4650,cc:0},{s:54500,p:2023,pc:2,c:1318,cc:0},{s:55000,p:3496,pc:50,c:5324,cc:0},
+  {s:55500,p:2271,pc:-182,c:1891,cc:-1},{s:56000,p:3083,pc:988,c:3144,cc:0},{s:56500,p:1273,pc:15,c:1550,cc:0},
+  {s:57000,p:2413,pc:-3,c:3793,cc:-4},{s:57500,p:534,pc:8,c:1778,cc:-10},{s:58000,p:894,pc:154,c:5997,cc:-53},
+  {s:58500,p:215,pc:81,c:283,cc:-16},{s:59000,p:921,pc:890,c:3756,cc:-138},{s:59500,p:11,pc:9,c:881,cc:-27},
+  {s:60000,p:7,pc:6,c:7277,cc:-1109},{s:60500,p:2,pc:2,c:306,cc:-126},{s:61000,p:7,pc:0,c:3089,cc:280},
+  {s:61500,p:1,pc:0,c:1433,cc:3},{s:62000,p:1,pc:0,c:5000,cc:66},{s:62500,p:0,pc:0,c:579,cc:310},
+  {s:63000,p:0,pc:0,c:3290,cc:230},{s:63500,p:0,pc:0,c:463,cc:116}
+];
+var jnetRows=[
+  {ct:"P59000",who:"モルガンＭＵＦＧ証券",vol:1650,pair:false},
+  {ct:"C59000",who:"ＪＰモルガン証券",vol:300,pair:false},
+  {ct:"C59000",who:"ＡＢＮクリアリン証券",vol:250,pair:false},
+  {ct:"C59000",who:"バークレイズ証券",vol:150,pair:false},
+  {ct:"C59000",who:"ゴールドマン証券",vol:100,pair:true},
+  {ct:"C59000",who:"モルガンＭＵＦＧ証券",vol:100,pair:true}
+];
+var pairsArr=[{a:"ゴールドマン証券",b:"モルガンＭＵＦＧ証券",ct:"C59000",qty:100}];
+var levels=[
+  {price:60000,label:"第二抵抗",sub:"C60000 = 7,277枚（-1,109解消中）",color:"#ef4444"},
+  {price:59000,label:"第一抵抗",sub:"J-NET C59000に海外勢売り集中",color:"#f87171"},
+  {price:58850,label:"ATM（先物清算値）",sub:"",color:"#fbbf24",atm:true},
+  {price:56000,label:"第一支持",sub:"P56000 +988枚の大量新規建玉",color:"#4ade80"},
+  {price:55000,label:"第二支持",sub:"P3,496枚 / C5,324枚 交差点",color:"#22c55e"}
+];
+var outlookArr=[
+  {title:"需給の歪み",icon:"⚡",body:"mini 3月限が-6,691枚の大幅減少。個人・短期筋のロング解消が加速。一方、ラージ+1,113枚、TOPIX+11,546枚と機関投資家は積極的に積み増し。「個人は撤退・機関は買い継続」の二極化構図。",tags:[{t:"mini大幅売り越し",c:"tag-red"},{t:"機関積み増し",c:"tag-green"}]},
+  {title:"手口の解釈",icon:"🔍",body:"ATMの59,000円にJ-NET取引が集中。モルガンMUFGがP59000を1,650枚、C59000ではJPモルガン（300枚）、ABNクリアリン（250枚＝海外機関代理）、バークレイズ（150枚）が売り参加。59,000円が機関の「攻防ライン」。建玉分布上C60000（7,277枚）が構造的抵抗帯だが-1,109枚解消中。",tags:[{t:"59000円攻防戦",c:"tag-purple"},{t:"C60000壁崩壊中",c:"tag-red"}]},
+  {title:"建玉変動",icon:"📊",body:"プット+4,562枚 vs コール+3,719枚（P/C比1.23倍）。3月限P56000（+988）・P59000（+890）・P55250（+918）にヘッジ集中。C60000が-1,109枚、C65000が-1,515枚解消される一方、C68000に+985枚の新規建玉。上値ターゲットが68,000円にシフト。",tags:[{t:"プット偏重 1.23x",c:"tag-red"},{t:"上値目標シフト",c:"tag-green"}]},
+  {title:"結論",icon:"🎯",body:"VI 26.89まで急低下し恐怖感後退。史上最高値連日更新中で上昇モメンタム健在。NVIDIA好決算はサプライズ不足だが、日銀人事案による利上げ観測後退と円安が下支え。C60000の壁が解消方向にある点は60,000円トライの可能性を示唆。プット偏重＝下値固め済みで底堅い展開。",tags:[{t:"史上最高値更新中",c:"tag-green"},{t:"60,000円トライへ",c:"tag-purple"}]}
+];
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+function fmt(n){return n.toLocaleString('ja-JP')}
+function fmtS(n){return(n>=0?'+':'')+fmt(n)}
+function pct(v,mx){return Math.min(Math.abs(v)/mx*100,100)}
+
+/* ============================================================
+   TAB SWITCH
+   ============================================================ */
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active')});
+  document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ============================================================
+   ② FUTURES CHART
+   ============================================================ */
+function buildFuturesChart(){
+  var el=document.getElementById('futures-chart');
+  var mx=Math.max.apply(null,futuresData.map(function(d){return Math.abs(d.value)}));
+  var h='';
+  futuresData.forEach(function(d){
+    var w=pct(d.value,mx);
+    var col=d.value>=0?'var(--green)':'var(--red)';
+    h+='<div class="bar-row">';
+    h+='<div class="bar-label">'+d.name.replace('\n','<br>')+'</div>';
+    h+='<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+col+'"></div></div>';
+    h+='<div class="bar-value" style="color:'+col+'">'+fmtS(d.value)+'</div>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+/* ============================================================
+   ③ TURNOVER CARDS
+   ============================================================ */
+function buildTurnover(){
+  var el=document.getElementById('turnover-cards');
+  var items=[
+    {label:"プット",val:turnover.putTotal,jnet:turnover.putJnet,col:"var(--put)"},
+    {label:"コール",val:turnover.callTotal,jnet:turnover.callJnet,col:"var(--call)"},
+    {label:"合計",val:turnover.grandTotal,jnet:turnover.jnetTotal,col:"var(--accent2)"}
+  ];
+  var h='';
+  items.forEach(function(d){
+    var r=(d.jnet/d.val*100).toFixed(1);
+    h+='<div class="card" style="text-align:center">';
+    h+='<div class="card-label">'+d.label+'</div>';
+    h+='<div class="card-val" style="color:'+d.col+'">'+fmt(d.val)+'</div>';
+    h+='<div class="card-sub">百万円</div>';
+    h+='<div class="card-sub2">J-NET: '+fmt(d.jnet)+' ('+r+'%)</div>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+/* ============================================================
+   ④ OI CHANGE (ZERO-CENTER DIVERGING)
+   ============================================================ */
+function buildOIChange(){
+  var el=document.getElementById('oi-change');
+  var mx=Math.max.apply(null,oiChange.map(function(d){return Math.max(Math.abs(d.put),Math.abs(d.call))}));
+  var h='';
+  oiChange.forEach(function(g){
+    h+='<div class="oi-change-group">';
+    h+='<div class="oi-change-label">'+g.group+'</div>';
+    // PUT row
+    h+=makeOIRow('PUT',g.put,mx,true);
+    // CALL row
+    h+=makeOIRow('CALL',g.call,mx,false);
+    h+='</div>';
+  });
+  h+='<div class="oi-guide"><span>← 減少</span><span>増加 →</span></div>';
+  el.innerHTML=h;
+}
+function makeOIRow(label,val,mx,isPut){
+  var w=Math.abs(val)/mx*45;
+  var col=val>=0?'var(--green)':'var(--red)';
+  var side=val>=0?'left:50%;':'right:50%;';
+  var radius=val>=0?'border-radius:0 3px 3px 0':'border-radius:3px 0 0 3px';
+  var h='<div class="oi-row">';
+  h+='<div class="oi-type" style="color:'+(isPut?'var(--put)':'var(--call)')+'">'+label+'</div>';
+  h+='<div class="oi-bar-area"><div class="oi-zero"></div>';
+  h+='<div class="oi-bar" style="'+side+'width:'+w+'%;background:'+col+';'+radius+'"></div>';
+  h+='</div>';
+  h+='<div class="oi-val" style="color:'+col+'">'+fmtS(val)+'</div>';
+  h+='</div>';
+  return h;
+}
+
+/* ============================================================
+   ⑤ SIGNIFICANT CHANGES
+   ============================================================ */
+function buildSigChart(){
+  var el=document.getElementById('sig-chart');
+  var mx=Math.max.apply(null,sigData.map(function(d){return Math.abs(d.v)}));
+  var h='';
+  sigData.forEach(function(d){
+    var w=pct(d.v,mx);
+    var col=d.v>=0?'var(--green)':'var(--red)';
+    h+='<div class="bar-row">';
+    h+='<div class="bar-label" style="width:110px;font-size:10px">'+d.id+'</div>';
+    h+='<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+col+'"></div></div>';
+    h+='<div class="bar-value" style="color:'+col+'">'+fmtS(d.v)+'</div>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+/* ============================================================
+   ⑥ BUTTERFLY
+   ============================================================ */
+function buildButterfly(){
+  var el=document.getElementById('butterfly');
+  var mx=Math.max.apply(null,bfData.map(function(d){return Math.max(d.p,d.c)}));
+  var scale=function(v){return(v/mx*100).toFixed(1)};
+  var h='';
+  // header
+  h+='<div class="bf-header">';
+  h+='<div class="bf-oi" style="color:var(--put)">建玉</div>';
+  h+='<div class="bf-chg" style="color:var(--put)">前日比</div>';
+  h+='<div class="bf-bar-area"><div class="bf-bar-left" style="justify-content:flex-end;font-size:9px;color:var(--put)">◀ プット</div>';
+  h+='<div class="bf-strike" style="font-weight:700;color:var(--atm)">行使価格</div>';
+  h+='<div class="bf-bar-right" style="font-size:9px;color:var(--call)">コール ▶</div></div>';
+  h+='<div class="bf-chg" style="color:var(--call)">前日比</div>';
+  h+='<div class="bf-oi" style="color:var(--call)">建玉</div>';
+  h+='</div>';
+
+  bfData.forEach(function(d){
+    var isAtm=d.s===59000;
+    h+='<div class="bf-row'+(isAtm?' atm-row':'')+'">';
+    h+='<div class="bf-oi">'+( d.p>0?fmt(d.p):'')+'</div>';
+    var pcCol=d.pc>0?'var(--green)':d.pc<0?'var(--red)':'transparent';
+    h+='<div class="bf-chg" style="color:'+pcCol+'">'+(d.pc!==0?fmtS(d.pc):'')+'</div>';
+    h+='<div class="bf-bar-area">';
+    h+='<div class="bf-bar-left"><div class="bf-bar" style="width:'+scale(d.p)+'%;background:linear-gradient(270deg,#f87171,#991b1b);opacity:.8"></div></div>';
+    h+='<div class="bf-strike'+(isAtm?' atm':'')+'">'+fmt(d.s)+'</div>';
+    h+='<div class="bf-bar-right"><div class="bf-bar" style="width:'+scale(d.c)+'%;background:linear-gradient(90deg,#60a5fa,#1e3a5f);opacity:.8"></div></div>';
+    h+='</div>';
+    var ccCol=d.cc>0?'var(--green)':d.cc<0?'var(--red)':'transparent';
+    h+='<div class="bf-chg" style="text-align:left;padding-left:4px;color:'+ccCol+'">'+(d.cc!==0?fmtS(d.cc):'')+'</div>';
+    h+='<div class="bf-oi" style="text-align:left;padding-left:4px">'+(d.c>0?fmt(d.c):'')+'</div>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
+
+/* ============================================================
+   ⑦ FLOW TABLE + PAIRS
+   ============================================================ */
+function buildFlow(){
+  var el=document.getElementById('flow-table-wrap');
+  var h='<table class="flow-table"><thead><tr><th>銘柄</th><th>参加者</th><th style="text-align:right">取引高</th></tr></thead><tbody>';
+  jnetRows.forEach(function(d){
+    var cls=d.pair?' class="pair-row"':'';
+    var ctCol=d.ct.charAt(0)==='P'?'var(--put)':'var(--call)';
+    h+='<tr'+cls+'>';
+    h+='<td style="font-family:DM Mono;font-weight:700;color:'+ctCol+'">'+d.ct+'</td>';
+    h+='<td>'+d.who+(d.pair?'<span class="pair-badge">ペア</span>':'')+'</td>';
+    h+='<td style="text-align:right;font-family:DM Mono;font-weight:700;color:var(--white)">'+fmt(d.vol)+'</td>';
+    h+='</tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+
+  var el2=document.getElementById('pair-cards');
+  var h2='';
+  pairsArr.forEach(function(p){
+    var ctCol=p.ct.charAt(0)==='P'?'var(--put)':'var(--call)';
+    h2+='<div class="pair-card">';
+    h2+='<span style="font-family:DM Mono;font-weight:700;color:'+ctCol+'">'+p.ct+'</span>';
+    h2+='<span>'+p.a+'</span>';
+    h2+='<span class="pair-arrow">⟷</span>';
+    h2+='<span>'+p.b+'</span>';
+    h2+='<span style="margin-left:auto;font-family:DM Mono;font-weight:700;color:var(--atm)">各'+p.qty+'枚</span>';
+    h2+='</div>';
+  });
+  el2.innerHTML=h2;
+}
+
+/* ============================================================
+   ⑧ LEVELS + OUTLOOK
+   ============================================================ */
+function buildLevels(){
+  var el=document.getElementById('levels-area');
+  var h='<h3 style="font-size:13px;color:var(--text2);margin:0 0 16px;letter-spacing:1.5px;text-transform:uppercase">サポート & レジスタンス</h3>';
+  levels.forEach(function(lv){
+    var cls=lv.atm?' level-atm':'';
+    var bb=lv.atm?'border-bottom:2px solid var(--atm);padding-bottom:8px':'border-bottom:1px dashed var(--border)';
+    h+='<div class="level-row" style="'+bb+'">';
+    h+='<div class="level-price" style="color:'+lv.color+'">'+fmt(lv.price)+'</div>';
+    h+='<div class="level-bar" style="background:linear-gradient(90deg,'+lv.color+'40,transparent)"></div>';
+    h+='<div class="level-info"><div class="level-name" style="color:'+lv.color+'">'+lv.label+'</div>';
+    if(lv.sub) h+='<div class="level-sub">'+lv.sub+'</div>';
+    h+='</div></div>';
+  });
+  // Forecast box
+  h+='<div class="forecast">';
+  h+='<div class="forecast-label">SQ（3/13）短期予想レンジ</div>';
+  h+='<div class="forecast-val">57,500 <span class="forecast-tilde">～</span> 60,500</div>';
+  h+='</div>';
+  el.innerHTML=h;
+}
+function buildOutlookCards(){
+  var el=document.getElementById('outlook-cards');
+  var h='';
+  outlookArr.forEach(function(c){
+    h+='<div class="outlook-card">';
+    h+='<div class="outlook-header"><span class="outlook-icon">'+c.icon+'</span><span class="outlook-title">'+c.title+'</span></div>';
+    h+='<div class="outlook-body">'+c.body+'</div>';
+    h+='<div class="tags">';
+    c.tags.forEach(function(t){h+='<span class="tag '+t.c+'">'+t.t+'</span>'});
+    h+='</div></div>';
+  });
+  el.innerHTML=h;
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildFuturesChart();
+buildTurnover();
+buildOIChange();
+buildSigChart();
+buildButterfly();
+buildFlow();
+buildLevels();
+buildOutlookCards();
+</script>
+</body>
+</html>
