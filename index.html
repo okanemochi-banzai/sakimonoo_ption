@@ -3,634 +3,594 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JPX Derivatives Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<title>JPX Market Analysis — 2026.03.02</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1a1a3a;--txt:#e8eaf6;--muted:#6b7094;--dim:#3d4066;--cyan:#22d3ee;--blue:#4f7df5;--gold:#fbbf24;--red:#f87171;--green:#4ade80;--purple:#818cf8;--mono:'DM Mono',monospace;--disp:'Outfit',sans-serif;--body:'Noto Sans JP',sans-serif}
-*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--txt);font-family:var(--body);overflow-x:hidden;font-size:13px}
-a{color:inherit;text-decoration:none}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#06060f;--panel:#0c0c1d;--card:#1a1a2e;--card2:#12122a;
+--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444;
+--foreign:#60a5fa;--domestic:#f87171;
+--txt:#e2e8f0;--txt2:#94a3b8;--txt3:#64748b;
+--border:#1e293b;--glow:rgba(96,165,250,0.15);
+}
+html{font-size:15px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;line-height:1.6;overflow-x:hidden}
+.mono{font-family:'DM Mono',monospace}
+.outfit{font-family:'Outfit',sans-serif}
 
-/* TOPBAR */
-.topbar{position:fixed;top:0;left:0;right:0;height:48px;z-index:100;background:rgba(6,6,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
-.topbar-brand{display:flex;align-items:center;gap:10px}
-.topbar-logo{width:8px;height:8px;background:var(--cyan);border-radius:50%;box-shadow:0 0 12px var(--cyan);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.topbar-title{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:3px;text-transform:uppercase}
-.topbar-nav{display:flex;gap:24px;list-style:none}
-.topbar-nav a{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:var(--disp);transition:color .2s}
-.topbar-nav a:hover{color:var(--cyan)}
+/* Top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:'Outfit';font-weight:800;font-size:1.1rem;color:#fff;letter-spacing:-.02em}
+.topbar .logo span{color:var(--call)}
+.topbar nav a{color:var(--txt2);text-decoration:none;font-size:.82rem;margin-left:1.5rem;transition:color .2s}
+.topbar nav a:hover{color:#fff}
+@media(max-width:768px){.topbar nav{display:none}}
 
-/* HERO */
-.hero{position:relative;min-height:60vh;display:flex;flex-direction:column;justify-content:center;padding:110px 48px 50px;overflow:hidden}
-.hero-grid{position:absolute;inset:0;background:linear-gradient(90deg,rgba(79,125,245,.03) 1px,transparent 1px),linear-gradient(0deg,rgba(79,125,245,.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,black 20%,transparent 70%)}
-.hero-glow{position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(79,125,245,.08),transparent 70%);pointer-events:none}
-.hero-content{position:relative;z-index:2;max-width:900px}
-.hero-eyebrow{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;opacity:0;animation:fu .6s ease forwards .2s}
-.hero-title{font-family:var(--disp);font-size:clamp(36px,6vw,68px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;opacity:0;animation:fu .6s ease forwards .4s}
-.hero-title .hl{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-desc{font-size:15px;color:var(--muted);line-height:1.8;max-width:560px;margin-bottom:32px;opacity:0;animation:fu .6s ease forwards .6s}
-@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.hero-ticker{display:flex;gap:32px;flex-wrap:wrap;opacity:0;animation:fu .6s ease forwards .8s}
-.ticker-item{display:flex;flex-direction:column;gap:4px}
-.ticker-label{font-size:10px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;font-family:var(--disp)}
-.ticker-value{font-family:var(--mono);font-size:22px;font-weight:500}
-.ticker-chg{font-family:var(--mono);font-size:12px}
+/* Hero */
+.hero{padding:7rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 80%,rgba(96,165,250,.08) 0%,transparent 60%),repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,255,255,.015) 40px,rgba(255,255,255,.015) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(255,255,255,.015) 40px,rgba(255,255,255,.015) 41px)}
+.hero h1{font-family:'Outfit';font-weight:800;font-size:clamp(1.8rem,4vw,3rem);color:#fff;letter-spacing:-.03em;animation:fadeUp .8s ease}
+.hero .sub{color:var(--txt2);font-size:.9rem;margin-top:.5rem;animation:fadeUp .8s ease .1s both}
+.hero .date-tag{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.3rem .8rem;font-size:.78rem;color:var(--atm);margin-top:.8rem;animation:fadeUp .8s ease .2s both}
 
-/* DIVIDER */
-.divider{height:1px;background:var(--border);margin:0 48px;position:relative}
-.divider::after{content:'';position:absolute;left:0;top:0;width:120px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent)}
+/* KPI Ticker */
+.kpi-ticker{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;animation:fadeUp .8s ease .3s both}
+.kpi-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.7rem 1.2rem;min-width:140px;text-align:center}
+.kpi-item .kpi-label{font-size:.7rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em}
+.kpi-item .kpi-val{font-family:'DM Mono';font-size:1.3rem;font-weight:500;color:#fff;margin-top:.2rem}
+.kpi-item .kpi-chg{font-family:'DM Mono';font-size:.75rem;margin-top:.15rem}
+.kpi-chg.neg{color:var(--dn)}.kpi-chg.pos{color:var(--up)}
 
-/* DASHBOARD SECTION */
-.dash-section{padding:48px 0 80px}
-.dash-header{display:flex;align-items:center;justify-content:space-between;padding:0 48px;margin-bottom:24px;flex-wrap:wrap;gap:16px}
-.dash-badge{font-family:var(--mono);font-size:10px;color:var(--cyan);border:1px solid rgba(34,211,238,.3);padding:4px 12px;border-radius:4px}
-.dash-stitle{font-family:var(--disp);font-size:24px;font-weight:800}
-.dash-date{font-family:var(--mono);font-size:13px;color:var(--muted)}
-.frame-wrap{margin:0 32px;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--panel);box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.frame-bar{display:flex;align-items:center;gap:8px;padding:12px 20px;background:rgba(12,12,29,.8);border-bottom:1px solid var(--border)}
-.fdot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.frame-url{flex:1;margin-left:12px;font-family:var(--mono);font-size:11px;color:var(--dim);background:rgba(0,0,0,.3);padding:6px 14px;border-radius:6px;border:1px solid var(--border)}
+/* Mobile nav */
+.mobile-nav{display:none;gap:.5rem;justify-content:center;margin-top:1.2rem;flex-wrap:wrap}
+@media(max-width:768px){.mobile-nav{display:flex!important}}
+.mobile-nav a{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.5rem 1rem;color:var(--txt2);text-decoration:none;font-size:.8rem;transition:all .2s}
+.mobile-nav a:hover{border-color:var(--call);color:#fff}
 
-/* DASHBOARD INNER */
-.db{background:#0f0f23;color:#c9d1d9;font-family:var(--body)}
-.db-hdr{background:linear-gradient(180deg,#1a1a3e,#0f0f23);border-bottom:1px solid #2a2a4a;padding:20px 24px 16px}
-.db-hdr-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
-.db-kpi-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
-.kpi{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid #2a2a4a;border-radius:12px;padding:18px 20px;flex:1 1 220px;min-width:190px}
-.kpi-label{font-size:11px;color:#8892b0;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
-.kpi-val{font-size:24px;font-weight:800;font-family:var(--mono);line-height:1.1}
-.kpi-sub{font-size:12px;margin-top:6px}
+/* Dashboard frame */
+.dash-wrap{max-width:1100px;margin:2rem auto;padding:0 1rem}
+.browser-frame{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.browser-bar{background:var(--card2);padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--border)}
+.dot{width:10px;height:10px;border-radius:50%}.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.browser-bar .url{flex:1;margin-left:.8rem;background:var(--bg);border-radius:6px;padding:.3rem .8rem;font-family:'DM Mono';font-size:.72rem;color:var(--txt3)}
 
-/* TABS */
-.tabs{display:flex;border-bottom:1px solid #2a2a4a;padding:0 24px;background:#12122a;overflow-x:auto}
-.tab{padding:12px 18px;font-size:13px;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:#8892b0;font-family:var(--body);font-weight:400}
-.tab.active{color:#e6f1ff;font-weight:700;border-bottom-color:#6366f1}
-.tab-content{display:none;padding:8px 24px 40px;max-width:1100px;margin:0 auto}
+/* Tabs */
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--card2);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{padding:.7rem 1.2rem;font-size:.8rem;color:var(--txt3);cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.tab-btn:hover{color:var(--txt)}
+.tab-btn.active{color:var(--call);border-bottom-color:var(--call);background:rgba(96,165,250,.05)}
+.tab-content{display:none;padding:1.5rem;animation:fadeIn .3s ease}
 .tab-content.active{display:block}
 
-/* CARDS */
-.card{background:#1a1a2e;border-radius:12px;border:1px solid #2a2a4a;margin-bottom:16px}
-.sec-title{display:flex;align-items:center;gap:12px;margin:32px 0 14px}
-.sec-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
-.sec-text{font-size:18px;font-weight:700;color:#e6f1ff}
+/* Section titles */
+.sec-title{font-family:'Outfit';font-weight:700;font-size:1.1rem;color:#fff;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.sec-title .num{background:var(--call);color:#000;width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700}
+.sec-sub{font-size:.82rem;color:var(--txt2);margin-bottom:1rem}
 
-/* CSS BAR CHART */
-.bar-chart{padding:16px}
-.bar-item{display:flex;align-items:center;margin-bottom:8px;gap:8px}
-.bar-label{width:100px;font-size:10px;color:#8892b0;text-align:right;flex-shrink:0;white-space:pre-line;line-height:1.3}
-.bar-track{flex:1;height:28px;background:#0f0f23;border-radius:4px;position:relative;overflow:visible;display:flex;align-items:center}
-.bar-fill{height:100%;border-radius:4px;transition:width .5s ease;min-width:2px}
-.bar-val{font-family:var(--mono);font-size:11px;font-weight:700;margin-left:8px;white-space:nowrap;flex-shrink:0}
+/* Cards grid */
+.cards{display:grid;gap:1rem;margin-bottom:1.5rem}
+.cards-3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.cards-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem}
+.card .card-label{font-size:.72rem;color:var(--txt3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem}
+.card .card-val{font-family:'DM Mono';font-size:1.4rem;font-weight:500;color:#fff}
+.card .card-sub{font-family:'DM Mono';font-size:.78rem;margin-top:.2rem}
 
-/* HORIZONTAL PAIRED BARS */
-.hbar-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:8px 16px}
-.hbar-label{width:60px;font-size:12px;color:#c9d1d9;text-align:right;flex-shrink:0}
-.hbar-track{flex:1;display:flex;gap:4px}
-.hbar-seg{height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:700;color:#fff;min-width:30px}
+/* Bar charts */
+.bar-chart{margin:1rem 0}
+.bar-row{display:flex;align-items:center;margin-bottom:.5rem;font-size:.8rem}
+.bar-label{width:160px;flex-shrink:0;color:var(--txt2);font-size:.75rem}
+.bar-track{flex:1;height:22px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .6s ease;min-width:2px}
+.bar-fill.pos{background:linear-gradient(90deg,var(--up),#22c55e)}.bar-fill.neg{background:linear-gradient(90deg,var(--dn),#dc2626)}
+.bar-fill.put{background:linear-gradient(90deg,var(--put),#ef4444)}.bar-fill.call{background:linear-gradient(90deg,var(--call),#3b82f6)}
+.bar-val{width:80px;text-align:right;font-family:'DM Mono';font-size:.78rem;flex-shrink:0;margin-left:.5rem}
 
-/* TURNOVER CARDS */
-.to-row{display:flex;gap:12px;flex-wrap:wrap}
-.to-card{flex:1 1 160px;padding:16px 20px;text-align:center}
-.to-val{font-size:22px;font-weight:800;font-family:var(--mono)}
-.to-jnet{font-size:11px;color:#6366f1;margin-top:6px}
+/* Butterfly chart */
+.bf-row{display:flex;align-items:center;margin-bottom:3px;font-size:.75rem;min-height:22px}
+.bf-left{flex:1;display:flex;justify-content:flex-end;padding-right:.3rem}
+.bf-strike{width:60px;text-align:center;font-family:'DM Mono';font-size:.72rem;color:var(--txt2);flex-shrink:0}
+.bf-right{flex:1;display:flex;padding-left:.3rem}
+.bf-bar{height:18px;border-radius:3px;min-width:1px;transition:width .5s ease}
+.bf-bar.put{background:var(--put)}.bf-bar.call{background:var(--call)}
+.bf-val{font-family:'DM Mono';font-size:.68rem;padding:0 .3rem;white-space:nowrap}
+.bf-row.atm-row .bf-strike{color:var(--atm);font-weight:700;background:rgba(251,191,36,.1);border-radius:3px}
 
-/* BUTTERFLY */
-.bf-hdr,.bf-r{display:flex;align-items:center;height:28px}
-.bf-hdr{border-bottom:1px solid #2a2a4a;padding-bottom:4px}
-.bf-r{border-bottom:1px solid #1a1a30}
-.bf-r.atm{background:rgba(251,191,36,.06)}
-.bf-cell{flex-shrink:0;font-family:var(--mono)}
-.bf-bar-wrap{flex:1;display:flex;padding:0 2px}
-.bf-bar{height:14px;border-radius:3px}
+/* Zero-center bar */
+.zc-row{display:flex;align-items:center;margin-bottom:.4rem}
+.zc-label{width:130px;font-size:.75rem;color:var(--txt2);flex-shrink:0}
+.zc-track{flex:1;height:24px;position:relative;display:flex}
+.zc-left{flex:1;display:flex;justify-content:flex-end}
+.zc-right{flex:1;display:flex}
+.zc-center{width:2px;background:var(--txt3);flex-shrink:0}
+.zc-bar{height:24px;border-radius:3px;transition:width .5s ease}
+.zc-bar.neg{background:var(--dn)}.zc-bar.pos{background:var(--up)}
+.zc-val{width:70px;font-family:'DM Mono';font-size:.75rem;text-align:right;flex-shrink:0;margin-left:.5rem}
+.zc-guide{display:flex;justify-content:space-between;font-size:.68rem;color:var(--txt3);padding:0 0 0 130px;margin-top:.2rem}
 
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{padding:10px 16px;text-align:left;color:#8892b0;border-bottom:2px solid #2a2a4a}
-.tbl td{padding:8px 16px;border-bottom:1px solid #1e1e3a}
-.tbl .pair-row{background:rgba(251,191,36,.05)}
-.pair-badge{margin-left:8px;font-size:9px;color:var(--gold);border:1px solid rgba(251,191,36,.3);border-radius:4px;padding:1px 6px}
+/* Tables */
+.data-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:1rem 0}
+.data-table th{background:var(--card2);color:var(--txt2);padding:.5rem .6rem;text-align:left;font-weight:500;border-bottom:1px solid var(--border);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em}
+.data-table td{padding:.45rem .6rem;border-bottom:1px solid rgba(30,41,59,.5);font-family:'DM Mono';font-size:.78rem}
+.data-table tr:hover{background:rgba(96,165,250,.03)}
 
-/* PAIR CARD */
-.pair-card{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#1a1a2e;border-radius:10px;border:1px solid rgba(251,191,36,.2);flex-wrap:wrap;margin-bottom:8px}
+/* Outlook section */
+.outlook-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin:1rem 0}
+.outlook-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem}
+.outlook-card .oc-icon{font-size:1.3rem;margin-bottom:.4rem}
+.outlook-card .oc-title{font-family:'Outfit';font-weight:600;font-size:.88rem;color:#fff;margin-bottom:.5rem}
+.outlook-card .oc-text{font-size:.78rem;color:var(--txt2);line-height:1.5}
 
-/* LEVEL BAR */
-.lv-row{display:flex;align-items:center;gap:12px;padding:8px 0}
-.lv-price{width:72px;font-size:16px;font-weight:800;text-align:right;font-family:var(--mono)}
-.lv-bar{height:8px;flex:1;border-radius:4px}
-.lv-info{min-width:180px}
-.lv-label{font-size:12px;font-weight:700}
-.lv-sub{font-size:10px;color:#8892b0}
+/* Level chart */
+.level-chart{position:relative;padding:1rem;background:var(--card);border-radius:10px;border:1px solid var(--border);margin:1rem 0}
+.level-row{display:flex;align-items:center;padding:.35rem 0;font-size:.78rem}
+.level-price{width:80px;font-family:'DM Mono';font-weight:500;text-align:right;padding-right:1rem}
+.level-bar-wrap{flex:1;position:relative;height:8px;background:var(--bg);border-radius:4px}
+.level-bar{height:100%;border-radius:4px;position:absolute;left:0;top:0}
+.level-tag{font-size:.7rem;margin-left:.5rem;padding:.1rem .4rem;border-radius:4px;white-space:nowrap}
+.level-tag.support{background:rgba(74,222,128,.1);color:var(--up);border:1px solid rgba(74,222,128,.2)}
+.level-tag.resist{background:rgba(248,113,113,.1);color:var(--dn);border:1px solid rgba(248,113,113,.2)}
+.level-tag.current{background:rgba(251,191,36,.1);color:var(--atm);border:1px solid rgba(251,191,36,.2)}
 
-/* FORECAST */
-.forecast{margin-top:16px;padding:12px 16px;border-radius:8px;background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(139,92,246,.1));border:1px solid rgba(99,102,241,.2);text-align:center}
-.forecast-range{font-size:24px;font-weight:900;color:#e6f1ff;font-family:var(--mono)}
+/* Participant section */
+.part-summary{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:600px){.part-summary{grid-template-columns:1fr}}
+.part-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem}
+.part-box .pb-title{font-family:'Outfit';font-weight:600;font-size:.95rem;margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem}
+.pb-row{display:flex;justify-content:space-between;padding:.25rem 0;font-size:.8rem}
+.pb-row .pb-label{color:var(--txt2)}.pb-row .pb-val{font-family:'DM Mono';font-weight:500}
+.pb-strategy{margin-top:.6rem;padding:.5rem .7rem;background:rgba(96,165,250,.05);border-radius:6px;font-size:.78rem;color:var(--call)}
+.foreign .pb-strategy{color:var(--foreign)}
+.domestic .pb-strategy{color:var(--domestic)}
 
-/* OUTLOOK CARD */
-.oc{padding:20px;margin-bottom:12px}
-.oc-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.oc-icon{font-size:20px}
-.oc-title{font-size:15px;font-weight:700;color:#e6f1ff}
-.oc-body{font-size:12.5px;line-height:1.8;color:#c9d1d9;margin-bottom:10px}
-.tags{display:flex;gap:8px;flex-wrap:wrap}
-.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.t-red{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)}
-.t-green{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
-.t-purple{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)}
+.insight-box{background:var(--card);border-left:3px solid var(--atm);border-radius:0 10px 10px 0;padding:1rem 1.2rem;margin:1.5rem 0;font-size:.82rem;color:var(--txt2);line-height:1.6}
+.insight-box .ib-icon{color:var(--atm);margin-right:.3rem}
 
-.footer{padding:40px 48px;border-top:1px solid var(--border);text-align:center}
-.footer-text{font-size:11px;color:var(--dim);font-family:var(--mono)}
-@media(max-width:768px){.topbar{padding:0 16px}.topbar-nav{display:none}.hero{padding:100px 20px 40px}.dash-header{padding:0 20px}.frame-wrap{margin:0 12px;border-radius:10px}.footer{padding:30px 20px}.bar-label{width:70px;font-size:9px}.mobile-nav{display:flex!important}}
+/* Footer */
+.site-footer{text-align:center;padding:2rem;color:var(--txt3);font-size:.75rem;border-top:1px solid var(--border);margin-top:2rem}
+.site-footer a{color:var(--txt2);text-decoration:none;margin:0 .5rem}
+.site-footer a:hover{color:#fff}
+
+/* Range indicator */
+.range-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin:1rem 0}
+.range-bar{position:relative;height:36px;background:var(--bg);border-radius:8px;margin:1rem 0;overflow:visible}
+.range-fill{position:absolute;height:100%;border-radius:8px;background:linear-gradient(90deg,rgba(96,165,250,.15),rgba(96,165,250,.3),rgba(96,165,250,.15))}
+.range-marker{position:absolute;top:-6px;bottom:-6px;width:3px;border-radius:2px;transform:translateX(-50%)}
+.range-label{position:absolute;top:42px;font-family:'DM Mono';font-size:.68rem;transform:translateX(-50%);white-space:nowrap}
+.range-label-top{position:absolute;top:-22px;font-family:'DM Mono';font-size:.65rem;transform:translateX(-50%);white-space:nowrap;color:var(--txt3)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<header class="topbar">
-<div class="topbar-brand"><div class="topbar-logo"></div><span class="topbar-title">JPX Intelligence</span></div>
-<nav><ul class="topbar-nav"><li><a href="#hero">ホーム</a></li><li><a href="#dashboard">ダッシュボード</a></li><li><a href="archive.html">アーカイブ</a></li></ul></nav>
-<div style="font-family:var(--mono);font-size:11px;color:var(--muted)">2026.02.27</div>
-</header>
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">JPX<span>Lab</span></div>
+  <nav>
+    <a href="#hero">ホーム</a>
+    <a href="#dashboard">ダッシュボード</a>
+    <a href="archive.html">📂 アーカイブ</a>
+  </nav>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="hero">
-<div class="hero-grid"></div><div class="hero-glow"></div>
-<div class="hero-content">
-<div class="hero-eyebrow">JPX Derivatives Intelligence</div>
-<h1 class="hero-title">デリバティブ<br><span class="hl">市場分析ポータル</span></h1>
-<p class="hero-desc">日経225先物・オプションの建玉残高、大口手口、ボラティリティ分析をリアルタイムに可視化。</p>
-<div class="hero-ticker">
-<div class="ticker-item"><span class="ticker-label">日経平均</span><span class="ticker-value">58,850.27</span><span class="ticker-chg" style="color:var(--green)">+96.88</span></div>
-<div class="ticker-item"><span class="ticker-label">日経VI</span><span class="ticker-value">27.89</span><span class="ticker-chg" style="color:var(--green)">-1.14</span></div>
-<div class="ticker-item"><span class="ticker-label">TOPIX</span><span class="ticker-value">3,938.68</span><span class="ticker-chg" style="color:var(--green)">+58.34</span></div>
-<div class="ticker-item"><span class="ticker-label">ATM</span><span class="ticker-value">59,100</span><span class="ticker-chg" style="color:var(--gold)">3月限清算値</span></div>
-</div></div>
+  <h1 class="outfit">JPX Derivatives Analysis</h1>
+  <p class="sub">日経225先物・オプション市場の日次分析ダッシュボード</p>
+  <div class="date-tag mono">📅 2026.03.02（月）</div>
+
+  <div class="kpi-ticker">
+    <div class="kpi-item">
+      <div class="kpi-label">日経平均</div>
+      <div class="kpi-val mono">58,057</div>
+      <div class="kpi-chg neg mono">▼ 793.03 (−1.35%)</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">日経平均VI</div>
+      <div class="kpi-val mono">34.99</div>
+      <div class="kpi-chg neg mono">▲ +7.66 (+28.0%)</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">TOPIX先物</div>
+      <div class="kpi-val mono">3,894.0</div>
+      <div class="kpi-chg neg mono">▼ 60.5 (−1.53%)</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">ATM</div>
+      <div class="kpi-val mono">58,000</div>
+      <div class="kpi-chg mono" style="color:var(--txt3)">N225先物清算値</div>
+    </div>
+  </div>
+
+  <div class="mobile-nav" style="display:none">
+    <a href="#dashboard">📊 ダッシュボード</a>
+    <a href="archive.html">📂 アーカイブ</a>
+  </div>
 </section>
-
-<!-- MOBILE NAV (hidden on desktop, visible on mobile where topbar-nav is hidden) -->
-<div style="display:none;padding:12px 20px;gap:16px;justify-content:center;border-bottom:1px solid var(--border);background:var(--bg)" class="mobile-nav">
-<a href="#dashboard" style="font-size:12px;color:var(--muted);font-family:var(--disp);letter-spacing:1px;text-decoration:none">ダッシュボード</a>
-<a href="archive.html" style="font-size:12px;color:var(--cyan);font-family:var(--disp);letter-spacing:1px;text-decoration:none">📂 アーカイブ</a>
-</div>
-
-<div class="divider"></div>
 
 <!-- DASHBOARD -->
-<section class="dash-section" id="dashboard">
-<div class="dash-header">
-<div style="display:flex;align-items:center;gap:16px"><span class="dash-badge">INTERACTIVE</span><h2 class="dash-stitle">分析ダッシュボード</h2></div>
-<span class="dash-date">DATA: 2026.02.27 — SQ: 2026.03.13</span>
-</div>
-<div class="frame-wrap">
-<div class="frame-bar"><span class="fdot" style="background:#f87171"></span><span class="fdot" style="background:#fbbf24"></span><span class="fdot" style="background:#4ade80"></span><span class="frame-url">jpx-intelligence://dashboard/20260227</span></div>
-<div class="db">
+<div class="dash-wrap" id="dashboard">
+  <div class="browser-frame">
+    <div class="browser-bar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <div class="url">jpx-lab.github.io/market-analysis/2026-03-02</div>
+    </div>
 
-<!-- HEADER KPI -->
-<div class="db-hdr">
-<div class="db-hdr-top">
-<div><div style="font-size:10px;color:#6366f1;letter-spacing:3px;text-transform:uppercase;font-weight:700;margin-bottom:4px">JPX Derivatives Intelligence</div><h1 style="font-size:22px;font-weight:900;color:#e6f1ff;margin:0">市場分析ダッシュボード</h1></div>
-<div style="text-align:right"><div style="font-size:20px;font-weight:800;color:#e6f1ff;font-family:var(--mono)">2026.02.27</div><div style="font-size:11px;color:#8892b0">金曜日 大引け</div></div>
-</div>
-<div class="db-kpi-row">
-<div class="kpi"><div class="kpi-label">日経平均（現物）</div><div class="kpi-val" style="color:#e6f1ff">58,850.27 円</div><div class="kpi-sub" style="color:#4ade80">+96.88 円</div></div>
-<div class="kpi"><div class="kpi-label">日経VI</div><div class="kpi-val" style="color:#4ade80">27.89</div><div class="kpi-sub" style="color:#f87171">-1.14</div></div>
-<div class="kpi"><div class="kpi-label">デイリー予測値幅</div><div class="kpi-val" style="color:#818cf8">57,812 ~ 59,888</div><div class="kpi-sub" style="color:#8892b0">VI÷√250</div></div>
-<div class="kpi"><div class="kpi-label">ウィークリー予測値幅</div><div class="kpi-val" style="color:#818cf8">56,574 ~ 61,126</div><div class="kpi-sub" style="color:#8892b0">VI÷√52</div></div>
-</div></div>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview',this)">📋 概要</button>
+      <button class="tab-btn" onclick="switchTab('butterfly',this)">🦋 建玉分布</button>
+      <button class="tab-btn" onclick="switchTab('flow',this)">🏦 手口</button>
+      <button class="tab-btn" onclick="switchTab('outlook',this)">🎯 総合評価</button>
+      <button class="tab-btn" onclick="switchTab('participants',this)">👥 参加者分析</button>
+    </div>
 
-<!-- TABS -->
-<div class="tabs">
-<button class="tab active" onclick="switchTab('t1',this)">概要</button>
-<button class="tab" onclick="switchTab('t2',this)">建玉分布</button>
-<button class="tab" onclick="switchTab('t3',this)">手口</button>
-<button class="tab" onclick="switchTab('t4',this)">総合評価</button>
-<button class="tab" onclick="switchTab('t5',this)">参加者分析</button>
-</div>
+    <!-- TAB: OVERVIEW -->
+    <div class="tab-content active" id="tab-overview">
+      <!-- ② Futures OI -->
+      <div class="sec-title"><span class="num">②</span> 先物建玉残高の変化</div>
+      <div id="futures-chart"></div>
 
-<!-- TAB 1: 概要 -->
-<div id="t1" class="tab-content active">
+      <!-- ③ Trading value -->
+      <div class="sec-title" style="margin-top:2rem"><span class="num">③</span> オプション取引代金（百万円）</div>
+      <div class="cards cards-3">
+        <div class="card">
+          <div class="card-label">プット</div>
+          <div class="card-val" style="color:var(--put)">13,215</div>
+          <div class="card-sub" style="color:var(--txt3)">J-NET: 9,534 (72.1%)</div>
+        </div>
+        <div class="card">
+          <div class="card-label">コール</div>
+          <div class="card-val" style="color:var(--call)">8,138</div>
+          <div class="card-sub" style="color:var(--txt3)">J-NET: 5,206 (64.0%)</div>
+        </div>
+        <div class="card">
+          <div class="card-label">合計</div>
+          <div class="card-val">21,354</div>
+          <div class="card-sub" style="color:var(--txt3)">J-NET: 14,741 (69.0%)</div>
+        </div>
+      </div>
+      <p class="sec-sub">プット代金がコールの1.6倍。J-NET比率72%は機関ヘッジ需要の急増を示す。</p>
 
-<div class="sec-title"><div class="sec-num">②</div><span class="sec-text">先物建玉残高（前日比）</span></div>
-<div class="card bar-chart" id="futures-chart"></div>
+      <!-- ④ OI Change (zero-center) -->
+      <div class="sec-title" style="margin-top:2rem"><span class="num">④</span> オプション建玉増減</div>
+      <div id="oi-change"></div>
 
-<div class="sec-title"><div class="sec-num">③</div><span class="sec-text">オプション総取引代金</span></div>
-<div class="to-row">
-<div class="card to-card"><div style="font-size:11px;color:#8892b0;margin-bottom:4px">プット</div><div class="to-val" style="color:#f87171">22,229</div><div style="font-size:10px;color:#8892b0">百万円</div><div class="to-jnet">J-NET: 20,363 (91.6%)</div></div>
-<div class="card to-card"><div style="font-size:11px;color:#8892b0;margin-bottom:4px">コール</div><div class="to-val" style="color:#60a5fa">25,474</div><div style="font-size:10px;color:#8892b0">百万円</div><div class="to-jnet">J-NET: 23,557 (92.5%)</div></div>
-<div class="card to-card"><div style="font-size:11px;color:#8892b0;margin-bottom:4px">合計</div><div class="to-val" style="color:#a78bfa">47,704</div><div style="font-size:10px;color:#8892b0">百万円</div><div class="to-jnet">J-NET: 43,920 (92.1%)</div></div>
-</div>
+      <!-- ⑤ Significant changes -->
+      <div class="sec-title" style="margin-top:2rem"><span class="num">⑤</span> 重要建玉変化（±300枚以上）</div>
+      <div id="sig-chart"></div>
+    </div>
 
-<div class="sec-title"><div class="sec-num">④</div><span class="sec-text">オプション建玉増減</span></div>
-<div class="card" style="padding:20px 16px" id="oi-chg-chart"></div>
+    <!-- TAB: BUTTERFLY -->
+    <div class="tab-content" id="tab-butterfly">
+      <div class="sec-title"><span class="num">⑥</span> 建玉分布（2603限月・ATM±5,000円）</div>
+      <p class="sec-sub">ATM = 58,000 ｜ プット（左・赤） / コール（右・青）</p>
+      <div id="butterfly-chart"></div>
+    </div>
 
-<div class="sec-title"><div class="sec-num">⑤</div><span class="sec-text">重要建玉変化（±300枚以上）</span></div>
-<div class="card bar-chart" id="sig-chart"></div>
-</div>
+    <!-- TAB: FLOW -->
+    <div class="tab-content" id="tab-flow">
+      <div class="sec-title"><span class="num">⑦</span> 大口手口（J-NET：NIKKEI 225 OOP）</div>
+      <p class="sec-sub">ＳＢＩ除外・100枚以上フィルタ適用</p>
+      <table class="data-table">
+        <thead><tr><th>銘柄</th><th>参加者</th><th>取引高</th><th>分類</th></tr></thead>
+        <tbody>
+          <tr><td>P2603-57000</td><td>ビーオブエー証券</td><td style="color:var(--put)">300</td><td>🌏 海外</td></tr>
+          <tr><td>P2603-57000</td><td>シティグループ証券</td><td style="color:var(--put)">200</td><td>🌏 海外</td></tr>
+          <tr><td>P2603-57000</td><td>ＢＮＰパリバ証券</td><td style="color:var(--put)">100</td><td>🌏 海外</td></tr>
+        </tbody>
+      </table>
+      <div class="insight-box">
+        <span class="ib-icon">💡</span>
+        P57000（ATM近傍）に海外3社が集中。ビーオブエー300枚を筆頭に、地政学リスクに対するプロテクティブ・プット需要。57,000円が機関の「下値防衛ライン」として意識される。
+      </div>
+    </div>
 
-<!-- TAB 2: 建玉分布 -->
-<div id="t2" class="tab-content">
-<div class="sec-title"><div class="sec-num">⑥</div><span class="sec-text">建玉分布（直近メジャー限月・500円刻み）</span></div>
-<div style="font-size:11px;color:#8892b0;margin-bottom:12px">ATM: <span style="color:#fbbf24;font-weight:700">59,100円</span>　<span style="color:#f87171">■</span> プット　<span style="color:#60a5fa">■</span> コール</div>
-<div class="card" style="padding:12px 0;overflow:hidden" id="bf-table"></div>
-</div>
+    <!-- TAB: OUTLOOK -->
+    <div class="tab-content" id="tab-outlook">
+      <div class="sec-title"><span class="num">⑧</span> 総合評価と先物予想</div>
 
-<!-- TAB 3: 手口 -->
-<div id="t3" class="tab-content">
-<div class="sec-title"><div class="sec-num">⑦</div><span class="sec-text">大口手口（J-NET：NIKKEI 225 OOP）</span></div>
-<div style="font-size:11px;color:#8892b0;margin-bottom:8px">SBI証券除外 | 100枚以上 | <span style="color:#fbbf24">■</span> 対当ペア</div>
-<div class="card" style="overflow:hidden;margin-bottom:16px">
-<table class="tbl">
-<thead><tr><th>銘柄</th><th>参加者</th><th style="text-align:right">取引高</th></tr></thead>
-<tbody>
-<tr class="pair-row"><td style="font-family:var(--mono);font-weight:700;color:#60a5fa">C59000</td><td>ＵＢＳ証券<span class="pair-badge">ペア</span></td><td style="text-align:right;font-family:var(--mono);font-weight:700;color:#e6f1ff">150</td></tr>
-<tr class="pair-row"><td style="font-family:var(--mono);font-weight:700;color:#60a5fa">C59000</td><td>シティグループ証券<span class="pair-badge">ペア</span></td><td style="text-align:right;font-family:var(--mono);font-weight:700;color:#e6f1ff">150</td></tr>
-<tr class="pair-row"><td style="font-family:var(--mono);font-weight:700;color:#60a5fa">C59000</td><td>ＡＢＮクリアリン証券<span class="pair-badge">ペア</span></td><td style="text-align:right;font-family:var(--mono);font-weight:700;color:#e6f1ff">150</td></tr>
-<tr class="pair-row"><td style="font-family:var(--mono);font-weight:700;color:#60a5fa">C59000</td><td>モルガンＭＵＦＧ証券<span class="pair-badge">ペア</span></td><td style="text-align:right;font-family:var(--mono);font-weight:700;color:#e6f1ff">150</td></tr>
-</tbody></table></div>
-<h3 style="font-size:14px;color:#e6f1ff;font-weight:700;margin-bottom:8px">同一数量の対当ペア</h3>
-<div class="pair-card"><span style="font-family:var(--mono);font-weight:700;color:#60a5fa;min-width:60px">C59000</span><span>ＵＢＳ証券</span><span style="color:#6366f1">⟷</span><span>シティグループ</span><span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:#fbbf24">各150枚</span></div>
-<div class="pair-card"><span style="font-family:var(--mono);font-weight:700;color:#60a5fa;min-width:60px">C59000</span><span>ＡＢＮクリアリン</span><span style="color:#6366f1">⟷</span><span>モルガンＭＵＦＧ</span><span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:#fbbf24">各150枚</span></div>
-</div>
+      <!-- Support/Resistance levels -->
+      <div id="level-chart"></div>
 
-<!-- TAB 4: 総合評価 -->
-<div id="t4" class="tab-content">
-<div class="sec-title"><div class="sec-num">⑧</div><span class="sec-text">総合評価と今後の先物予想</span></div>
-<div class="card" style="padding:20px;margin-bottom:20px">
-<h3 style="font-size:13px;color:#8892b0;margin:0 0 16px;letter-spacing:1.5px;text-transform:uppercase">サポート &amp; レジスタンス</h3>
-<div id="levels-container"></div>
-<div class="forecast"><div style="font-size:11px;color:#8892b0;margin-bottom:4px">SQ（3/13）短期予想レンジ</div><div class="forecast-range">57,500 <span style="color:#6366f1;font-size:16px">〜</span> 61,000</div></div>
-</div>
-<div id="outlook-cards"></div>
-<div id="cashflow-card"></div>
-</div>
+      <!-- Range forecast -->
+      <div class="range-box">
+        <div style="font-family:'Outfit';font-weight:600;font-size:.9rem;color:#fff;margin-bottom:.3rem">📐 予想レンジ（〜3月SQ 3/13）</div>
+        <div style="font-size:.78rem;color:var(--txt2);margin-bottom:.5rem">メイン: 56,500 — 59,500 ｜ リスク: 54,000 — 57,000</div>
+        <div id="range-indicator"></div>
+      </div>
 
-<!-- TAB 5: 参加者分析 -->
-<div id="t5" class="tab-content">
-<div class="sec-title"><div class="sec-num">⑨</div><span class="sec-text">参加者別建玉分析（2/20時点・3月限）</span></div>
+      <!-- Outlook cards -->
+      <div class="outlook-cards">
+        <div class="outlook-card">
+          <div class="oc-icon">⚖️</div>
+          <div class="oc-title">需給の歪み</div>
+          <div class="oc-text">N225ラージ+2,705枚で買い建て増。mini+18枚で個人静観。TOPIX▲15,672枚は機関のポジション圧縮。地政学ショック下でもN225買い増は押し目需要を示唆。</div>
+        </div>
+        <div class="outlook-card">
+          <div class="oc-icon">🏦</div>
+          <div class="oc-title">手口の解釈</div>
+          <div class="oc-text">J-NETでP57000に海外3社集中。57,000円が「下値の床」。C60000の6,403枚が最大の「上値の蓋」。コール売り主導のカバードコール設定。</div>
+        </div>
+        <div class="outlook-card">
+          <div class="oc-icon">📊</div>
+          <div class="oc-title">建玉変動</div>
+          <div class="oc-text">プット+1,816/コール+2,787で双方増加。プット代金1.6倍で恐怖ヘッジ主導。深いOTMプット（38000/47000/52000）積み増しはテールリスク警戒。</div>
+        </div>
+        <div class="outlook-card">
+          <div class="oc-icon">🎯</div>
+          <div class="oc-title">結論</div>
+          <div class="oc-text">米・イスラエルのイラン攻撃で地政学リスク急騰。VIは35近傍でパニック接近。ただし朝の急落からの下げ渋りは底堅さ。3月SQに向け56,500〜59,500のレンジを想定。中東情勢次第で54,000割れのリスクも。</div>
+        </div>
+      </div>
+    </div>
 
-<!-- 海外 vs 国内 サマリー（先物+OP統合） -->
-<div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px">
-<div class="card" style="flex:1 1 300px;padding:20px">
-<div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:14px">🌏 海外勢</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-<div style="width:55px;font-size:11px;color:#8892b0;text-align:right;font-weight:700;flex-shrink:0">先物</div>
-<div style="flex:1;display:flex;justify-content:flex-end;height:22px"><div style="width:30%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:100px;flex-shrink:0">-7,088 売り超</div>
-</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-<div style="width:55px;font-size:11px;color:#f87171;text-align:right;font-weight:700;flex-shrink:0">PUT</div>
-<div style="flex:1;display:flex;justify-content:flex-start;height:22px"><div style="width:25%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:100px;flex-shrink:0">+767 買い超</div>
-</div>
-<div style="display:flex;align-items:center;gap:8px">
-<div style="width:55px;font-size:11px;color:#60a5fa;text-align:right;font-weight:700;flex-shrink:0">CALL</div>
-<div style="flex:1;display:flex;justify-content:flex-end;height:22px"><div style="width:45%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:100px;flex-shrink:0">-1,244 売り超</div>
-</div>
-<div style="margin-top:12px;font-size:11px;color:#8892b0;line-height:1.6">→ <span style="color:#fbbf24;font-weight:700">プロテクティブ・カラー</span>（先物ショート＋P買い＋C売り＝守り）</div>
-</div>
-<div class="card" style="flex:1 1 300px;padding:20px">
-<div style="font-size:13px;font-weight:700;color:#f87171;margin-bottom:14px">🏠 国内勢</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-<div style="width:55px;font-size:11px;color:#8892b0;text-align:right;font-weight:700;flex-shrink:0">先物</div>
-<div style="flex:1;display:flex;justify-content:flex-start;height:22px"><div style="width:30%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:100px;flex-shrink:0">+6,799 買い超</div>
-</div>
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-<div style="width:55px;font-size:11px;color:#f87171;text-align:right;font-weight:700;flex-shrink:0">PUT</div>
-<div style="flex:1;display:flex;justify-content:flex-end;height:22px"><div style="width:25%;background:#f87171;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#f87171;width:100px;flex-shrink:0">-762 売り超</div>
-</div>
-<div style="display:flex;align-items:center;gap:8px">
-<div style="width:55px;font-size:11px;color:#60a5fa;text-align:right;font-weight:700;flex-shrink:0">CALL</div>
-<div style="flex:1;display:flex;justify-content:flex-start;height:22px"><div style="width:45%;background:#4ade80;border-radius:4px;opacity:.8"></div></div>
-<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#4ade80;width:100px;flex-shrink:0">+1,260 買い超</div>
-</div>
-<div style="margin-top:12px;font-size:11px;color:#8892b0;line-height:1.6">→ <span style="color:#fbbf24;font-weight:700">リスクテイク</span>（先物ロング＋P売り＋C買い＝攻め）</div>
-</div>
-</div>
+    <!-- TAB: PARTICIPANTS -->
+    <div class="tab-content" id="tab-participants">
+      <div class="sec-title"><span class="num">⑨</span> 参加者別建玉分析（オプション・2/27基準）</div>
+      <p class="sec-sub">※ indexfut_oi_by_tp.xlsx 未アップロードのため先物クロス分析は非対応</p>
 
-<!-- 先物ポジション ランキング -->
-<div class="sec-title"><div class="sec-num" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">📈</div><span class="sec-text">先物ポジション ランキング</span></div>
-<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px" id="futures-rankings"></div>
+      <!-- Summary -->
+      <div class="part-summary">
+        <div class="part-box foreign">
+          <div class="pb-title" style="color:var(--foreign)">🌏 海外勢</div>
+          <div class="pb-row"><span class="pb-label">PUT Net</span><span class="pb-val" style="color:var(--up)">+12</span></div>
+          <div class="pb-row"><span class="pb-label">CALL Net</span><span class="pb-val" style="color:var(--dn)">-963</span></div>
+          <div class="pb-strategy">→ プロテクティブ・カラー（ヘッジ＋蓋）</div>
+        </div>
+        <div class="part-box domestic">
+          <div class="pb-title" style="color:var(--domestic)">🏠 国内勢</div>
+          <div class="pb-row"><span class="pb-label">PUT Net</span><span class="pb-val" style="color:var(--dn)">-12</span></div>
+          <div class="pb-row"><span class="pb-label">CALL Net</span><span class="pb-val" style="color:var(--up)">+964</span></div>
+          <div class="pb-strategy">→ リバーサル（強気転換）</div>
+        </div>
+      </div>
 
-<!-- 統合プロファイル -->
-<div class="sec-title"><div class="sec-num" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🏆</div><span class="sec-text">統合プロファイル（先物×オプション）</span></div>
-<div class="card" style="overflow:hidden;margin-bottom:16px">
-<table class="tbl">
-<thead><tr>
-<th style="width:30px"></th>
-<th>参加者</th>
-<th style="text-align:right">先物Net</th>
-<th style="text-align:right">P Net</th>
-<th style="text-align:right">C Net</th>
-<th style="text-align:center">推定戦略</th>
-</tr></thead>
-<tbody id="participant-table"></tbody>
-</table>
-</div>
+      <!-- Participant table -->
+      <div style="margin-top:1.5rem;font-family:'Outfit';font-weight:600;font-size:.92rem;color:#fff;margin-bottom:.8rem">統合プロファイル</div>
+      <div style="overflow-x:auto">
+      <table class="data-table" id="participant-table">
+        <thead>
+          <tr><th></th><th>参加者</th><th>P売超</th><th>P買超</th><th>P Net</th><th>C売超</th><th>C買超</th><th>C Net</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      </div>
 
-<!-- 構造の解説 -->
-<div class="card" style="padding:16px 20px;margin-bottom:24px;border-left:3px solid #fbbf24">
-<div style="font-size:12px;color:#fbbf24;font-weight:700;margin-bottom:6px">💡 ポジション構造の読み方</div>
-<div style="font-size:12px;color:#c9d1d9;line-height:1.8">海外勢は先物で-7,088枚の売り超に加え、オプションで「P買い＋C売り」＝高値圏での<strong style="color:#60a5fa">プロテクティブ・カラー戦略</strong>。ただし個社別ではABNクリアリンが先物+8,554枚のロングでカバードコールを組むなど、海外勢内でも方向が割れている。国内勢は先物ロング＋「P売り＋C買い」＝<strong style="color:#f87171">攻めのリスクテイク</strong>。特に野村が先物+16,518枚で最大のロングポジション。</div>
-</div>
+      <div class="insight-box">
+        <span class="ib-icon">💡</span>
+        海外勢はコール売り超963枚、国内勢はコール買い超964枚と、ほぼ鏡像のポジション構造。海外＝カラー戦略で利益確定ゾーン設定（守り）、国内＝コール買いで上値追い（攻め）。ABN/JPモルガン/シティのコール売りが「上値の蓋」を形成。モルガンMUFGのプット売り863枚はプレミアム収入戦略。ゴールドマンのプット買い825枚は下値ヘッジ。
+      </div>
+    </div>
+
+  </div><!-- /browser-frame -->
 </div>
 
-</div><!-- end .db -->
-</div><!-- end .frame-wrap -->
-</section>
+<!-- FOOTER -->
+<footer class="site-footer">
+  <a href="index.html">🏠 最新レポート</a>
+  <a href="archive.html">📂 アーカイブ一覧</a>
+  <br><br>
+  <span>JPXLab Market Analysis — Generated 2026.03.02</span>
+</footer>
 
-<footer class="footer"><span class="footer-text">© 2026 JPX Derivatives Intelligence — Not investment advice</span><div style="margin-top:12px;display:flex;gap:20px;justify-content:center"><a href="index.html" style="font-size:12px;color:var(--muted);font-family:var(--disp);letter-spacing:1px;text-decoration:none;transition:color .2s">最新</a><a href="archive.html" style="font-size:12px;color:var(--cyan);font-family:var(--disp);letter-spacing:1px;text-decoration:none;transition:color .2s">📂 アーカイブ一覧</a></div></footer>
-
-<!-- ============ VANILLA JS (ZERO DEPENDENCIES) ============ -->
 <script>
+// Tab switching
 function switchTab(id, btn) {
-  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
-  document.querySelectorAll('.tab').forEach(function(el){ el.classList.remove('active'); });
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
 }
 
-// Build bar charts with pure CSS
+// ② Futures OI bar chart
 function buildFuturesChart() {
-  var data = [
-    {name:"N225ラージ\n建玉残高",v:-1279},{name:"N225ラージ\n3月限",v:-1766},
-    {name:"N225mini\n建玉残高",v:3670},{name:"N225mini\n3月限",v:2410},
-    {name:"TOPIX\n建玉残高",v:2946},{name:"TOPIX\n3月限",v:2427}
+  const data = [
+    { label: 'N225ラージ 合計', val: 2705 },
+    { label: 'N225ラージ 2603', val: 2263 },
+    { label: 'N225ラージ 2606', val: 148 },
+    { label: 'N225 mini 合計', val: 1726 },
+    { label: 'N225 mini 2603', val: 18 },
+    { label: 'N225 mini 2606', val: 1428 },
+    { label: 'TOPIX 合計', val: -15672 },
+    { label: 'TOPIX 2603', val: -15660 },
   ];
-  var max = Math.max.apply(null, data.map(function(d){return Math.abs(d.v)}));
-  var html = '';
-  data.forEach(function(d){
-    var w = Math.round(Math.abs(d.v)/max*100);
-    var color = d.v >= 0 ? '#3b82f6' : '#ef4444';
-    var sign = d.v >= 0 ? '+' : '';
-    html += '<div class="bar-item"><div class="bar-label">' + d.name.replace('\n','<br>') + '</div>';
-    html += '<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+color+'"></div></div>';
-    html += '<div class="bar-val" style="color:'+color+'">' + sign + d.v.toLocaleString() + '</div></div>';
+  const maxAbs = Math.max(...data.map(d => Math.abs(d.val)));
+  const el = document.getElementById('futures-chart');
+  let html = '<div class="bar-chart">';
+  data.forEach(d => {
+    const pct = Math.min(Math.abs(d.val) / maxAbs * 80, 80);
+    const cls = d.val >= 0 ? 'pos' : 'neg';
+    const color = d.val >= 0 ? 'var(--up)' : 'var(--dn)';
+    const sign = d.val >= 0 ? '+' : '';
+    html += '<div class="bar-row"><div class="bar-label">' + d.label + '</div><div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + pct + '%"></div></div><div class="bar-val" style="color:' + color + '">' + sign + d.val.toLocaleString() + '</div></div>';
   });
-  document.getElementById('futures-chart').innerHTML = html;
-}
-
-function buildSigChart() {
-  var data = [
-    {id:"P40000(03)",v:-521},{id:"P44000(03)",v:-850},{id:"P47000(03)",v:505},{id:"P50000(03)",v:-753},{id:"P52000(03)",v:525},
-    {id:"C57500(03)",v:-703},{id:"C59000(03)",v:-356},{id:"C60000(03)",v:-953},{id:"C61000(03)",v:-754},{id:"C62000(03)",v:-523},
-    {id:"C63000(03)",v:-1269},{id:"C68000(03)",v:330},{id:"P30000(04)",v:972},{id:"P38000(04)",v:-491},{id:"P45000(04)",v:507},{id:"P50000(04)",v:466}
-  ];
-  var max = Math.max.apply(null, data.map(function(d){return Math.abs(d.v)}));
-  var html = '';
-  data.forEach(function(d){
-    var w = Math.round(Math.abs(d.v)/max*100);
-    var color = d.v >= 0 ? '#4ade80' : '#f87171';
-    var sign = d.v >= 0 ? '+' : '';
-    html += '<div class="bar-item"><div class="bar-label" style="width:85px;font-size:9px">' + d.id + '</div>';
-    html += '<div class="bar-track"><div class="bar-fill" style="width:'+w+'%;background:'+color+';opacity:.85"></div></div>';
-    html += '<div class="bar-val" style="color:'+color+'">' + sign + d.v.toLocaleString() + '</div></div>';
-  });
-  document.getElementById('sig-chart').innerHTML = html;
-}
-
-function buildButterfly() {
-  var data = [
-    {s:54500,p:2045,pc:22,c:1318,cc:0},{s:55000,p:3502,pc:6,c:5244,cc:-80},{s:55500,p:2291,pc:20,c:1891,cc:0},
-    {s:56000,p:3134,pc:51,c:3144,cc:0},{s:56500,p:1466,pc:193,c:1550,cc:0},{s:57000,p:2465,pc:52,c:3793,cc:0},
-    {s:57500,p:538,pc:4,c:1075,cc:-703},{s:58000,p:895,pc:1,c:5746,cc:-251},{s:58500,p:248,pc:33,c:296,cc:13},
-    {s:59000,p:917,pc:-4,c:3400,cc:-356},{s:59500,p:10,pc:-1,c:912,cc:31},{s:60000,p:9,pc:2,c:6324,cc:-953},
-    {s:60500,p:2,pc:0,c:351,cc:45},{s:61000,p:7,pc:0,c:2335,cc:-754},{s:61500,p:1,pc:0,c:1481,cc:48},
-    {s:62000,p:1,pc:0,c:4477,cc:-523},{s:62500,p:0,pc:0,c:632,cc:53},{s:63000,p:0,pc:0,c:2021,cc:-1269},
-    {s:63500,p:0,pc:0,c:561,cc:98},{s:64000,p:0,pc:0,c:2440,cc:-13}
-  ];
-  var mx = Math.max.apply(null, data.map(function(d){return Math.max(d.p,d.c)}));
-  var sc = 100/(mx*1.15);
-  var atm = 59000;
-  var fs = function(n){return (n>=0?'+':'')+n.toLocaleString()};
-
-  var html = '<div class="bf-hdr">';
-  html += '<div class="bf-cell" style="width:55px;text-align:right;padding-right:4px;font-size:9px;color:#f87171;font-weight:700">建玉</div>';
-  html += '<div class="bf-cell" style="width:42px;text-align:right;padding-right:4px;font-size:9px;color:#f87171">前日比</div>';
-  html += '<div style="flex:1;text-align:right;padding-right:8px;font-size:9px;color:#f87171">◀ プット</div>';
-  html += '<div class="bf-cell" style="width:56px;text-align:center;font-size:9px;color:#fbbf24;font-weight:700;border-left:1px solid #2a2a4a;border-right:1px solid #2a2a4a">行使価格</div>';
-  html += '<div style="flex:1;text-align:left;padding-left:8px;font-size:9px;color:#60a5fa">コール ▶</div>';
-  html += '<div class="bf-cell" style="width:42px;text-align:left;padding-left:4px;font-size:9px;color:#60a5fa">前日比</div>';
-  html += '<div class="bf-cell" style="width:55px;text-align:left;padding-left:4px;font-size:9px;color:#60a5fa;font-weight:700">建玉</div>';
   html += '</div>';
-
-  data.forEach(function(d){
-    var isA = d.s === atm;
-    html += '<div class="bf-r'+(isA?' atm':'')+'">';
-    html += '<div class="bf-cell" style="width:55px;text-align:right;padding-right:4px;font-size:10px;color:#c9d1d9">'+(d.p>0?d.p.toLocaleString():'')+'</div>';
-    html += '<div class="bf-cell" style="width:42px;text-align:right;padding-right:4px;font-size:9px;color:'+(d.pc>0?'#4ade80':d.pc<0?'#f87171':'transparent')+'">'+(d.pc?fs(d.pc):'')+'</div>';
-    html += '<div class="bf-bar-wrap" style="justify-content:flex-end"><div class="bf-bar" style="width:'+d.p*sc+'%;background:linear-gradient(270deg,#f87171,#991b1b);opacity:.8;border-radius:3px 0 0 3px"></div></div>';
-    html += '<div class="bf-cell" style="width:56px;text-align:center;font-size:10px;font-weight:'+(isA?800:500)+';color:'+(isA?'#fbbf24':'#c9d1d9')+';border-left:1px solid #2a2a4a;border-right:1px solid #2a2a4a;background:'+(isA?'rgba(251,191,36,.1)':'transparent')+'">'+d.s.toLocaleString()+'</div>';
-    html += '<div class="bf-bar-wrap" style="justify-content:flex-start"><div class="bf-bar" style="width:'+d.c*sc+'%;background:linear-gradient(90deg,#60a5fa,#1e3a5f);opacity:.8;border-radius:0 3px 3px 0"></div></div>';
-    html += '<div class="bf-cell" style="width:42px;text-align:left;padding-left:4px;font-size:9px;color:'+(d.cc>0?'#4ade80':d.cc<0?'#f87171':'transparent')+'">'+(d.cc?fs(d.cc):'')+'</div>';
-    html += '<div class="bf-cell" style="width:55px;text-align:left;padding-left:4px;font-size:10px;color:#c9d1d9">'+(d.c>0?d.c.toLocaleString():'')+'</div>';
-    html += '</div>';
-  });
-  document.getElementById('bf-table').innerHTML = html;
+  el.innerHTML = html;
 }
 
-function buildLevels() {
-  var levels = [
-    {price:62000,label:"第三抵抗",sub:"C62000=4,477枚",color:"#ef4444"},
-    {price:60000,label:"第一抵抗",sub:"C60000=6,324枚(解消中)",color:"#f87171"},
-    {price:59100,label:"ATM（先物清算値）",sub:"",color:"#fbbf24"},
-    {price:58000,label:"第一支持",sub:"C5,746枚ガンマフロア",color:"#4ade80"},
-    {price:56000,label:"第二支持",sub:"P3,134枚+前回J-NET帯",color:"#22c55e"},
-    {price:55000,label:"第三支持",sub:"P3,502枚の最大壁",color:"#16a34a"}
-  ];
-  var html = '';
-  levels.forEach(function(l){
-    var bb = l.color==='#fbbf24' ? '2px solid #fbbf24' : '1px dashed #2a2a4a';
-    html += '<div class="lv-row" style="border-bottom:'+bb+'">';
-    html += '<div class="lv-price" style="color:'+l.color+'">'+l.price.toLocaleString()+'</div>';
-    html += '<div class="lv-bar" style="background:linear-gradient(90deg,'+l.color+'40,transparent)"></div>';
-    html += '<div class="lv-info"><div class="lv-label" style="color:'+l.color+'">'+l.label+'</div><div class="lv-sub">'+l.sub+'</div></div>';
-    html += '</div>';
-  });
-  document.getElementById('levels-container').innerHTML = html;
-}
-
-function buildOutlookCards() {
-  var cards = [
-    {t:"需給の歪み",i:"⚡",x:"ラージ-1,279枚と一部利食い。mini+3,670枚でSQ前ロール+押し目買い。TOPIX+2,946枚でバリューシフト継続。",tg:'<span class="tag t-red">ラージ利食い</span><span class="tag t-green">TOPIX積み増し</span>'},
-    {t:"手口の解釈",i:"🔍",x:"J-NET大口はATMコール（C59000）に集中。150枚×4社で2組の対当ペア。下値ヘッジ→ATMガンマトレーディングへ移行。59,000円がSQピン候補。",tg:'<span class="tag t-purple">ATMコール集中</span><span class="tag t-red">SQピン意識</span>'},
-    {t:"建玉変動",i:"📊",x:"3月限コール-4,116枚の大量解消。C63000が-1,269枚、C60000が-953枚。SQ接近のガンマリスク削減。プットは期先+3,763枚。",tg:'<span class="tag t-red">コール大量解消</span><span class="tag t-green">期先ヘッジ継続</span>'},
-    {t:"結論",i:"🎯",x:"VI 27.89。4日続伸で最高値更新。朝方-600円から切り返す強さ。60,000円はコール解消で突破しやすい。CPI+1.8%で利上げ後退=追い風。",tg:'<span class="tag t-green">最高値圏維持</span><span class="tag t-purple">6万円射程圏</span>'}
-  ];
-  var html = '';
-  cards.forEach(function(c){
-    html += '<div class="card oc"><div class="oc-head"><span class="oc-icon">'+c.i+'</span><span class="oc-title">'+c.t+'</span></div>';
-    html += '<div class="oc-body">'+c.x+'</div><div class="tags">'+c.tg+'</div></div>';
-  });
-  document.getElementById('outlook-cards').innerHTML = html;
-}
-
+// ④ OI Change zero-center bars
 function buildOIChange() {
-  var rows = [
-    {label:"全限月", put:3763, call:-522},
-    {label:"3月限", put:-61, call:-4116}
+  const data = [
+    { label: '全限月 PUT', val: 1816 },
+    { label: '全限月 CALL', val: 2787 },
+    { label: '2603限月 PUT', val: 482 },
+    { label: '2603限月 CALL', val: 1415 },
+    { label: '2604限月 CALL', val: 1045 },
   ];
-  var max = Math.max.apply(null, rows.map(function(r){return Math.max(Math.abs(r.put),Math.abs(r.call))}));
-  var html = '';
-  // Legend
-  html += '<div style="display:flex;gap:16px;font-size:11px;color:#8892b0;margin-bottom:16px;justify-content:center">';
-  html += '<span><span style="color:#f87171">■</span> プット</span>';
-  html += '<span><span style="color:#60a5fa">■</span> コール</span>';
-  html += '<span style="color:#4ade80">▲ 増加</span>';
-  html += '<span style="color:#f87171">▼ 減少</span>';
-  html += '</div>';
-
-  rows.forEach(function(r){
-    html += '<div style="margin-bottom:20px">';
-    html += '<div style="font-size:12px;color:#e6f1ff;font-weight:700;margin-bottom:8px">'+r.label+'</div>';
-    // Put row
-    var pW = Math.round(Math.abs(r.put)/max*45);
-    var pColor = r.put >= 0 ? '#4ade80' : '#f87171';
-    var pSign = r.put >= 0 ? '+' : '';
-    var pDir = r.put >= 0 ? 'right' : 'left';
-    html += '<div style="display:flex;align-items:center;height:32px;margin-bottom:4px">';
-    html += '<div style="width:50px;font-size:11px;color:#f87171;text-align:right;padding-right:8px;font-weight:700;flex-shrink:0">PUT</div>';
-    // Left half (negative)
-    html += '<div style="flex:1;display:flex;justify-content:flex-end;height:100%">';
-    if(r.put < 0) html += '<div style="width:'+pW+'%;background:'+pColor+';border-radius:4px 0 0 4px;opacity:.8"></div>';
-    html += '</div>';
-    // Center line
-    html += '<div style="width:2px;background:#555;flex-shrink:0;height:100%"></div>';
-    // Right half (positive)
-    html += '<div style="flex:1;display:flex;justify-content:flex-start;height:100%">';
-    if(r.put >= 0) html += '<div style="width:'+pW+'%;background:'+pColor+';border-radius:0 4px 4px 0;opacity:.8"></div>';
-    html += '</div>';
-    html += '<div style="width:80px;font-family:var(--mono);font-size:12px;font-weight:700;color:'+pColor+';padding-left:8px;flex-shrink:0">'+pSign+r.put.toLocaleString()+'</div>';
-    html += '</div>';
-
-    // Call row
-    var cW = Math.round(Math.abs(r.call)/max*45);
-    var cColor = r.call >= 0 ? '#4ade80' : '#f87171';
-    var cSign = r.call >= 0 ? '+' : '';
-    html += '<div style="display:flex;align-items:center;height:32px">';
-    html += '<div style="width:50px;font-size:11px;color:#60a5fa;text-align:right;padding-right:8px;font-weight:700;flex-shrink:0">CALL</div>';
-    html += '<div style="flex:1;display:flex;justify-content:flex-end;height:100%">';
-    if(r.call < 0) html += '<div style="width:'+cW+'%;background:'+cColor+';border-radius:4px 0 0 4px;opacity:.8"></div>';
-    html += '</div>';
-    html += '<div style="width:2px;background:#555;flex-shrink:0;height:100%"></div>';
-    html += '<div style="flex:1;display:flex;justify-content:flex-start;height:100%">';
-    if(r.call >= 0) html += '<div style="width:'+cW+'%;background:'+cColor+';border-radius:0 4px 4px 0;opacity:.8"></div>';
-    html += '</div>';
-    html += '<div style="width:80px;font-family:var(--mono);font-size:12px;font-weight:700;color:'+cColor+';padding-left:8px;flex-shrink:0">'+cSign+r.call.toLocaleString()+'</div>';
-    html += '</div>';
-    html += '</div>';
+  const maxAbs = Math.max(...data.map(d => Math.abs(d.val)));
+  const el = document.getElementById('oi-change');
+  let html = '';
+  data.forEach(d => {
+    const pct = Math.abs(d.val) / maxAbs * 80;
+    const isNeg = d.val < 0;
+    const color = isNeg ? 'var(--dn)' : 'var(--up)';
+    const sign = d.val >= 0 ? '+' : '';
+    html += '<div class="zc-row"><div class="zc-label">' + d.label + '</div><div class="zc-track"><div class="zc-left">';
+    if (isNeg) html += '<div class="zc-bar neg" style="width:' + pct + '%;margin-left:auto"></div>';
+    html += '</div><div class="zc-center"></div><div class="zc-right">';
+    if (!isNeg) html += '<div class="zc-bar pos" style="width:' + pct + '%"></div>';
+    html += '</div></div><div class="zc-val" style="color:' + color + '">' + sign + d.val.toLocaleString() + '</div></div>';
   });
-  // Zero label
-  html += '<div style="display:flex;align-items:center;margin-top:4px">';
-  html += '<div style="width:50px;flex-shrink:0"></div>';
-  html += '<div style="flex:1;text-align:right;font-size:9px;color:#555;padding-right:2px">← 減少</div>';
-  html += '<div style="width:2px;flex-shrink:0"></div>';
-  html += '<div style="flex:1;text-align:left;font-size:9px;color:#555;padding-left:2px">増加 →</div>';
-  html += '<div style="width:80px;flex-shrink:0"></div>';
-  html += '</div>';
-  document.getElementById('oi-chg-chart').innerHTML = html;
+  html += '<div class="zc-guide"><span>← 減少</span><span>増加 →</span></div>';
+  el.innerHTML = html;
 }
 
+// ⑤ Significant changes
+function buildSigChart() {
+  const data = [
+    { label: 'P2603 38,000', val: 307 },
+    { label: 'P2603 40,000', val: -661 },
+    { label: 'P2603 47,000', val: 384 },
+    { label: 'P2603 50,000', val: -396 },
+    { label: 'P2603 52,000', val: 399 },
+    { label: 'P2604 48,000', val: -418 },
+    { label: 'P2604 50,000', val: -423 },
+    { label: 'P2604 56,000', val: 317 },
+    { label: 'C2604 59,250', val: 300 },
+  ];
+  const maxAbs = Math.max(...data.map(d => Math.abs(d.val)));
+  const el = document.getElementById('sig-chart');
+  let html = '<div class="bar-chart">';
+  data.forEach(d => {
+    const pct = Math.abs(d.val) / maxAbs * 70;
+    const cls = d.val >= 0 ? 'pos' : 'neg';
+    const color = d.val >= 0 ? 'var(--up)' : 'var(--dn)';
+    const sign = d.val >= 0 ? '+' : '';
+    html += '<div class="bar-row"><div class="bar-label">' + d.label + '</div><div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + pct + '%"></div></div><div class="bar-val" style="color:' + color + '">' + sign + d.val.toLocaleString() + '</div></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ⑥ Butterfly chart
+function buildButterfly() {
+  const data = [
+    {s:53000,p:3856,pc:-49,c:1849,cc:0},
+    {s:53500,p:302,pc:25,c:257,cc:0},
+    {s:54000,p:4224,pc:273,c:4650,cc:0},
+    {s:54500,p:2064,pc:19,c:1318,cc:0},
+    {s:55000,p:3490,pc:-12,c:5244,cc:0},
+    {s:55500,p:2470,pc:179,c:1891,cc:0},
+    {s:56000,p:3346,pc:212,c:3136,cc:-8},
+    {s:56500,p:1409,pc:-57,c:1549,cc:-1},
+    {s:57000,p:2302,pc:-163,c:3796,cc:3},
+    {s:57500,p:625,pc:87,c:1158,cc:83},
+    {s:58000,p:927,pc:32,c:5874,cc:128},
+    {s:58500,p:339,pc:91,c:297,cc:1},
+    {s:59000,p:917,pc:0,c:3359,cc:-41},
+    {s:59500,p:13,pc:3,c:1140,cc:228},
+    {s:60000,p:9,pc:0,c:6403,cc:79},
+    {s:60500,p:2,pc:0,c:375,cc:24},
+    {s:61000,p:7,pc:0,c:2281,cc:-54},
+    {s:61500,p:1,pc:0,c:1609,cc:128},
+    {s:62000,p:1,pc:0,c:4365,cc:-112},
+    {s:62500,p:0,pc:0,c:641,cc:9},
+    {s:63000,p:0,pc:0,c:2294,cc:273},
+  ];
+  const maxOI = Math.max(...data.map(d => Math.max(d.p, d.c)));
+  const el = document.getElementById('butterfly-chart');
+  let html = '<div style="font-size:.7rem;color:var(--txt3);display:flex;justify-content:space-between;padding:0 .3rem;margin-bottom:.3rem"><span style="color:var(--put)">◀ プット</span><span>権利行使価格</span><span style="color:var(--call)">コール ▶</span></div>';
+  data.forEach(d => {
+    const pPct = d.p / maxOI * 100;
+    const cPct = d.c / maxOI * 100;
+    const isATM = d.s === 58000;
+    const pChgStr = d.pc !== 0 ? ' <span style="color:' + (d.pc > 0 ? 'var(--up)' : 'var(--dn)') + '">(' + (d.pc > 0 ? '+' : '') + d.pc + ')</span>' : '';
+    const cChgStr = d.cc !== 0 ? ' <span style="color:' + (d.cc > 0 ? 'var(--up)' : 'var(--dn)') + '">(' + (d.cc > 0 ? '+' : '') + d.cc + ')</span>' : '';
+    html += '<div class="bf-row' + (isATM ? ' atm-row' : '') + '">';
+    html += '<div class="bf-left"><span class="bf-val" style="color:var(--put)">' + d.p.toLocaleString() + pChgStr + '</span><div class="bf-bar put" style="width:' + pPct + '%"></div></div>';
+    html += '<div class="bf-strike">' + (d.s / 1000).toFixed(1) + 'K</div>';
+    html += '<div class="bf-right"><div class="bf-bar call" style="width:' + cPct + '%"></div><span class="bf-val" style="color:var(--call)">' + d.c.toLocaleString() + cChgStr + '</span></div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// ⑧ Support/Resistance levels
+function buildLevels() {
+  const levels = [
+    { price: 62000, label: 'R3 C62000壁', type: 'resist', strength: 60 },
+    { price: 60000, label: 'R2 C60000壁 (最大)', type: 'resist', strength: 90 },
+    { price: 59500, label: 'R1 カバードコール帯', type: 'resist', strength: 45 },
+    { price: 58057, label: '現在値 58,057', type: 'current', strength: 0 },
+    { price: 57000, label: 'S1 海外Pヘッジ', type: 'support', strength: 65 },
+    { price: 55500, label: 'S2 プット壁集中', type: 'support', strength: 75 },
+    { price: 53500, label: 'S3 深いプット壁', type: 'support', strength: 55 },
+  ];
+  const el = document.getElementById('level-chart');
+  let html = '<div class="level-chart"><div style="font-family:Outfit;font-weight:600;font-size:.88rem;color:#fff;margin-bottom:.8rem">📍 サポート / レジスタンス</div>';
+  levels.forEach(l => {
+    const color = l.type === 'support' ? 'var(--up)' : l.type === 'resist' ? 'var(--dn)' : 'var(--atm)';
+    html += '<div class="level-row"><div class="level-price" style="color:' + color + '">' + l.price.toLocaleString() + '</div><div class="level-bar-wrap"><div class="level-bar" style="width:' + l.strength + '%;background:' + color + ';opacity:.4"></div></div><span class="level-tag ' + l.type + '">' + l.label + '</span></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// Range indicator
+function buildRange() {
+  const el = document.getElementById('range-indicator');
+  const lo = 54000, hi = 63000;
+  const range = hi - lo;
+  function pct(v) { return ((v - lo) / range * 100).toFixed(1); }
+  let html = '<div class="range-bar">';
+  // Main range fill
+  html += '<div class="range-fill" style="left:' + pct(56500) + '%;width:' + ((59500-56500)/range*100).toFixed(1) + '%;background:linear-gradient(90deg,rgba(96,165,250,.15),rgba(96,165,250,.25),rgba(96,165,250,.15))"></div>';
+  // Risk range
+  html += '<div class="range-fill" style="left:' + pct(54000) + '%;width:' + ((57000-54000)/range*100).toFixed(1) + '%;background:rgba(239,68,68,.1);border:1px dashed rgba(239,68,68,.3);border-radius:8px"></div>';
+  // Current marker
+  html += '<div class="range-marker" style="left:' + pct(58057) + '%;background:var(--atm)"></div>';
+  // Labels
+  html += '<div class="range-label" style="left:' + pct(56500) + '%;color:var(--call)">56,500</div>';
+  html += '<div class="range-label" style="left:' + pct(59500) + '%;color:var(--call)">59,500</div>';
+  html += '<div class="range-label" style="left:' + pct(54000) + '%;color:var(--dn)">54,000</div>';
+  html += '<div class="range-label" style="left:' + pct(58057) + '%;color:var(--atm)">現在値</div>';
+  html += '<div class="range-label-top" style="left:' + pct(57750) + '%;color:var(--call)">▬ メイン</div>';
+  html += '<div class="range-label-top" style="left:' + pct(55000) + '%;color:var(--dn)">┄ リスク</div>';
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ⑨ Participant table
 function buildParticipantTable() {
-  var data = [
-    {name:"野村証券",cat:"国内",fn:16518,pn:-500,cn:500,strategy:"先物ロング＋リバーサル（最強気）"},
-    {name:"ＡＢＮクリアリン証券",cat:"海外",fn:8554,pn:-193,cn:-1290,strategy:"カバードコール（利確ゾーン設定）"},
-    {name:"ＨＳＢＣ証券",cat:"海外",fn:-33988,pn:0,cn:0,strategy:"先物ショート（最大の売り手）"},
-    {name:"モルガンＭＵＦＧ証券",cat:"海外",fn:-13311,pn:926,cn:-348,strategy:"ベア＋プロテクティブ・プット"},
-    {name:"ＪＰモルガン証券",cat:"海外",fn:9183,pn:455,cn:130,strategy:"先物ロング＋ロングボラ"},
-    {name:"三菱ＵＦＪ証券",cat:"国内",fn:-8102,pn:-3,cn:-10,strategy:"先物ショート"},
-    {name:"みずほ証券",cat:"国内",fn:-7694,pn:10,cn:415,strategy:"先物ショート＋コール買い"},
-    {name:"バークレイズ証券",cat:"海外",fn:7043,pn:-28,cn:-173,strategy:"先物ロング＋コール売り"},
-    {name:"大和証券",cat:"国内",fn:269,pn:-275,cn:365,strategy:"リバーサル（強気転換）"},
-    {name:"ソシエテＧ証券",cat:"海外",fn:5400,pn:4,cn:-46,strategy:"先物ロング"},
-    {name:"ゴールドマン証券",cat:"海外",fn:-3081,pn:-6,cn:-224,strategy:"ベア（全方位弱気）"},
-    {name:"ビーオブエー証券",cat:"海外",fn:1250,pn:0,cn:655,strategy:"先物ロング＋コール買い（強気）"}
+  const data = [
+    ['🏠','野村証券',0,0,0,0,850,850],
+    ['🌏','ゴールドマン証券',0,825,825,0,188,188],
+    ['🌏','モルガンＭＵＦＧ証券',863,0,-863,0,13,13],
+    ['🌏','ＪＰモルガン証券',0,10,10,432,0,-432],
+    ['🌏','ＡＢＮクリアリン証券',9,7,-2,417,1,-416],
+    ['🌏','シティグループ証券',0,0,0,400,0,-400],
+    ['🏠','みずほ証券',0,0,0,20,350,330],
+    ['🌏','ソシエテＧ証券',0,20,20,9,177,168],
+    ['🏠','大和証券',0,0,0,170,0,-170],
+    ['🌏','ＢＮＰパリバ証券',0,39,39,127,31,-96],
+    ['🌏','バークレイズ証券',0,1,1,0,109,109],
+    ['🌏','ＵＢＳ証券',0,0,0,77,0,-77],
+    ['🏠','三菱ＵＦＪｅスマート',1,0,-1,67,0,-67],
   ];
-  var html = '';
-  data.forEach(function(d, i) {
-    var catColor = d.cat === '海外' ? '#60a5fa' : '#f87171';
-    var catIcon = d.cat === '海外' ? '🌏' : '🏠';
-    var fColor = d.fn >= 0 ? '#4ade80' : '#f87171';
-    var pColor = d.pn >= 0 ? '#4ade80' : '#f87171';
-    var cColor = d.cn >= 0 ? '#4ade80' : '#f87171';
-    var fs = function(n){return(n>=0?'+':'')+n.toLocaleString()};
-    var bg = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,.02)';
-    html += '<tr style="border-bottom:1px solid #1e1e3a;background:' + bg + '">';
-    html += '<td style="padding:8px 6px;text-align:center;font-size:14px">' + catIcon + '</td>';
-    html += '<td style="padding:8px 10px;color:#e6f1ff;font-weight:500;font-size:12px">' + d.name + '</td>';
-    html += '<td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-weight:700;color:' + fColor + ';font-size:11px">' + fs(d.fn) + '</td>';
-    html += '<td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-weight:700;color:' + pColor + ';font-size:11px">' + fs(d.pn) + '</td>';
-    html += '<td style="padding:8px 10px;text-align:right;font-family:var(--mono);font-weight:700;color:' + cColor + ';font-size:11px">' + fs(d.cn) + '</td>';
-    html += '<td style="padding:8px 10px;text-align:center;font-size:10px;color:#8892b0">' + d.strategy + '</td>';
-    html += '</tr>';
+  const tbody = document.querySelector('#participant-table tbody');
+  data.forEach(d => {
+    const tr = document.createElement('tr');
+    const pColor = d[4] > 0 ? 'var(--up)' : d[4] < 0 ? 'var(--dn)' : 'var(--txt3)';
+    const cColor = d[7] > 0 ? 'var(--up)' : d[7] < 0 ? 'var(--dn)' : 'var(--txt3)';
+    const sign4 = d[4] > 0 ? '+' : '';
+    const sign7 = d[7] > 0 ? '+' : '';
+    tr.innerHTML = '<td>' + d[0] + '</td><td style="font-family:Noto Sans JP;font-size:.75rem">' + d[1] + '</td><td>' + d[2].toLocaleString() + '</td><td>' + d[3].toLocaleString() + '</td><td style="color:' + pColor + '">' + sign4 + d[4].toLocaleString() + '</td><td>' + d[5].toLocaleString() + '</td><td>' + d[6].toLocaleString() + '</td><td style="color:' + cColor + '">' + sign7 + d[7].toLocaleString() + '</td>';
+    tbody.appendChild(tr);
   });
-  document.getElementById('participant-table').innerHTML = html;
 }
 
-function buildFuturesRankings() {
-  var rankings = [
-    {title:"N225ラージ 売超",data:[["ＨＳＢＣ",33988],["モルガンMUFG",13311],["三菱UFJ",8102],["みずほ",7694],["ゴールドマン",3081]],color:"#f87171"},
-    {title:"N225ラージ 買超",data:[["野村",16518],["ＪＰモルガン",9183],["ＡＢＮクリアリン",8554],["バークレイズ",7043],["ソシエテＧ",5400]],color:"#4ade80"},
-    {title:"TOPIX 売超",data:[["ゴールドマン",48635],["ＢＮＰパリバ",21618],["三菱UFJ",17086],["ＳＭＢＣ日興",14493],["みずほ",13254]],color:"#f87171"},
-    {title:"TOPIX 買超",data:[["ビーオブエー",28686],["モルガンMUFG",27444],["バークレイズ",24650],["シティ",22211],["ＪＰモルガン",22139]],color:"#4ade80"}
-  ];
-  var html = '';
-  rankings.forEach(function(r) {
-    var max = r.data[0][1];
-    html += '<div class="card" style="flex:1 1 240px;min-width:240px;padding:14px 16px">';
-    html += '<div style="font-size:11px;font-weight:700;color:' + r.color + ';margin-bottom:10px">' + r.title + '</div>';
-    r.data.forEach(function(d) {
-      var w = Math.round(d[1] / max * 100);
-      html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">';
-      html += '<div style="width:80px;font-size:10px;color:#c9d1d9;text-align:right;flex-shrink:0;overflow:hidden;white-space:nowrap">' + d[0] + '</div>';
-      html += '<div style="flex:1;height:16px;background:#0f0f23;border-radius:3px"><div style="width:' + w + '%;height:100%;background:' + r.color + ';opacity:.7;border-radius:3px"></div></div>';
-      html += '<div style="font-family:var(--mono);font-size:10px;color:' + r.color + ';width:50px;flex-shrink:0;text-align:right">' + d[1].toLocaleString() + '</div>';
-      html += '</div>';
-    });
-    html += '</div>';
-  });
-  document.getElementById('futures-rankings').innerHTML = html;
-}
-
-function buildCashflowCard() {
-  var flows = [
-    {name:"海外投資家",val:-101266,unit:"千株"},
-    {name:"個人",val:466184,unit:"千株"},
-    {name:"法人",val:-366033,unit:"千株"},
-    {name:"投資信託",val:-73941,unit:"千株"},
-    {name:"自己",val:-36709,unit:"千株"}
-  ];
-  var html = '<div class="card oc" style="border-left:3px solid #818cf8">';
-  html += '<div class="oc-head"><span class="oc-icon">📊</span><span class="oc-title">現物フロー（TSEプライム・2/16〜2/20）</span></div>';
-  html += '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">';
-  flows.forEach(function(f) {
-    var mShares = (f.val / 10000).toFixed(2);
-    var color = f.val >= 0 ? '#4ade80' : '#f87171';
-    var label = f.val >= 0 ? '買い越し' : '売り越し';
-    var sign = f.val >= 0 ? '+' : '';
-    html += '<div style="display:flex;align-items:center;gap:8px">';
-    html += '<div style="width:75px;font-size:11px;color:#c9d1d9;text-align:right;flex-shrink:0">' + f.name + '</div>';
-    html += '<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:' + color + '">' + sign + mShares + '万株（' + label + '）</div>';
-    html += '</div>';
-  });
-  html += '</div>';
-  html += '<div style="font-size:11px;color:#8892b0;line-height:1.7">→ 海外が現物で売り越す中、⑨の先物ポジションではABNクリアリンが+8,554枚の買い超を維持 ＝ <span style="color:#fbbf24;font-weight:700">ヘッジ回転</span>の構図。個人が+46.6万株の大幅買い越しで受け皿に。</div>';
-  html += '<div class="tags" style="margin-top:8px"><span class="tag t-red">海外 売り越し</span><span class="tag t-green">個人 買い越し</span><span class="tag t-purple">ヘッジ回転</span></div>';
-  html += '</div>';
-  document.getElementById('cashflow-card').innerHTML = html;
-}
-
-// Initialize all
+// Initialize
 buildFuturesChart();
+buildOIChange();
 buildSigChart();
 buildButterfly();
 buildLevels();
-buildOutlookCards();
-buildOIChange();
+buildRange();
 buildParticipantTable();
-buildFuturesRankings();
-buildCashflowCard();
 </script>
 </body>
 </html>
