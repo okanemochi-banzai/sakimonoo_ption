@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPX Market Analysis — 2026.03.03</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#06060f;--panel:#0c0c1d;--card:#1a1a2e;--card2:#12122a;
+--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444;
+--foreign:#60a5fa;--domestic:#f87171;
+--txt:#e2e8f0;--txt2:#94a3b8;--border:#2d2d5e;
+--accent:#818cf8;--glow:rgba(129,140,248,.15);
+}
+body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;line-height:1.6;overflow-x:hidden}
+.mono{font-family:'DM Mono',monospace}
+.outfit{font-family:'Outfit',sans-serif}
+
+/* Top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:'Outfit';font-weight:700;font-size:18px;color:var(--accent)}
+.topbar nav a{color:var(--txt2);text-decoration:none;margin-left:20px;font-size:13px;transition:.2s}
+.topbar nav a:hover{color:var(--txt)}
+@media(max-width:768px){.topbar nav{display:none}}
+
+/* Hero */
+.hero{margin-top:52px;padding:48px 24px 32px;text-align:center;position:relative;overflow:hidden;
+background:linear-gradient(180deg,rgba(129,140,248,.06) 0%,transparent 100%)}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+background-size:60px 60px;opacity:.15}
+.hero h1{font-family:'Outfit';font-size:clamp(24px,4vw,36px);font-weight:700;color:#fff;position:relative;
+animation:fadeUp .6s ease-out}
+.hero .sub{color:var(--txt2);font-size:14px;margin-top:4px;position:relative}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* KPI Ticker */
+.kpi-ticker{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px;position:relative}
+.kpi-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;min-width:140px;text-align:center;
+animation:fadeUp .6s ease-out;animation-fill-mode:both}
+.kpi-item:nth-child(2){animation-delay:.1s}.kpi-item:nth-child(3){animation-delay:.2s}.kpi-item:nth-child(4){animation-delay:.3s}
+.kpi-label{font-size:11px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px}
+.kpi-val{font-family:'DM Mono';font-size:22px;font-weight:700;margin-top:2px}
+.kpi-chg{font-family:'DM Mono';font-size:12px;margin-top:2px}
+.red{color:var(--dn)}.green{color:var(--up)}.blue{color:var(--call)}.yellow{color:var(--atm)}
+
+/* Mobile nav */
+.mobile-nav{display:none;justify-content:center;gap:12px;padding:16px;position:relative}
+.mobile-nav a{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 18px;color:var(--txt);text-decoration:none;font-size:13px;font-weight:500}
+@media(max-width:768px){.mobile-nav{display:flex!important}}
+
+/* Dashboard */
+.dashboard{max-width:1100px;margin:0 auto;padding:24px}
+.browser-frame{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.browser-toolbar{background:var(--card2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.dot{width:10px;height:10px;border-radius:50%}.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.url-bar{flex:1;background:var(--bg);border-radius:6px;padding:4px 12px;font-family:'DM Mono';font-size:11px;color:var(--txt2);margin-left:8px}
+
+/* KPI Header inside frame */
+.frame-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px;background:var(--card2);border-bottom:1px solid var(--border)}
+.fkpi{text-align:center;padding:8px}
+.fkpi .label{font-size:11px;color:var(--txt2)}.fkpi .val{font-family:'DM Mono';font-size:18px;font-weight:700}
+
+/* Tabs */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{flex-shrink:0;background:none;border:none;color:var(--txt2);padding:12px 18px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;font-family:'Noto Sans JP'}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;padding:20px}.tab-content.active{display:block}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.card-title{font-family:'Outfit';font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+
+/* Bar charts */
+.bar-row{display:flex;align-items:center;margin-bottom:8px;gap:8px}
+.bar-label{width:120px;font-size:12px;color:var(--txt2);flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:22px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .4s ease-out;min-width:2px}
+.bar-val{width:80px;font-family:'DM Mono';font-size:12px;flex-shrink:0}
+
+/* Butterfly chart */
+.bf-row{display:flex;align-items:center;margin-bottom:3px;gap:0}
+.bf-left{width:35%;display:flex;justify-content:flex-end;align-items:center;gap:4px}
+.bf-strike{width:70px;text-align:center;font-family:'DM Mono';font-size:11px;flex-shrink:0;padding:2px 4px;border-radius:4px}
+.bf-strike.atm{background:var(--atm);color:#000;font-weight:700}
+.bf-right{width:35%;display:flex;align-items:center;gap:4px}
+.bf-bar{height:16px;border-radius:3px;transition:width .4s}
+.bf-num{font-family:'DM Mono';font-size:10px;color:var(--txt2);min-width:40px}
+.bf-left .bf-num{text-align:right}.bf-right .bf-num{text-align:left}
+
+/* Zero-center bars for ④ */
+.zbar-container{position:relative;margin-bottom:12px}
+.zbar-group{margin-bottom:16px}
+.zbar-title{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--txt)}
+.zbar-row{display:flex;align-items:center;margin-bottom:6px;height:26px}
+.zbar-label{width:60px;font-size:11px;color:var(--txt2);text-align:right;flex-shrink:0;padding-right:8px}
+.zbar-track{flex:1;height:22px;position:relative;display:flex;align-items:center}
+.zbar-center{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#4a4a6a;z-index:1}
+.zbar-fill{position:absolute;height:100%;border-radius:3px;z-index:2}
+.zbar-val{width:70px;font-family:'DM Mono';font-size:11px;flex-shrink:0;padding-left:8px}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:var(--card2);padding:8px 10px;text-align:left;font-weight:500;color:var(--txt2);border-bottom:1px solid var(--border);position:sticky;top:0}
+.tbl td{padding:6px 10px;border-bottom:1px solid rgba(45,45,94,.4)}.tbl tr:hover{background:rgba(129,140,248,.04)}
+.tbl .mono{font-family:'DM Mono'}
+
+/* Level chart for ⑧ */
+.level-chart{position:relative;height:400px;margin:16px 0;border-left:2px solid var(--border);padding-left:20px}
+.level-line{position:absolute;left:0;right:0;display:flex;align-items:center;gap:8px}
+.level-marker{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.level-bar{height:3px;flex:1;border-radius:2px;opacity:.5}
+.level-text{font-family:'DM Mono';font-size:12px;white-space:nowrap}
+
+/* Outlook cards */
+.outlook-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.outlook-card .icon{font-size:20px;margin-bottom:8px}
+.outlook-card h4{font-size:14px;font-weight:600;margin-bottom:8px}
+.outlook-card p{font-size:12px;color:var(--txt2);line-height:1.7}
+
+/* Participant section */
+.summary-boxes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:600px){.summary-boxes{grid-template-columns:1fr}}
+.sum-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.sum-box h4{font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sum-item{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.sum-item .lbl{color:var(--txt2)}.sum-item .val{font-family:'DM Mono';font-weight:600}
+.strategy-tag{display:inline-block;background:var(--accent);color:#fff;border-radius:4px;padding:2px 8px;font-size:11px;margin-top:4px}
+.insight-box{background:var(--card2);border-left:3px solid var(--atm);border-radius:0 8px 8px 0;padding:14px 16px;margin-top:16px;font-size:12px;color:var(--txt2);line-height:1.8}
+
+/* Ranking tables */
+.rank-section{margin-bottom:16px}
+.rank-title{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--accent)}
+.rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:600px){.rank-grid{grid-template-columns:1fr}}
+
+/* Footer */
+.footer{text-align:center;padding:32px 24px;color:var(--txt2);font-size:12px;border-top:1px solid var(--border);margin-top:40px}
+.footer a{color:var(--accent);text-decoration:none}
+
+/* Tags */
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono';font-weight:500}
+.tag-put{background:rgba(248,113,113,.15);color:var(--put)}.tag-call{background:rgba(96,165,250,.15);color:var(--call)}
+.tag-up{background:rgba(74,222,128,.15);color:var(--up)}.tag-dn{background:rgba(239,68,68,.15);color:var(--dn)}
+.tag-foreign{background:rgba(96,165,250,.15);color:var(--foreign)}.tag-domestic{background:rgba(248,113,113,.15);color:var(--domestic)}
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+<div class="logo">JPX Derivatives</div>
+<nav>
+<a href="#hero">ホーム</a>
+<a href="#dash">ダッシュボード</a>
+<a href="archive.html">📂 アーカイブ</a>
+</nav>
+</div>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+<h1 class="outfit">JPX Market Analysis</h1>
+<p class="sub">2026年3月3日（火）</p>
+<div class="kpi-ticker">
+<div class="kpi-item"><div class="kpi-label">日経平均</div><div class="kpi-val mono red">56,279.05</div><div class="kpi-chg mono red">▼ 1,778.19 (−3.06%)</div></div>
+<div class="kpi-item"><div class="kpi-label">日経VI</div><div class="kpi-val mono red">34.99</div><div class="kpi-chg mono red">▲ 7.66 (+28.02%)</div></div>
+<div class="kpi-item"><div class="kpi-label">TOPIX</div><div class="kpi-val mono red">3,767.50</div><div class="kpi-chg mono red">▼ 126.50</div></div>
+<div class="kpi-item"><div class="kpi-label">ATM</div><div class="kpi-val mono yellow">56,000</div><div class="kpi-chg mono" style="color:var(--txt2)">N225先物清算値 56,150</div></div>
+</div>
+</section>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav">
+<a href="#dash">📊 ダッシュボード</a>
+<a href="archive.html">📂 アーカイブ</a>
+</div>
+
+<!-- Dashboard -->
+<section class="dashboard" id="dash">
+<div class="browser-frame">
+<div class="browser-toolbar">
+<div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+<div class="url-bar">jpx-analysis.github.io/dashboard/20260303</div>
+</div>
+
+<!-- KPI Header -->
+<div class="frame-kpi">
+<div class="fkpi"><div class="label">日経平均</div><div class="val mono red">56,279.05</div></div>
+<div class="fkpi"><div class="label">VI</div><div class="val mono red">34.99</div></div>
+<div class="fkpi"><div class="label">1日予測値幅</div><div class="val mono">55,034 – 57,524</div></div>
+<div class="fkpi"><div class="label">1週間予測値幅</div><div class="val mono">53,548 – 59,010</div></div>
+</div>
+
+<!-- Tabs -->
+<div class="tab-bar">
+<button class="tab-btn active" onclick="switchTab('overview',this)">概要</button>
+<button class="tab-btn" onclick="switchTab('dist',this)">建玉分布</button>
+<button class="tab-btn" onclick="switchTab('flow',this)">手口</button>
+<button class="tab-btn" onclick="switchTab('outlook',this)">総合評価</button>
+<button class="tab-btn" onclick="switchTab('participants',this)">参加者分析</button>
+</div>
+
+<!-- Tab: Overview -->
+<div class="tab-content active" id="tab-overview">
+
+<div class="card"><div class="card-title">📈 ② 先物建玉増減</div><div id="fut-chart"></div></div>
+
+<div class="card"><div class="card-title">💰 ③ オプション取引代金（百万円）</div>
+<div class="cards-grid">
+<div style="background:var(--card2);border-radius:8px;padding:14px;text-align:center">
+<div style="font-size:11px;color:var(--put)">プット</div>
+<div class="mono" style="font-size:22px;font-weight:700;color:var(--put)">14,525</div>
+<div style="font-size:10px;color:var(--txt2)">J-NET: 9,523 (65.6%)</div>
+</div>
+<div style="background:var(--card2);border-radius:8px;padding:14px;text-align:center">
+<div style="font-size:11px;color:var(--call)">コール</div>
+<div class="mono" style="font-size:22px;font-weight:700;color:var(--call)">11,453</div>
+<div style="font-size:10px;color:var(--txt2)">J-NET: 8,428 (73.6%)</div>
+</div>
+<div style="background:var(--card2);border-radius:8px;padding:14px;text-align:center">
+<div style="font-size:11px;color:var(--txt2)">合計</div>
+<div class="mono" style="font-size:22px;font-weight:700">25,978</div>
+<div style="font-size:10px;color:var(--txt2)">J-NET比率: 69.1%</div>
+</div>
+</div></div>
+
+<div class="card"><div class="card-title">📊 ④ オプション建玉増減</div><div id="oi-change"></div></div>
+
+<div class="card"><div class="card-title">⚡ ⑤ 重要建玉変化（±300枚以上）</div><div id="sig-chart"></div></div>
+
+</div>
+
+<!-- Tab: Distribution -->
+<div class="tab-content" id="tab-dist">
+<div class="card"><div class="card-title">🦋 ⑥ 建玉分布（3月限 ATM=56,000 ±5,000円）</div>
+<div style="display:flex;justify-content:center;gap:16px;margin-bottom:8px;font-size:11px;color:var(--txt2)">
+<span><span style="color:var(--put)">◼</span> プット</span>
+<span><span style="color:var(--call)">◼</span> コール</span>
+<span><span style="color:var(--atm)">◼</span> ATM</span>
+</div>
+<div id="butterfly"></div>
+</div>
+</div>
+
+<!-- Tab: Flow -->
+<div class="tab-content" id="tab-flow">
+<div class="card"><div class="card-title">🏛 ⑦ 大口手口（J-NET：NIKKEI 225 OOP）</div>
+<table class="tbl">
+<thead><tr><th>銘柄</th><th>参加者</th><th>取引高</th><th>属性</th></tr></thead>
+<tbody>
+<tr><td class="mono">P2603-56000</td><td>ＢＮＰパリバ証券</td><td class="mono">500</td><td><span class="tag tag-foreign">海外</span></td></tr>
+<tr><td class="mono">P2603-56000</td><td>ＪＰモルガン証券</td><td class="mono">300</td><td><span class="tag tag-foreign">海外</span></td></tr>
+<tr><td class="mono">P2603-56000</td><td>三菱ＵＦＪ証券</td><td class="mono">200</td><td><span class="tag tag-domestic">国内</span></td></tr>
+<tr><td class="mono">P2603-56000</td><td>ＵＢＳ証券</td><td class="mono">200</td><td><span class="tag tag-foreign">海外</span></td></tr>
+<tr><td class="mono">P2603-56000</td><td>大和証券</td><td class="mono">200</td><td><span class="tag tag-domestic">国内</span></td></tr>
+<tr><td class="mono">P2603-55500</td><td>ＢＮＰパリバ証券</td><td class="mono">200</td><td><span class="tag tag-foreign">海外</span></td></tr>
+</tbody>
+</table>
+<div style="margin-top:12px;background:var(--card2);border-radius:8px;padding:12px">
+<div style="font-size:12px;font-weight:600;margin-bottom:6px">🔗 対当ペア候補</div>
+<div style="font-size:11px;color:var(--txt2)">P2603-56000（200枚）：三菱ＵＦＪ証券 / ＵＢＳ証券 / 大和証券 — 同一数量の3社一致</div>
+</div>
+<div class="insight-box" style="margin-top:12px">
+💡 ATMプット56,000に海外5社が集中（合計1,400枚）。ＢＮＰパリバが最大手（計700枚）。中東リスクに対する機関投資家のダウンサイドヘッジ構築が明確。
+</div>
+</div>
+</div>
+
+<!-- Tab: Outlook -->
+<div class="tab-content" id="tab-outlook">
+<div class="card"><div class="card-title">🎯 サポート/レジスタンス</div><div id="levels"></div></div>
+<div class="card"><div class="card-title">📐 短期予想レンジ（〜3/13 SQ）</div>
+<div style="text-align:center;padding:16px">
+<div style="display:inline-block;background:var(--card2);border-radius:10px;padding:20px 32px;border:1px solid var(--accent)">
+<div style="font-size:12px;color:var(--txt2)">メインシナリオ</div>
+<div class="mono" style="font-size:28px;font-weight:700;color:var(--accent);margin:8px 0">53,500 — 58,000</div>
+<div style="font-size:11px;color:var(--txt2)">VIベース1週間レンジ: 53,548 — 59,010</div>
+</div>
+</div>
+</div>
+<div id="outlook-cards"></div>
+</div>
+
+<!-- Tab: Participants -->
+<div class="tab-content" id="tab-participants">
+<div class="card"><div class="card-title">🌏🏠 ⑨ 参加者別建玉分析（2/27時点）</div>
+
+<div class="summary-boxes">
+<div class="sum-box" style="border-color:rgba(96,165,250,.3)">
+<h4>🌏 海外勢</h4>
+<div class="sum-item"><span class="lbl">先物Net</span><span class="val green">+65,880</span></div>
+<div class="sum-item"><span class="lbl">プットNet</span><span class="val" style="color:var(--txt)">+30</span></div>
+<div class="sum-item"><span class="lbl">コールNet</span><span class="val green">+519</span></div>
+<div class="strategy-tag" style="background:var(--up)">ブル（先物ロング主体）</div>
+</div>
+<div class="sum-box" style="border-color:rgba(248,113,113,.3)">
+<h4>🏠 国内勢</h4>
+<div class="sum-item"><span class="lbl">先物Net</span><span class="val red">-65,812</span></div>
+<div class="sum-item"><span class="lbl">プットNet</span><span class="val" style="color:var(--txt)">0</span></div>
+<div class="sum-item"><span class="lbl">コールNet</span><span class="val green">+1,200</span></div>
+<div class="strategy-tag" style="background:var(--dn)">ショート＋コール買い（上値保険）</div>
+</div>
+</div>
+
+<div class="rank-section">
+<div class="rank-title">先物ポジション ランキング — 日経225ラージ</div>
+<div class="rank-grid">
+<div>
+<div style="font-size:11px;color:var(--dn);margin-bottom:4px;font-weight:600">売超トップ5</div>
+<table class="tbl"><tbody>
+<tr><td>ＨＳＢＣ証券</td><td class="mono red" style="text-align:right">30,777</td></tr>
+<tr><td>モルガンＭＵＦＧ証券</td><td class="mono red" style="text-align:right">15,259</td></tr>
+<tr><td>三菱ＵＦＪ証券</td><td class="mono red" style="text-align:right">7,519</td></tr>
+<tr><td>ゴールドマン証券</td><td class="mono red" style="text-align:right">4,817</td></tr>
+<tr><td>みずほ証券</td><td class="mono red" style="text-align:right">3,936</td></tr>
+</tbody></table>
+</div>
+<div>
+<div style="font-size:11px;color:var(--up);margin-bottom:4px;font-weight:600">買超トップ5</div>
+<table class="tbl"><tbody>
+<tr><td>野村証券</td><td class="mono green" style="text-align:right">16,017</td></tr>
+<tr><td>ＪＰモルガン証券</td><td class="mono green" style="text-align:right">9,295</td></tr>
+<tr><td>バークレイズ証券</td><td class="mono green" style="text-align:right">7,434</td></tr>
+<tr><td>ＡＢＮクリアリン証券</td><td class="mono green" style="text-align:right">6,571</td></tr>
+<tr><td>ＳＭＢＣ日興証券</td><td class="mono green" style="text-align:right">4,392</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+
+<div class="rank-section">
+<div class="rank-title">先物ポジション ランキング — 日経225mini</div>
+<div class="rank-grid">
+<div>
+<div style="font-size:11px;color:var(--dn);margin-bottom:4px;font-weight:600">売超トップ5</div>
+<table class="tbl"><tbody>
+<tr><td>バークレイズ証券</td><td class="mono red" style="text-align:right">21,670</td></tr>
+<tr><td>モルガンＭＵＦＧ証券</td><td class="mono red" style="text-align:right">21,173</td></tr>
+<tr><td>ＡＢＮクリアリン証券</td><td class="mono red" style="text-align:right">13,339</td></tr>
+<tr><td>ＢＮＰパリバ証券</td><td class="mono red" style="text-align:right">8,358</td></tr>
+<tr><td>ＪＰモルガン証券</td><td class="mono red" style="text-align:right">3,387</td></tr>
+</tbody></table>
+</div>
+<div>
+<div style="font-size:11px;color:var(--up);margin-bottom:4px;font-weight:600">買超トップ5</div>
+<table class="tbl"><tbody>
+<tr><td>ソシエテＧ証券</td><td class="mono green" style="text-align:right">28,798</td></tr>
+<tr><td>ビーオブエー証券</td><td class="mono green" style="text-align:right">11,487</td></tr>
+<tr><td>野村証券</td><td class="mono green" style="text-align:right">8,053</td></tr>
+<tr><td>シティグループ証券</td><td class="mono green" style="text-align:right">7,173</td></tr>
+<tr><td>ゴールドマン証券</td><td class="mono green" style="text-align:right">6,973</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+
+<div class="rank-section">
+<div class="rank-title">先物ポジション ランキング — TOPIX</div>
+<div class="rank-grid">
+<div>
+<div style="font-size:11px;color:var(--dn);margin-bottom:4px;font-weight:600">売超トップ5</div>
+<table class="tbl"><tbody>
+<tr><td>ゴールドマン証券</td><td class="mono red" style="text-align:right">31,495</td></tr>
+<tr><td>ＢＮＰパリバ証券</td><td class="mono red" style="text-align:right">23,857</td></tr>
+<tr><td>野村証券</td><td class="mono red" style="text-align:right">17,609</td></tr>
+<tr><td>ＳＭＢＣ日興証券</td><td class="mono red" style="text-align:right">17,337</td></tr>
+<tr><td>三菱ＵＦＪ証券</td><td class="mono red" style="text-align:right">16,761</td></tr>
+</tbody></table>
+</div>
+<div>
+<div style="font-size:11px;color:var(--up);margin-bottom:4px;font-weight:600">買超トップ5</div>
+<table class="tbl"><tbody>
+<tr><td>ビーオブエー証券</td><td class="mono green" style="text-align:right">28,810</td></tr>
+<tr><td>モルガンＭＵＦＧ証券</td><td class="mono green" style="text-align:right">27,982</td></tr>
+<tr><td>バークレイズ証券</td><td class="mono green" style="text-align:right">26,455</td></tr>
+<tr><td>シティグループ証券</td><td class="mono green" style="text-align:right">23,992</td></tr>
+<tr><td>ＪＰモルガン証券</td><td class="mono green" style="text-align:right">16,495</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+
+<div class="rank-section">
+<div class="rank-title">統合プロファイル（先物＋オプション）</div>
+<div style="overflow-x:auto">
+<table class="tbl">
+<thead><tr><th></th><th>参加者</th><th>先物Net</th><th>P Net</th><th>C Net</th><th>推定戦略</th></tr></thead>
+<tbody>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>ソシエテＧ証券</td><td class="mono green">+46,450</td><td class="mono">+20</td><td class="mono">+177</td><td>ブル</td></tr>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>ビーオブエー証券</td><td class="mono green">+40,297</td><td class="mono">0</td><td class="mono">0</td><td>ブル</td></tr>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>ＨＳＢＣ証券</td><td class="mono red">-37,046</td><td class="mono">0</td><td class="mono">0</td><td>ベア</td></tr>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>シティグループ証券</td><td class="mono green">+33,596</td><td class="mono">0</td><td class="mono red">-400</td><td>カバードコール</td></tr>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>ゴールドマン証券</td><td class="mono red">-29,339</td><td class="mono green">+825</td><td class="mono green">+188</td><td>ベア＋ヘッジ</td></tr>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>ＢＮＰパリバ証券</td><td class="mono red">-27,825</td><td class="mono">+39</td><td class="mono">+31</td><td>ベア</td></tr>
+<tr><td><span class="tag tag-foreign">海外</span></td><td>ＪＰモルガン証券</td><td class="mono green">+22,403</td><td class="mono">+10</td><td class="mono">0</td><td>ブル</td></tr>
+<tr><td><span class="tag tag-domestic">国内</span></td><td>みずほ証券</td><td class="mono red">-21,729</td><td class="mono">0</td><td class="mono green">+350</td><td>ベア</td></tr>
+<tr><td><span class="tag tag-domestic">国内</span></td><td>三菱ＵＦＪ証券</td><td class="mono red">-19,492</td><td class="mono">0</td><td class="mono">0</td><td>ベア</td></tr>
+<tr><td><span class="tag tag-domestic">国内</span></td><td>ＳＢＩ証券</td><td class="mono red">-13,030</td><td class="mono">0</td><td class="mono">0</td><td>ベア</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="insight-box">
+💡 海外勢は2極化：ソシエテ/ビーオブエー/シティ/JPモルガンのブル陣営 vs HSBC/ゴールドマン/BNPのベア陣営。国内勢は概ね先物ショートに偏り、急落局面では買い戻しが下支え要因。ゴールドマンはベアながらプット買い+825枚で二重の下値保険を構築。
+</div>
+
+</div>
+</div>
+
+</div><!-- browser-frame -->
+</section>
+
+<!-- Footer -->
+<div class="footer">
+<a href="archive.html">📂 アーカイブ一覧</a> ｜ <span>JPX Market Analysis — Generated 2026.03.03</span>
+</div>
+
+<script>
+function switchTab(id,btn){
+document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+document.getElementById('tab-'+id).classList.add('active');
+btn.classList.add('active');
+}
+
+function fmt(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function fmtSign(n){return (n>=0?'+':'')+fmt(n)}
+
+// ② Futures chart
+function buildFuturesChart(){
+var el=document.getElementById('fut-chart');
+var items=[
+{label:'N225ラージ 合計',val:4863,oi:217557},
+{label:'N225ラージ 3月',val:4232,oi:171302},
+{label:'N225 mini 合計',val:29474,oi:319529},
+{label:'N225 mini 3月',val:24467,oi:275194},
+{label:'TOPIX 合計',val:7034,oi:466223},
+{label:'TOPIX 3月',val:6841,oi:453070}
+];
+var maxV=Math.max.apply(null,items.map(function(i){return Math.abs(i.val)}));
+var html='';
+items.forEach(function(item){
+var pct=Math.abs(item.val)/maxV*100;
+var color=item.val>=0?'var(--up)':'var(--dn)';
+var txtColor=item.val>=0?'green':'red';
+html+='<div class="bar-row"><div class="bar-label">'+item.label+'</div>';
+html+='<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+html+='<div class="bar-val mono '+txtColor+'">'+fmtSign(item.val)+'</div></div>';
+});
+el.innerHTML=html;
+}
+
+// ④ OI Change - zero center bars
+function buildOIChange(){
+var el=document.getElementById('oi-change');
+var groups=[
+{title:'全限月',items:[
+{label:'PUT',val:8658},{label:'CALL',val:3893}
+]},
+{title:'3月限月',items:[
+{label:'PUT',val:5324},{label:'CALL',val:1473}
+]}
+];
+var maxV=8658;
+var html='';
+groups.forEach(function(g){
+html+='<div class="zbar-group"><div class="zbar-title">'+g.title+'</div>';
+g.items.forEach(function(item){
+var pct=Math.abs(item.val)/maxV*50;
+var isPos=item.val>=0;
+var color=isPos?'var(--up)':'var(--dn)';
+var left=isPos?'50%':((50-pct)+'%');
+var txtC=isPos?'green':'red';
+var typeC=item.label==='PUT'?'var(--put)':'var(--call)';
+html+='<div class="zbar-row">';
+html+='<div class="zbar-label" style="color:'+typeC+'">'+item.label+'</div>';
+html+='<div class="zbar-track"><div class="zbar-center"></div>';
+html+='<div class="zbar-fill" style="left:'+left+';width:'+pct+'%;background:'+color+'"></div></div>';
+html+='<div class="zbar-val mono '+txtC+'">'+fmtSign(item.val)+'</div></div>';
+});
+html+='</div>';
+});
+html+='<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--txt2);padding:0 68px 0 68px"><span>← 減少</span><span>増加 →</span></div>';
+el.innerHTML=html;
+}
+
+// ⑤ Significant changes
+function buildSigChart(){
+var el=document.getElementById('sig-chart');
+var items=[
+{label:'P2603-38000',val:845},{label:'P2603-56000',val:769},{label:'P2603-54000',val:714},
+{label:'P2603-53750',val:524},{label:'P2603-55000',val:484},{label:'P2603-53375',val:450},
+{label:'C2604-60000',val:410},{label:'C2603-58500',val:325},{label:'P2604-49000',val:310},{label:'P2604-53000',val:304}
+];
+var maxV=845;
+var html='';
+items.forEach(function(item){
+var pct=Math.abs(item.val)/maxV*100;
+var isP=item.label.charAt(0)==='P';
+var color=isP?'var(--put)':'var(--call)';
+html+='<div class="bar-row"><div class="bar-label" style="width:110px"><span class="tag '+(isP?'tag-put':'tag-call')+'">'+item.label+'</span></div>';
+html+='<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+html+='<div class="bar-val mono" style="color:'+color+'">'+fmtSign(item.val)+'</div></div>';
+});
+el.innerHTML=html;
+}
+
+// ⑥ Butterfly
+function buildButterfly(){
+var el=document.getElementById('butterfly');
+var strikes=[
+[51000,3317,57,1092,0],[51500,502,23,627,0],[52000,5709,-152,4706,0],[52500,3780,18,1288,0],
+[53000,3904,48,1849,0],[53500,320,18,257,0],[54000,4938,714,4650,0],[54500,2133,69,1318,0],
+[55000,3974,484,5224,-20],[55500,2603,133,1891,0],[56000,4115,769,3102,-34],
+[56500,1550,141,1588,39],[57000,2513,211,3842,46],[57500,563,-62,1356,198],
+[58000,883,-44,5886,12],[58500,335,-4,622,325],[59000,916,-1,3480,121],
+[59500,13,0,1386,246],[60000,9,0,6551,148],[60500,2,0,528,153],[61000,7,0,2334,53]
+];
+var maxOI=Math.max.apply(null,strikes.map(function(s){return Math.max(s[1],s[3])}));
+var html='';
+strikes.forEach(function(s){
+var strike=s[0],pOI=s[1],pChg=s[2],cOI=s[3],cChg=s[4];
+var pPct=pOI/maxOI*100;
+var cPct=cOI/maxOI*100;
+var isATM=strike===56000;
+html+='<div class="bf-row">';
+html+='<div class="bf-left"><div class="bf-num" style="color:var(--put)">'+fmt(pOI)+'<span style="font-size:9px;color:'+(pChg>=0?'var(--up)':'var(--dn)')+'"> '+fmtSign(pChg)+'</span></div>';
+html+='<div class="bf-bar" style="width:'+pPct+'%;background:var(--put)"></div></div>';
+html+='<div class="bf-strike'+(isATM?' atm':'')+'">'+fmt(strike)+'</div>';
+html+='<div class="bf-right"><div class="bf-bar" style="width:'+cPct+'%;background:var(--call)"></div>';
+html+='<div class="bf-num" style="color:var(--call)">'+fmt(cOI)+'<span style="font-size:9px;color:'+(cChg>=0?'var(--up)':'var(--dn)')+'"> '+fmtSign(cChg)+'</span></div></div>';
+html+='</div>';
+});
+el.innerHTML=html;
+}
+
+// ⑧ Levels
+function buildLevels(){
+var el=document.getElementById('levels');
+var levels=[
+{price:60000,label:'R2: 60,000（C建玉6,551）',color:'var(--call)',pct:90},
+{price:58000,label:'R1: 58,000（C建玉5,886）',color:'var(--call)',pct:70},
+{price:56150,label:'ATM: 56,150（先物清算値）',color:'var(--atm)',pct:50},
+{price:54000,label:'S1: 54,000（P建玉4,938 +714）',color:'var(--put)',pct:30},
+{price:52000,label:'S2: 52,000（P建玉5,709）',color:'var(--put)',pct:10}
+];
+var html='<div style="position:relative;height:280px;margin:8px 0">';
+levels.forEach(function(lv){
+var top=(100-lv.pct)+'%';
+html+='<div class="level-line" style="top:'+top+'">';
+html+='<div class="level-marker" style="background:'+lv.color+'"></div>';
+html+='<div class="level-bar" style="background:'+lv.color+'"></div>';
+html+='<div class="level-text" style="color:'+lv.color+'">'+lv.label+'</div>';
+html+='</div>';
+});
+html+='</div>';
+el.innerHTML=html;
+}
+
+// ⑧ Outlook Cards
+function buildOutlookCards(){
+var el=document.getElementById('outlook-cards');
+var cards=[
+{icon:'⚖️',title:'需給の歪み',text:'mini建玉+29,474枚と急増。急落局面で個人・短期投機筋の逆張り買いが活発化。ラージ+4,863、TOPIX+7,034は機関の組み入れ/ロール対応。miniの急増は短期スクイーズの種にもなりうる。'},
+{icon:'🏛',title:'手口の解釈',text:'J-NETではATMプット56,000に海外5社集中（計1,400枚）。BNPパリバが最大手（700枚）。これは「下値の床」ではなく保険購入であり、海外機関が更なる下落を警戒。'},
+{icon:'📊',title:'建玉変動',text:'プット+8,658枚（コールの2.2倍）と極めて偏った増加。56,000〜54,000にプット集中。テールリスクヘッジ（P38,000に+845枚）も確認され、地政学リスク深刻化を想定したポジション。'},
+{icon:'🎯',title:'結論',text:'メイン: 53,500〜58,000。VI35水準は短期オーバーシュート気味で一旦リバウンド（56,500〜57,500）を挟むが、中東次第で54,000方向への再テスト。リスク: ホルムズ封鎖等なら52,000〜50,000も視野。国内勢ショートカバーが下支え。'}
+];
+var html='<div class="cards-grid">';
+cards.forEach(function(c){
+html+='<div class="outlook-card"><div class="icon">'+c.icon+'</div><h4>'+c.title+'</h4><p>'+c.text+'</p></div>';
+});
+html+='</div>';
+el.innerHTML=html;
+}
+
+// Initialize
+buildFuturesChart();
+buildOIChange();
+buildSigChart();
+buildButterfly();
+buildLevels();
+buildOutlookCards();
+</script>
+</body>
+</html>
