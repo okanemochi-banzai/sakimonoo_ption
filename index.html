@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -20,140 +19,138 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .outfit{font-family:'Outfit',sans-serif}
 
 /* Top bar */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(–border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
-.topbar .logo{font-family:‘Outfit’;font-weight:700;font-size:18px;color:var(–accent)}
-.topbar nav a{color:var(–txt2);text-decoration:none;margin-left:20px;font-size:13px;transition:.2s}
-.topbar nav a:hover{color:var(–txt)}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:'Outfit';font-weight:700;font-size:18px;color:var(--accent)}
+.topbar nav a{color:var(--txt2);text-decoration:none;margin-left:20px;font-size:13px;transition:.2s}
+.topbar nav a:hover{color:var(--txt)}
 @media(max-width:768px){.topbar nav{display:none}}
 
 /* Hero */
 .hero{margin-top:52px;padding:48px 24px 32px;text-align:center;position:relative;overflow:hidden;
 background:linear-gradient(180deg,rgba(129,140,248,.06) 0%,transparent 100%)}
-.hero::before{content:’’;position:absolute;top:0;left:0;right:0;bottom:0;
-background-image:linear-gradient(var(–border) 1px,transparent 1px),linear-gradient(90deg,var(–border) 1px,transparent 1px);
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
 background-size:60px 60px;opacity:.15}
-.hero h1{font-family:‘Outfit’;font-size:clamp(24px,4vw,36px);font-weight:700;color:#fff;position:relative;
+.hero h1{font-family:'Outfit';font-size:clamp(24px,4vw,36px);font-weight:700;color:#fff;position:relative;
 animation:fadeUp .6s ease-out}
-.hero .sub{color:var(–txt2);font-size:14px;margin-top:4px;position:relative}
+.hero .sub{color:var(--txt2);font-size:14px;margin-top:4px;position:relative}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* KPI Ticker */
 .kpi-ticker{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px;position:relative}
-.kpi-item{background:var(–card);border:1px solid var(–border);border-radius:10px;padding:12px 18px;min-width:140px;text-align:center;
+.kpi-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;min-width:140px;text-align:center;
 animation:fadeUp .6s ease-out;animation-fill-mode:both}
 .kpi-item:nth-child(2){animation-delay:.1s}.kpi-item:nth-child(3){animation-delay:.2s}.kpi-item:nth-child(4){animation-delay:.3s}
-.kpi-label{font-size:11px;color:var(–txt2);text-transform:uppercase;letter-spacing:1px}
-.kpi-val{font-family:‘DM Mono’;font-size:22px;font-weight:700;margin-top:2px}
-.kpi-chg{font-family:‘DM Mono’;font-size:12px;margin-top:2px}
-.red{color:var(–dn)}.green{color:var(–up)}.blue{color:var(–call)}.yellow{color:var(–atm)}
+.kpi-label{font-size:11px;color:var(--txt2);text-transform:uppercase;letter-spacing:1px}
+.kpi-val{font-family:'DM Mono';font-size:22px;font-weight:700;margin-top:2px}
+.kpi-chg{font-family:'DM Mono';font-size:12px;margin-top:2px}
+.red{color:var(--dn)}.green{color:var(--up)}.blue{color:var(--call)}.yellow{color:var(--atm)}
 
 /* Mobile nav */
 .mobile-nav{display:none;justify-content:center;gap:12px;padding:16px;position:relative}
-.mobile-nav a{background:var(–card);border:1px solid var(–border);border-radius:8px;padding:10px 18px;color:var(–txt);text-decoration:none;font-size:13px;font-weight:500}
+.mobile-nav a{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 18px;color:var(--txt);text-decoration:none;font-size:13px;font-weight:500}
 @media(max-width:768px){.mobile-nav{display:flex!important}}
 
 /* Dashboard */
 .dashboard{max-width:1100px;margin:0 auto;padding:24px}
-.browser-frame{background:var(–panel);border:1px solid var(–border);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-.browser-toolbar{background:var(–card2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(–border)}
+.browser-frame{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.browser-toolbar{background:var(--card2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
 .dot{width:10px;height:10px;border-radius:50%}.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
-.url-bar{flex:1;background:var(–bg);border-radius:6px;padding:4px 12px;font-family:‘DM Mono’;font-size:11px;color:var(–txt2);margin-left:8px}
+.url-bar{flex:1;background:var(--bg);border-radius:6px;padding:4px 12px;font-family:'DM Mono';font-size:11px;color:var(--txt2);margin-left:8px}
 
 /* KPI Header inside frame */
-.frame-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px;background:var(–card2);border-bottom:1px solid var(–border)}
+.frame-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:16px;background:var(--card2);border-bottom:1px solid var(--border)}
 .fkpi{text-align:center;padding:8px}
-.fkpi .label{font-size:11px;color:var(–txt2)}.fkpi .val{font-family:‘DM Mono’;font-size:18px;font-weight:700}
+.fkpi .label{font-size:11px;color:var(--txt2)}.fkpi .val{font-family:'DM Mono';font-size:18px;font-weight:700}
 
 /* Tabs */
-.tab-bar{display:flex;border-bottom:1px solid var(–border);overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tab-btn{flex-shrink:0;background:none;border:none;color:var(–txt2);padding:12px 18px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;font-family:‘Noto Sans JP’}
-.tab-btn.active{color:var(–accent);border-bottom-color:var(–accent)}
+.tab-bar{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{flex-shrink:0;background:none;border:none;color:var(--txt2);padding:12px 18px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;font-family:'Noto Sans JP'}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-content{display:none;padding:20px}.tab-content.active{display:block}
 
 /* Cards */
-.card{background:var(–card);border:1px solid var(–border);border-radius:10px;padding:16px;margin-bottom:16px}
-.card-title{font-family:‘Outfit’;font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.card-title{font-family:'Outfit';font-size:15px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
 
 /* Bar charts */
 .bar-row{display:flex;align-items:center;margin-bottom:8px;gap:8px}
-.bar-label{width:120px;font-size:12px;color:var(–txt2);flex-shrink:0;text-align:right}
-.bar-track{flex:1;height:22px;background:var(–bg);border-radius:4px;position:relative;overflow:hidden}
+.bar-label{width:120px;font-size:12px;color:var(--txt2);flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:22px;background:var(--bg);border-radius:4px;position:relative;overflow:hidden}
 .bar-fill{height:100%;border-radius:4px;transition:width .4s ease-out;min-width:2px}
-.bar-val{width:80px;font-family:‘DM Mono’;font-size:12px;flex-shrink:0}
+.bar-val{width:80px;font-family:'DM Mono';font-size:12px;flex-shrink:0}
 
 /* Butterfly chart */
 .bf-row{display:flex;align-items:center;margin-bottom:3px;gap:0}
 .bf-left{width:35%;display:flex;justify-content:flex-end;align-items:center;gap:4px}
-.bf-strike{width:70px;text-align:center;font-family:‘DM Mono’;font-size:11px;flex-shrink:0;padding:2px 4px;border-radius:4px}
-.bf-strike.atm{background:var(–atm);color:#000;font-weight:700}
+.bf-strike{width:70px;text-align:center;font-family:'DM Mono';font-size:11px;flex-shrink:0;padding:2px 4px;border-radius:4px}
+.bf-strike.atm{background:var(--atm);color:#000;font-weight:700}
 .bf-right{width:35%;display:flex;align-items:center;gap:4px}
 .bf-bar{height:16px;border-radius:3px;transition:width .4s}
-.bf-num{font-family:‘DM Mono’;font-size:10px;color:var(–txt2);min-width:40px}
+.bf-num{font-family:'DM Mono';font-size:10px;color:var(--txt2);min-width:40px}
 .bf-left .bf-num{text-align:right}.bf-right .bf-num{text-align:left}
 
 /* Zero-center bars for ④ */
 .zbar-container{position:relative;margin-bottom:12px}
 .zbar-group{margin-bottom:16px}
-.zbar-title{font-size:13px;font-weight:600;margin-bottom:8px;color:var(–txt)}
+.zbar-title{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--txt)}
 .zbar-row{display:flex;align-items:center;margin-bottom:6px;height:26px}
-.zbar-label{width:60px;font-size:11px;color:var(–txt2);text-align:right;flex-shrink:0;padding-right:8px}
+.zbar-label{width:60px;font-size:11px;color:var(--txt2);text-align:right;flex-shrink:0;padding-right:8px}
 .zbar-track{flex:1;height:22px;position:relative;display:flex;align-items:center}
 .zbar-center{position:absolute;left:50%;top:0;bottom:0;width:2px;background:#4a4a6a;z-index:1}
 .zbar-fill{position:absolute;height:100%;border-radius:3px;z-index:2}
-.zbar-val{width:70px;font-family:‘DM Mono’;font-size:11px;flex-shrink:0;padding-left:8px}
+.zbar-val{width:70px;font-family:'DM Mono';font-size:11px;flex-shrink:0;padding-left:8px}
 
 /* Table */
 .tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{background:var(–card2);padding:8px 10px;text-align:left;font-weight:500;color:var(–txt2);border-bottom:1px solid var(–border);position:sticky;top:0}
+.tbl th{background:var(--card2);padding:8px 10px;text-align:left;font-weight:500;color:var(--txt2);border-bottom:1px solid var(--border);position:sticky;top:0}
 .tbl td{padding:6px 10px;border-bottom:1px solid rgba(45,45,94,.4)}.tbl tr:hover{background:rgba(129,140,248,.04)}
-.tbl .mono{font-family:‘DM Mono’}
+.tbl .mono{font-family:'DM Mono'}
 
 /* Level chart for ⑧ */
-.level-chart{position:relative;height:400px;margin:16px 0;border-left:2px solid var(–border);padding-left:20px}
+.level-chart{position:relative;height:400px;margin:16px 0;border-left:2px solid var(--border);padding-left:20px}
 .level-line{position:absolute;left:0;right:0;display:flex;align-items:center;gap:8px}
 .level-marker{width:14px;height:14px;border-radius:50%;flex-shrink:0}
 .level-bar{height:3px;flex:1;border-radius:2px;opacity:.5}
-.level-text{font-family:‘DM Mono’;font-size:12px;white-space:nowrap}
+.level-text{font-family:'DM Mono';font-size:12px;white-space:nowrap}
 
 /* Outlook cards */
-.outlook-card{background:var(–card);border:1px solid var(–border);border-radius:10px;padding:16px;margin-bottom:12px}
+.outlook-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
 .outlook-card .icon{font-size:20px;margin-bottom:8px}
 .outlook-card h4{font-size:14px;font-weight:600;margin-bottom:8px}
-.outlook-card p{font-size:12px;color:var(–txt2);line-height:1.7}
+.outlook-card p{font-size:12px;color:var(--txt2);line-height:1.7}
 
 /* Participant section */
 .summary-boxes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
 @media(max-width:600px){.summary-boxes{grid-template-columns:1fr}}
-.sum-box{background:var(–card);border:1px solid var(–border);border-radius:10px;padding:16px}
+.sum-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
 .sum-box h4{font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .sum-item{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
-.sum-item .lbl{color:var(–txt2)}.sum-item .val{font-family:‘DM Mono’;font-weight:600}
-.strategy-tag{display:inline-block;background:var(–accent);color:#fff;border-radius:4px;padding:2px 8px;font-size:11px;margin-top:4px}
-.insight-box{background:var(–card2);border-left:3px solid var(–atm);border-radius:0 8px 8px 0;padding:14px 16px;margin-top:16px;font-size:12px;color:var(–txt2);line-height:1.8}
+.sum-item .lbl{color:var(--txt2)}.sum-item .val{font-family:'DM Mono';font-weight:600}
+.strategy-tag{display:inline-block;background:var(--accent);color:#fff;border-radius:4px;padding:2px 8px;font-size:11px;margin-top:4px}
+.insight-box{background:var(--card2);border-left:3px solid var(--atm);border-radius:0 8px 8px 0;padding:14px 16px;margin-top:16px;font-size:12px;color:var(--txt2);line-height:1.8}
 
 /* Ranking tables */
 .rank-section{margin-bottom:16px}
-.rank-title{font-size:13px;font-weight:600;margin-bottom:8px;color:var(–accent)}
+.rank-title{font-size:13px;font-weight:600;margin-bottom:8px;color:var(--accent)}
 .rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:600px){.rank-grid{grid-template-columns:1fr}}
 
 /* Footer */
-.footer{text-align:center;padding:32px 24px;color:var(–txt2);font-size:12px;border-top:1px solid var(–border);margin-top:40px}
-.footer a{color:var(–accent);text-decoration:none}
+.footer{text-align:center;padding:32px 24px;color:var(--txt2);font-size:12px;border-top:1px solid var(--border);margin-top:40px}
+.footer a{color:var(--accent);text-decoration:none}
 
 /* Tags */
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:‘DM Mono’;font-weight:500}
-.tag-put{background:rgba(248,113,113,.15);color:var(–put)}.tag-call{background:rgba(96,165,250,.15);color:var(–call)}
-.tag-up{background:rgba(74,222,128,.15);color:var(–up)}.tag-dn{background:rgba(239,68,68,.15);color:var(–dn)}
-.tag-foreign{background:rgba(96,165,250,.15);color:var(–foreign)}.tag-domestic{background:rgba(248,113,113,.15);color:var(–domestic)}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono';font-weight:500}
+.tag-put{background:rgba(248,113,113,.15);color:var(--put)}.tag-call{background:rgba(96,165,250,.15);color:var(--call)}
+.tag-up{background:rgba(74,222,128,.15);color:var(--up)}.tag-dn{background:rgba(239,68,68,.15);color:var(--dn)}
+.tag-foreign{background:rgba(96,165,250,.15);color:var(--foreign)}.tag-domestic{background:rgba(248,113,113,.15);color:var(--domestic)}
 </style>
-
 </head>
 <body>
 
 <!-- Top Bar -->
-
 <div class="topbar">
 <div class="logo">JPX Derivatives</div>
 <nav>
@@ -164,7 +161,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Hero -->
-
 <section class="hero" id="hero">
 <h1 class="outfit">JPX Market Analysis</h1>
 <p class="sub">2026年3月3日（火）</p>
@@ -177,14 +173,12 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </section>
 
 <!-- Mobile Nav -->
-
 <div class="mobile-nav">
 <a href="#dash">📊 ダッシュボード</a>
 <a href="archive.html">📂 アーカイブ</a>
 </div>
 
 <!-- Dashboard -->
-
 <section class="dashboard" id="dash">
 <div class="browser-frame">
 <div class="browser-toolbar">
@@ -193,7 +187,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- KPI Header -->
-
 <div class="frame-kpi">
 <div class="fkpi"><div class="label">日経平均</div><div class="val mono red">56,279.05</div></div>
 <div class="fkpi"><div class="label">VI</div><div class="val mono red">34.99</div></div>
@@ -202,7 +195,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Tabs -->
-
 <div class="tab-bar">
 <button class="tab-btn active" onclick="switchTab('overview',this)">概要</button>
 <button class="tab-btn" onclick="switchTab('dist',this)">建玉分布</button>
@@ -212,7 +204,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Tab: Overview -->
-
 <div class="tab-content active" id="tab-overview">
 
 <div class="card"><div class="card-title">📈 ② 先物建玉増減</div><div id="fut-chart"></div></div>
@@ -243,7 +234,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Tab: Distribution -->
-
 <div class="tab-content" id="tab-dist">
 <div class="card"><div class="card-title">🦋 ⑥ 建玉分布（3月限 ATM=56,000 ±5,000円）</div>
 <div style="display:flex;justify-content:center;gap:16px;margin-bottom:8px;font-size:11px;color:var(--txt2)">
@@ -256,7 +246,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Tab: Flow -->
-
 <div class="tab-content" id="tab-flow">
 <div class="card"><div class="card-title">🏛 ⑦ 大口手口（J-NET：NIKKEI 225 OOP）</div>
 <table class="tbl">
@@ -281,7 +270,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Tab: Outlook -->
-
 <div class="tab-content" id="tab-outlook">
 <div class="card"><div class="card-title">🎯 サポート/レジスタンス</div><div id="levels"></div></div>
 <div class="card"><div class="card-title">📐 短期予想レンジ（〜3/13 SQ）</div>
@@ -297,7 +285,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </div>
 
 <!-- Tab: Participants -->
-
 <div class="tab-content" id="tab-participants">
 <div class="card"><div class="card-title">🌏🏠 ⑨ 参加者別建玉分析（2/27時点）</div>
 
@@ -428,7 +415,6 @@ animation:fadeUp .6s ease-out;animation-fill-mode:both}
 </section>
 
 <!-- Footer -->
-
 <div class="footer">
 <a href="archive.html">📂 アーカイブ一覧</a> ｜ <span>JPX Market Analysis — Generated 2026.03.03</span>
 </div>
@@ -600,6 +586,5 @@ buildButterfly();
 buildLevels();
 buildOutlookCards();
 </script>
-
 </body>
 </html>
