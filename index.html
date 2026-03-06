@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -96,6 +95,45 @@ body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',s
 .zb-val{width:60px;font-family:'DM Mono';font-size:10px;flex-shrink:0;text-align:right}
 footer{text-align:center;padding:20px;color:var(--txt2);font-size:10px;border-top:1px solid var(--border)}
 footer a{color:var(--accent);text-decoration:none}
+.strat-zone{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin:6px 0;position:relative;overflow:hidden}
+.strat-zone::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px}
+.strat-zone.sz-sell-p::before{background:var(--put)}.strat-zone.sz-sell-c::before{background:var(--call)}
+.strat-zone.sz-atm::before{background:var(--atm)}.strat-zone.sz-neutral::before{background:var(--txt2)}
+.sz-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.sz-range{font-family:'DM Mono';font-size:13px;font-weight:600}
+.sz-stars{color:var(--atm);font-size:12px;letter-spacing:1px}
+.sz-label{font-size:11px;font-weight:600;margin-bottom:4px}
+.sz-body{font-size:10px;color:var(--txt2);line-height:1.6}
+.sz-action{display:inline-block;font-size:10px;padding:3px 8px;border-radius:4px;margin-top:6px;font-weight:500}
+.sz-action-sell-p{background:rgba(248,113,113,.12);color:var(--put);border:1px solid rgba(248,113,113,.25)}
+.sz-action-sell-c{background:rgba(96,165,250,.12);color:var(--call);border:1px solid rgba(96,165,250,.25)}
+.sz-action-avoid{background:rgba(251,191,36,.08);color:var(--atm);border:1px solid rgba(251,191,36,.2)}
+.sz-action-spread{background:rgba(129,140,248,.12);color:var(--accent);border:1px solid rgba(129,140,248,.25)}
+.sz-meter{display:flex;gap:2px;align-items:center;margin-top:4px}
+.sz-meter-seg{height:6px;border-radius:2px;flex:1}
+.sz-meter-seg.on{background:var(--atm)}.sz-meter-seg.off{background:var(--card2)}
+.prob-tbl{width:100%;border-collapse:collapse;font-size:10px;margin:8px 0}
+.prob-tbl th{color:var(--txt2);font-weight:500;padding:5px 6px;border-bottom:1px solid var(--border);text-align:left;font-size:9px}
+.prob-tbl td{padding:4px 6px;border-bottom:1px solid rgba(30,30,58,.4)}
+.prob-bar-bg{width:100%;height:8px;background:var(--card2);border-radius:3px;overflow:hidden}
+.prob-bar-fill{height:100%;border-radius:3px}
+.edge-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:9px;color:var(--txt2);margin:8px 0;padding:8px;background:var(--card2);border-radius:6px}
+.edge-legend span{display:flex;align-items:center;gap:4px}
+.edge-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sz-hedge{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.18);border-radius:6px;padding:8px 10px;margin-top:8px}
+.sz-hedge-title{font-size:10px;font-weight:600;color:var(--accent);margin-bottom:3px}
+.sz-hedge-body{font-size:10px;color:var(--txt2);line-height:1.6}
+.sz-hedge-body .mono{color:var(--txt)}
+.hedge-ref{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin:14px 0}
+.hedge-ref h4{font-size:12px;font-weight:600;margin-bottom:8px;color:var(--accent)}
+.hedge-row{display:flex;align-items:stretch;gap:8px;margin:6px 0}
+.hedge-col{flex:1;background:var(--card2);border-radius:8px;padding:10px;font-size:10px}
+.hedge-col .hc-label{color:var(--txt2);font-size:9px;margin-bottom:4px}
+.hedge-col .hc-val{font-family:'DM Mono';font-size:14px;font-weight:500}
+.trigger-tbl{width:100%;border-collapse:collapse;font-size:10px;margin:8px 0}
+.trigger-tbl th{text-align:left;color:var(--txt2);font-weight:500;padding:5px 6px;border-bottom:1px solid var(--border);font-size:9px}
+.trigger-tbl td{padding:4px 6px;border-bottom:1px solid rgba(30,30,58,.4)}
+.trigger-arrow{display:inline-block;width:18px;text-align:center;font-size:11px}
 .pair-card{background:var(--card);border:1px solid var(--accent);border-radius:8px;padding:10px;margin:6px 0;font-size:11px}
 </style>
 </head>
@@ -124,7 +162,6 @@ footer a{color:var(--accent);text-decoration:none}
 <div class="grid" id="dashboard">
 
 <!-- Card 1: Futures OI -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">📈</span><span class="title">先物建玉増減</span></div>
 <div class="dcard-preview">
@@ -138,7 +175,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 2: Options Value -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">💰</span><span class="title">オプション取引代金</span></div>
 <div class="dcard-preview">
@@ -152,7 +188,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 3: OI Changes -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">📊</span><span class="title">オプション建玉増減</span></div>
 <div class="dcard-preview">
@@ -172,7 +207,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 4: Significant Changes -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">⚡</span><span class="title">重要建玉変化</span></div>
 <div class="dcard-preview">
@@ -187,7 +221,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 5: Butterfly -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">🦋</span><span class="title">建玉分布</span></div>
 <div class="dcard-preview">
@@ -203,7 +236,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 6: J-NET -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">🏛</span><span class="title">大口手口（J-NET）</span></div>
 <div class="dcard-preview">
@@ -218,7 +250,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 7: Summary -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">🎯</span><span class="title">総合評価</span></div>
 <div class="dcard-preview">
@@ -231,7 +262,6 @@ footer a{color:var(--accent);text-decoration:none}
 </div>
 
 <!-- Card 8: Participants -->
-
 <div class="dcard" onclick="toggle(this)">
 <div class="dcard-hdr"><span class="icon">🌏</span><span class="title">参加者別建玉分析</span></div>
 <div class="dcard-preview">
@@ -242,6 +272,21 @@ footer a{color:var(--accent);text-decoration:none}
 <div style="font-size:10px;color:var(--txt2);margin-top:4px">前週データ(3/3)｜カラー vs リスクテイク</div>
 </div>
 <div class="dcard-detail" id="det-part"></div>
+</div>
+
+<!-- Card 9: Strategy Map (Option Selling) -->
+<div class="dcard" onclick="toggle(this)">
+<div class="dcard-hdr"><span class="icon">🎲</span><span class="title">戦略マップ（プレミアム売り）</span></div>
+<div class="dcard-preview">
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<div class="mm" style="flex:1;min-width:100px"><div class="ml">ベスト P売り</div><div class="mv mono" style="color:var(--put)">50,000</div></div>
+<div class="mm" style="flex:1;min-width:100px"><div class="ml">ベスト C売り</div><div class="mv mono" style="color:var(--call)">60,000</div></div>
+<div class="mm" style="flex:1;min-width:100px"><div class="ml">VI環境</div><div class="mv mono" style="color:var(--atm)">超高(売有利)</div></div>
+<div class="mm" style="flex:1;min-width:100px"><div class="ml">ヘッジ限月</div><div class="mv mono" style="color:var(--up)">mini 4月</div></div>
+</div>
+<div style="font-size:10px;color:var(--txt2);margin-top:6px">OTM確率＋建玉壁スコア＋先物デルタヘッジ判断付き</div>
+</div>
+<div class="dcard-detail" id="det-strat"></div>
 </div>
 
 </div><!-- grid -->
@@ -257,7 +302,7 @@ document.querySelectorAll('.dcard.open').forEach(function(c){c.classList.remove(
 if(!w){card.classList.add('open');var d=card.querySelector('.dcard-detail');if(d&&d.id&&!card.dataset.built){buildDetail(d.id);card.dataset.built='1'}card.scrollIntoView({behavior:'smooth',block:'nearest'})}
 }
 function buildDetail(id){
-var m={'det-fut':bFut,'det-optval':bOptVal,'det-oi':bOI,'det-sig':bSig,'det-bf':bBF,'det-jnet':bJnet,'det-out':bOut,'det-part':bPart};
+var m={'det-fut':bFut,'det-optval':bOptVal,'det-oi':bOI,'det-sig':bSig,'det-bf':bBF,'det-jnet':bJnet,'det-out':bOut,'det-part':bPart,'det-strat':bStrat};
 if(m[id])m[id]();
 }
 function hbar(label,val,maxVal,color,isNeg){
@@ -431,7 +476,269 @@ h+='</table>';
 h+='<div class="insight">海外＝カラー（先物売+P買+C売）vs 国内＝リスクテイク（先物買+P売+C買）の鏡像構造が継続。HSBCの-33,988枚が最大売超、野村の+16,518枚が最大買超。ゴールドマンはTOPIX-48,635のベアポジション維持。</div>';
 d.innerHTML=h;
 }
-</script>
+function bStrat(){
+var d=document.getElementById('det-strat');
+/* --- Probability engine (simplified cumulative normal) --- */
+function ncdf(x){var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;var s=1;if(x<0){s=-1;x=-x;}var t=1/(1+p*x);var y=1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x/2);return 0.5*(1+s*y);}
+var F=55140,vi=40,T=6/250;/* SQ 3/13 = 6 trading days */
+var sT=vi/100*Math.sqrt(T);/* σ√T = 0.0620 */
+function pOTM_put(K){var d2=Math.log(F/K)/sT;return ncdf(d2);}/* P(expire OTM) for put */
+function pOTM_call(K){var d2=Math.log(F/K)/sT;return ncdf(-d2);}/* P(expire OTM) for call */
 
+/* --- Zone data --- */
+var zones=[
+{lo:60000,hi:99999,type:'sell-c',label:'60,000以上',name:'Deep OTM コール売りゾーン',
+ wall:6173,wallNote:'C60K壁 6,173枚（3月限最厚コール壁）',
+ edge:5,otmFn:function(){return pOTM_call(60000);},
+ flow:'4月限C61K −1,091枚の巻戻し → 上値期待が後退している証左',
+ who:'海外勢 CALL Net −1,244 = 機関もコール売り方向',
+ action:'Naked Call売り / Bear Call上段',
+ actionCls:'sz-action-sell-c',
+ risk:'中東停戦サプライズで急騰するテールリスク。損切ライン必須',
+ hedge:'58,000突破で mini 1枚買い（暫定ヘッジ）。60,000到達なら追加1枚。C売り10枚に対しmini 2-3枚が目安。6月限ロール中のためmini 4月限を使用（3月限は流動性急低下中：OI −44,675）。',
+ hedgeTrigger:'58,000',hedgeDir:'買',hedgeNote:'C売りのデルタ急拡大に備え mini で暫定カバー',
+ mini:'3/12限 C59000 OI=1,743（最厚）/ C60000 OI=870。ラージC60K売り1枚 → ミニC59000売り10枚で代替可。125円刻みで59,000/59,500/60,000に分散エントリーが可能。'},
+{lo:57000,hi:59999,type:'sell-c',label:'57,000–58,000',name:'OTM コール売りゾーン',
+ wall:5734,wallNote:'C57K 3,665枚 + C58K 5,734枚の二重壁',
+ edge:4,otmFn:function(){return pOTM_call(57000);},
+ flow:'3月限C57K −396、4月限C57K −775 → コール建玉が減少中',
+ who:'ABN C売 −1,290 = HF代理もこの帯域でカバードコール',
+ action:'Call Credit Spread（57K売/60K買）',
+ actionCls:'sz-action-spread',
+ risk:'自律反発の延長で57K突破の可能性あり。スプレッドでリスク限定推奨',
+ hedge:'56,500到達で mini 1枚買い（デルタ調整）。スプレッド組みなら不要だが、Naked C売り時は必須。コール壁の−396枚減少は蓋が薄くなりつつあるサイン → ヘッジ発動を早めに。',
+ hedgeTrigger:'56,500',hedgeDir:'買',hedgeNote:'コール壁が薄化中 → ヘッジトリガーを早めに設定',
+ mini:'3/12限 C57000 OI=898 / C58000 OI=1,135。ラージC57K売り → ミニC57000+C57500各5枚に分散可。週次限月で残り5日 → タイムディケイ効率◎。'},
+{lo:55000,hi:56999,type:'atm',label:'55,000–57,000',name:'ATM ゾーン（ガンマリスク高）',
+ wall:5366,wallNote:'C55K 5,366 / P55K 4,169 両建て密集',
+ edge:2,otmFn:function(){return 0.50;},
+ flow:'J-NETでATM近辺（55K-55.25K）に手口集中。マーケットメイカー主導',
+ who:'シティ P55250×200枚 = ATMプット大口取引発生',
+ action:'Iron Condor の中間帯 → Naked売り回避',
+ actionCls:'sz-action-avoid',
+ risk:'VI=40でのATMガンマは1日±1,400円。Naked売りは壊滅リスク',
+ hedge:'この帯域はガンマ最大 → 先物でのデルタヘッジが最も頻繁に必要。mini で日中スキャルピング（朝高→後場売り等）でガンマ損を一部回収。ただしmini 3月限 OI −44,675で板が薄い → スリッページ注意。4月限(OI +5,930)への移行を推奨。',
+ hedgeTrigger:'常時',hedgeDir:'双方向',hedgeNote:'ガンマ最大帯域 → 日中の先物スキャルピングで損益調整',
+ mini:'ミニOPのATM帯域は本日取引高が突出（C56000=4,876枚、P55000換算も大量）。ラージのNaked売りは危険だが、ミニで小ロット（3-5枚）のShort Straddle → 日中利確は検討余地あり。ただしガンマリスクは同等なので過信禁物。'},
+{lo:52000,hi:54999,type:'sell-p',label:'52,000–54,000',name:'OTM プット売りゾーン',
+ wall:6119,wallNote:'P52K 6,119枚 + P54K 4,874枚 多段壁',
+ edge:4,otmFn:function(){return pOTM_put(52000);},
+ flow:'4月限P52K +1,209 / P55K +1,262 → 機関がここにヘッジ構築中',
+ who:'国内勢 PUT Net −762 = 国内機関はプット売り超過（＝この帯域を支持）',
+ action:'Put Credit Spread（52K売/50K買）',
+ actionCls:'sz-action-spread',
+ risk:'中東情勢悪化・原油100ドル超で急落リスク。スプレッドでリスク限定',
+ hedge:'54,000割れで mini 1枚売り（暫定デルタヘッジ）。53,000割れなら追加1枚。P売り10枚に対しmini 2-3枚が目安。ただし壁が多段的（54K→52K→50K）なので一気に抜けにくい構造 → ヘッジの段階投入が有効。',
+ hedgeTrigger:'54,000',hedgeDir:'売',hedgeNote:'多段壁 → 段階的にヘッジ枚数を増やす戦略が有効',
+ mini:'3/12限 P52000 OI=592 / P53000 OI=468 / P54000 OI=639。ラージP52K売り1枚 → ミニP52000+P52500+P53000に3-4枚ずつ分散。125円刻みで多段壁に沿った精密なストライク選択が可能。'},
+{lo:0,hi:51999,type:'sell-p',label:'50,000以下',name:'Deep OTM プット売りゾーン',
+ wall:7306,wallNote:'P50K壁 7,306枚（3月限最厚プット壁）',
+ edge:5,otmFn:function(){return pOTM_put(50000);},
+ flow:'5月限P50K +600枚 → 深い下値にも新規ヘッジ = 万が一に備えるが薄い',
+ who:'海外勢 先物Net −7,088 だがカラー構造 = 完全ベアではない',
+ action:'Naked Put売り（プレミアム薄いが安全性高）',
+ actionCls:'sz-action-sell-p',
+ risk:'2σ超の暴落シナリオ（5万円割れ確率 ~6%）。証拠金余裕の確認必須',
+ hedge:'52,000割れでmini 1枚売り。50,000到達なら損切＋mini追加売りで全額デルタヘッジに移行。この帯域は板が極端に薄くなるため、指値ではなく成行きヘッジを覚悟。TOPIX先物の方が流動性が残っている可能性あり（OI 475K、前日比+1,936）。',
+ hedgeTrigger:'52,000',hedgeDir:'売',hedgeNote:'板薄リスク → TOPIX先物も代替ヘッジ候補',
+ mini:'3/12限 P50000 OI=660 / P48000 OI=631。Deep OTMのミニは板が薄くスプレッドが広い。ラージP50K売りの方が約定品質は良いが、ミニで5枚程度に抑えてリスク管理する手もあり。3/12限の週次P50000は本日+201枚の新規建て → 需要あり。'}
+];
+
+var h='';
+/* --- Header --- */
+h+='<div style="font-size:12px;font-weight:600;margin-bottom:4px">プレミアム売り 戦略マップ</div>';
+h+='<div style="font-size:10px;color:var(--txt2);margin-bottom:10px">VI=40 / ATM=55,140 / SQ=3月13日（残り6営業日）基準。建玉壁の厚さ＋参加者フロー＋OTM確率から売りエッジを5段階評価。</div>';
+
+/* --- Product comparison box --- */
+h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">';
+h+='<div style="background:var(--card2);border-radius:8px;padding:10px;border-left:3px solid var(--accent)">';
+h+='<div style="font-size:11px;font-weight:600;color:var(--txt);margin-bottom:4px">📦 日経225オプション（ラージ）</div>';
+h+='<div style="font-size:10px;color:var(--txt2);line-height:1.7">';
+h+='取引単位: <span class="mono" style="color:var(--txt)">指数×1,000円</span><br>';
+h+='行使価格: <span class="mono">500円/250円刻み</span><br>';
+h+='限月: <span class="mono">3月/4月/5月/6月…</span>（月次）<br>';
+h+='本日取引高: <span class="mono">67,996枚</span> / 代金 <span class="mono">52,993M</span><br>';
+h+='建玉OI: <span class="mono">P 545,403 / C 303,405</span>';
+h+='</div></div>';
+h+='<div style="background:var(--card2);border-radius:8px;padding:10px;border-left:3px solid var(--atm)">';
+h+='<div style="font-size:11px;font-weight:600;color:var(--txt);margin-bottom:4px">📦 日経225ミニオプション</div>';
+h+='<div style="font-size:10px;color:var(--txt2);line-height:1.7">';
+h+='取引単位: <span class="mono" style="color:var(--atm)">指数×100円</span>（ラージの1/10）<br>';
+h+='行使価格: <span class="mono">125円刻み</span>（細かい調整可）<br>';
+h+='限月: <span class="mono">週次</span>（3/5, 3/10, 3/12, 3/17…）<br>';
+h+='本日取引高: <span class="mono">118,786枚</span> / 代金 <span class="mono">3,468M</span><br>';
+h+='建玉OI: <span class="mono">P 42,679 / C 66,963</span>';
+h+='</div></div>';
+h+='</div>';
+h+='<div style="font-size:9px;color:var(--txt2);background:var(--card2);padding:6px 10px;border-radius:6px;margin-bottom:12px">💡 <b>換算:</b> ラージ1枚 ≒ ミニ10枚（証拠金・損益とも1/10）。ミニは125円刻みで細かい行使価格が選べるため、段階的なエントリー/イグジットに向いている。週次限月は短期売りのタイムディケイ効率が高い。</div>';
+
+/* --- Edge legend --- */
+h+='<div class="edge-legend">';
+h+='<span><span class="edge-dot" style="background:var(--atm)"></span>売りエッジ = 壁厚×OTM確率×参加者順張り度</span>';
+h+='<span><span class="edge-dot" style="background:var(--put)"></span>P売りゾーン</span>';
+h+='<span><span class="edge-dot" style="background:var(--call)"></span>C売りゾーン</span>';
+h+='<span><span class="edge-dot" style="background:var(--atm)"></span>ATM注意</span>';
+h+='</div>';
+
+/* --- Probability reference table --- */
+h+='<div style="font-size:11px;font-weight:600;margin:10px 0 4px">SQ時点OTM確率（VI=40基準）</div>';
+h+='<table class="prob-tbl"><tr><th>行使価格</th><th>タイプ</th><th>OTM確率</th><th></th><th>距離</th></tr>';
+var probRows=[
+{k:50000,t:'PUT売',fn:pOTM_put,clr:'var(--put)'},
+{k:52000,t:'PUT売',fn:pOTM_put,clr:'var(--put)'},
+{k:53000,t:'PUT売',fn:pOTM_put,clr:'var(--put)'},
+{k:54000,t:'PUT売',fn:pOTM_put,clr:'var(--put)'},
+{k:57000,t:'CALL売',fn:pOTM_call,clr:'var(--call)'},
+{k:58000,t:'CALL売',fn:pOTM_call,clr:'var(--call)'},
+{k:60000,t:'CALL売',fn:pOTM_call,clr:'var(--call)'}
+];
+probRows.forEach(function(r){
+var p=r.fn(r.k)*100;
+var dist=r.k-F;
+var distStr=(dist>=0?'+':'')+dist.toLocaleString();
+h+='<tr><td class="mono">'+r.k.toLocaleString()+'</td>';
+h+='<td style="color:'+r.clr+'">'+r.t+'</td>';
+h+='<td class="mono" style="font-weight:600">'+p.toFixed(1)+'%</td>';
+h+='<td style="width:100px"><div class="prob-bar-bg"><div class="prob-bar-fill" style="width:'+p+'%;background:'+r.clr+'"></div></div></td>';
+h+='<td class="mono" style="color:var(--txt2);font-size:9px">'+distStr+'</td></tr>';
+});
+h+='</table>';
+h+='<div style="font-size:9px;color:var(--txt2);margin-bottom:12px">※ OTM確率 = SQ時に無価値で失効する確率（プレミアム全額収穫）。対数正規分布・VI一定の前提。</div>';
+
+/* --- Zone cards --- */
+h+='<div style="font-size:11px;font-weight:600;margin:12px 0 6px">価格帯別 売りエッジ評価</div>';
+zones.forEach(function(z){
+var otm=z.otmFn()*100;
+h+='<div class="strat-zone sz-'+z.type+'">';
+h+='<div class="sz-hdr"><div><span class="sz-range">'+z.label+'</span> <span style="font-size:10px;color:var(--txt2);margin-left:6px">'+z.name+'</span></div>';
+/* star rating */
+var stars='';for(var i=0;i<5;i++){stars+=(i<z.edge?'★':'☆');}
+h+='<div class="sz-stars">'+stars+'</div></div>';
+/* edge meter */
+h+='<div class="sz-meter">';
+for(var i=0;i<5;i++){h+='<div class="sz-meter-seg '+(i<z.edge?'on':'off')+'"></div>';}
+h+='<span style="font-size:9px;color:var(--txt2);margin-left:6px">売りエッジ</span></div>';
+h+='<div class="sz-body" style="margin-top:8px">';
+h+='<div style="margin:4px 0"><b>🧱 壁:</b> '+z.wallNote+'</div>';
+h+='<div style="margin:4px 0"><b>📊 フロー:</b> '+z.flow+'</div>';
+h+='<div style="margin:4px 0"><b>🌏 参加者:</b> '+z.who+'</div>';
+if(z.type!=='atm'){h+='<div style="margin:4px 0"><b>📈 OTM確率:</b> <span class="mono" style="font-weight:600;color:var(--atm)">'+otm.toFixed(1)+'%</span></div>';}
+h+='<div style="margin:6px 0"><b>⚠️ リスク:</b> <span style="color:var(--dn)">'+z.risk+'</span></div>';
+h+='<div class="sz-hedge"><div class="sz-hedge-title">🔀 先物ヘッジアクション</div><div class="sz-hedge-body">';
+h+='<div>トリガー: <span class="mono" style="font-weight:600">'+z.hedgeTrigger+'</span> → mini <span style="color:'+(z.hedgeDir==='買'?'var(--up)':z.hedgeDir==='売'?'var(--dn)':'var(--atm)')+';font-weight:600">'+z.hedgeDir+'</span></div>';
+h+='<div style="margin-top:3px">'+z.hedge+'</div>';
+h+='<div style="margin-top:3px;color:var(--accent)">💡 '+z.hedgeNote+'</div>';
+h+='</div></div>';
+h+='<div style="margin-top:8px"><span class="sz-action '+z.actionCls+'">→ '+z.action+'</span></div>';
+if(z.mini){h+='<div style="margin-top:6px;font-size:10px;padding:6px 8px;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.15);border-radius:5px"><span style="color:var(--atm);font-weight:600">ミニOP: </span><span style="color:var(--txt2)">'+z.mini+'</span></div>';}
+h+='</div></div>';
+});
+
+/* --- Concrete strategy ideas --- */
+h+='<div style="font-size:11px;font-weight:600;margin:14px 0 6px">具体的な組み合わせ例</div>';
+h+='<div style="font-size:9px;color:var(--txt2);background:var(--card2);padding:5px 10px;border-radius:6px;margin-bottom:8px">各戦略に <span style="color:var(--accent)">ラージ版</span> と <span style="color:var(--atm)">ミニ版</span> を併記。ミニ版は証拠金1/10・125円刻みの柔軟性を活かした構成。</div>';
+h+='<div class="analysis-cards">';
+h+='<div class="acard" style="border-color:var(--accent)"><h5>🔷 Iron Condor（SQ狙い）</h5>';
+h+='<p><b style="color:var(--accent)">ラージ（3月限）:</b><br><span style="color:var(--call)">C57000売 / C60000買</span> + <span style="color:var(--put)">P52000売 / P50000買</span><br>';
+h+='<b style="color:var(--atm)">ミニ（3/12限）:</b><br><span style="color:var(--call)">C57000売 / C59000買</span> + <span style="color:var(--put)">P52000売 / P50000買</span> ×各10枚<br>';
+h+='<span class="mono" style="font-size:10px;color:var(--txt2)">ミニ版はウイング幅を調整可能。125円刻みで微調整できる利点。</span><br>';
+h+='両翼OTM確率: C側 70% × P側 83% → 同時OTM ~58%<br>';
+h+='<span style="color:var(--accent)">🔀 スプレッド構成のためデルタヘッジ不要。翼突破時のみ損切。</span></p></div>';
+
+h+='<div class="acard" style="border-color:var(--put)"><h5>🔴 Put Credit Spread</h5>';
+h+='<p><b style="color:var(--accent)">ラージ（4月限）:</b> <span style="color:var(--put)">P52000売 / P50000買</span><br>';
+h+='<b style="color:var(--atm)">ミニ（3/12限）:</b> <span style="color:var(--put)">P52000売 / P50500買</span> ×10枚<br>';
+h+='<span class="mono" style="font-size:10px;color:var(--txt2)">ミニ版は幅1,500円 → 最大損失を絞りつつ週次θ効率◎</span><br>';
+h+='P52K: ラージ壁6,119枚 + ミニ3/12限OI=592。国内勢P売り超が支持。<br>';
+h+='<span style="color:var(--accent)">🔀 スプレッドで最大損失限定済。54K割れで早期損切検討。</span></p></div>';
+
+h+='<div class="acard" style="border-color:var(--call)"><h5>🔵 Call Credit Spread</h5>';
+h+='<p><b style="color:var(--accent)">ラージ（4月限）:</b> <span style="color:var(--call)">C58000売 / C60000買</span><br>';
+h+='<b style="color:var(--atm)">ミニ（3/12限）:</b> <span style="color:var(--call)">C57500売 / C59000買</span> ×10枚<br>';
+h+='<span class="mono" style="font-size:10px;color:var(--txt2)">ミニの125円刻みでラージにない57,500を選択可能。</span><br>';
+h+='C58K: ラージ壁5,734枚 + ミニ3/12限OI=1,135。ABN C売り−1,290が蓋を補強。<br>';
+h+='<span style="color:var(--accent)">🔀 スプレッドで限定済。57K突破でアラート設定推奨。</span></p></div>';
+
+h+='<div class="acard" style="border-color:var(--atm)"><h5>⚡ Short Strangle（高VI活用）</h5>';
+h+='<p><b style="color:var(--accent)">ラージ:</b> <span style="color:var(--put)">P52000売</span> + <span style="color:var(--call)">C58000売</span><br>';
+h+='<b style="color:var(--atm)">ミニ（3/12限）:</b> <span style="color:var(--put)">P52000売</span> + <span style="color:var(--call)">C58000売</span> ×各5枚<br>';
+h+='<span class="mono" style="font-size:10px;color:var(--txt2)">ミニ5枚 = ラージ0.5枚相当。小ロットで試打 → 増枚の段階投入に最適。</span><br>';
+h+='VI=40 → プレミアム極厚。VI低下で短期利確狙い。<br>';
+h+='<span style="color:var(--accent)">🔀 <b>Naked売り → 先物ヘッジ必須。</b>mini先物4月限で段階ヘッジ。</span></p></div>';
+
+h+='<div class="acard" style="border-color:var(--atm)"><h5>🆕 ミニ専用: 週次θハーベスト</h5>';
+h+='<p><b style="color:var(--atm)">ミニ（3/10限 = 残り3営業日）:</b><br>';
+h+='<span style="color:var(--put)">P52000売</span> + <span style="color:var(--call)">C58000売</span> ×各3枚<br>';
+h+='<span class="mono" style="font-size:10px;color:var(--txt2)">残り3日のθ加速。証拠金はラージの1/10以下。</span><br>';
+h+='週次限月を毎週ロールし、残り3-5日のθ最効率ゾーンだけを収穫。ラージ月次と異なり週単位でリセット → リスクイベントを跨ぎにくい。<br>';
+h+='<span style="color:var(--dn)">⚠ 板が薄い限月あり。OIの厚い3/12限をメインに。</span></p></div>';
+h+='</div>';
+
+/* --- Futures hedge reference --- */
+h+='<div class="hedge-ref"><h4>🔀 先物デルタヘッジ参照</h4>';
+h+='<div class="hedge-row">';
+h+='<div class="hedge-col"><div class="hc-label">mini 3月限 OI</div><div class="hc-val chg-dn">280,573</div><div style="font-size:9px;color:var(--dn)">前日比 −44,675 (板薄化中)</div></div>';
+h+='<div class="hedge-col"><div class="hc-label">mini 4月限 OI</div><div class="hc-val chg-up">37,802</div><div style="font-size:9px;color:var(--up)">前日比 +5,930 (ロール先)</div></div>';
+h+='<div class="hedge-col"><div class="hc-label">TOPIX 3月限 OI</div><div class="hc-val" style="color:var(--txt)">456,328</div><div style="font-size:9px;color:var(--txt2)">前日比 −3,937 (流動性厚)</div></div>';
+h+='</div>';
+
+h+='<div style="font-size:11px;font-weight:600;margin:12px 0 4px">ヘッジトリガー一覧</div>';
+h+='<table class="trigger-tbl"><tr><th>トリガー価格</th><th></th><th>アクション</th><th>対象OP売り</th><th>枚数目安</th><th>注意点</th></tr>';
+var triggers=[
+{p:'58,000↑',arrow:'↑',clr:'var(--up)',act:'mini 買い',op:'C60K売り',lot:'OP10枚に対しmini 2-3枚',note:'C壁6,173枚が最後の砦'},
+{p:'56,500↑',arrow:'↑',clr:'var(--up)',act:'mini 買い',op:'C57K-58K売り',lot:'OP10枚に対しmini 1-2枚',note:'コール壁が薄化傾向（−396）'},
+{p:'55,140',arrow:'↔',clr:'var(--atm)',act:'日中スキャルピング',op:'ATM Strangle',lot:'ガンマ損に応じて調整',note:'ガンマ最大 / 板薄注意'},
+{p:'54,000↓',arrow:'↓',clr:'var(--dn)',act:'mini 売り',op:'P52K-54K売り',lot:'OP10枚に対しmini 1-2枚',note:'多段壁あり → 段階投入'},
+{p:'52,000↓',arrow:'↓',clr:'var(--dn)',act:'mini 売り（追加）',op:'P50K-52K売り',lot:'OP10枚に対しmini 2-3枚',note:'板薄 → TOPIX代替検討'}
+];
+triggers.forEach(function(t){
+h+='<tr><td class="mono" style="color:'+t.clr+';font-weight:600">'+t.p+'</td>';
+h+='<td><span class="trigger-arrow" style="color:'+t.clr+'">'+t.arrow+'</span></td>';
+h+='<td style="font-weight:500">'+t.act+'</td>';
+h+='<td style="color:var(--txt2)">'+t.op+'</td>';
+h+='<td class="mono" style="font-size:9px">'+t.lot+'</td>';
+h+='<td style="font-size:9px;color:var(--txt2)">'+t.note+'</td></tr>';
+});
+h+='</table>';
+
+h+='<div style="font-size:11px;font-weight:600;margin:12px 0 4px">先物限月選択ガイド</div>';
+h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+h+='<div style="background:var(--card2);border-radius:8px;padding:10px;font-size:10px">';
+h+='<div style="color:var(--dn);font-weight:600;margin-bottom:4px">⚠ mini 3月限（SQ 3/13）</div>';
+h+='OI: 280,573 → 前日比<b> −44,675</b>で急減中。SQまで残り6営業日で板が日々薄くなる。スリッページリスク大。<br>→ <b>ヘッジ用途では3月限を避ける</b>（SQ直前のギャップリスク）</div>';
+h+='<div style="background:var(--card2);border-radius:8px;padding:10px;font-size:10px">';
+h+='<div style="color:var(--up);font-weight:600;margin-bottom:4px">✅ mini 4月限（推奨）</div>';
+h+='OI: 37,802 → 前日比<b> +5,930</b>でロール流入中。清算値 54,835（3月限比 −305）。流動性は日々改善中。<br>→ <b>ヘッジのメイン限月として推奨</b>（3月OPのSQ後も継続保有可能）</div>';
+h+='</div>';
+
+h+='<div style="font-size:10px;color:var(--txt2);margin-top:8px;padding:8px;background:var(--card2);border-radius:6px;border-left:2px solid var(--accent)">';
+h+='<b>TOPIX先物の代替ヘッジ:</b> OI 475,946（前日比+1,936）で流動性が厚い。N225が板薄で約定しない緊急時はTOPIX先物でβヘッジ（N225:TOPIX ≒ 15:1の比率）。特に50,000円割れの暴落局面ではN225 mini の板が消える可能性があるため、TOPIXを第二のヘッジ手段として準備しておくこと。</div>';
+
+h+='</div>';
+
+/* --- VI scenario table --- */
+h+='<div style="font-size:11px;font-weight:600;margin:14px 0 6px">VIシナリオ別 OTM確率変化</div>';
+h+='<table class="prob-tbl"><tr><th>行使価格</th><th>VI=30</th><th>VI=40（現在）</th><th>VI=50</th></tr>';
+var viScen=[30,40,50];
+var strikes_sc=[{k:50000,t:'P'},{k:52000,t:'P'},{k:57000,t:'C'},{k:58000,t:'C'},{k:60000,t:'C'}];
+strikes_sc.forEach(function(sk){
+h+='<tr><td class="mono" style="color:'+(sk.t==='P'?'var(--put)':'var(--call)')+'">'+sk.t+sk.k.toLocaleString()+'</td>';
+viScen.forEach(function(v,vi_idx){
+var st=v/100*Math.sqrt(T);
+var prob;
+if(sk.t==='P'){prob=ncdf(Math.log(F/sk.k)/st)*100;}
+else{prob=ncdf(-Math.log(F/sk.k)/st)*100;}
+var isCurr=vi_idx===1;
+h+='<td class="mono" style="'+(isCurr?'font-weight:700;color:var(--atm)':'color:var(--txt2)')+'">'+prob.toFixed(1)+'%</td>';
+});
+h+='</tr>';
+});
+h+='</table>';
+h+='<div style="font-size:9px;color:var(--txt2);margin-bottom:8px">VI低下 = OTM確率上昇 = 売り手に有利 + プレミアム縮小で含み益。VI上昇 = OTM確率低下 = 証拠金圧迫に注意。</div>';
+
+h+='<div class="insight">VI=40は2024年8月ショック以来の高水準。プレミアムが極めて厚い環境はオプション売り手にとって年に数回のチャンス。ただし中東情勢というテールリスクが存在するため、<b>裸売りよりスプレッド</b>でリスクを限定し、ポジションサイズを通常の50-70%に抑えることを推奨。VIが30台に低下したタイミングが利確の目安。建玉壁（P50K=7,306 / C60K=6,173）はSQまでの短期的な心理的バリアとして機能するが、地政学イベントで壁を突破する可能性は常にある。<br><br><b>先物ヘッジの要点:</b> mini 3月限はOI急減（−44,675）で板薄化が進行中。ヘッジは<b>mini 4月限</b>（OI +5,930でロール流入中）をメインに使用。緊急時はTOPIX先物（OI 475K）をβヘッジとして併用。ヘッジの発動は「トリガー価格到達 → 段階投入」が基本。一括ヘッジは板薄環境でスリッページが大きくなるため避けること。</div>';
+d.innerHTML=h;
+}
+</script>
 </body>
 </html>
