@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P&L シミュレーター — 2026.03.06</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--card2:#161636;--border:#1e1e3a;--txt:#e2e8f0;--txt2:#94a3b8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444;--accent:#818cf8;--profit:rgba(74,222,128,.12);--loss:rgba(239,68,68,.12)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Noto Sans JP','Outfit',sans-serif;font-size:13px;line-height:1.6}
+.mono{font-family:'DM Mono',monospace}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px}
+.topbar .logo{font-family:'Outfit';font-weight:700;font-size:15px;color:var(--accent)}
+.topbar .sub{font-size:11px;color:var(--txt2)}
+
+.container{max-width:1200px;margin:0 auto;padding:16px}
+
+.hero{text-align:center;padding:20px 0 16px}
+.hero h1{font-family:'Outfit';font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--atm));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:var(--txt2);font-size:11px;margin-top:4px}
+
+.kpi-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;justify-content:center}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;text-align:center}
+.kpi .kl{font-size:9px;color:var(--txt2);letter-spacing:.5px}
+.kpi .kv{font-family:'DM Mono';font-size:14px;font-weight:500}
+
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.panel-title{font-family:'Outfit';font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:10px;color:var(--txt2);font-weight:500}
+.form-group input,.form-group select{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--txt);font-family:'DM Mono';font-size:12px;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+
+.legs{margin:10px 0}
+.leg{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0;position:relative}
+.leg-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.leg-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+.leg-tag.put{background:rgba(248,113,113,.15);color:var(--put)}
+.leg-tag.call{background:rgba(96,165,250,.15);color:var(--call)}
+.leg-tag.fut{background:rgba(129,140,248,.15);color:var(--accent)}
+.leg-remove{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--txt2);cursor:pointer;font-size:14px;line-height:1}
+.leg-remove:hover{color:var(--dn)}
+.leg-fields{display:flex;gap:8px;flex-wrap:wrap}
+.leg-fields .form-group{min-width:100px;flex:1}
+
+.btn-row{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.btn{padding:7px 14px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--txt);font-size:11px;cursor:pointer;transition:all .2s;font-family:'Noto Sans JP'}
+.btn:hover{border-color:var(--accent);background:rgba(129,140,248,.08)}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:#6366f1}
+.btn.put-btn{border-color:var(--put);color:var(--put)}
+.btn.put-btn:hover{background:rgba(248,113,113,.08)}
+.btn.call-btn{border-color:var(--call);color:var(--call)}
+.btn.call-btn:hover{background:rgba(96,165,250,.08)}
+.btn.fut-btn{border-color:var(--accent);color:var(--accent)}
+.btn.fut-btn:hover{background:rgba(129,140,248,.08)}
+
+.premium-note{font-size:10px;color:var(--atm);margin-top:4px;padding:4px 8px;background:rgba(251,191,36,.06);border-radius:4px;display:inline-block}
+
+.result-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11px}
+.result-table th{padding:7px 8px;text-align:right;font-size:10px;color:var(--txt2);font-weight:500;border-bottom:2px solid var(--border);position:sticky;top:0;background:var(--card)}
+.result-table th:first-child{text-align:left}
+.result-table td{padding:6px 8px;text-align:right;font-family:'DM Mono';font-size:11px;border-bottom:1px solid rgba(30,30,58,.4)}
+.result-table td:first-child{text-align:left;font-weight:500}
+.result-table tr.atm-row{background:rgba(251,191,36,.06)}
+.result-table tr.atm-row td:first-child{color:var(--atm);font-weight:700}
+.result-table tr.be-row{background:rgba(129,140,248,.06)}
+.result-table .profit{color:var(--up)}
+.result-table .loss{color:var(--dn)}
+.result-table .zero{color:var(--txt2)}
+
+.pnl-bar-cell{position:relative;width:120px}
+.pnl-bar{height:12px;border-radius:2px;position:absolute;top:50%;transform:translateY(-50%)}
+.pnl-bar.pos{background:var(--up);left:50%}
+.pnl-bar.neg{background:var(--dn);right:50%}
+.pnl-bar-zero{position:absolute;left:50%;top:20%;height:60%;width:1px;background:var(--txt2);opacity:.4}
+
+.chart-area{position:relative;height:260px;background:var(--card2);border-radius:8px;margin:12px 0;overflow:hidden;border:1px solid var(--border)}
+.chart-canvas{width:100%;height:100%}
+
+.insight{background:var(--card2);border-left:3px solid var(--atm);border-radius:0 8px 8px 0;padding:12px 14px;font-size:11px;color:var(--txt2);margin-top:12px}
+
+.preset-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.preset-btn{padding:5px 10px;border-radius:5px;border:1px solid var(--border);background:var(--card2);color:var(--txt2);font-size:10px;cursor:pointer;transition:all .2s}
+.preset-btn:hover{border-color:var(--atm);color:var(--atm)}
+
+.table-scroll{max-height:500px;overflow-y:auto;border-radius:8px;border:1px solid var(--border)}
+.table-scroll::-webkit-scrollbar{width:6px}
+.table-scroll::-webkit-scrollbar-track{background:var(--card)}
+.table-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+.summary-strip{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.summary-item{background:var(--card2);border-radius:6px;padding:8px 12px;flex:1;min-width:120px;text-align:center}
+.summary-item .sl{font-size:9px;color:var(--txt2)}
+.summary-item .sv{font-family:'DM Mono';font-size:15px;font-weight:500;margin-top:2px}
+
+@media(max-width:600px){
+.form-grid{grid-template-columns:1fr}
+.leg-fields{flex-direction:column}
+.pnl-bar-cell{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="logo">P&L Simulator</div>
+<div class="sub">2026.03.06 | ATM 55,730 | VI 44.00 | SQまで4営業日</div>
+</div>
+
+<div class="container">
+
+<div class="hero">
+<h1>オプション売り＋先物ヘッジ P&Lシミュレーター</h1>
+<div class="sub">SQ着地価格別の損益マップを自動計算 — ラージ・ミニ両対応</div>
+</div>
+
+<div class="kpi-row">
+<div class="kpi"><div class="kl">ATM (先物清算)</div><div class="kv mono" style="color:var(--atm)">55,730</div></div>
+<div class="kpi"><div class="kl">日経VI</div><div class="kv mono" style="color:var(--dn)">44.00</div></div>
+<div class="kpi"><div class="kl">SQ</div><div class="kv mono">3/13(金)</div></div>
+<div class="kpi"><div class="kl">残り</div><div class="kv mono">4営業日</div></div>
+</div>
+
+<!-- Presets -->
+<div class="panel">
+<div class="panel-title">📋 プリセット戦略</div>
+<div class="preset-row">
+<button class="preset-btn" onclick="loadPreset('iron_condor')">Iron Condor</button>
+<button class="preset-btn" onclick="loadPreset('put_spread')">Put Credit Spread</button>
+<button class="preset-btn" onclick="loadPreset('call_spread')">Call Credit Spread</button>
+<button class="preset-btn" onclick="loadPreset('strangle_hedge')">Short Strangle + 先物ヘッジ</button>
+<button class="preset-btn" onclick="loadPreset('put_naked')">P売り + mini先物ヘッジ</button>
+<button class="preset-btn" onclick="loadPreset('mini_weekly')">ミニ週次θハーベスト</button>
+</div>
+</div>
+
+<!-- Leg Builder -->
+<div class="panel">
+<div class="panel-title">🔧 ポジション構築</div>
+<div class="btn-row">
+<button class="btn put-btn" onclick="addLeg('put')">+ プット</button>
+<button class="btn call-btn" onclick="addLeg('call')">+ コール</button>
+<button class="btn fut-btn" onclick="addLeg('fut')">+ 先物mini</button>
+<button class="btn" onclick="clearLegs()">クリア</button>
+</div>
+<div class="legs" id="legs"></div>
+<div class="premium-note" id="premium-note" style="display:none">💡 プレミアムは BS近似（VI=44, T=4日）で自動推定。手入力で上書き可能。</div>
+<div style="margin-top:10px">
+<button class="btn primary" onclick="calculate()">📊 P&L計算</button>
+</div>
+</div>
+
+<!-- Results -->
+<div class="panel" id="result-panel" style="display:none">
+<div class="panel-title">📊 SQ着地別 損益マップ</div>
+
+<div class="summary-strip" id="summary-strip"></div>
+
+<!-- Chart -->
+<div class="chart-area" id="chart-area">
+<canvas class="chart-canvas" id="chart-canvas"></canvas>
+</div>
+
+<!-- Table -->
+<div class="table-scroll">
+<table class="result-table" id="result-table">
+<thead id="result-thead"></thead>
+<tbody id="result-tbody"></tbody>
+</table>
+</div>
+
+<div class="insight" id="result-insight"></div>
+</div>
+
+</div>
+
+<script>
+var ATM = 55730;
+var VI = 44;
+var T = 4/250;
+var legId = 0;
+var legs = [];
+
+// Cumulative normal distribution
+function ncdf(x){
+  var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  var s=x<0?-1:1; x=Math.abs(x)/Math.sqrt(2);
+  var t=1/(1+p*x);var y=1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return 0.5*(1+s*y);
+}
+
+// BS option price (futures options, r=0 approx)
+function bsPrice(type, K, F, sigma, t){
+  if(t<=0) return type==='put'?Math.max(K-F,0):Math.max(F-K,0);
+  var sqrtT=Math.sqrt(t);
+  var d1=(Math.log(F/K)+0.5*sigma*sigma*t)/(sigma*sqrtT);
+  var d2=d1-sigma*sqrtT;
+  if(type==='put') return K*ncdf(-d2)-F*ncdf(-d1);
+  return F*ncdf(d1)-K*ncdf(d2);
+}
+
+function estimatePremium(type, strike){
+  var sigma=VI/100;
+  var px = bsPrice(type, strike, ATM, sigma, T);
+  return Math.round(px);
+}
+
+function addLeg(type, preset){
+  legId++;
+  var id = legId;
+  var defaultStrike = type==='fut'? ATM : (type==='put'? ATM-2000 : ATM+2000);
+  var defaultDir = type==='fut'? 'short' : 'short';
+  var defaultQty = type==='fut'? 3 : 1;
+  var defaultPrem = type!=='fut'? estimatePremium(type, defaultStrike) : 0;
+  var defaultEntry = type==='fut'? ATM : 0;
+
+  if(preset){
+    defaultStrike = preset.strike || defaultStrike;
+    defaultDir = preset.dir || defaultDir;
+    defaultQty = preset.qty || defaultQty;
+    defaultPrem = preset.prem !== undefined ? preset.prem : (type!=='fut'? estimatePremium(type, defaultStrike) : 0);
+    defaultEntry = preset.entry || (type==='fut'? ATM : 0);
+  }
+
+  var leg = {id:id, type:type, strike:defaultStrike, dir:defaultDir, qty:defaultQty, prem:defaultPrem, entry:defaultEntry, multi: type==='fut'? 100 : 1000};
+
+  legs.push(leg);
+  renderLegs();
+  document.getElementById('premium-note').style.display = 'inline-block';
+}
+
+function removeLeg(id){
+  legs = legs.filter(function(l){return l.id !== id;});
+  renderLegs();
+}
+
+function clearLegs(){
+  legs = [];
+  legId = 0;
+  renderLegs();
+  document.getElementById('result-panel').style.display = 'none';
+}
+
+function renderLegs(){
+  var el = document.getElementById('legs');
+  var h = '';
+  legs.forEach(function(leg){
+    var tagCls = leg.type==='put'?'put':(leg.type==='call'?'call':'fut');
+    var tagName = leg.type==='put'?'PUT':(leg.type==='call'?'CALL':'先物mini');
+
+    h += '<div class="leg" id="leg-'+leg.id+'">';
+    h += '<button class="leg-remove" onclick="removeLeg('+leg.id+')">✕</button>';
+    h += '<div class="leg-header"><span class="leg-tag '+tagCls+'">'+tagName+'</span></div>';
+    h += '<div class="leg-fields">';
+
+    if(leg.type !== 'fut'){
+      h += '<div class="form-group"><label>売買</label><select onchange="updateLeg('+leg.id+',\'dir\',this.value)">';
+      h += '<option value="short"'+(leg.dir==='short'?' selected':'')+'>売り(Short)</option>';
+      h += '<option value="long"'+(leg.dir==='long'?' selected':'')+'>買い(Long)</option>';
+      h += '</select></div>';
+      h += '<div class="form-group"><label>行使価格</label><input type="number" value="'+leg.strike+'" step="500" onchange="updateLeg('+leg.id+',\'strike\',+this.value);autoFillPrem('+leg.id+')"></div>';
+      h += '<div class="form-group"><label>プレミアム(円)</label><input type="number" value="'+leg.prem+'" step="10" id="prem-'+leg.id+'" onchange="updateLeg('+leg.id+',\'prem\',+this.value)"></div>';
+      h += '<div class="form-group"><label>枚数</label><input type="number" value="'+leg.qty+'" min="1" step="1" onchange="updateLeg('+leg.id+',\'qty\',+this.value)"></div>';
+      h += '<div class="form-group"><label>乗数</label><select onchange="updateLeg('+leg.id+',\'multi\',+this.value)">';
+      h += '<option value="1000"'+(leg.multi===1000?' selected':'')+'>ラージ(×1000)</option>';
+      h += '<option value="100"'+(leg.multi===100?' selected':'')+'>ミニ(×100)</option>';
+      h += '</select></div>';
+    } else {
+      h += '<div class="form-group"><label>売買</label><select onchange="updateLeg('+leg.id+',\'dir\',this.value)">';
+      h += '<option value="short"'+(leg.dir==='short'?' selected':'')+'>売り(Short)</option>';
+      h += '<option value="long"'+(leg.dir==='long'?' selected':'')+'>買い(Long)</option>';
+      h += '</select></div>';
+      h += '<div class="form-group"><label>エントリー価格</label><input type="number" value="'+leg.entry+'" step="5" onchange="updateLeg('+leg.id+',\'entry\',+this.value)"></div>';
+      h += '<div class="form-group"><label>枚数</label><input type="number" value="'+leg.qty+'" min="1" step="1" onchange="updateLeg('+leg.id+',\'qty\',+this.value)"></div>';
+      h += '<div class="form-group"><label>乗数</label><select onchange="updateLeg('+leg.id+',\'multi\',+this.value)">';
+      h += '<option value="100"'+(leg.multi===100?' selected':'')+'>mini(×100)</option>';
+      h += '<option value="1000"'+(leg.multi===1000?' selected':'')+'>ラージ(×1000)</option>';
+      h += '</select></div>';
+    }
+    h += '</div></div>';
+  });
+  el.innerHTML = h;
+}
+
+function updateLeg(id, field, val){
+  legs.forEach(function(l){if(l.id===id) l[field]=val;});
+}
+
+function autoFillPrem(id){
+  var leg = legs.find(function(l){return l.id===id;});
+  if(!leg || leg.type==='fut') return;
+  var prem = estimatePremium(leg.type, leg.strike);
+  leg.prem = prem;
+  var inp = document.getElementById('prem-'+id);
+  if(inp) inp.value = prem;
+}
+
+// Calculate P&L at a given SQ price
+function calcPnlAt(sq){
+  var total = 0;
+  legs.forEach(function(leg){
+    var pnl = 0;
+    var sign = leg.dir==='short'? -1 : 1;
+
+    if(leg.type==='put'){
+      var intrinsic = Math.max(leg.strike - sq, 0);
+      // Short put: receive premium, pay intrinsic
+      // Long put: pay premium, receive intrinsic
+      pnl = (leg.prem - sign * intrinsic * (-1)) ;
+      // Cleaner: short put P&L = premium - max(K-SQ,0); long put = max(K-SQ,0) - premium
+      if(leg.dir==='short') pnl = leg.prem - intrinsic;
+      else pnl = intrinsic - leg.prem;
+    } else if(leg.type==='call'){
+      var intrinsic = Math.max(sq - leg.strike, 0);
+      if(leg.dir==='short') pnl = leg.prem - intrinsic;
+      else pnl = intrinsic - leg.prem;
+    } else { // futures
+      if(leg.dir==='short') pnl = leg.entry - sq;
+      else pnl = sq - leg.entry;
+    }
+
+    total += pnl * leg.qty * leg.multi;
+  });
+  return total;
+}
+
+// Per-leg P&L in "index points" (before multiplier)
+function calcLegPnlPts(leg, sq){
+  if(leg.type==='put'){
+    var intrinsic = Math.max(leg.strike - sq, 0);
+    return leg.dir==='short'? leg.prem - intrinsic : intrinsic - leg.prem;
+  } else if(leg.type==='call'){
+    var intrinsic = Math.max(sq - leg.strike, 0);
+    return leg.dir==='short'? leg.prem - intrinsic : intrinsic - leg.prem;
+  } else {
+    return leg.dir==='short'? leg.entry - sq : sq - leg.entry;
+  }
+}
+
+function calculate(){
+  if(legs.length===0) return;
+
+  // Generate SQ prices: ATM-6000 to ATM+6000, 500 step
+  var prices = [];
+  var low = Math.floor((ATM-6000)/500)*500;
+  var high = Math.ceil((ATM+6000)/500)*500;
+  for(var p=low; p<=high; p+=500) prices.push(p);
+
+  // Ensure ATM is included
+  if(prices.indexOf(ATM)<0){
+    prices.push(ATM);
+    prices.sort(function(a,b){return a-b;});
+  }
+
+  // Calculate all P&L
+  var results = prices.map(function(sq){
+    var total = calcPnlAt(sq);
+    var perLeg = legs.map(function(leg){return calcLegPnlPts(leg, sq);});
+    return {sq:sq, total:total, perLeg:perLeg};
+  });
+
+  // Find max profit, max loss, breakeven
+  var maxProfit = -Infinity, maxLoss = Infinity, breakevens = [];
+  results.forEach(function(r,i){
+    if(r.total > maxProfit) maxProfit = r.total;
+    if(r.total < maxLoss) maxLoss = r.total;
+    if(i>0){
+      var prev = results[i-1];
+      if((prev.total<0 && r.total>=0)||(prev.total>=0 && r.total<0)){
+        // Linear interpolation for breakeven
+        var be = prev.sq + (r.sq-prev.sq) * Math.abs(prev.total) / (Math.abs(prev.total)+Math.abs(r.total));
+        breakevens.push(Math.round(be));
+      }
+    }
+  });
+
+  // Summary
+  var summaryEl = document.getElementById('summary-strip');
+  var sh = '';
+  sh += '<div class="summary-item"><div class="sl">最大利益</div><div class="sv'+(maxProfit>=0?' profit':' loss')+'">'+formatYen(maxProfit)+'</div></div>';
+  sh += '<div class="summary-item"><div class="sl">最大損失</div><div class="sv'+(maxLoss>=0?' profit':' loss')+'">'+formatYen(maxLoss)+'</div></div>';
+  sh += '<div class="summary-item"><div class="sl">損益分岐点</div><div class="sv mono" style="color:var(--atm)">'+(breakevens.length?breakevens.map(function(b){return b.toLocaleString();}).join(' / '):'—')+'</div></div>';
+  summaryEl.innerHTML = sh;
+
+  // Table
+  var maxAbs = Math.max(Math.abs(maxProfit), Math.abs(maxLoss), 1);
+  var thead = document.getElementById('result-thead');
+  var tbody = document.getElementById('result-tbody');
+
+  var th = '<tr><th style="text-align:left">SQ着地</th>';
+  legs.forEach(function(leg, i){
+    var name = leg.type==='put'?'P'+leg.strike:(leg.type==='call'?'C'+leg.strike:'先物');
+    var dir = leg.dir==='short'?'売':'買';
+    th += '<th>'+name+' '+dir+'×'+leg.qty+'</th>';
+  });
+  th += '<th>合計P&L</th><th style="width:120px">P&Lバー</th></tr>';
+  thead.innerHTML = th;
+
+  var tb = '';
+  results.forEach(function(r){
+    var isATM = Math.abs(r.sq - ATM) < 250;
+    var isBE = breakevens.some(function(be){return Math.abs(r.sq - be) < 300;});
+    var cls = isATM?' class="atm-row"':(isBE?' class="be-row"':'');
+
+    tb += '<tr'+cls+'>';
+    tb += '<td'+(isATM?' style="color:var(--atm)"':'')+'>'+r.sq.toLocaleString()+'</td>';
+
+    r.perLeg.forEach(function(pl, i){
+      var val = pl * legs[i].qty;
+      var unit = legs[i].multi === 1000 ? '円' : '円';
+      var valStr = (val>=0?'+':'')+val.toLocaleString();
+      var color = val>0?'profit':(val<0?'loss':'zero');
+      tb += '<td class="'+color+'">'+valStr+'</td>';
+    });
+
+    var totalColor = r.total>0?'profit':(r.total<0?'loss':'zero');
+    tb += '<td class="'+totalColor+'" style="font-weight:600">'+formatYen(r.total)+'</td>';
+
+    // Bar
+    var barPct = Math.abs(r.total)/maxAbs*50;
+    if(barPct<1 && r.total!==0) barPct=1;
+    var barCls = r.total>=0?'pos':'neg';
+    tb += '<td class="pnl-bar-cell"><div class="pnl-bar-zero"></div><div class="pnl-bar '+barCls+'" style="width:'+barPct+'%"></div></td>';
+    tb += '</tr>';
+  });
+  tbody.innerHTML = tb;
+
+  // Draw chart
+  drawChart(results, breakevens, maxAbs);
+
+  // Insight
+  var insightEl = document.getElementById('result-insight');
+  var pnlAtATM = calcPnlAt(ATM);
+  var pnlAt54K = calcPnlAt(54000);
+  var pnlAt57K = calcPnlAt(57500);
+  insightEl.innerHTML = '💡 ATM('+ATM.toLocaleString()+')着地時: <span class="mono" style="color:'+cc(pnlAtATM)+'">'+formatYen(pnlAtATM)+'</span>'
+    +' | 54,000着地時: <span class="mono" style="color:'+cc(pnlAt54K)+'">'+formatYen(pnlAt54K)+'</span>'
+    +' | 57,500着地時: <span class="mono" style="color:'+cc(pnlAt57K)+'">'+formatYen(pnlAt57K)+'</span>'
+    +'<br>損益分岐: '+(breakevens.length?breakevens.map(function(b){return '<span class="mono" style="color:var(--atm)">'+b.toLocaleString()+'</span>';}).join(' / '):'設定なし')
+    +' | 注: プレミアムはBS近似値。実際の約定価格で上書きしてください。';
+
+  document.getElementById('result-panel').style.display = 'block';
+  document.getElementById('result-panel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function formatYen(val){
+  if(Math.abs(val)>=1000000) return (val>=0?'+':'')+Math.round(val/10000).toLocaleString()+'万円';
+  return (val>=0?'+':'')+val.toLocaleString()+'円';
+}
+function cc(val){return val>=0?'var(--up)':'var(--dn)';}
+
+function drawChart(results, breakevens, maxAbs){
+  var canvas = document.getElementById('chart-canvas');
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width+'px';
+  canvas.style.height = rect.height+'px';
+  ctx.scale(dpr,dpr);
+
+  var W = rect.width, H = rect.height;
+  var pad = {top:20,right:20,bottom:30,left:70};
+  var cw = W-pad.left-pad.right, ch = H-pad.top-pad.bottom;
+
+  // Clear
+  ctx.fillStyle = '#161636';
+  ctx.fillRect(0,0,W,H);
+
+  var prices = results.map(function(r){return r.sq;});
+  var pMin = prices[0], pMax = prices[prices.length-1];
+  var vMax = maxAbs * 1.1;
+
+  function x(p){return pad.left + (p-pMin)/(pMax-pMin)*cw;}
+  function y(v){return pad.top + ch/2 - v/vMax*(ch/2);}
+
+  // Zero line
+  ctx.strokeStyle = 'rgba(148,163,184,.2)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(pad.left,y(0));ctx.lineTo(W-pad.right,y(0));ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ATM line
+  ctx.strokeStyle = 'rgba(251,191,36,.3)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([2,4]);
+  ctx.beginPath();ctx.moveTo(x(ATM),pad.top);ctx.lineTo(x(ATM),H-pad.bottom);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Fill profit/loss areas
+  ctx.beginPath();
+  ctx.moveTo(x(results[0].sq), y(0));
+  results.forEach(function(r){ctx.lineTo(x(r.sq), y(r.total));});
+  ctx.lineTo(x(results[results.length-1].sq), y(0));
+  ctx.closePath();
+  var grad = ctx.createLinearGradient(0, y(vMax), 0, y(-vMax));
+  grad.addColorStop(0, 'rgba(74,222,128,.15)');
+  grad.addColorStop(0.5, 'rgba(74,222,128,.02)');
+  grad.addColorStop(0.5, 'rgba(239,68,68,.02)');
+  grad.addColorStop(1, 'rgba(239,68,68,.15)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // P&L line
+  ctx.strokeStyle = '#818cf8';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  results.forEach(function(r,i){
+    if(i===0)ctx.moveTo(x(r.sq),y(r.total));
+    else ctx.lineTo(x(r.sq),y(r.total));
+  });
+  ctx.stroke();
+
+  // Breakeven dots
+  ctx.fillStyle = '#fbbf24';
+  breakevens.forEach(function(be){
+    ctx.beginPath();ctx.arc(x(be),y(0),4,0,Math.PI*2);ctx.fill();
+  });
+
+  // X axis labels
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'center';
+  var step = cw / (prices.length-1);
+  var labelEvery = step < 40 ? 4 : (step < 60 ? 2 : 1);
+  prices.forEach(function(p,i){
+    if(i % labelEvery === 0){
+      ctx.fillText((p/1000).toFixed(1)+'K', x(p), H-pad.bottom+14);
+    }
+  });
+
+  // Y axis labels
+  ctx.textAlign = 'right';
+  var yTicks = 5;
+  for(var i=-yTicks;i<=yTicks;i++){
+    var val = i/yTicks * vMax;
+    var yp = y(val);
+    if(yp>pad.top && yp<H-pad.bottom){
+      ctx.fillStyle = '#94a3b8';
+      if(Math.abs(val)>=10000) ctx.fillText(Math.round(val/10000)+'万', pad.left-6, yp+3);
+      else ctx.fillText(Math.round(val/1000)+'K', pad.left-6, yp+3);
+
+      ctx.strokeStyle = 'rgba(148,163,184,.06)';
+      ctx.beginPath();ctx.moveTo(pad.left,yp);ctx.lineTo(W-pad.right,yp);ctx.stroke();
+    }
+  }
+
+  // Labels
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = '10px Noto Sans JP';
+  ctx.textAlign = 'center';
+  ctx.fillText('ATM '+ATM.toLocaleString(), x(ATM), pad.top-6);
+}
+
+// Presets
+function loadPreset(name){
+  clearLegs();
+  switch(name){
+    case 'iron_condor':
+      addLeg('put',{strike:52000,dir:'short',qty:1,multi:1000});
+      addLeg('put',{strike:50000,dir:'long',qty:1,multi:1000});
+      addLeg('call',{strike:58000,dir:'short',qty:1,multi:1000});
+      addLeg('call',{strike:60000,dir:'long',qty:1,multi:1000});
+      break;
+    case 'put_spread':
+      addLeg('put',{strike:53000,dir:'short',qty:1,multi:1000});
+      addLeg('put',{strike:51000,dir:'long',qty:1,multi:1000});
+      break;
+    case 'call_spread':
+      addLeg('call',{strike:58000,dir:'short',qty:1,multi:1000});
+      addLeg('call',{strike:60000,dir:'long',qty:1,multi:1000});
+      break;
+    case 'strangle_hedge':
+      addLeg('put',{strike:52500,dir:'short',qty:1,multi:1000});
+      addLeg('call',{strike:58500,dir:'short',qty:1,multi:1000});
+      addLeg('fut',{dir:'short',qty:0,entry:ATM,multi:100});
+      break;
+    case 'put_naked':
+      addLeg('put',{strike:50000,dir:'short',qty:1,prem:500,multi:1000});
+      addLeg('fut',{dir:'short',qty:3,entry:55000,multi:100});
+      break;
+    case 'mini_weekly':
+      addLeg('put',{strike:53500,dir:'short',qty:10,multi:100});
+      addLeg('call',{strike:57500,dir:'short',qty:10,multi:100});
+      break;
+  }
+  setTimeout(calculate, 100);
+}
+
+// Auto-resize chart on window resize
+window.addEventListener('resize', function(){
+  if(document.getElementById('result-panel').style.display!=='none'){
+    calculate();
+  }
+});
+</script>
+</body>
+</html>
