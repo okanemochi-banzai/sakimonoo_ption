@@ -3,299 +3,288 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P&L Simulator — 2026.03.09</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P&L Simulator | JPX 2026.03.10</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--inc:#4ade80;--dec:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444}
-body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;line-height:1.6}
-.mono{font-family:'DM Mono',monospace}
-a{color:var(--accent);text-decoration:none}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:space-between}
-.topbar-logo{font-family:'Outfit';font-weight:700;font-size:15px;color:var(--accent)}
-.topbar-nav{display:flex;gap:16px;font-size:13px}.topbar-nav a{color:var(--muted)}
-.kpi-strip{display:flex;justify-content:center;gap:20px;padding:12px 16px;flex-wrap:wrap}
-.kpi{text-align:center;min-width:80px}.kpi-label{font-size:10px;color:var(--muted)}.kpi-val{font-family:'DM Mono';font-size:16px;color:#fff}
-.section{max-width:1000px;margin:0 auto;padding:16px}
-.preset-bar{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-.preset-btn{padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text);cursor:pointer;font-size:12px;font-family:'Noto Sans JP'}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.6}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
+.topbar-logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}
+.topbar-nav a{color:var(--muted);text-decoration:none;font-size:12px;margin-left:16px;font-family:Outfit}
+.topbar-nav a:hover{color:var(--accent)}
+.kpi-strip{display:flex;justify-content:center;gap:24px;padding:14px 16px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--border)}
+.kpi{text-align:center}.kpi-val{font-family:'DM Mono';font-size:16px;font-weight:500;color:#fff}
+.kpi-label{font-size:10px;color:var(--muted);margin-top:2px}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.section h3{font-family:Outfit;font-size:14px;font-weight:600;color:var(--accent);margin-bottom:12px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.preset-btn{padding:6px 14px;background:var(--panel);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer;font-size:11px;font-family:'Noto Sans JP'}
 .preset-btn:hover{border-color:var(--accent);color:var(--accent)}
-.leg-row{display:flex;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);flex-wrap:wrap;font-size:12px}
-.leg-row select,.leg-row input{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:4px;padding:4px 6px;font-size:12px;font-family:'DM Mono'}
-.leg-row input{width:80px}
-.leg-row select{width:90px}
-.btn{padding:6px 14px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-family:'Noto Sans JP'}
-.btn-accent{background:var(--accent);color:#fff}.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-.btn:hover{opacity:.85}
-.result-strip{display:flex;gap:16px;justify-content:center;margin:16px 0;flex-wrap:wrap}
-.res-box{text-align:center;padding:8px 16px;border-radius:8px;border:1px solid var(--border);min-width:100px}
-.res-label{font-size:10px;color:var(--muted)}.res-val{font-family:'DM Mono';font-size:16px}
-table.pnl{width:100%;border-collapse:collapse;font-size:11px;margin:12px 0}
-table.pnl th{padding:4px 6px;color:var(--muted);border-bottom:1px solid var(--border);font-weight:500;text-align:right;font-size:10px}
-table.pnl td{padding:3px 6px;border-bottom:1px solid rgba(30,30,58,.3);text-align:right;font-family:'DM Mono'}
-table.pnl .atm{background:rgba(251,191,36,.08)}
-table.pnl .be{background:rgba(129,140,248,.08)}
+.leg-row{display:grid;grid-template-columns:80px 80px 100px 100px 80px 80px 40px;gap:6px;align-items:center;margin-bottom:6px;font-size:11px}
+.leg-row select,.leg-row input{background:var(--panel);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:4px 6px;font-size:11px;font-family:'DM Mono'}
+.leg-row input{width:100%}
+.add-btns{display:flex;gap:8px;margin-top:8px}
+.add-btns button{padding:5px 12px;background:var(--panel);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer;font-size:11px}
+.add-btns button:hover{border-color:var(--accent)}
+.del-btn{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:4px;color:var(--dec);cursor:pointer;font-size:12px;padding:2px 8px}
+.summary-strip{display:flex;gap:16px;justify-content:center;padding:12px;background:var(--panel);border-radius:8px;margin-bottom:12px}
+.summary-item{text-align:center}.summary-val{font-family:'DM Mono';font-size:16px;font-weight:500}
+.summary-label{font-size:10px;color:var(--muted)}
+canvas{width:100%;border-radius:8px;margin-bottom:12px}
+.pnl-table{width:100%;border-collapse:collapse;font-size:11px;font-family:'DM Mono'}
+.pnl-table th,.pnl-table td{padding:5px 8px;border-bottom:1px solid var(--border);text-align:right}
+.pnl-table th{color:var(--muted);font-weight:500;font-size:10px;text-align:center}
+.pnl-table .atm-row{background:rgba(251,191,36,.06)}
+.pnl-table .be-row{background:rgba(129,140,248,.06)}
 .pnl-bar{display:inline-block;height:10px;border-radius:2px;vertical-align:middle}
-.insight{background:rgba(129,140,248,.06);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:13px;line-height:1.7}
-canvas{display:block;margin:12px auto;max-width:100%}
+.inc{color:var(--inc)}.dec{color:var(--dec)}
 </style>
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-logo">P&amp;L Simulator</div>
-  <nav class="topbar-nav">
-    <a href="index.html">&larr; ダッシュボード</a>
-    <a href="archive.html">アーカイブ</a>
-  </nav>
+<div class="topbar-logo">P&L Simulator</div>
+<div class="topbar-nav">
+<a href="index.html">← ダッシュボード</a>
+<a href="archive.html">アーカイブ</a>
+</div>
 </div>
 <div class="kpi-strip">
-  <div class="kpi"><div class="kpi-label">ATM</div><div class="kpi-val">52,600</div></div>
-  <div class="kpi"><div class="kpi-label">VI</div><div class="kpi-val">44</div></div>
-  <div class="kpi"><div class="kpi-label">SQ</div><div class="kpi-val">3/13</div></div>
-  <div class="kpi"><div class="kpi-label">残り</div><div class="kpi-val">4日</div></div>
-</div>
-<div class="section">
-<h2 style="font-family:Outfit;font-size:18px;color:#fff;margin-bottom:8px">プリセット戦略</h2>
-<div class="preset-bar">
-  <button class="preset-btn" onclick="loadPreset('ic')">Iron Condor</button>
-  <button class="preset-btn" onclick="loadPreset('pcs')">Put Credit Spread</button>
-  <button class="preset-btn" onclick="loadPreset('ccs')">Call Credit Spread</button>
-  <button class="preset-btn" onclick="loadPreset('ss')">Short Strangle</button>
-  <button class="preset-btn" onclick="loadPreset('ph')">P売+miniヘッジ</button>
-  <button class="preset-btn" onclick="loadPreset('wt')">Weekly θ Harvest</button>
+<div class="kpi"><div class="kpi-val">54,460</div><div class="kpi-label">ATM（先物清算値）</div></div>
+<div class="kpi"><div class="kpi-val">41.3</div><div class="kpi-label">日経VI</div></div>
+<div class="kpi"><div class="kpi-val">3/13(金)</div><div class="kpi-label">SQ日</div></div>
+<div class="kpi"><div class="kpi-val">3日</div><div class="kpi-label">SQまで</div></div>
 </div>
 
-<h2 style="font-family:Outfit;font-size:18px;color:#fff;margin:16px 0 8px">レグビルダー</h2>
-<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
-  <button class="btn btn-outline" onclick="addLeg('P')">+ プット</button>
-  <button class="btn btn-outline" onclick="addLeg('C')">+ コール</button>
-  <button class="btn btn-outline" onclick="addLeg('F')">+ 先物mini</button>
-  <button class="btn btn-outline" onclick="clearLegs()">クリア</button>
-  <button class="btn btn-accent" onclick="calculate()">計算</button>
+<div class="container">
+<div class="section">
+<h3>プリセット戦略</h3>
+<div class="presets">
+<button class="preset-btn" onclick="loadPreset('ic')">Iron Condor</button>
+<button class="preset-btn" onclick="loadPreset('pcs')">Put Credit Spread</button>
+<button class="preset-btn" onclick="loadPreset('ccs')">Call Credit Spread</button>
+<button class="preset-btn" onclick="loadPreset('ss')">Short Strangle</button>
+<button class="preset-btn" onclick="loadPreset('ph')">P売り+miniヘッジ</button>
+<button class="preset-btn" onclick="loadPreset('theta')">ミニ週次θ</button>
+</div>
+</div>
+
+<div class="section">
+<h3>レグビルダー</h3>
+<div style="font-size:10px;color:var(--muted);margin-bottom:8px">
+タイプ / 売買 / 行使価格 / プレミアム(円) / 枚数 / 乗数 / 削除
 </div>
 <div id="legs"></div>
+<div class="add-btns">
+<button onclick="addLeg('P')">+ プット</button>
+<button onclick="addLeg('C')">+ コール</button>
+<button onclick="addLeg('F')">+ 先物mini</button>
+<button onclick="clearLegs()">クリア</button>
+</div>
+<p style="font-size:10px;color:var(--muted);margin-top:6px">※ プレミアムはBS近似(VI=41.3, T=3日)の参考値。手入力で上書き可能。</p>
+</div>
 
-<div id="results" style="display:none">
-<h2 style="font-family:Outfit;font-size:18px;color:#fff;margin:16px 0 8px">結果</h2>
-<div class="result-strip" id="summary"></div>
-<canvas id="chart" width="900" height="350"></canvas>
-<div id="tbl"></div>
-<div class="insight" id="insightBox"></div>
+<div class="section" id="results" style="display:none">
+<h3>P&L結果</h3>
+<div class="summary-strip" id="summary"></div>
+<canvas id="chart" height="300"></canvas>
+<div style="overflow-x:auto"><table class="pnl-table" id="pnl-table"></table></div>
 </div>
 </div>
 
 <script>
-var ATM=52600,VI=44,T=4/250,legs=[];
-function ncdf(x){var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
-var s=x>=0?1:-1;x=Math.abs(x);var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x/2);return .5*(1+s*y);}
-function bsPrice(type,K,F,sigma,T){if(T<=0||sigma<=0)return type==='P'?Math.max(K-F,0):Math.max(F-K,0);
-var st=sigma*Math.sqrt(T);var d1=(Math.log(F/K)+.5*sigma*sigma*T)/st;var d2=d1-st;
-return type==='P'?K*ncdf(-d2)-F*ncdf(-d1):F*ncdf(d1)-K*ncdf(d2);}
+const ATM=54460;
+const VI=0.413;
+const T=3/250;
+let legs=[];
+let legId=0;
 
-function addLeg(type){
-  var id=Date.now();
-  var dir='Short',K=ATM,prem=0,qty=1,mult=1000;
-  if(type==='F'){mult=100;K=ATM;}
-  else{prem=Math.round(bsPrice(type,K,ATM,VI/100,T));}
-  legs.push({id:id,type:type,dir:dir,K:K,prem:prem,qty:qty,mult:mult});
-  renderLegs();
+function normCDF(x){
+  if(x<-8)return 0;if(x>8)return 1;
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  const s=x>=0?1:-1;const ax=Math.abs(x);
+  const t=1/(1+p*ax);
+  const y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-ax*ax/2);
+  return 0.5*(1+s*y);
 }
 
-function removeLeg(id){legs=legs.filter(function(l){return l.id!==id});renderLegs();}
+function bsPrice(type,K,F,sigma,t){
+  if(t<=0||sigma<=0)return Math.max(type==='P'?K-F:F-K,0);
+  const st=sigma*Math.sqrt(t);
+  const d1=(Math.log(F/K)+0.5*sigma*sigma*t)/st;
+  const d2=d1-st;
+  if(type==='P')return K*normCDF(-d2)-F*normCDF(-d1);
+  return F*normCDF(d1)-K*normCDF(d2);
+}
+
+function addLeg(type,side,strike,prem,qty,mult){
+  side=side||'Short';strike=strike||(type==='F'?ATM:type==='P'?ATM-2000:ATM+2000);
+  qty=qty||1;mult=mult||(type==='F'?100:1000);
+  if(prem===undefined&&type!=='F'){prem=Math.round(bsPrice(type,strike,ATM,VI,T));}
+  if(type==='F')prem=0;
+  const id=legId++;
+  legs.push({id,type,side,strike,prem,qty,mult});
+  renderLegs();calc();
+}
+
+function removeLeg(id){legs=legs.filter(l=>l.id!==id);renderLegs();calc();}
+function clearLegs(){legs=[];renderLegs();document.getElementById('results').style.display='none';}
 
 function renderLegs(){
-  var el=document.getElementById('legs');var h='';
-  legs.forEach(function(l){
-    var typeLabel=l.type==='P'?'PUT':l.type==='C'?'CALL':'FUTURES';
-    var color=l.type==='P'?'var(--put)':l.type==='C'?'var(--call)':'var(--atm)';
-    h+='<div class="leg-row">';
-    h+='<span style="color:'+color+';font-weight:600;width:60px">'+typeLabel+'</span>';
-    h+='<select onchange="updateLeg('+l.id+',\'dir\',this.value)"><option'+(l.dir==='Short'?' selected':'')+'>Short</option><option'+(l.dir==='Long'?' selected':'')+'>Long</option></select>';
-    h+='<label style="color:var(--muted);font-size:10px">K</label><input value="'+l.K+'" onchange="updateLeg('+l.id+',\'K\',this.value)">';
-    if(l.type!=='F'){h+='<label style="color:var(--muted);font-size:10px">Prem</label><input value="'+l.prem+'" onchange="updateLeg('+l.id+',\'prem\',this.value)">';}
-    h+='<label style="color:var(--muted);font-size:10px">Qty</label><input value="'+l.qty+'" style="width:50px" onchange="updateLeg('+l.id+',\'qty\',this.value)">';
-    h+='<select onchange="updateLeg('+l.id+',\'mult\',this.value)"><option value="1000"'+(l.mult==1000?' selected':'')+'>x1000</option><option value="100"'+(l.mult==100?' selected':'')+'>x100</option></select>';
-    h+='<button class="btn btn-outline" style="padding:2px 8px" onclick="removeLeg('+l.id+')">x</button>';
-    h+='</div>';
+  const c=document.getElementById('legs');c.innerHTML='';
+  legs.forEach(l=>{
+    const d=document.createElement('div');d.className='leg-row';
+    d.innerHTML=`
+      <select onchange="updLeg(${l.id},'type',this.value)"><option ${l.type==='P'?'selected':''}>P</option><option ${l.type==='C'?'selected':''}>C</option><option ${l.type==='F'?'selected':''}>F</option></select>
+      <select onchange="updLeg(${l.id},'side',this.value)"><option ${l.side==='Short'?'selected':''}>Short</option><option ${l.side==='Long'?'selected':''}>Long</option></select>
+      <input type="number" value="${l.strike}" step="500" onchange="updLeg(${l.id},'strike',+this.value)">
+      <input type="number" value="${l.prem}" step="10" onchange="updLeg(${l.id},'prem',+this.value)" ${l.type==='F'?'disabled':''}>
+      <input type="number" value="${l.qty}" min="1" onchange="updLeg(${l.id},'qty',+this.value)">
+      <select onchange="updLeg(${l.id},'mult',+this.value)"><option value="1000" ${l.mult===1000?'selected':''}>×1000</option><option value="100" ${l.mult===100?'selected':''}>×100</option></select>
+      <button class="del-btn" onclick="removeLeg(${l.id})">×</button>`;
+    c.appendChild(d);
   });
-  el.innerHTML=h;
 }
 
-function updateLeg(id,field,val){
-  legs.forEach(function(l){
-    if(l.id===id){
-      if(field==='K'){l.K=parseInt(val);if(l.type!=='F'){l.prem=Math.round(bsPrice(l.type,l.K,ATM,VI/100,T));}}
-      else if(field==='prem')l.prem=parseFloat(val);
-      else if(field==='qty')l.qty=parseInt(val);
-      else if(field==='mult')l.mult=parseInt(val);
-      else if(field==='dir')l.dir=val;
+function updLeg(id,prop,val){
+  const l=legs.find(x=>x.id===id);if(!l)return;
+  l[prop]=val;
+  if(prop==='strike'&&l.type!=='F'){l.prem=Math.round(bsPrice(l.type,l.strike,ATM,VI,T));}
+  if(prop==='type'){
+    if(val==='F'){l.prem=0;l.mult=100;l.strike=ATM;}
+    else{l.mult=1000;l.prem=Math.round(bsPrice(val,l.strike,ATM,VI,T));}
+  }
+  renderLegs();calc();
+}
+
+function calc(){
+  if(legs.length===0){document.getElementById('results').style.display='none';return;}
+  document.getElementById('results').style.display='block';
+  const sqs=[];for(let s=ATM-6000;s<=ATM+6000;s+=500)sqs.push(s);
+  const rows=sqs.map(sq=>{
+    let total=0;const legPnls=[];
+    legs.forEach(l=>{
+      let pnl=0;
+      if(l.type==='P'){
+        pnl=l.side==='Short'?l.prem-Math.max(l.strike-sq,0):Math.max(l.strike-sq,0)-l.prem;
+      }else if(l.type==='C'){
+        pnl=l.side==='Short'?l.prem-Math.max(sq-l.strike,0):Math.max(sq-l.strike,0)-l.prem;
+      }else{
+        pnl=l.side==='Short'?l.strike-sq:sq-l.strike;
+      }
+      const yen=pnl*l.qty*l.mult;
+      legPnls.push(yen);total+=yen;
+    });
+    return{sq,legPnls,total};
+  });
+
+  // Summary
+  const maxP=Math.max(...rows.map(r=>r.total));
+  const minP=Math.min(...rows.map(r=>r.total));
+  const bes=[];
+  for(let i=1;i<rows.length;i++){
+    if((rows[i-1].total<=0&&rows[i].total>=0)||(rows[i-1].total>=0&&rows[i].total<=0)){
+      bes.push(rows[i].sq);
     }
+  }
+  const sm=document.getElementById('summary');
+  sm.innerHTML=`
+    <div class="summary-item"><div class="summary-val inc">${(maxP>=0?'+':'')+(maxP/10000).toFixed(1)}万円</div><div class="summary-label">最大利益</div></div>
+    <div class="summary-item"><div class="summary-val dec">${(minP/10000).toFixed(1)}万円</div><div class="summary-label">最大損失</div></div>
+    <div class="summary-item"><div class="summary-val" style="color:var(--atm)">${bes.map(b=>b.toLocaleString()).join(', ')||'—'}</div><div class="summary-label">損益分岐点</div></div>`;
+
+  // Chart
+  const canvas=document.getElementById('chart');
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.offsetWidth*2;canvas.height=600;
+  ctx.scale(2,2);
+  const w=canvas.offsetWidth;const h=300;
+  const pad={t:20,r:20,b:40,l:70};
+  const pw=w-pad.l-pad.r;const ph=h-pad.t-pad.b;
+  ctx.fillStyle='#0c0c1d';ctx.fillRect(0,0,w,h);
+
+  const xMin=sqs[0];const xMax=sqs[sqs.length-1];
+  const yMax=Math.max(Math.abs(maxP),Math.abs(minP))*1.1||1;
+  const x=sq=>(sq-xMin)/(xMax-xMin)*pw+pad.l;
+  const y=v=>pad.t+ph/2-v/yMax*ph/2;
+
+  // Zero line
+  ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(pad.l,y(0));ctx.lineTo(w-pad.r,y(0));ctx.stroke();
+  ctx.setLineDash([]);
+
+  // ATM line
+  ctx.strokeStyle='rgba(251,191,36,.3)';ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(x(ATM),pad.t);ctx.lineTo(x(ATM),h-pad.b);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Fill areas
+  ctx.beginPath();ctx.moveTo(x(rows[0].sq),y(0));
+  rows.forEach(r=>ctx.lineTo(x(r.sq),y(r.total)));
+  ctx.lineTo(x(rows[rows.length-1].sq),y(0));ctx.closePath();
+  const grd=ctx.createLinearGradient(0,pad.t,0,h-pad.b);
+  grd.addColorStop(0,'rgba(74,222,128,.15)');grd.addColorStop(0.5,'rgba(74,222,128,.02)');
+  grd.addColorStop(0.5,'rgba(239,68,68,.02)');grd.addColorStop(1,'rgba(239,68,68,.15)');
+  ctx.fillStyle=grd;ctx.fill();
+
+  // P&L line
+  ctx.strokeStyle='#818cf8';ctx.lineWidth=2;
+  ctx.beginPath();rows.forEach((r,i)=>{i===0?ctx.moveTo(x(r.sq),y(r.total)):ctx.lineTo(x(r.sq),y(r.total))});ctx.stroke();
+
+  // BE dots
+  bes.forEach(b=>{ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.arc(x(b),y(0),4,0,Math.PI*2);ctx.fill()});
+
+  // Axes labels
+  ctx.fillStyle='#888';ctx.font='10px DM Mono';ctx.textAlign='center';
+  for(let s=xMin;s<=xMax;s+=2000){ctx.fillText(s.toLocaleString(),x(s),h-pad.b+15)}
+  ctx.textAlign='right';
+  const steps=5;for(let i=0;i<=steps;i++){
+    const v=-yMax+2*yMax*i/steps;
+    ctx.fillText((v/10000).toFixed(0)+'万',pad.l-8,y(v)+4);
+  }
+
+  // Table
+  const tbl=document.getElementById('pnl-table');
+  let th='<thead><tr><th>SQ着地</th>';
+  legs.forEach((l,i)=>th+=`<th>${l.type}${l.strike.toLocaleString()}${l.side[0]}×${l.qty}</th>`);
+  th+='<th>合計P&L</th><th>バー</th></tr></thead>';
+  let tb='<tbody>';
+  const absMax=Math.max(...rows.map(r=>Math.abs(r.total)))||1;
+  rows.forEach(r=>{
+    const isAtm=Math.abs(r.sq-ATM)<=250;
+    const isBe=bes.includes(r.sq);
+    const cls=isAtm?'atm-row':isBe?'be-row':'';
+    tb+=`<tr class="${cls}"><td style="text-align:left">${r.sq.toLocaleString()}</td>`;
+    r.legPnls.forEach(p=>{
+      const c=p>=0?'inc':'dec';
+      tb+=`<td class="${c}">${(p/10000).toFixed(1)}</td>`;
+    });
+    const tc=r.total>=0?'inc':'dec';
+    const bw=Math.round(Math.abs(r.total)/absMax*60);
+    const bc=r.total>=0?'var(--inc)':'var(--dec)';
+    tb+=`<td class="${tc}" style="font-weight:600">${(r.total/10000).toFixed(1)}万</td>`;
+    tb+=`<td><div class="pnl-bar" style="width:${bw}px;background:${bc}"></div></td></tr>`;
   });
-  renderLegs();
+  tb+='</tbody>';
+  tbl.innerHTML=th+tb;
 }
 
-function clearLegs(){legs=[];renderLegs();document.getElementById('results').style.display='none';}
+const presets={
+  ic:[{type:'P',side:'Short',strike:50000,mult:1000},{type:'P',side:'Long',strike:49000,mult:1000},{type:'C',side:'Short',strike:58000,mult:1000},{type:'C',side:'Long',strike:59000,mult:1000}],
+  pcs:[{type:'P',side:'Short',strike:51000,mult:1000},{type:'P',side:'Long',strike:49500,mult:1000}],
+  ccs:[{type:'C',side:'Short',strike:57000,mult:1000},{type:'C',side:'Long',strike:59000,mult:1000}],
+  ss:[{type:'P',side:'Short',strike:50000,mult:1000},{type:'C',side:'Short',strike:58000,mult:1000}],
+  ph:[{type:'P',side:'Short',strike:52000,mult:1000},{type:'F',side:'Short',strike:54460,mult:100}],
+  theta:[{type:'P',side:'Short',strike:52000,mult:100},{type:'C',side:'Short',strike:57000,mult:100}]
+};
 
 function loadPreset(name){
   clearLegs();
-  var id=Date.now;
-  if(name==='ic'){
-    legs=[
-      {id:1,type:'P',dir:'Short',K:50000,prem:Math.round(bsPrice('P',50000,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:2,type:'P',dir:'Long',K:48000,prem:Math.round(bsPrice('P',48000,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:3,type:'C',dir:'Short',K:55000,prem:Math.round(bsPrice('C',55000,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:4,type:'C',dir:'Long',K:57000,prem:Math.round(bsPrice('C',57000,ATM,VI/100,T)),qty:1,mult:1000}
-    ];
-  } else if(name==='pcs'){
-    legs=[
-      {id:1,type:'P',dir:'Short',K:50000,prem:Math.round(bsPrice('P',50000,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:2,type:'P',dir:'Long',K:48000,prem:Math.round(bsPrice('P',48000,ATM,VI/100,T)),qty:1,mult:1000}
-    ];
-  } else if(name==='ccs'){
-    legs=[
-      {id:1,type:'C',dir:'Short',K:55000,prem:Math.round(bsPrice('C',55000,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:2,type:'C',dir:'Long',K:57000,prem:Math.round(bsPrice('C',57000,ATM,VI/100,T)),qty:1,mult:1000}
-    ];
-  } else if(name==='ss'){
-    legs=[
-      {id:1,type:'P',dir:'Short',K:49500,prem:Math.round(bsPrice('P',49500,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:2,type:'C',dir:'Short',K:55500,prem:Math.round(bsPrice('C',55500,ATM,VI/100,T)),qty:1,mult:1000}
-    ];
-  } else if(name==='ph'){
-    legs=[
-      {id:1,type:'P',dir:'Short',K:50500,prem:Math.round(bsPrice('P',50500,ATM,VI/100,T)),qty:1,mult:1000},
-      {id:2,type:'F',dir:'Short',K:51000,prem:0,qty:3,mult:100}
-    ];
-  } else if(name==='wt'){
-    legs=[
-      {id:1,type:'P',dir:'Short',K:50000,prem:Math.round(bsPrice('P',50000,ATM,VI/100,T)),qty:10,mult:100},
-      {id:2,type:'C',dir:'Short',K:55000,prem:Math.round(bsPrice('C',55000,ATM,VI/100,T)),qty:10,mult:100}
-    ];
-  }
-  renderLegs();
-  calculate();
-}
-
-function calculate(){
-  if(legs.length===0)return;
-  var prices=[];
-  for(var sq=ATM-6000;sq<=ATM+6000;sq+=500)prices.push(sq);
-  var results=[];var maxP=-Infinity,minP=Infinity,bes=[];
-  prices.forEach(function(sq){
-    var total=0;
-    var legPnls=[];
-    legs.forEach(function(l){
-      var pnl=0;
-      if(l.type==='P'){
-        var intr=Math.max(l.K-sq,0);
-        pnl=l.dir==='Short'?(l.prem-intr):(intr-l.prem);
-      } else if(l.type==='C'){
-        var intr=Math.max(sq-l.K,0);
-        pnl=l.dir==='Short'?(l.prem-intr):(intr-l.prem);
-      } else {
-        pnl=l.dir==='Short'?(l.K-sq):(sq-l.K);
-      }
-      var yen=pnl*l.qty*l.mult;
-      legPnls.push(yen);
-      total+=yen;
-    });
-    results.push({sq:sq,legs:legPnls,total:total});
-    if(total>maxP)maxP=total;
-    if(total<minP)minP=total;
-  });
-  // Find breakevens
-  for(var i=1;i<results.length;i++){
-    if((results[i-1].total<=0&&results[i].total>=0)||(results[i-1].total>=0&&results[i].total<=0)){
-      bes.push(results[i].sq);
-    }
-  }
-  // Summary
-  var fmt=function(v){return v>=1000000||v<=-1000000?(v/10000).toFixed(0)+'\u4e07\u5186':v.toLocaleString()+'\u5186';};
-  document.getElementById('summary').innerHTML=
-    '<div class="res-box"><div class="res-label">\u6700\u5927\u5229\u76ca</div><div class="res-val mono" style="color:var(--up)">'+fmt(maxP)+'</div></div>'+
-    '<div class="res-box"><div class="res-label">\u6700\u5927\u640d\u5931</div><div class="res-val mono" style="color:var(--dn)">'+fmt(minP)+'</div></div>'+
-    '<div class="res-box"><div class="res-label">\u640d\u76ca\u5206\u5c90</div><div class="res-val mono" style="color:var(--atm)">'+bes.map(function(b){return b.toLocaleString()}).join(', ')+'</div></div>';
-
-  // Chart
-  var canvas=document.getElementById('chart');
-  var ctx=canvas.getContext('2d');
-  var W=canvas.width,H=canvas.height,pad={t:20,r:30,b:40,l:70};
-  var pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='var(--panel)';ctx.fillRect(0,0,W,H);
-  var yMin=minP*1.1,yMax=maxP*1.1;if(yMin>0)yMin=-maxP*.1;if(yMax<0)yMax=-minP*.1;
-  var xMin=prices[0],xMax=prices[prices.length-1];
-  function tx(v){return pad.l+(v-xMin)/(xMax-xMin)*pw;}
-  function ty(v){return pad.t+ph-(v-yMin)/(yMax-yMin)*ph;}
-  // Zero line
-  ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
-  ctx.beginPath();ctx.moveTo(pad.l,ty(0));ctx.lineTo(W-pad.r,ty(0));ctx.stroke();ctx.setLineDash([]);
-  // ATM line
-  ctx.strokeStyle='rgba(251,191,36,.3)';ctx.setLineDash([4,4]);
-  ctx.beginPath();ctx.moveTo(tx(ATM),pad.t);ctx.lineTo(tx(ATM),H-pad.b);ctx.stroke();ctx.setLineDash([]);
-  // Fill profit/loss areas
-  ctx.beginPath();ctx.moveTo(tx(results[0].sq),ty(0));
-  results.forEach(function(r){ctx.lineTo(tx(r.sq),ty(r.total))});
-  ctx.lineTo(tx(results[results.length-1].sq),ty(0));ctx.closePath();
-  var grad=ctx.createLinearGradient(0,ty(maxP),0,ty(minP));
-  grad.addColorStop(0,'rgba(74,222,128,.15)');grad.addColorStop(.5,'rgba(74,222,128,.05)');
-  grad.addColorStop(.5,'rgba(239,68,68,.05)');grad.addColorStop(1,'rgba(239,68,68,.15)');
-  ctx.fillStyle=grad;ctx.fill();
-  // P&L line
-  ctx.strokeStyle='#818cf8';ctx.lineWidth=2;ctx.beginPath();
-  results.forEach(function(r,i){i===0?ctx.moveTo(tx(r.sq),ty(r.total)):ctx.lineTo(tx(r.sq),ty(r.total))});
-  ctx.stroke();
-  // Breakeven dots
-  ctx.fillStyle='#fbbf24';
-  bes.forEach(function(b){ctx.beginPath();ctx.arc(tx(b),ty(0),4,0,Math.PI*2);ctx.fill()});
-  // X axis labels
-  ctx.fillStyle='#8888aa';ctx.font='10px DM Mono';ctx.textAlign='center';
-  for(var i=0;i<prices.length;i+=2){ctx.fillText((prices[i]/1000).toFixed(1)+'k',tx(prices[i]),H-pad.b+14);}
-  // Y axis
-  ctx.textAlign='right';
-  var ySteps=5;for(var i=0;i<=ySteps;i++){var v=yMin+(yMax-yMin)*i/ySteps;ctx.fillText(v>=10000||v<=-10000?(v/10000).toFixed(0)+'\u4e07':Math.round(v).toLocaleString(),pad.l-6,ty(v)+4);}
-
-  // Table
-  var th='<table class="pnl"><thead><tr><th>SQ\u7740\u5730</th>';
-  legs.forEach(function(l,i){
-    var lb=l.type+(l.K/1000).toFixed(0)+'k'+(l.dir==='Short'?'\u58f2':'\u8cb7')+'x'+l.qty;
-    th+='<th>'+lb+'</th>';
-  });
-  th+='<th>\u5408\u8a08P&L</th><th style="width:80px">\u30d0\u30fc</th></tr></thead><tbody>';
-  var absMax=Math.max(Math.abs(maxP),Math.abs(minP));
-  results.forEach(function(r){
-    var cls=r.sq===ATM?' class="atm"':(bes.indexOf(r.sq)>=0?' class="be"':'');
-    th+='<tr'+cls+'><td>'+r.sq.toLocaleString()+'</td>';
-    r.legs.forEach(function(lp){
-      var c=lp>=0?'var(--up)':'var(--dn)';
-      th+='<td style="color:'+c+'">'+Math.round(lp).toLocaleString()+'</td>';
-    });
-    var c=r.total>=0?'var(--up)':'var(--dn)';
-    var fv=r.total>=1000000||r.total<=-1000000?(r.total/10000).toFixed(0)+'\u4e07':Math.round(r.total).toLocaleString();
-    th+='<td style="color:'+c+';font-weight:600">'+fv+'</td>';
-    var bw=Math.round(Math.abs(r.total)/absMax*60);
-    var bc=r.total>=0?'var(--up)':'var(--dn)';
-    th+='<td><span class="pnl-bar" style="width:'+bw+'px;background:'+bc+'"></span></td>';
-    th+='</tr>';
-  });
-  th+='</tbody></table>';
-  document.getElementById('tbl').innerHTML=th;
-
-  // Insight
-  var atmResult=results.find(function(r){return r.sq===ATM});
-  var lo=results.find(function(r){return r.sq===50500});
-  var hi=results.find(function(r){return r.sq===54500});
-  var ins='ATM(52,600)\u7740\u5730\u6642: '+fmt(atmResult?atmResult.total:0);
-  if(lo)ins+=' / \u4e0b\u9650(50,500)\u7740\u5730: '+fmt(lo.total);
-  if(hi)ins+=' / \u4e0a\u9650(54,500)\u7740\u5730: '+fmt(hi.total);
-  document.getElementById('insightBox').textContent=ins;
-  document.getElementById('results').style.display='block';
+  presets[name].forEach(p=>addLeg(p.type,p.side,p.strike,undefined,1,p.mult));
 }
 </script>
 
-<div style="text-align:center;padding:20px;font-size:11px;color:var(--muted)">
-BS\u8fd1\u4f3c\u30d7\u30ec\u30df\u30a2\u30e0\u306f\u53c2\u8003\u5024\u3067\u3059\u3002\u5b9f\u969b\u306e\u7d04\u5b9a\u4fa1\u683c\u3068\u306f\u4e56\u96e2\u3057\u307e\u3059\u3002\u624b\u5165\u529b\u3067\u4e0a\u66f8\u304d\u53ef\u80fd\u3002
-</div>
 </body>
 </html>
