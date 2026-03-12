@@ -1,311 +1,390 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P&L Simulator — 2026年3月11日（水）</title>
+<title>P&L Simulator — 2026.03.12</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--dim:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;line-height:1.6}
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--yellow:#fbbf24}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:14px}
+.mono{font-family:'DM Mono',monospace}
 a{color:var(--accent);text-decoration:none}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:space-between}
-.topbar .logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}
-.topbar .sub{color:var(--dim);font-size:10px;margin-left:10px}
-.topbar nav a{margin-left:16px;font-size:12px;color:var(--dim)}
-.kpi-strip{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--border)}
-.kpi{text-align:center}.kpi .label{font-size:10px;color:var(--dim)}.kpi .value{font-family:'DM Mono';font-size:16px;color:#fff}
-.container{max-width:1000px;margin:0 auto;padding:16px}
-.section{margin:16px 0}
-.section h2{font-family:Outfit;font-size:15px;font-weight:600;color:#fff;margin-bottom:10px}
-.presets{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.preset-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-family:'Noto Sans JP'}
-.preset-btn:hover{border-color:var(--accent);color:var(--accent)}
-.preset-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.leg-builder{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin:10px 0}
-.leg-row{display:flex;align-items:center;gap:6px;margin:4px 0;flex-wrap:wrap}
-.leg-row select,.leg-row input{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;font-size:11px;font-family:'DM Mono'}
-.leg-row select{width:80px}.leg-row input{width:80px}
-.leg-row .rm{background:var(--red);color:#fff;border:none;width:22px;height:22px;border-radius:4px;cursor:pointer;font-size:12px}
-.add-btns{display:flex;gap:6px;margin:8px 0}
-.add-btn{background:rgba(129,140,248,.1);border:1px solid var(--accent);color:var(--accent);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px}
-.add-btn:hover{background:var(--accent);color:#fff}
-.result-strip{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0;padding:10px;background:var(--card);border-radius:8px}
-.result-kpi{text-align:center;flex:1;min-width:120px}
-.result-kpi .rl{font-size:10px;color:var(--dim)}.result-kpi .rv{font-family:'DM Mono';font-size:18px}
-canvas{width:100%;max-width:900px;display:block;margin:12px auto;border-radius:8px}
-table.pnl{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
-table.pnl th{background:rgba(129,140,248,.08);color:var(--dim);font-weight:500;padding:4px 6px;text-align:right;font-size:10px;border-bottom:1px solid var(--border)}
-table.pnl td{padding:3px 6px;border-bottom:1px solid rgba(30,30,58,.5);font-family:'DM Mono';font-size:10px;text-align:right}
-table.pnl .atm-row{background:rgba(251,191,36,.06)}
-table.pnl .be-row{background:rgba(129,140,248,.06)}
-.pnl-bar-cell{display:flex;align-items:center;gap:2px}
-.pnl-bar{height:10px;border-radius:2px}
-.insight-box{background:rgba(129,140,248,.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 12px;margin:12px 0;font-size:12px}
+.topbar{background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:Outfit;font-weight:700;font-size:16px;color:var(--accent)}
+.topbar nav a{margin-left:18px;font-size:13px;color:var(--muted)}
+.container{max-width:900px;margin:0 auto;padding:16px}
+.kpi-strip{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+.kpi{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;min-width:90px}
+.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase}
+.kpi .val{font-family:'DM Mono';font-size:16px}
+.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin:12px 0}
+.section h3{font-family:Outfit;font-size:14px;font-weight:600;margin-bottom:10px}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.presets button{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:'Noto Sans JP'}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+.legs{margin:10px 0}
+.leg{display:flex;gap:6px;align-items:center;margin:4px 0;flex-wrap:wrap;font-size:12px}
+.leg select,.leg input{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:4px;font-size:12px;font-family:'DM Mono'}
+.leg input{width:80px}
+.leg select{width:80px}
+.leg .rm{background:var(--red);color:#fff;border:none;width:22px;height:22px;border-radius:4px;cursor:pointer;font-size:14px}
+.add-btns button{background:var(--accent);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;margin:2px;font-family:'Noto Sans JP'}
+.add-btns button.clr{background:var(--red)}
+.results{margin-top:16px}
+.summary{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.summary .s{background:rgba(255,255,255,.04);padding:8px 12px;border-radius:6px;text-align:center;flex:1;min-width:120px}
+.summary .s .sl{font-size:10px;color:var(--muted)}
+.summary .s .sv{font-family:'DM Mono';font-size:16px}
+canvas{width:100%;max-width:860px;margin:10px auto;display:block}
+.pnl-table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
+.pnl-table th{padding:4px 6px;border-bottom:1px solid var(--border);text-align:right;color:var(--muted);font-weight:500}
+.pnl-table td{padding:3px 6px;border-bottom:1px solid rgba(30,30,58,.3);text-align:right;font-family:'DM Mono'}
+.pnl-table .atm-row{background:rgba(251,191,36,.06)}
+.pnl-table .be-row{background:rgba(129,140,248,.06)}
+.insight{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);border-radius:8px;padding:10px;margin-top:10px;font-size:12px}
 </style>
 </head>
 <body>
-
 <div class="topbar">
-  <div class="logo">P&L Simulator</div>
-  <div class="sub">2026年3月11日（水） | ATM 55,200 | VI 35.05 | SQ残2日</div>
-  <nav>
-    <a href="index.html">← ダッシュボード</a>
-    <a href="archive.html">アーカイブ</a>
-  </nav>
+<div class="logo">📊 P&L Simulator</div>
+<div style="font-size:11px;color:var(--muted)">ATM 54,430 / VI 42.94 / SQ 3/13 / T=1日</div>
+<nav><a href="index.html">← ダッシュボード</a> <a href="archive.html">アーカイブ</a></nav>
 </div>
-
-<div class="kpi-strip">
-  <div class="kpi"><div class="label">ATM</div><div class="value">55,200</div></div>
-  <div class="kpi"><div class="label">日経VI</div><div class="value">35.05</div></div>
-  <div class="kpi"><div class="label">SQ日付</div><div class="value">2026/3/13</div></div>
-  <div class="kpi"><div class="label">残り営業日</div><div class="value">2</div></div>
-</div>
-
 <div class="container">
-
-<div class="section">
-<h2>プリセット戦略</h2>
-<div class="presets" id="presets"></div>
+<div class="kpi-strip">
+<div class="kpi"><div class="label">ATM</div><div class="val mono">54,430</div></div>
+<div class="kpi"><div class="label">VI</div><div class="val mono" style="color:var(--red)">42.94</div></div>
+<div class="kpi"><div class="label">SQ日</div><div class="val mono">3/13</div></div>
+<div class="kpi"><div class="label">残り営業日</div><div class="val mono">1</div></div>
 </div>
 
 <div class="section">
-<h2>レグビルダー</h2>
+<h3>プリセット戦略</h3>
+<div class="presets">
+<button onclick="preset('ic')">Iron Condor</button>
+<button onclick="preset('pcs')">Put Credit Spread</button>
+<button onclick="preset('ccs')">Call Credit Spread</button>
+<button onclick="preset('strangle')">Short Strangle</button>
+<button onclick="preset('phedge')">P売+mini先物ヘッジ</button>
+<button onclick="preset('weekly')">ミニ週次θ</button>
+</div>
+
+<h3>レグビルダー</h3>
 <div class="add-btns">
-  <button class="add-btn" onclick="addLeg('put')">+ プット</button>
-  <button class="add-btn" onclick="addLeg('call')">+ コール</button>
-  <button class="add-btn" onclick="addLeg('fut')">+ 先物mini</button>
-  <button class="add-btn" onclick="clearLegs()" style="background:rgba(248,113,113,.1);border-color:var(--red);color:var(--red)">クリア</button>
+<button onclick="addLeg('put')">+ プット</button>
+<button onclick="addLeg('call')">+ コール</button>
+<button onclick="addLeg('fut')">+ 先物mini</button>
+<button class="clr" onclick="clearLegs()">クリア</button>
 </div>
-<div class="leg-builder" id="legs"></div>
-<div style="font-size:10px;color:var(--dim);margin-top:4px">※ プレミアムはBS近似値（参考）。手入力で上書き可能。</div>
-</div>
-
-<div class="section" id="results" style="display:none">
-<h2>P&L結果</h2>
-<div class="result-strip" id="summary"></div>
-<canvas id="chart" width="900" height="350"></canvas>
-<div id="pnl-table"></div>
-<div class="insight-box" id="insight-box"></div>
+<div class="legs" id="legs"></div>
 </div>
 
+<div class="results" id="results" style="display:none">
+<div class="section">
+<h3>サマリー</h3>
+<div class="summary" id="summary"></div>
+<canvas id="chart" width="860" height="300"></canvas>
+<h3>SQ着地別P&L</h3>
+<div id="tableContainer" style="overflow-x:auto"></div>
+<div class="insight" id="insightBox"></div>
+</div>
+</div>
 </div>
 
 <script>
-var ATM=55200,VI=35.05,T=2/250;
-var legs=[];
-var presets=[
-  {name:'Iron Condor',legs:[{t:'put',sd:'S',k:52000,m:1000,q:1},{t:'put',sd:'L',k:50000,m:1000,q:1},{t:'call',sd:'S',k:58000,m:1000,q:1},{t:'call',sd:'L',k:60000,m:1000,q:1}]},
-  {name:'Put Credit',legs:[{t:'put',sd:'S',k:52000,m:1000,q:1},{t:'put',sd:'L',k:50000,m:1000,q:1}]},
-  {name:'Call Credit',legs:[{t:'call',sd:'S',k:58000,m:1000,q:1},{t:'call',sd:'L',k:60000,m:1000,q:1}]},
-  {name:'Strangle+ヘッジ',legs:[{t:'put',sd:'S',k:53000,m:1000,q:1},{t:'call',sd:'S',k:57000,m:1000,q:1},{t:'fut',sd:'S',k:ATM,m:100,q:0}]},
-  {name:'P売+miniヘッジ',legs:[{t:'put',sd:'S',k:54000,m:1000,q:1},{t:'fut',sd:'S',k:ATM,m:100,q:0}]},
-  {name:'ミニ週次θ',legs:[{t:'put',sd:'S',k:53000,m:100,q:1},{t:'call',sd:'S',k:57000,m:100,q:1}]}
-];
+const ATM=54430,VI=0.4294,T=1/250;
+let legs=[];
 
-function normCDF(x){var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;var s=x>=0?1:-1;x=Math.abs(x);var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x/2);return 0.5*(1+s*y)}
+function normCDF(x){
+  if(x<0)return 1-normCDF(-x);
+  const t=1/(1+0.2316419*x);
+  const d=0.3989422804014327;
+  const p=d*Math.exp(-x*x/2)*(t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429)))));
+  return 1-p;
+}
 
-function bsPrice(type,K,F,sig,T){
-  if(T<=0)return type=='put'?Math.max(K-F,0):Math.max(F-K,0);
-  var sqT=Math.sqrt(T);var d1=(Math.log(F/K)+0.5*sig*sig*T)/(sig*sqT);var d2=d1-sig*sqT;
-  if(type=='put')return K*normCDF(-d2)-F*normCDF(-d1);
+function bsPrice(type,K,F,s,t){
+  if(t<=0)return type==='put'?Math.max(K-F,0):Math.max(F-K,0);
+  const st=s*Math.sqrt(t);
+  const d1=(Math.log(F/K)+0.5*s*s*t)/st;
+  const d2=d1-st;
+  if(type==='put')return K*normCDF(-d2)-F*normCDF(-d1);
   return F*normCDF(d1)-K*normCDF(d2);
 }
 
-function initPresets(){
-  var el=document.getElementById('presets');
-  presets.forEach(function(p,i){
-    var b=document.createElement('button');b.className='preset-btn';b.textContent=p.name;
-    b.onclick=function(){loadPreset(i);document.querySelectorAll('.preset-btn').forEach(function(x){x.classList.remove('active')});b.classList.add('active')};
-    el.appendChild(b);
-  });
-}
-
-function loadPreset(idx){
-  legs=[];
-  presets[idx].legs.forEach(function(l){
-    var prem=0;
-    if(l.t!='fut')prem=Math.round(bsPrice(l.t,l.k,ATM,VI/100,T));
-    legs.push({type:l.t,side:l.sd,strike:l.k,prem:prem,qty:l.q,mult:l.m});
-  });
-  renderLegs();calc();
-}
-
 function addLeg(type){
-  var k=type=='fut'?ATM:(type=='put'?ATM-2000:ATM+2000);
-  var m=1000;var prem=0;
-  if(type!='fut')prem=Math.round(bsPrice(type,k,ATM,VI/100,T));
-  legs.push({type:type,side:'S',strike:k,prem:prem,qty:1,mult:m});
-  renderLegs();calc();
+  const id=Date.now();
+  let leg;
+  if(type==='fut'){
+    leg={id,type:'fut',dir:'short',entry:ATM,qty:1,mult:100};
+  }else{
+    const K=type==='put'?ATM-2000:ATM+2000;
+    const prem=Math.round(bsPrice(type,K,ATM,VI,T));
+    leg={id,type,dir:'short',K,prem,qty:1,mult:1000};
+  }
+  legs.push(leg);
+  renderLegs();
+  calc();
 }
 
-function removeLeg(i){legs.splice(i,1);renderLegs();calc()}
-function clearLegs(){legs=[];renderLegs();document.getElementById('results').style.display='none';document.querySelectorAll('.preset-btn').forEach(function(x){x.classList.remove('active')})}
+function removeLeg(id){
+  legs=legs.filter(l=>l.id!==id);
+  renderLegs();
+  calc();
+}
+
+function clearLegs(){
+  legs=[];
+  renderLegs();
+  document.getElementById('results').style.display='none';
+}
 
 function renderLegs(){
-  var el=document.getElementById('legs');var h='';
-  legs.forEach(function(l,i){
-    var label=l.type=='put'?'プット':l.type=='call'?'コール':'先物';
-    h+='<div class="leg-row">';
-    h+='<span style="color:'+(l.type=='put'?'var(--red)':l.type=='call'?'var(--blue)':'var(--yellow)')+';font-size:11px;width:50px">'+label+'</span>';
-    h+='<select onchange="legs['+i+'].side=this.value;calc()"><option value="S"'+(l.side=='S'?' selected':'')+'>Short</option><option value="L"'+(l.side=='L'?' selected':'')+'>Long</option></select>';
-    h+='<label style="font-size:10px;color:var(--dim)">'+(l.type=='fut'?'Entry':'K')+'</label><input type="number" value="'+l.strike+'" step="500" onchange="updateStrike('+i+',this.value)">';
-    if(l.type!='fut')h+='<label style="font-size:10px;color:var(--dim)">Prem</label><input type="number" value="'+l.prem+'" step="10" onchange="legs['+i+'].prem=+this.value;calc()">';
-    h+='<label style="font-size:10px;color:var(--dim)">枚数</label><input type="number" value="'+l.qty+'" min="0" step="1" style="width:50px" onchange="legs['+i+'].qty=+this.value;calc()">';
-    h+='<select onchange="legs['+i+'].mult=+this.value;calc()"><option value="1000"'+(l.mult==1000?' selected':'')+'>ラージ×1000</option><option value="100"'+(l.mult==100?' selected':'')+'>ミニ×100</option></select>';
-    h+='<button class="rm" onclick="removeLeg('+i+')">×</button>';
-    h+='</div>';
-  });
-  if(!legs.length)h='<div style="color:var(--dim);text-align:center;padding:16px">レグを追加するか、プリセットを選択してください</div>';
-  el.innerHTML=h;
+  const el=document.getElementById('legs');
+  el.innerHTML=legs.map(l=>{
+    if(l.type==='fut'){
+      return `<div class="leg" data-id="${l.id}">
+        <select onchange="updLeg(${l.id},'dir',this.value)"><option value="short"${l.dir==='short'?' selected':''}>Short</option><option value="long"${l.dir==='long'?' selected':''}>Long</option></select>
+        <span>先物mini</span>
+        <input type="number" value="${l.entry}" onchange="updLeg(${l.id},'entry',+this.value)" placeholder="Entry">
+        <span>×</span><input type="number" value="${l.qty}" min="1" style="width:50px" onchange="updLeg(${l.id},'qty',+this.value)">
+        <select onchange="updLeg(${l.id},'mult',+this.value)"><option value="100"${l.mult===100?' selected':''}>mini×100</option><option value="1000"${l.mult===1000?' selected':''}>ラージ×1000</option></select>
+        <button class="rm" onclick="removeLeg(${l.id})">×</button></div>`;
+    }
+    return `<div class="leg" data-id="${l.id}">
+      <select onchange="updLeg(${l.id},'dir',this.value)"><option value="short"${l.dir==='short'?' selected':''}>Short</option><option value="long"${l.dir==='long'?' selected':''}>Long</option></select>
+      <span style="color:${l.type==='put'?'var(--red)':'var(--accent)'}">${l.type==='put'?'PUT':'CALL'}</span>
+      <input type="number" value="${l.K}" onchange="updLeg(${l.id},'K',+this.value);autoP(${l.id})" placeholder="K">
+      <span>@</span><input type="number" value="${l.prem}" onchange="updLeg(${l.id},'prem',+this.value)" placeholder="Prem">
+      <span>×</span><input type="number" value="${l.qty}" min="1" style="width:50px" onchange="updLeg(${l.id},'qty',+this.value)">
+      <select onchange="updLeg(${l.id},'mult',+this.value)"><option value="1000"${l.mult===1000?' selected':''}>ラージ×1000</option><option value="100"${l.mult===100?' selected':''}>ミニ×100</option></select>
+      <button class="rm" onclick="removeLeg(${l.id})">×</button></div>`;
+  }).join('');
 }
 
-function updateStrike(i,v){
-  legs[i].strike=+v;
-  if(legs[i].type!='fut')legs[i].prem=Math.round(bsPrice(legs[i].type,+v,ATM,VI/100,T));
-  renderLegs();calc();
+function updLeg(id,key,val){
+  const l=legs.find(x=>x.id===id);
+  if(l)l[key]=val;
+  calc();
+}
+
+function autoP(id){
+  const l=legs.find(x=>x.id===id);
+  if(l&&l.type!=='fut'){
+    l.prem=Math.round(bsPrice(l.type,l.K,ATM,VI,T));
+    renderLegs();
+    calc();
+  }
+}
+
+function preset(name){
+  legs=[];
+  const t=Date.now;
+  switch(name){
+    case 'ic':
+      legs=[
+        {id:1,type:'put',dir:'short',K:52000,prem:Math.round(bsPrice('put',52000,ATM,VI,T)),qty:1,mult:1000},
+        {id:2,type:'put',dir:'long',K:50000,prem:Math.round(bsPrice('put',50000,ATM,VI,T)),qty:1,mult:1000},
+        {id:3,type:'call',dir:'short',K:57000,prem:Math.round(bsPrice('call',57000,ATM,VI,T)),qty:1,mult:1000},
+        {id:4,type:'call',dir:'long',K:59000,prem:Math.round(bsPrice('call',59000,ATM,VI,T)),qty:1,mult:1000}
+      ];break;
+    case 'pcs':
+      legs=[
+        {id:1,type:'put',dir:'short',K:53000,prem:Math.round(bsPrice('put',53000,ATM,VI,T)),qty:1,mult:1000},
+        {id:2,type:'put',dir:'long',K:51000,prem:Math.round(bsPrice('put',51000,ATM,VI,T)),qty:1,mult:1000}
+      ];break;
+    case 'ccs':
+      legs=[
+        {id:1,type:'call',dir:'short',K:56000,prem:Math.round(bsPrice('call',56000,ATM,VI,T)),qty:1,mult:1000},
+        {id:2,type:'call',dir:'long',K:58000,prem:Math.round(bsPrice('call',58000,ATM,VI,T)),qty:1,mult:1000}
+      ];break;
+    case 'strangle':
+      legs=[
+        {id:1,type:'put',dir:'short',K:52500,prem:Math.round(bsPrice('put',52500,ATM,VI,T)),qty:1,mult:1000},
+        {id:2,type:'call',dir:'short',K:56500,prem:Math.round(bsPrice('call',56500,ATM,VI,T)),qty:1,mult:1000},
+        {id:3,type:'fut',dir:'short',entry:ATM,qty:0,mult:100}
+      ];break;
+    case 'phedge':
+      legs=[
+        {id:1,type:'put',dir:'short',K:53000,prem:Math.round(bsPrice('put',53000,ATM,VI,T)),qty:1,mult:1000},
+        {id:2,type:'fut',dir:'short',entry:53000,qty:3,mult:100}
+      ];break;
+    case 'weekly':
+      legs=[
+        {id:1,type:'put',dir:'short',K:53000,prem:Math.round(bsPrice('put',53000,ATM,VI,T)),qty:10,mult:100},
+        {id:2,type:'call',dir:'short',K:56000,prem:Math.round(bsPrice('call',56000,ATM,VI,T)),qty:10,mult:100}
+      ];break;
+  }
+  renderLegs();
+  calc();
 }
 
 function calc(){
-  if(!legs.length||legs.every(function(l){return l.qty==0})){document.getElementById('results').style.display='none';return}
+  if(legs.length===0){document.getElementById('results').style.display='none';return}
   document.getElementById('results').style.display='block';
-  var sqPrices=[];for(var s=ATM-6000;s<=ATM+6000;s+=500)sqPrices.push(s);
-  var pnlData=sqPrices.map(function(sq){
-    var total=0;
-    var legPnls=legs.map(function(l){
-      var pnl=0;
-      if(l.type=='put'){
-        pnl=l.side=='S'?(l.prem-Math.max(l.strike-sq,0)):(Math.max(l.strike-sq,0)-l.prem);
-      }else if(l.type=='call'){
-        pnl=l.side=='S'?(l.prem-Math.max(sq-l.strike,0)):(Math.max(sq-l.strike,0)-l.prem);
+  
+  const sqPrices=[];
+  for(let s=ATM-6000;s<=ATM+6000;s+=500)sqPrices.push(s);
+  
+  const pnlData=sqPrices.map(sq=>{
+    let total=0;
+    const legPnls=legs.map(l=>{
+      let pnl;
+      if(l.type==='fut'){
+        pnl=(l.dir==='short'?l.entry-sq:sq-l.entry)*l.qty*l.mult;
       }else{
-        pnl=l.side=='S'?(l.strike-sq):(sq-l.strike);
+        const intrinsic=l.type==='put'?Math.max(l.K-sq,0):Math.max(sq-l.K,0);
+        const ptPnl=l.dir==='short'?l.prem-intrinsic:intrinsic-l.prem;
+        pnl=ptPnl*l.qty*l.mult;
       }
-      var yen=pnl*l.qty*l.mult;total+=yen;return{pts:pnl,yen:yen};
+      total+=pnl;
+      return pnl;
     });
-    return{sq:sq,legPnls:legPnls,total:total};
+    return {sq,legPnls,total};
   });
-
-  var maxP=Math.max.apply(null,pnlData.map(function(d){return d.total}));
-  var minP=Math.min.apply(null,pnlData.map(function(d){return d.total}));
-  var bes=[];
-  for(var i=1;i<pnlData.length;i++){
-    if((pnlData[i-1].total<=0&&pnlData[i].total>0)||(pnlData[i-1].total>=0&&pnlData[i].total<0)){
-      var r=pnlData[i-1].total/(pnlData[i-1].total-pnlData[i].total);
-      bes.push(Math.round(pnlData[i-1].sq+r*500));
+  
+  const maxP=Math.max(...pnlData.map(d=>d.total));
+  const minP=Math.min(...pnlData.map(d=>d.total));
+  const bePrices=[];
+  for(let i=1;i<pnlData.length;i++){
+    if((pnlData[i-1].total>=0&&pnlData[i].total<0)||(pnlData[i-1].total<0&&pnlData[i].total>=0)){
+      bePrices.push(Math.round((pnlData[i-1].sq+pnlData[i].sq)/2));
     }
   }
-
+  
   // Summary
-  var sumEl=document.getElementById('summary');
-  sumEl.innerHTML='<div class="result-kpi"><div class="rl">最大利益</div><div class="rv" style="color:var(--green)">'+(maxP>=0?'+':'')+Math.round(maxP).toLocaleString()+'円</div></div>'+
-    '<div class="result-kpi"><div class="rl">最大損失</div><div class="rv" style="color:var(--red)">'+Math.round(minP).toLocaleString()+'円</div></div>'+
-    '<div class="result-kpi"><div class="rl">損益分岐</div><div class="rv" style="color:var(--yellow)">'+bes.map(function(b){return b.toLocaleString()}).join(' / ')+'</div></div>';
-
+  const smEl=document.getElementById('summary');
+  smEl.innerHTML=`
+    <div class="s"><div class="sl">最大利益</div><div class="sv mono" style="color:var(--green)">${fmt(maxP)}</div></div>
+    <div class="s"><div class="sl">最大損失</div><div class="sv mono" style="color:var(--red)">${fmt(minP)}</div></div>
+    <div class="s"><div class="sl">損益分岐</div><div class="sv mono">${bePrices.length?bePrices.join(' / '):'—'}</div></div>`;
+  
   // Chart
-  drawChart(pnlData,bes);
-
+  drawChart(pnlData,bePrices);
+  
   // Table
-  var tEl=document.getElementById('pnl-table');
-  var th='<table class="pnl"><tr><th style="text-align:left">SQ着地</th>';
-  legs.forEach(function(l,i){
-    var label=(l.type=='put'?'P':l.type=='call'?'C':'F')+l.strike.toLocaleString()+(l.side=='S'?'売':'買')+'×'+l.qty;
-    th+='<th>'+label+'</th>';
+  const tc=document.getElementById('tableContainer');
+  let th='<table class="pnl-table"><tr><th style="text-align:left">SQ着地</th>';
+  legs.forEach((l,i)=>{
+    const lbl=l.type==='fut'?'先物'+(l.dir==='short'?'S':'L'):(l.type==='put'?'P':'C')+l.K+(l.dir==='short'?'売':'買');
+    th+='<th>'+lbl+'×'+l.qty+'</th>';
   });
-  th+='<th>合計P&L</th><th style="width:100px">バー</th></tr>';
-
-  var absMax=Math.max(Math.abs(maxP),Math.abs(minP))||1;
-  pnlData.forEach(function(d){
-    var isAtm=d.sq==ATM,isBe=bes.some(function(b){return Math.abs(b-d.sq)<300});
-    var cls=isAtm?' class="atm-row"':(isBe?' class="be-row"':'');
-    th+='<tr'+cls+'><td style="text-align:left;'+(isAtm?'color:var(--yellow);font-weight:700':'')+'">'+d.sq.toLocaleString()+'</td>';
-    d.legPnls.forEach(function(lp){
-      var c=lp.yen>=0?'var(--green)':'var(--red)';
-      th+='<td style="color:'+c+'">'+Math.round(lp.yen).toLocaleString()+'</td>';
+  th+='<th>合計P&L</th></tr>';
+  
+  pnlData.forEach(d=>{
+    const isATM=d.sq===ATM||Math.abs(d.sq-ATM)<=250;
+    const isBE=bePrices.some(b=>Math.abs(d.sq-b)<=250);
+    const cls=isATM?'atm-row':isBE?'be-row':'';
+    th+='<tr class="'+cls+'"><td style="text-align:left" class="mono">'+d.sq.toLocaleString()+'</td>';
+    d.legPnls.forEach(p=>{
+      const c=p>=0?'var(--green)':'var(--red)';
+      th+='<td style="color:'+c+'">'+fmt(p)+'</td>';
     });
-    var tc=d.total>=0?'var(--green)':'var(--red)';
-    th+='<td style="color:'+tc+';font-weight:700">'+Math.round(d.total).toLocaleString()+'</td>';
-    var bw=Math.round(Math.abs(d.total)/absMax*60);
-    var bc=d.total>=0?'var(--green)':'var(--red)';
-    var bdir=d.total>=0?'margin-left:50%':'margin-left:calc(50% - '+bw+'px)';
-    th+='<td><div style="width:100px;height:10px;position:relative"><div style="position:absolute;left:50%;top:0;width:1px;height:10px;background:var(--border)"></div><div class="pnl-bar" style="width:'+bw+'px;background:'+bc+';'+bdir+';position:absolute;top:0"></div></div></td>';
-    th+='</tr>';
+    const tc2=d.total>=0?'var(--green)':'var(--red)';
+    th+='<td style="color:'+tc2+';font-weight:600">'+fmt(d.total)+'</td></tr>';
   });
   th+='</table>';
-  tEl.innerHTML=th;
-
+  tc.innerHTML=th;
+  
   // Insight
-  var atmPnl=pnlData.find(function(d){return d.sq==ATM});
-  var iEl=document.getElementById('insight-box');
-  iEl.innerHTML='ATM('+ATM.toLocaleString()+')着地時: <b style="color:'+(atmPnl.total>=0?'var(--green)':'var(--red)')+'">'+(atmPnl.total>=0?'+':'')+Math.round(atmPnl.total).toLocaleString()+'円</b>';
+  const atmD=pnlData.find(d=>Math.abs(d.sq-ATM)<=250);
+  const lo=pnlData.find(d=>d.sq===ATM-3000);
+  const hi=pnlData.find(d=>d.sq===ATM+3000);
+  const ib=document.getElementById('insightBox');
+  ib.innerHTML=`<strong>ATM(${ATM})着地時</strong>: ${atmD?fmt(atmD.total):'—'} / <strong>下限(${ATM-3000})着地時</strong>: ${lo?fmt(lo.total):'—'} / <strong>上限(${ATM+3000})着地時</strong>: ${hi?fmt(hi.total):'—'}`;
 }
 
-function drawChart(data,bes){
-  var canvas=document.getElementById('chart');var ctx=canvas.getContext('2d');
-  var W=canvas.width=900,H=canvas.height=350;
-  var pad={l:60,r:20,t:20,b:40};
-  var cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
-  ctx.fillStyle='#0c0c1d';ctx.fillRect(0,0,W,H);
+function fmt(v){
+  if(Math.abs(v)>=10000)return (v>=0?'+':'')+(v/10000).toFixed(1)+'万円';
+  return (v>=0?'+':'')+Math.round(v).toLocaleString()+'円';
+}
 
-  var vals=data.map(function(d){return d.total});
-  var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
-  var range=Math.max(Math.abs(mn),Math.abs(mx))||1;mn=-range;mx=range;
-
-  function x(i){return pad.l+i/(data.length-1)*cW}
-  function y(v){return pad.t+(1-(v-mn)/(mx-mn))*cH}
-  var zeroY=y(0);
-
-  // Grid
-  ctx.strokeStyle='#1e1e3a';ctx.lineWidth=0.5;
-  for(var g=-5;g<=5;g++){
-    var gv=range*g/5;var gy=y(gv);
-    ctx.beginPath();ctx.moveTo(pad.l,gy);ctx.lineTo(W-pad.r,gy);ctx.stroke();
-    ctx.fillStyle='#666';ctx.font='10px DM Mono';ctx.textAlign='right';
-    ctx.fillText(Math.round(gv).toLocaleString(),pad.l-6,gy+3);
-  }
-
+function drawChart(data,bePrices){
+  const c=document.getElementById('chart');
+  const ctx=c.getContext('2d');
+  const W=c.width,H=c.height;
+  const pad={t:20,r:60,b:40,l:70};
+  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
+  
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0c0c1d';
+  ctx.fillRect(0,0,W,H);
+  
+  const xs=data.map(d=>d.sq),ys=data.map(d=>d.total);
+  const minX=Math.min(...xs),maxX=Math.max(...xs);
+  const minY=Math.min(...ys,0),maxY=Math.max(...ys,0);
+  const rY=maxY-minY||1;
+  
+  function tx(v){return pad.l+(v-minX)/(maxX-minX)*cw}
+  function ty(v){return pad.t+(1-(v-minY)/rY)*ch}
+  
   // Zero line
-  ctx.strokeStyle='#555';ctx.lineWidth=1;ctx.setLineDash([4,4]);
-  ctx.beginPath();ctx.moveTo(pad.l,zeroY);ctx.lineTo(W-pad.r,zeroY);ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.15)';
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(pad.l,ty(0));ctx.lineTo(W-pad.r,ty(0));ctx.stroke();
   ctx.setLineDash([]);
-
+  
   // ATM line
-  var atmIdx=data.findIndex(function(d){return d.sq==ATM});
-  if(atmIdx>=0){
-    ctx.strokeStyle='rgba(251,191,36,.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-    ctx.beginPath();ctx.moveTo(x(atmIdx),pad.t);ctx.lineTo(x(atmIdx),H-pad.b);ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
+  ctx.strokeStyle='rgba(251,191,36,.3)';
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(tx(ATM),pad.t);ctx.lineTo(tx(ATM),H-pad.b);ctx.stroke();
+  ctx.setLineDash([]);
+  
   // Fill areas
-  ctx.beginPath();ctx.moveTo(x(0),zeroY);
-  for(var i=0;i<data.length;i++){ctx.lineTo(x(i),y(data[i].total))}
-  ctx.lineTo(x(data.length-1),zeroY);ctx.closePath();
-  var grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
-  grad.addColorStop(0,'rgba(74,222,128,.15)');grad.addColorStop(0.5,'rgba(0,0,0,0)');grad.addColorStop(1,'rgba(248,113,113,.15)');
-  ctx.fillStyle=grad;ctx.fill();
-
+  const y0=ty(0);
+  // Green fill
+  ctx.fillStyle='rgba(74,222,128,.1)';
+  ctx.beginPath();
+  ctx.moveTo(tx(xs[0]),y0);
+  data.forEach(d=>{
+    const y=Math.min(ty(d.total),y0);
+    ctx.lineTo(tx(d.sq),y);
+  });
+  ctx.lineTo(tx(xs[xs.length-1]),y0);ctx.closePath();ctx.fill();
+  
+  // Red fill
+  ctx.fillStyle='rgba(239,68,68,.1)';
+  ctx.beginPath();
+  ctx.moveTo(tx(xs[0]),y0);
+  data.forEach(d=>{
+    const y=Math.max(ty(d.total),y0);
+    ctx.lineTo(tx(d.sq),y);
+  });
+  ctx.lineTo(tx(xs[xs.length-1]),y0);ctx.closePath();ctx.fill();
+  
   // P&L line
-  ctx.strokeStyle='#818cf8';ctx.lineWidth=2;ctx.beginPath();
-  for(var i=0;i<data.length;i++){i==0?ctx.moveTo(x(i),y(data[i].total)):ctx.lineTo(x(i),y(data[i].total))}
+  ctx.strokeStyle='#818cf8';ctx.lineWidth=2;
+  ctx.beginPath();
+  data.forEach((d,i)=>{
+    const x=tx(d.sq),y=ty(d.total);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
   ctx.stroke();
-
-  // X labels
-  ctx.fillStyle='#666';ctx.font='9px DM Mono';ctx.textAlign='center';
-  for(var i=0;i<data.length;i+=2){
-    ctx.fillText(data[i].sq.toLocaleString(),x(i),H-pad.b+14);
-  }
-
+  
   // BE dots
   ctx.fillStyle='var(--yellow)';
-  bes.forEach(function(b){
-    var bi=data.findIndex(function(d){return Math.abs(d.sq-b)<300});
-    if(bi>=0){ctx.beginPath();ctx.arc(x(bi),y(0),4,0,Math.PI*2);ctx.fillStyle='#fbbf24';ctx.fill()}
+  bePrices.forEach(b=>{
+    ctx.beginPath();ctx.arc(tx(b),ty(0),4,0,Math.PI*2);ctx.fill();
   });
+  
+  // Labels
+  ctx.fillStyle='#8888aa';ctx.font='10px DM Mono';ctx.textAlign='center';
+  for(let s=minX;s<=maxX;s+=2000){
+    ctx.fillText((s/1000).toFixed(0)+'k',tx(s),H-pad.b+14);
+  }
+  ctx.textAlign='right';
+  const step=rY>500000?100000:rY>50000?50000:10000;
+  for(let v=Math.ceil(minY/step)*step;v<=maxY;v+=step){
+    ctx.fillText(fmt(v),pad.l-4,ty(v)+3);
+  }
 }
 
-initPresets();renderLegs();
+// Auto-render first preset
+preset('ic');
 </script>
+
 </body>
 </html>
