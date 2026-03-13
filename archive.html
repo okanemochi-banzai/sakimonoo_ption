@@ -2,84 +2,121 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>JPX Derivatives Intelligence — アーカイブ</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1a1a3a;--txt:#e8eaf6;--muted:#6b7094;--dim:#3d4066;--cyan:#22d3ee;--blue:#4f7df5;--gold:#fbbf24;--red:#f87171;--green:#4ade80;--mono:'DM Mono',monospace;--disp:'Outfit',sans-serif;--body:'Noto Sans JP',sans-serif}
-*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--txt);font-family:var(--body);min-height:100vh}
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24;--cyan:#22d3ee}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;min-height:100vh}
 a{color:inherit;text-decoration:none}
-.topbar{position:fixed;top:0;left:0;right:0;height:48px;z-index:100;background:rgba(6,6,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px}
-.topbar-brand{display:flex;align-items:center;gap:10px}
-.topbar-logo{width:8px;height:8px;background:var(--cyan);border-radius:50%;box-shadow:0 0 12px var(--cyan);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.topbar-title{font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:3px;text-transform:uppercase}
-.topbar-nav{display:flex;gap:24px;list-style:none}
-.topbar-nav a{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-family:var(--disp);transition:color .2s}
-.topbar-nav a:hover{color:var(--cyan)}
-.main{max-width:860px;margin:0 auto;padding:100px 32px 80px}
-.page-eyebrow{font-family:var(--mono);font-size:11px;color:var(--cyan);letter-spacing:4px;text-transform:uppercase;margin-bottom:12px;opacity:0;animation:fu .6s ease forwards .2s}
-.page-title{font-family:var(--disp);font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-1px;margin-bottom:8px;opacity:0;animation:fu .6s ease forwards .4s}
-.page-title .hl{background:linear-gradient(135deg,var(--blue),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.page-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:40px;opacity:0;animation:fu .6s ease forwards .6s}
-@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.latest-banner{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(79,125,245,.1),rgba(34,211,238,.08));border:1px solid rgba(34,211,238,.2);border-radius:14px;padding:20px 24px;margin-bottom:40px;flex-wrap:wrap;gap:12px;opacity:0;animation:fu .6s ease forwards .7s}
-.latest-label{font-size:10px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;font-family:var(--disp);font-weight:600;margin-bottom:4px}
-.latest-title{font-size:18px;font-weight:800;color:var(--txt);font-family:var(--disp)}
-.latest-btn{display:inline-flex;align-items:center;gap:8px;background:var(--cyan);color:#06060f;font-weight:700;font-size:13px;padding:10px 22px;border-radius:8px;font-family:var(--disp);transition:background .2s,transform .1s}
-.latest-btn:hover{background:#67e8f9;transform:translateY(-1px)}
-.latest-btn::after{content:'→'}
-.section-label{font-size:10px;color:var(--dim);letter-spacing:2px;text-transform:uppercase;font-family:var(--disp);font-weight:600;margin-bottom:16px;padding-left:4px}
-.archive-list{display:flex;flex-direction:column;gap:8px;opacity:0;animation:fu .6s ease forwards .8s}
-.entry{display:flex;align-items:center;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 20px;transition:border-color .2s,background .2s,transform .15s;gap:16px;flex-wrap:wrap}
-.entry:hover{border-color:rgba(34,211,238,.3);background:#0e0e24;transform:translateX(4px)}
-.entry-date{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--txt);min-width:130px;flex-shrink:0}
-.entry-weekday{font-size:12px;color:var(--muted);min-width:40px;flex-shrink:0}
-.entry-tags{display:flex;gap:6px;flex:1;flex-wrap:wrap}
-.etag{font-size:10px;padding:3px 10px;border-radius:12px;font-weight:600;font-family:var(--mono)}
-.etag-nikkei{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2)}
-.etag-vi{background:rgba(251,191,36,.1);color:var(--gold);border:1px solid rgba(251,191,36,.2)}
-.etag-red{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
-.entry-arrow{font-size:16px;color:var(--dim);margin-left:auto;flex-shrink:0;transition:color .2s}
-.entry:hover .entry-arrow{color:var(--cyan)}
-.footer{max-width:860px;margin:0 auto;padding:40px 32px;border-top:1px solid var(--border);text-align:center}
-.footer-text{font-size:11px;color:var(--dim);font-family:var(--mono)}
-@media(max-width:600px){.topbar{padding:0 16px}.topbar-nav{display:none}.main{padding:80px 16px 60px}.entry{padding:12px 14px}.entry-date{font-size:15px;min-width:110px}}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}
+.topbar nav a{color:var(--muted);text-decoration:none;font-size:12px;margin-left:16px;font-family:Outfit}
+.topbar nav a:hover,.topbar nav a.active{color:var(--accent)}
+.hero{text-align:center;padding:32px 16px 20px;background:radial-gradient(ellipse at 50% 0%,rgba(129,140,248,.08),transparent 70%)}
+.hero h1{font-family:Outfit;font-size:22px;font-weight:700}
+.hero .sub{font-size:12px;color:var(--muted);margin-top:6px}
+.container{max-width:800px;margin:0 auto;padding:0 16px 40px}
+.sq-section{margin-top:28px}
+.sq-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sq-badge{font-family:Outfit;font-weight:700;font-size:13px;color:var(--accent);background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);border-radius:6px;padding:4px 12px;white-space:nowrap}
+.sq-badge.current{color:var(--yellow);background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)}
+.sq-meta{font-size:11px;color:var(--muted);font-family:'DM Mono'}
+.sq-range{font-size:11px;color:var(--muted);margin-left:auto;font-family:'DM Mono'}
+.entry{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;transition:all .2s;cursor:pointer}
+.entry:hover{border-color:var(--accent);background:rgba(17,17,40,.8)}
+.entry-date{font-family:'DM Mono';font-size:13px;font-weight:500;min-width:90px;color:var(--text)}
+.entry-weekday{font-size:11px;color:var(--muted);min-width:28px}
+.entry-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.etag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono'}
+.etag-nikkei{background:rgba(96,165,250,.08);color:var(--blue);border:1px solid rgba(96,165,250,.15)}
+.etag-nikkei.down{color:var(--red);background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15)}
+.etag-vi{background:rgba(129,140,248,.08);color:var(--accent);border:1px solid rgba(129,140,248,.15)}
+.etag-vi.high{color:var(--red);background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15)}
+.etag-sq{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.2);font-weight:600}
+.entry-arrow{font-size:14px;color:var(--accent);opacity:.4;transition:.2s;flex-shrink:0}
+.entry:hover .entry-arrow{opacity:1;transform:translateX(2px)}
+.latest-banner{background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-top:20px}
+.latest-banner .label{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+.latest-banner .title{font-family:Outfit;font-size:14px;font-weight:600;margin-top:2px}
+.latest-btn{background:var(--accent);color:#fff;padding:8px 18px;border-radius:6px;font-family:Outfit;font-weight:600;font-size:12px}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:30px}
+footer a{color:var(--accent);text-decoration:none;margin:0 8px}
+.mobile-nav{display:none;justify-content:center;gap:12px;padding:8px;border-bottom:1px solid var(--border)}
+.mobile-nav a{color:var(--muted);text-decoration:none;font-size:11px;font-family:Outfit;padding:4px 10px;border:1px solid var(--border);border-radius:6px}
+.mobile-nav a.active{color:var(--accent);border-color:var(--accent)}
+@media(max-width:768px){.topbar nav{display:none}.mobile-nav{display:flex}}
 </style>
 </head>
 <body>
-<header class="topbar">
-<div class="topbar-brand"><div class="topbar-logo"></div><span class="topbar-title">JPX Intelligence</span></div>
-<nav><ul class="topbar-nav"><li><a href="index.html">最新</a></li><li><a href="archive.html">アーカイブ</a></li></ul></nav>
-</header>
-<main class="main">
-<div class="page-eyebrow">Archive</div>
-<h1 class="page-title"><span class="hl">市場分析</span>アーカイブ</h1>
-<p class="page-desc">過去のJPXデリバティブ分析ダッシュボードの一覧です。日付をクリックすると当日の分析ページが開きます。</p>
-<div class="latest-banner">
-<div><div class="latest-label">Latest Report</div><div class="latest-title">最新の分析ダッシュボード</div></div>
-<a href="index.html" class="latest-btn">最新版を見る</a>
-</div>
-<div class="section-label">Past Reports</div>
-<div class="archive-list">
 
-<!-- 以下を archive.html の archive-list 内の先頭に追加 -->
-<a href="JPX_portal_20260312.html" class="entry">
-  <span class="entry-date">2026.03.12</span>
-  <span class="entry-weekday">木</span>
+<div class="topbar">
+<div class="logo">JPX Archive</div>
+<nav>
+<a href="index.html">ダッシュボード</a>
+<a href="pnl_simulator.html">P&Lシミュレーター</a>
+<a href="archive.html" class="active">アーカイブ</a>
+</nav>
+</div>
+
+<div class="mobile-nav">
+<a href="index.html">ダッシュボード</a>
+<a href="pnl_simulator.html">P&L</a>
+<a href="archive.html" class="active">アーカイブ</a>
+</div>
+
+<div class="hero">
+<h1>📂 SQ別アーカイブ</h1>
+<div class="sub">SQ（特別清算指数）サイクルごとに整理した市場分析レポート一覧</div>
+</div>
+
+<div class="latest-banner" style="max-width:800px;margin:16px auto">
+<div><div class="label">Latest Report</div><div class="title">最新の分析ダッシュボード</div></div>
+<a href="index.html" class="latest-btn">最新版を見る →</a>
+</div>
+
+<div class="container">
+
+<!-- ═══ 6月限SQサイクル（2026/4/10〜6/12） ═══ -->
+<div class="sq-section">
+<div class="sq-header">
+<span class="sq-badge current">6月限SQ</span>
+<span class="sq-meta">SQ日: 2026/06/12（金）</span>
+<span class="sq-range">次回SQ期間</span>
+</div>
+<div style="padding:10px 16px;background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;text-align:center">
+4月限SQ（4/10）通過後に更新されます
+</div>
+</div>
+
+<!-- ═══ 3月限SQサイクル（2026/2/14〜3/13） ═══ -->
+<div class="sq-section">
+<div class="sq-header">
+<span class="sq-badge">3月限SQ</span>
+<span class="sq-meta">SQ日: 2026/03/13（金）</span>
+<span class="sq-range">59,332 → 53,820</span>
+</div>
+
+<div id="archive-list-mar">
+
+<a href="JPX_portal_20260313.html" class="entry">
+  <span class="entry-date">2026.03.13</span>
+  <span class="entry-weekday">金</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">54,452.96 (-572.41)</span>
-    <span class="etag etag-vi">VI 42.94</span>
+    <span class="etag etag-nikkei down">53,819.61 (-633.35)</span>
+    <span class="etag etag-vi high">VI 45.80</span>
+    <span class="etag etag-sq">SQ日</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
-  
+
 <a href="JPX_portal_20260311.html" class="entry">
   <span class="entry-date">2026.03.11</span>
   <span class="entry-weekday">水</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">55,025 (+776 / +1.43%)</span>
-    <span class="etag etag-vi">VI 35.05</span>
+    <span class="etag etag-nikkei">55,620.81 (+776.59)</span>
+    <span class="etag etag-vi high">VI 38.27</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
@@ -88,18 +125,8 @@ a{color:inherit;text-decoration:none}
   <span class="entry-date">2026.03.10</span>
   <span class="entry-weekday">火</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">日経平均 54,248 (+1,519)</span>
-    <span class="etag etag-vi">VI 41.3</span>
-  </span>
-  <span class="entry-arrow">→</span>
-</a>
-  
-<a href="JPX_portal_20260309.html" class="entry">
-  <span class="entry-date">2026.03.09</span>
-  <span class="entry-weekday">月</span>
-  <span class="entry-tags">
-    <span class="etag etag-nikkei">52,728.72 (-2,892.12)</span>
-    <span class="etag etag-vi">VI 44</span>
+    <span class="etag etag-nikkei down">54,844.22 (-234.18)</span>
+    <span class="etag etag-vi high">VI 42.94</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
@@ -108,50 +135,52 @@ a{color:inherit;text-decoration:none}
   <span class="entry-date">2026.03.06</span>
   <span class="entry-weekday">金</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">55,620 (+342 / +0.62%)</span>
-    <span class="etag etag-vi">VI 44.00</span>
+    <span class="etag etag-nikkei down">55,024.63 (-253.77)</span>
+    <span class="etag etag-vi high">VI 36.56</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
 
-  
 <a href="JPX_portal_20260305.html" class="entry">
   <span class="entry-date">2026.03.05</span>
   <span class="entry-weekday">木</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">55,278 (+1,032)</span>
-    <span class="etag etag-vi">VI ~40</span>
+    <span class="etag etag-nikkei">55,278.40 (+1,032.86)</span>
+    <span class="etag etag-vi high">VI 40.00</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
-  
+
 <a href="JPX_portal_20260304.html" class="entry">
   <span class="entry-date">2026.03.04</span>
   <span class="entry-weekday">水</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">54,245 (-2,033)</span>
-    <span class="etag etag-vi">VI 56.30</span>
+    <span class="etag etag-nikkei down">54,245.54 (-2,033.51)</span>
+    <span class="etag etag-vi high">VI 56.30</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
+
 <a href="JPX_portal_20260303.html" class="entry">
   <span class="entry-date">2026.03.03</span>
   <span class="entry-weekday">火</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">56,279.05 (-1,778.19)</span>
-    <span class="etag etag-vi">VI 34.99</span>
+    <span class="etag etag-nikkei down">56,279.05 (-1,778.19)</span>
+    <span class="etag etag-vi high">VI 34.99</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
+
 <a href="JPX_portal_20260302.html" class="entry">
   <span class="entry-date">2026.03.02</span>
   <span class="entry-weekday">月</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">58,057.24 (-793.03)</span>
+    <span class="etag etag-nikkei down">58,057.24 (-793.03)</span>
     <span class="etag etag-vi">VI 34.99</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
+
 <a href="JPX_portal_20260227.html" class="entry">
   <span class="entry-date">2026.02.27</span>
   <span class="entry-weekday">金</span>
@@ -161,6 +190,7 @@ a{color:inherit;text-decoration:none}
   </span>
   <span class="entry-arrow">→</span>
 </a>
+
 <a href="JPX_portal_20260226.html" class="entry">
   <span class="entry-date">2026.02.26</span>
   <span class="entry-weekday">木</span>
@@ -170,8 +200,56 @@ a{color:inherit;text-decoration:none}
   </span>
   <span class="entry-arrow">→</span>
 </a>
-</div>
-</main>
-<footer class="footer"><span class="footer-text">© 2026 JPX Derivatives Intelligence — Not investment advice</span></footer>
+
+<a href="JPX_portal_20260220.html" class="entry">
+  <span class="entry-date">2026.02.20</span>
+  <span class="entry-weekday">金</span>
+  <span class="entry-tags">
+    <span class="etag etag-nikkei down">55,958.10 (-642)</span>
+    <span class="etag etag-vi">VI 30.80</span>
+  </span>
+  <span class="entry-arrow">→</span>
+</a>
+
+<a href="JPX_portal_20260219.html" class="entry">
+  <span class="entry-date">2026.02.19</span>
+  <span class="entry-weekday">木</span>
+  <span class="entry-tags">
+    <span class="etag etag-nikkei down">56,279.18 (-888)</span>
+    <span class="etag etag-vi">VI 29.82</span>
+  </span>
+  <span class="entry-arrow">→</span>
+</a>
+
+<a href="JPX_portal_20260218.html" class="entry">
+  <span class="entry-date">2026.02.18</span>
+  <span class="entry-weekday">水</span>
+  <span class="entry-tags">
+    <span class="etag etag-nikkei">57,143.84 (+577.35)</span>
+    <span class="etag etag-vi">VI 27.89</span>
+  </span>
+  <span class="entry-arrow">→</span>
+</a>
+
+<a href="JPX_portal_20260217.html" class="entry">
+  <span class="entry-date">2026.02.17</span>
+  <span class="entry-weekday">火</span>
+  <span class="entry-tags">
+    <span class="etag etag-nikkei down">56,566.49 (-901)</span>
+    <span class="etag etag-vi">VI 29.82</span>
+  </span>
+  <span class="entry-arrow">→</span>
+</a>
+
+</div><!-- /archive-list-mar -->
+</div><!-- /sq-section 3月限 -->
+
+</div><!-- /container -->
+
+<footer>
+<a href="index.html">ダッシュボード</a> ｜ <a href="pnl_simulator.html">P&Lシミュレーター</a> ｜ <a href="archive.html">アーカイブ</a><br>
+<span style="font-size:10px">JPX Derivatives Intelligence © 2026 — Not investment advice</span>
+</footer>
+
 </body>
 </html>
