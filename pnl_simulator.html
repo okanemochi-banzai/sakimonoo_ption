@@ -1,266 +1,414 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P&L Simulator - 2026-03-13</title>
+<title>P&L Simulator — 2026.03.16</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--muted:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--yellow:#fbbf24}
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--accent:#818cf8;--text:#e2e2f0;--muted:#8888aa;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP','Outfit',sans-serif;line-height:1.6}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}
-.topbar .sub{font-family:'DM Mono';font-size:10px;color:var(--muted);margin-left:8px}
-.topbar nav a{color:var(--muted);text-decoration:none;font-size:12px;margin-left:16px;font-family:Outfit}
+.topbar .sub{font-size:11px;color:var(--muted);font-family:'DM Mono';margin-left:12px}
+.topbar nav{display:flex;gap:16px;font-size:13px;font-family:Outfit}
+.topbar nav a{color:var(--muted)}
 .topbar nav a:hover{color:var(--accent)}
-.container{max-width:1000px;margin:0 auto;padding:16px}
-.kpi-strip{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;flex:1;min-width:120px}
-.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase}
-.kpi .value{font-family:'DM Mono';font-size:16px;font-weight:700;margin-top:2px}
-.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
-.section h2{font-family:Outfit;font-size:14px;font-weight:600;margin-bottom:10px;color:var(--accent)}
-.preset-grid{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.preset-btn{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:11px;font-family:Outfit}
-.preset-btn:hover{border-color:var(--accent);color:var(--accent)}
-.legs{margin-bottom:12px}
-.leg-row{display:flex;gap:6px;align-items:center;margin:4px 0;flex-wrap:wrap}
-.leg-row select,.leg-row input{background:var(--panel);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:4px 8px;font-size:12px;font-family:'DM Mono'}
-.leg-row select{width:70px}
-.leg-row input{width:80px}
-.leg-row .remove{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px}
-.add-btns{display:flex;gap:6px;margin-bottom:12px}
-.add-btns button{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text);cursor:pointer;font-size:11px}
-.add-btns button:hover{border-color:var(--accent)}
-.calc-btn{background:var(--accent);border:none;border-radius:8px;padding:8px 24px;color:#fff;cursor:pointer;font-family:Outfit;font-weight:600;font-size:13px;width:100%}
-.summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.summary-item{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
-.summary-item .sl{font-size:10px;color:var(--muted)}
-.summary-item .sv{font-family:'DM Mono';font-size:18px;font-weight:700;margin-top:4px}
-canvas{width:100%;max-height:300px;margin:12px 0}
-table.pnl{width:100%;border-collapse:collapse;font-size:11px}
-table.pnl th{color:var(--muted);font-size:10px;text-transform:uppercase;padding:4px;border-bottom:1px solid var(--border);text-align:right}
-table.pnl td{padding:4px;border-bottom:1px solid rgba(30,30,58,.3);text-align:right;font-family:'DM Mono'}
-table.pnl .atm-row{background:rgba(251,191,36,.08)}
-.pos{color:var(--green)}.neg{color:var(--red)}
-.insight{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.15);border-radius:8px;padding:10px;margin-top:12px;font-size:12px;color:var(--muted)}
+.kpi-strip{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--border)}
+.kpi{text-align:center}
+.kpi .kv{font-family:'DM Mono';font-size:18px;font-weight:700;color:#fff}
+.kpi .kl{font-size:10px;color:var(--muted)}
+.section{max-width:1200px;margin:0 auto;padding:16px}
+.section-title{font-family:Outfit;font-size:14px;font-weight:600;color:var(--accent);margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.preset-btn{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--text);font-size:12px;cursor:pointer;font-family:'Noto Sans JP';transition:border-color .2s}
+.preset-btn:hover{border-color:var(--accent)}
+.preset-btn.active{border-color:var(--accent);background:rgba(129,140,248,.1)}
+.legs-area{margin:12px 0}
+.leg{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin:6px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.leg select,.leg input{background:var(--panel);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:4px 6px;font-size:12px;font-family:'DM Mono'}
+.leg select{width:70px}.leg input{width:80px}
+.leg label{font-size:11px;color:var(--muted)}
+.leg .rm{color:var(--dn);cursor:pointer;font-size:14px;margin-left:auto}
+.add-btns{display:flex;gap:6px;margin:8px 0}
+.add-btn{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:6px 14px;color:var(--accent);font-size:12px;cursor:pointer;font-family:Outfit}
+.add-btn:hover{border-color:var(--accent)}
+.summary-strip{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;padding:12px;background:var(--card);border-radius:8px;border:1px solid var(--border)}
+.sbox{text-align:center;flex:1;min-width:120px}
+.sbox .sl{font-size:10px;color:var(--muted)}
+.sbox .sv{font-family:'DM Mono';font-size:16px;font-weight:700}
+canvas#pnlChart{width:100%;height:300px;background:var(--card);border-radius:8px;border:1px solid var(--border);margin:12px 0}
+table.pnl-table{width:100%;border-collapse:collapse;font-size:11px;margin:12px 0}
+table.pnl-table th{background:var(--card);color:var(--muted);padding:5px 6px;text-align:right;font-weight:500;font-size:10px;position:sticky;top:40px;border-bottom:1px solid var(--border)}
+table.pnl-table td{padding:4px 6px;border-bottom:1px solid rgba(30,30,58,.4);font-family:'DM Mono';font-size:11px;text-align:right}
+table.pnl-table tr.atm{background:rgba(251,191,36,.06)}
+table.pnl-table tr.be{background:rgba(129,140,248,.06)}
+.pnl-bar-cell{position:relative;width:120px}
+.pnl-bar{height:12px;position:absolute;top:50%;transform:translateY(-50%)}
+.insight{background:var(--card);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;margin:12px 0;font-size:12px;line-height:1.7}
+.insight b{color:var(--accent)}
+footer{text-align:center;padding:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--accent);margin:0 8px}
+@media(max-width:768px){.topbar .sub{display:none}.topbar nav{gap:10px;font-size:12px}.leg{font-size:11px}}
 </style>
 </head>
 <body>
 <div class="topbar">
-<div class="logo">P&L Simulator<span class="sub">2026-03-13 | ATM=53,270 | VI=45.8 | SQ=4/10 | 残19日</span></div>
+<div><span class="logo">P&L Simulator</span><span class="sub">2026.03.16 | ATM 53,530 | VI 42.50 | 4月SQ 4/10(18日) | 6月SQ 6/12(61日)</span></div>
 <nav><a href="index.html">← ダッシュボード</a><a href="archive.html">アーカイブ</a></nav>
 </div>
 
-<div class="container">
 <div class="kpi-strip">
-<div class="kpi"><div class="label">ATM</div><div class="value" style="color:var(--yellow)">53,270</div></div>
-<div class="kpi"><div class="label">VI</div><div class="value" style="color:var(--red)">45.8</div></div>
-<div class="kpi"><div class="label">次回SQ</div><div class="value">4/10</div></div>
-<div class="kpi"><div class="label">残り</div><div class="value">19日</div></div>
+<div class="kpi"><div class="kv">53,530</div><div class="kl">ATM (6月限)</div></div>
+<div class="kpi"><div class="kv">42.50</div><div class="kl">日経VI</div></div>
+<div class="kpi"><div class="kv">4/10</div><div class="kl">4月SQ</div></div>
+<div class="kpi"><div class="kv">61日</div><div class="kl">6月SQまで</div></div>
 </div>
 
 <div class="section">
-<h2>プリセット戦略</h2>
-<div class="preset-grid">
-<button class="preset-btn" onclick="loadPreset('ic')">Iron Condor</button>
-<button class="preset-btn" onclick="loadPreset('pcs')">Put Credit Spread</button>
-<button class="preset-btn" onclick="loadPreset('ccs')">Call Credit Spread</button>
-<button class="preset-btn" onclick="loadPreset('strangle')">Short Strangle + ヘッジ</button>
-<button class="preset-btn" onclick="loadPreset('phedge')">P売り + miniヘッジ</button>
-<button class="preset-btn" onclick="loadPreset('theta')">ミニ週次θ</button>
-</div>
-</div>
+<div class="section-title">プリセット戦略</div>
+<div class="presets" id="presets"></div>
 
-<div class="section">
-<h2>レグビルダー</h2>
-<div id="legs" class="legs"></div>
+<div class="section-title">レグビルダー</div>
 <div class="add-btns">
-<button onclick="addLeg('P')">+ プット</button>
-<button onclick="addLeg('C')">+ コール</button>
-<button onclick="addLeg('F')">+ 先物mini</button>
-<button onclick="clearLegs()">クリア</button>
+<div class="add-btn" id="addPut">+ プット</div>
+<div class="add-btn" id="addCall">+ コール</div>
+<div class="add-btn" id="addFut">+ 先物mini</div>
+<div class="add-btn" id="clearAll">クリア</div>
 </div>
-<button class="calc-btn" onclick="calculate()">P&L 計算</button>
+<div class="legs-area" id="legsArea"></div>
+
+<div class="section-title">P&L サマリー</div>
+<div class="summary-strip" id="summaryStrip">
+<div class="sbox"><div class="sl">最大利益</div><div class="sv" id="maxProfit" style="color:var(--up)">—</div></div>
+<div class="sbox"><div class="sl">最大損失</div><div class="sv" id="maxLoss" style="color:var(--dn)">—</div></div>
+<div class="sbox"><div class="sl">損益分岐点</div><div class="sv" id="breakeven" style="color:var(--atm)">—</div></div>
 </div>
 
-<div id="results" style="display:none">
-<div class="section">
-<h2>サマリー</h2>
-<div class="summary">
-<div class="summary-item"><div class="sl">最大利益</div><div class="sv pos" id="maxProfit">-</div></div>
-<div class="summary-item"><div class="sl">最大損失</div><div class="sv neg" id="maxLoss">-</div></div>
-<div class="summary-item"><div class="sl">損益分岐</div><div class="sv" id="breakeven">-</div></div>
-</div>
+<div class="section-title">P&L チャート</div>
+<canvas id="pnlChart"></canvas>
+
+<div class="section-title">SQ着地別テーブル</div>
+<div style="overflow-x:auto"><table class="pnl-table" id="pnlTable"></table></div>
+
+<div class="insight" id="insightBox"><b>プリセットまたはレグを追加</b>してP&Lを計算してください。BS近似プレミアムは参考値です。実際の約定価格とは乖離する場合があります。</div>
 </div>
 
-<div class="section">
-<h2>P&Lチャート</h2>
-<canvas id="pnlChart" height="250"></canvas>
-</div>
-
-<div class="section">
-<h2>SQ着地別損益テーブル</h2>
-<div style="overflow-x:auto"><table class="pnl" id="pnlTable"></table></div>
-</div>
-
-<div class="insight" id="insightBox"></div>
-</div>
-</div>
+<footer>
+<a href="index.html">ダッシュボード</a><a href="archive.html">アーカイブ一覧</a>
+<div style="margin-top:6px">P&L Simulator v5 — Generated 2026.03.16</div>
+</footer>
 
 <script>
-var ATM=53270,VI=45.8,T=0.076000,legs=[];
-var MULT_L=1000,MULT_M=100;
+var ATM=53530,VI=42.50,T_APR=18/250,T_JUN=61/250;
+var legs=[];
+var legId=0;
 
-function normCdf(x){
-  if(x<-8)return 0;if(x>8)return 1;
-  var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
-  var s=x>=0?1:-1,xa=Math.abs(x),t=1/(1+p*xa);
-  var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-xa*xa/2);
-  return 0.5*(1+s*y);
+function normCDF(x){
+if(x<-8)return 0;if(x>8)return 1;
+var t=1/(1+0.2316419*Math.abs(x));
+var d=0.3989422804014327;
+var p=d*Math.exp(-x*x/2)*(t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429)))));
+return x>0?1-p:p;
 }
+
 function bsPrice(type,K,F,sigma,T){
-  if(T<=0||sigma<=0)return 0;
-  var d1=(Math.log(F/K)+0.5*sigma*sigma*T)/(sigma*Math.sqrt(T));
-  var d2=d1-sigma*Math.sqrt(T);
-  if(type==='P')return K*normCdf(-d2)-F*normCdf(-d1);
-  return F*normCdf(d1)-K*normCdf(d2);
+if(T<=0)return Math.max(type==='P'?K-F:F-K,0);
+var sqT=Math.sqrt(T);
+var d1=(Math.log(F/K)+0.5*sigma*sigma*T)/(sigma*sqT);
+var d2=d1-sigma*sqT;
+if(type==='P')return K*normCDF(-d2)-F*normCDF(-d1);
+return F*normCDF(d1)-K*normCDF(d2);
 }
-function addLeg(type,dir,strike,prem,qty,mult){
-  dir=dir||'S';strike=strike||ATM;prem=prem||0;qty=qty||1;mult=mult||(type==='F'?MULT_M:MULT_L);
-  if(prem===0&&type!=='F')prem=Math.round(bsPrice(type,strike,ATM,VI/100,T));
-  var id='leg_'+Date.now()+'_'+Math.random().toString(36).substr(2,4);
-  legs.push({id:id,type:type,dir:dir,strike:strike,prem:prem,qty:qty,mult:mult});
-  renderLegs();
+
+var PRESETS=[
+{name:'Iron Condor',legs:[
+{type:'P',dir:'S',K:50000,mult:1000,qty:1},{type:'P',dir:'L',K:48500,mult:1000,qty:1},
+{type:'C',dir:'S',K:58000,mult:1000,qty:1},{type:'C',dir:'L',K:60000,mult:1000,qty:1}]},
+{name:'Put Credit Spread',legs:[
+{type:'P',dir:'S',K:50000,mult:1000,qty:1},{type:'P',dir:'L',K:48500,mult:1000,qty:1}]},
+{name:'Call Credit Spread',legs:[
+{type:'C',dir:'S',K:58000,mult:1000,qty:1},{type:'C',dir:'L',K:60000,mult:1000,qty:1}]},
+{name:'Short Strangle+ヘッジ',legs:[
+{type:'P',dir:'S',K:50500,mult:1000,qty:1},{type:'C',dir:'S',K:58500,mult:1000,qty:1},
+{type:'F',dir:'S',K:53530,mult:100,qty:0}]},
+{name:'P売+miniヘッジ',legs:[
+{type:'P',dir:'S',K:50000,mult:1000,qty:1},{type:'F',dir:'S',K:51500,mult:100,qty:3}]},
+{name:'ミニ週次θ',legs:[
+{type:'P',dir:'S',K:51000,mult:100,qty:10},{type:'C',dir:'S',K:56000,mult:100,qty:10}]}
+];
+
+function renderPresets(){
+var el=document.getElementById('presets');
+var s='';
+for(var i=0;i<PRESETS.length;i++){
+s+='<div class="preset-btn" data-idx="'+i+'">'+PRESETS[i].name+'</div>';
 }
-function removeLeg(id){legs=legs.filter(l=>l.id!==id);renderLegs();}
-function clearLegs(){legs=[];renderLegs();document.getElementById('results').style.display='none';}
+el.innerHTML=s;
+}
+
+function loadPreset(idx){
+var p=PRESETS[idx];
+legs=[];legId=0;
+for(var i=0;i<p.legs.length;i++){
+var l=Object.assign({},p.legs[i]);
+l.id=legId++;
+if(l.type!=='F'){
+l.prem=Math.round(bsPrice(l.type,l.K,ATM,VI/100,T_JUN));
+}
+legs.push(l);
+}
+renderLegs();calculate();
+var btns=document.querySelectorAll('.preset-btn');
+for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');}
+btns[idx].classList.add('active');
+}
+
+function addLeg(type){
+var l={id:legId++,type:type,dir:'S',mult:1000,qty:1};
+if(type==='P'){l.K=50000;l.prem=Math.round(bsPrice('P',50000,ATM,VI/100,T_JUN));}
+else if(type==='C'){l.K=58000;l.prem=Math.round(bsPrice('C',58000,ATM,VI/100,T_JUN));}
+else{l.K=ATM;l.mult=100;}
+legs.push(l);
+renderLegs();calculate();
+}
+
+function removeLeg(id){
+legs=legs.filter(function(l){return l.id!==id;});
+renderLegs();calculate();
+}
+
 function renderLegs(){
-  var h='';
-  legs.forEach(function(l){
-    h+='<div class="leg-row">';
-    h+='<select onchange="updLeg(\''+l.id+'\',\'dir\',this.value)"><option value="S"'+(l.dir==='S'?' selected':'')+'>Short</option><option value="L"'+(l.dir==='L'?' selected':'')+'>Long</option></select>';
-    if(l.type==='F'){
-      h+='<span style="color:var(--yellow);font-size:11px">先物mini</span>';
-      h+='<input value="'+l.strike+'" onchange="updLeg(\''+l.id+'\',\'strike\',+this.value)" placeholder="エントリー">';
-    }else{
-      h+='<span style="color:var(--'+(l.type==='P'?'put':'call')+');font-size:11px">'+(l.type==='P'?'PUT':'CALL')+'</span>';
-      h+='<input value="'+l.strike+'" onchange="updLeg(\''+l.id+'\',\'strike\',+this.value)" placeholder="行使価格">';
-      h+='<input value="'+l.prem+'" onchange="updLeg(\''+l.id+'\',\'prem\',+this.value)" placeholder="プレミアム">';
-    }
-    h+='<input value="'+l.qty+'" style="width:50px" onchange="updLeg(\''+l.id+'\',\'qty\',+this.value)" placeholder="枚数">';
-    h+='<select onchange="updLeg(\''+l.id+'\',\'mult\',+this.value)"><option value="1000"'+(l.mult===1000?' selected':'')+'>ラージ</option><option value="100"'+(l.mult===100?' selected':'')+'>ミニ</option></select>';
-    h+='<button class="remove" onclick="removeLeg(\''+l.id+'\')">×</button>';
-    h+='</div>';
-  });
-  document.getElementById('legs').innerHTML=h;
+var el=document.getElementById('legsArea');
+var s='';
+for(var i=0;i<legs.length;i++){
+var l=legs[i];
+var typeLabel=l.type==='P'?'PUT':l.type==='C'?'CALL':'先物';
+var dirOpts=l.type==='F'?'<option value="S"'+(l.dir==='S'?' selected':'')+'>Short</option><option value="L"'+(l.dir==='L'?' selected':'')+'>Long</option>':'<option value="S"'+(l.dir==='S'?' selected':'')+'>Short(売)</option><option value="L"'+(l.dir==='L'?' selected':'')+'>Long(買)</option>';
+s+='<div class="leg" data-lid="'+l.id+'">';
+s+='<span style="font-size:12px;color:'+(l.type==='P'?'var(--put)':l.type==='C'?'var(--call)':'var(--atm)')+'">'+typeLabel+'</span>';
+s+='<label>売買<select class="leg-dir">'+dirOpts+'</select></label>';
+s+='<label>'+(l.type==='F'?'価格':'行使価格')+'<input type="number" class="leg-k" value="'+l.K+'" step="500"></label>';
+if(l.type!=='F'){s+='<label>ﾌﾟﾚﾐｱﾑ<input type="number" class="leg-prem" value="'+(l.prem||0)+'" step="10"></label>';}
+s+='<label>枚数<input type="number" class="leg-qty" value="'+l.qty+'" step="1" min="0" style="width:50px"></label>';
+s+='<label>乗数<select class="leg-mult"><option value="1000"'+(l.mult===1000?' selected':'')+'>x1000(ﾗｰｼﾞ)</option><option value="100"'+(l.mult===100?' selected':'')+'>x100(ﾐﾆ)</option></select></label>';
+s+='<span class="rm" data-rmid="'+l.id+'">✕</span>';
+s+='</div>';
 }
-function updLeg(id,key,val){
-  var l=legs.find(x=>x.id===id);if(!l)return;l[key]=val;
-  if(key==='strike'&&l.type!=='F')l.prem=Math.round(bsPrice(l.type,l.strike,ATM,VI/100,T));
-  renderLegs();
+el.innerHTML=s;
 }
-function loadPreset(name){
-  clearLegs();
-  switch(name){
-    case 'ic':addLeg('P','S',48500,0,1,1000);addLeg('P','L',47000,0,1,1000);addLeg('C','S',58000,0,1,1000);addLeg('C','L',59000,0,1,1000);break;
-    case 'pcs':addLeg('P','S',50000,0,1,1000);addLeg('P','L',48500,0,1,1000);break;
-    case 'ccs':addLeg('C','S',56000,0,1,1000);addLeg('C','L',58000,0,1,1000);break;
-    case 'strangle':addLeg('P','S',50000,0,1,1000);addLeg('C','S',56000,0,1,1000);addLeg('F','S',ATM,0,0,100);break;
-    case 'phedge':addLeg('P','S',50000,0,1,1000);addLeg('F','S',51500,0,3,100);break;
-    case 'theta':addLeg('P','S',51000,0,10,100);addLeg('C','S',55500,0,10,100);break;
-  }
-  setTimeout(calculate,100);
+
+function readLegs(){
+var els=document.querySelectorAll('.leg');
+for(var i=0;i<els.length;i++){
+var lid=parseInt(els[i].getAttribute('data-lid'));
+var leg=legs.find(function(l){return l.id===lid;});
+if(!leg)continue;
+leg.dir=els[i].querySelector('.leg-dir').value;
+leg.K=parseFloat(els[i].querySelector('.leg-k').value)||ATM;
+var premEl=els[i].querySelector('.leg-prem');
+if(premEl)leg.prem=parseFloat(premEl.value)||0;
+leg.qty=parseInt(els[i].querySelector('.leg-qty').value)||0;
+leg.mult=parseInt(els[i].querySelector('.leg-mult').value)||1000;
 }
+}
+
 function calculate(){
-  if(legs.length===0)return;
-  var sqMin=ATM-6000,sqMax=ATM+6000,step=500;
-  var rows=[];
-  for(var sq=sqMin;sq<=sqMax;sq+=step){
-    var total=0;var legPnls=[];
-    legs.forEach(function(l){
-      var pnl=0;
-      if(l.type==='F'){pnl=(l.dir==='S'?l.strike-sq:sq-l.strike);}
-      else if(l.type==='P'){var itm=Math.max(l.strike-sq,0);pnl=l.dir==='S'?l.prem-itm:itm-l.prem;}
-      else{var itm=Math.max(sq-l.strike,0);pnl=l.dir==='S'?l.prem-itm:itm-l.prem;}
-      var val=pnl*l.qty*l.mult;
-      legPnls.push(val);total+=val;
-    });
-    rows.push({sq:sq,legPnls:legPnls,total:total});
-  }
-  var maxP=Math.max(...rows.map(r=>r.total));
-  var maxL=Math.min(...rows.map(r=>r.total));
-  var be=[];
-  for(var i=1;i<rows.length;i++){if((rows[i-1].total<=0&&rows[i].total>0)||(rows[i-1].total>0&&rows[i].total<=0))be.push(rows[i].sq);}
-  document.getElementById('maxProfit').textContent=maxP>=1e6?(maxP/1e6).toFixed(1)+'百万':(maxP/1e4).toFixed(0)+'万';
-  document.getElementById('maxProfit').className='sv '+(maxP>=0?'pos':'neg');
-  document.getElementById('maxLoss').textContent=maxL>=0?(maxL/1e4).toFixed(0)+'万':maxL<=-1e6?(maxL/1e6).toFixed(1)+'百万':(maxL/1e4).toFixed(0)+'万';
-  document.getElementById('maxLoss').className='sv '+(maxL>=0?'pos':'neg');
-  document.getElementById('breakeven').textContent=be.length?be.map(b=>b.toLocaleString()).join(' / '):'—';
-  // Chart
-  var canvas=document.getElementById('pnlChart');var ctx=canvas.getContext('2d');
-  canvas.width=canvas.offsetWidth*2;canvas.height=500;ctx.scale(2,2);
-  var w=canvas.offsetWidth,h=250;
-  var absMax=Math.max(Math.abs(maxP),Math.abs(maxL))*1.2||1;
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle='#0c0c1d';ctx.fillRect(0,0,w,h);
-  var padL=50,padR=20,padT=20,padB=30;
-  var cw=w-padL-padR,ch=h-padT-padB;
-  var zeroY=padT+ch*(absMax/(2*absMax));
-  // Zero line
-  ctx.strokeStyle='#333';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(padL,zeroY);ctx.lineTo(padL+cw,zeroY);ctx.stroke();ctx.setLineDash([]);
-  // ATM line
-  var atmX=padL+cw*((ATM-sqMin)/(sqMax-sqMin));
-  ctx.strokeStyle='rgba(251,191,36,.4)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(atmX,padT);ctx.lineTo(atmX,padT+ch);ctx.stroke();ctx.setLineDash([]);
-  // P&L curve
-  ctx.beginPath();ctx.strokeStyle='#818cf8';ctx.lineWidth=2;
-  rows.forEach(function(r,i){
-    var x=padL+cw*(i/(rows.length-1));
-    var y=padT+ch*(1-((r.total/absMax+1)/2));
-    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-  });
-  ctx.stroke();
-  // Fill
-  rows.forEach(function(r,i){
-    var x=padL+cw*(i/(rows.length-1));
-    var y=padT+ch*(1-((r.total/absMax+1)/2));
-    ctx.beginPath();ctx.moveTo(x,zeroY);ctx.lineTo(x,y);
-    ctx.strokeStyle=r.total>=0?'rgba(74,222,128,.3)':'rgba(248,113,113,.3)';
-    ctx.lineWidth=cw/(rows.length-1);ctx.stroke();
-  });
-  // Labels
-  ctx.fillStyle='#8888aa';ctx.font='10px DM Mono';ctx.textAlign='center';
-  for(var i=0;i<rows.length;i+=4){
-    var x=padL+cw*(i/(rows.length-1));
-    ctx.fillText((rows[i].sq/1000).toFixed(0)+'k',x,padT+ch+15);
-  }
-  ctx.textAlign='right';
-  ctx.fillText('+'+Math.round(absMax/1e4)+'万',padL-4,padT+10);
-  ctx.fillText(Math.round(-absMax/1e4)+'万',padL-4,padT+ch);
-  ctx.fillText('0',padL-4,zeroY+4);
-  // Table
-  var th='<tr><th style="text-align:left">SQ着地</th>';
-  legs.forEach(function(l,i){var s=l.dir+(l.type==='F'?'先物':l.type)+l.strike;th+='<th>'+s+'</th>';});
-  th+='<th>合計P&L</th><th style="width:120px">バー</th></tr>';
-  var tb='';
-  rows.forEach(function(r){
-    var cls=r.sq===ATM?' class="atm-row"':'';
-    tb+='<tr'+cls+'><td style="text-align:left;font-family:DM Mono">'+r.sq.toLocaleString()+'</td>';
-    r.legPnls.forEach(function(lp){var c=lp>=0?'pos':'neg';tb+='<td class="'+c+'">'+(lp/1e4).toFixed(1)+'万</td>';});
-    var tc=r.total>=0?'pos':'neg';tb+='<td class="'+tc+'" style="font-weight:700">'+(r.total/1e4).toFixed(1)+'万</td>';
-    var bw=Math.min(Math.abs(r.total)/absMax*50,50);var bc=r.total>=0?'var(--green)':'var(--red)';
-    var bd=r.total>=0?'left':'right';
-    tb+='<td><div style="width:100px;height:12px;background:rgba(255,255,255,.03);border-radius:2px;position:relative;margin:0 auto"><div style="position:absolute;'+bd+':50%;width:'+bw+'%;height:100%;background:'+bc+';opacity:.6;border-radius:2px"></div></div></td>';
-    tb+='</tr>';
-  });
-  document.getElementById('pnlTable').innerHTML=th+tb;
-  // Insight
-  var atmRow=rows.find(r=>r.sq===ATM);
-  var ins='ATM(0)着地時P&L: 1万円'.replace('{0}',ATM.toLocaleString()).replace('{1}',atmRow?(atmRow.total/1e4).toFixed(1):'—');
-  document.getElementById('insightBox').innerHTML='<b>📊 シナリオ</b>: '+ins+'<br>※ BSプレミアムは参考値。実約定価格で上書き推奨。';
-  document.getElementById('results').style.display='block';
+readLegs();
+if(legs.length===0){return;}
+var sqPrices=[];
+for(var sq=ATM-6000;sq<=ATM+6000;sq+=500){sqPrices.push(sq);}
+var results=[];
+var maxP=-Infinity,minP=Infinity,bes=[];
+for(var i=0;i<sqPrices.length;i++){
+var sq=sqPrices[i];
+var total=0;
+var legPnls=[];
+for(var j=0;j<legs.length;j++){
+var l=legs[j];
+var pnl=0;
+if(l.type==='P'){
+var intrinsic=Math.max(l.K-sq,0);
+pnl=l.dir==='S'?(l.prem-intrinsic):(intrinsic-l.prem);
+}else if(l.type==='C'){
+var intrinsic2=Math.max(sq-l.K,0);
+pnl=l.dir==='S'?(l.prem-intrinsic2):(intrinsic2-l.prem);
+}else{
+pnl=l.dir==='S'?(l.K-sq):(sq-l.K);
 }
+var pnlYen=pnl*l.qty*l.mult;
+legPnls.push(pnlYen);
+total+=pnlYen;
+}
+results.push({sq:sq,legPnls:legPnls,total:total});
+if(total>maxP)maxP=total;
+if(total<minP)minP=total;
+if(i>0){
+var prev=results[i-1].total;
+if((prev<0&&total>=0)||(prev>=0&&total<0)){
+bes.push(sq);
+}
+}
+}
+document.getElementById('maxProfit').textContent=formatYen(maxP);
+document.getElementById('maxProfit').style.color=maxP>=0?'var(--up)':'var(--dn)';
+document.getElementById('maxLoss').textContent=formatYen(minP);
+document.getElementById('breakeven').textContent=bes.length>0?bes.map(function(b){return b.toLocaleString();}).join(' / '):'—';
+drawChart(results);
+drawTable(results);
+drawInsight(results,bes);
+}
+
+function formatYen(v){
+if(Math.abs(v)>=10000000)return (v/10000000).toFixed(2)+'億円';
+if(Math.abs(v)>=10000)return (v/10000).toFixed(1)+'万円';
+return v.toLocaleString()+'円';
+}
+
+function drawChart(results){
+var canvas=document.getElementById('pnlChart');
+var dpr=window.devicePixelRatio||1;
+var rect=canvas.getBoundingClientRect();
+canvas.width=rect.width*dpr;
+canvas.height=300*dpr;
+var ctx=canvas.getContext('2d');
+ctx.scale(dpr,dpr);
+var W=rect.width,H=300;
+ctx.fillStyle='#111128';ctx.fillRect(0,0,W,H);
+var pad={t:20,r:60,b:30,l:60};
+var pW=W-pad.l-pad.r,pH=H-pad.t-pad.b;
+var sqs=results.map(function(r){return r.sq;});
+var tots=results.map(function(r){return r.total;});
+var minSQ=sqs[0],maxSQ=sqs[sqs.length-1];
+var minV=Math.min.apply(null,tots),maxV=Math.max.apply(null,tots);
+var range=Math.max(Math.abs(minV),Math.abs(maxV))*1.1;
+if(range===0)range=1;
+function xPos(sq){return pad.l+(sq-minSQ)/(maxSQ-minSQ)*pW;}
+function yPos(v){return pad.t+pH/2-v/range*(pH/2);}
+// zero line
+ctx.strokeStyle='#333355';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+ctx.beginPath();ctx.moveTo(pad.l,yPos(0));ctx.lineTo(W-pad.r,yPos(0));ctx.stroke();
+ctx.setLineDash([]);
+// ATM line
+ctx.strokeStyle='rgba(251,191,36,.3)';ctx.setLineDash([3,3]);
+ctx.beginPath();ctx.moveTo(xPos(ATM),pad.t);ctx.lineTo(xPos(ATM),H-pad.b);ctx.stroke();
+ctx.setLineDash([]);
+// fill areas
+for(var i=1;i<results.length;i++){
+var x0=xPos(results[i-1].sq),x1=xPos(results[i].sq);
+var y0=yPos(results[i-1].total),y1=yPos(results[i].total);
+var yZ=yPos(0);
+ctx.beginPath();ctx.moveTo(x0,yZ);ctx.lineTo(x0,y0);ctx.lineTo(x1,y1);ctx.lineTo(x1,yZ);ctx.closePath();
+var avg=(results[i-1].total+results[i].total)/2;
+ctx.fillStyle=avg>=0?'rgba(74,222,128,.1)':'rgba(239,68,68,.1)';
+ctx.fill();
+}
+// P&L curve
+ctx.strokeStyle='#818cf8';ctx.lineWidth=2;
+ctx.beginPath();
+for(var i=0;i<results.length;i++){
+var x=xPos(results[i].sq),y=yPos(results[i].total);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+}
+ctx.stroke();
+// axes labels
+ctx.fillStyle='#8888aa';ctx.font='10px DM Mono';ctx.textAlign='center';
+for(var i=0;i<sqs.length;i+=4){
+ctx.fillText(sqs[i].toLocaleString(),xPos(sqs[i]),H-pad.b+14);
+}
+ctx.textAlign='right';
+var yTicks=[-range,range*-0.5,0,range*0.5,range];
+for(var i=0;i<yTicks.length;i++){
+var y=yPos(yTicks[i]);
+if(y>pad.t&&y<H-pad.b){
+ctx.fillText(formatYen(yTicks[i]),pad.l-4,y+4);
+}
+}
+}
+
+function drawTable(results){
+var el=document.getElementById('pnlTable');
+var s='<tr><th style="text-align:left">SQ着地</th>';
+for(var j=0;j<legs.length;j++){
+var l=legs[j];
+var label=(l.type==='F'?'先物':l.type)+l.K.toLocaleString()+(l.dir==='S'?'売':'買');
+s+='<th>'+label+'</th>';
+}
+s+='<th>合計P&L</th><th style="width:120px">バー</th></tr>';
+var maxAbs=0;
+for(var i=0;i<results.length;i++){if(Math.abs(results[i].total)>maxAbs)maxAbs=Math.abs(results[i].total);}
+if(maxAbs===0)maxAbs=1;
+for(var i=0;i<results.length;i++){
+var r=results[i];
+var isATM=Math.abs(r.sq-ATM)<250;
+s+='<tr class="'+(isATM?'atm':'')+'">';
+s+='<td style="text-align:left;'+(isATM?'color:var(--atm);font-weight:700':'')+'">'+r.sq.toLocaleString()+'</td>';
+for(var j=0;j<r.legPnls.length;j++){
+var v=r.legPnls[j];var col=v>=0?'var(--up)':'var(--dn)';
+s+='<td style="color:'+col+'">'+formatYen(v)+'</td>';
+}
+var tCol=r.total>=0?'var(--up)':'var(--dn)';
+s+='<td style="color:'+tCol+';font-weight:700">'+formatYen(r.total)+'</td>';
+var bW=Math.abs(r.total)/maxAbs*50;
+var bCol=r.total>=0?'var(--up)':'var(--dn)';
+var bDir=r.total>=0?'left:50%':'right:50%';
+s+='<td class="pnl-bar-cell"><div class="pnl-bar" style="width:'+bW+'%;background:'+bCol+';'+bDir+';height:12px;border-radius:2px"></div></td>';
+s+='</tr>';
+}
+el.innerHTML=s;
+}
+
+function drawInsight(results,bes){
+var el=document.getElementById('insightBox');
+var atmResult=results.find(function(r){return Math.abs(r.sq-ATM)<250;});
+var lowResult=results.find(function(r){return Math.abs(r.sq-51500)<250;});
+var highResult=results.find(function(r){return Math.abs(r.sq-55500)<250;});
+var s='<b>シナリオ分析：</b>';
+if(atmResult)s+=' ATM('+ATM.toLocaleString()+')着地時: '+formatYen(atmResult.total)+'。';
+if(lowResult)s+=' レンジ下限(51,500)着地時: '+formatYen(lowResult.total)+'。';
+if(highResult)s+=' レンジ上限(55,500)着地時: '+formatYen(highResult.total)+'。';
+if(bes.length>0)s+=' 損益分岐: '+bes.map(function(b){return b.toLocaleString();}).join(', ')+'。';
+s+='<br><span style="color:var(--muted)">※BS近似プレミアムは参考値。実際の約定価格での手入力を推奨。</span>';
+el.innerHTML=s;
+}
+
+renderPresets();
+
+document.getElementById('presets').addEventListener('click',function(e){
+var btn=e.target.closest('.preset-btn');
+if(!btn)return;
+loadPreset(parseInt(btn.getAttribute('data-idx')));
+});
+document.getElementById('addPut').addEventListener('click',function(){addLeg('P');});
+document.getElementById('addCall').addEventListener('click',function(){addLeg('C');});
+document.getElementById('addFut').addEventListener('click',function(){addLeg('F');});
+document.getElementById('clearAll').addEventListener('click',function(){legs=[];legId=0;renderLegs();document.getElementById('pnlTable').innerHTML='';document.getElementById('maxProfit').textContent='—';document.getElementById('maxLoss').textContent='—';document.getElementById('breakeven').textContent='—';var c2=document.getElementById('pnlChart');var cx2=c2.getContext('2d');cx2.clearRect(0,0,c2.width,c2.height);});
+
+document.getElementById('legsArea').addEventListener('click',function(e){
+if(e.target.classList.contains('rm')){
+removeLeg(parseInt(e.target.getAttribute('data-rmid')));
+}
+});
+document.getElementById('legsArea').addEventListener('change',function(e){
+if(e.target.classList.contains('leg-k')){
+var legEl=e.target.closest('.leg');
+var lid=parseInt(legEl.getAttribute('data-lid'));
+var leg=legs.find(function(l){return l.id===lid;});
+if(leg&&leg.type!=='F'){
+var newK=parseFloat(e.target.value)||ATM;
+leg.K=newK;
+leg.prem=Math.round(bsPrice(leg.type,newK,ATM,VI/100,T_JUN));
+var premEl=legEl.querySelector('.leg-prem');
+if(premEl)premEl.value=leg.prem;
+}
+}
+calculate();
+});
+
+window.addEventListener('resize',function(){if(legs.length>0)calculate();});
 </script>
+
 </body>
 </html>
