@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -10,43 +11,43 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;min-height:100vh}
 a{color:inherit;text-decoration:none}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between}
-.topbar .logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}
-.topbar nav a{color:var(--muted);text-decoration:none;font-size:12px;margin-left:16px;font-family:Outfit}
-.topbar nav a:hover,.topbar nav a.active{color:var(--accent)}
-.hero{text-align:center;padding:32px 16px 20px;background:radial-gradient(ellipse at 50% 0%,rgba(129,140,248,.08),transparent 70%)}
-.hero h1{font-family:Outfit;font-size:22px;font-weight:700}
-.hero .sub{font-size:12px;color:var(--muted);margin-top:6px}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:'Outfit';font-weight:700;font-size:16px;color:var(--accent)}
+.topbar nav a{color:var(--muted);text-decoration:none;font-size:13px;margin-left:18px;transition:color .2s}
+.topbar nav a:hover{color:var(--accent)}.topbar nav a.active{color:var(--accent)}
+@media(max-width:768px){.topbar nav{display:none}}
+.hero{text-align:center;padding:32px 20px 16px;position:relative}
+.hero h1{font-family:'Outfit';font-size:24px;font-weight:700;color:#fff}
+.hero .sub{color:var(--muted);font-size:12px;margin-top:4px}
 .container{max-width:800px;margin:0 auto;padding:0 16px 40px}
-.sq-section{margin-top:28px}
-.sq-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.sq-badge{font-family:Outfit;font-weight:700;font-size:13px;color:var(--accent);background:rgba(129,140,248,.1);border:1px solid rgba(129,140,248,.2);border-radius:6px;padding:4px 12px;white-space:nowrap}
-.sq-badge.current{color:var(--yellow);background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2)}
-.sq-meta{font-size:11px;color:var(--muted);font-family:'DM Mono'}
-.sq-range{font-size:11px;color:var(--muted);margin-left:auto;font-family:'DM Mono'}
-.entry{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;transition:all .2s;cursor:pointer}
-.entry:hover{border-color:var(--accent);background:rgba(17,17,40,.8)}
-.entry-date{font-family:'DM Mono';font-size:13px;font-weight:500;min-width:90px;color:var(--text)}
-.entry-weekday{font-size:11px;color:var(--muted);min-width:28px}
+.latest-banner{background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin:16px 0 24px}
+.latest-banner .label{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+.latest-banner .title{font-family:Outfit;font-size:14px;font-weight:600;margin-top:2px}
+.latest-btn{background:var(--accent);color:#fff;padding:8px 18px;border-radius:6px;font-family:Outfit;font-weight:600;font-size:12px}
+.sq-section{margin-bottom:24px}
+.sq-header{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);margin-bottom:8px;flex-wrap:wrap}
+.sq-badge{font-family:'DM Mono';font-size:11px;padding:3px 10px;border-radius:4px;background:rgba(129,140,248,.1);color:var(--accent);border:1px solid rgba(129,140,248,.2);font-weight:600}
+.sq-badge.current{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.2)}
+.sq-meta{font-size:11px;color:var(--muted)}.sq-range{font-family:'DM Mono';font-size:11px;color:var(--yellow)}
+.entry{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin:6px 0;transition:all .2s;background:var(--card)}
+.entry:hover{border-color:var(--accent);background:var(--panel);transform:translateX(2px)}
+.entry-date{font-family:'DM Mono';font-size:13px;color:#fff;min-width:90px;font-weight:500}
+.entry-weekday{font-size:11px;color:var(--muted);min-width:20px}
 .entry-tags{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.etag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'DM Mono'}
-.etag-nikkei{background:rgba(96,165,250,.08);color:var(--blue);border:1px solid rgba(96,165,250,.15)}
-.etag-nikkei.down{color:var(--red);background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15)}
-.etag-vi{background:rgba(129,140,248,.08);color:var(--accent);border:1px solid rgba(129,140,248,.15)}
+.etag{font-family:'DM Mono';font-size:10px;padding:2px 8px;border-radius:4px}
+.etag-nikkei{background:rgba(226,226,240,.06);color:var(--text);border:1px solid var(--border)}
+.etag-nikkei.down{color:var(--red)}
+.etag-vi{background:rgba(129,140,248,.06);color:var(--accent);border:1px solid rgba(129,140,248,.15)}
 .etag-vi.high{color:var(--red);background:rgba(248,113,113,.08);border-color:rgba(248,113,113,.15)}
 .etag-sq{background:rgba(251,191,36,.1);color:var(--yellow);border:1px solid rgba(251,191,36,.2);font-weight:600}
 .entry-arrow{font-size:14px;color:var(--accent);opacity:.4;transition:.2s;flex-shrink:0}
 .entry:hover .entry-arrow{opacity:1;transform:translateX(2px)}
-.latest-banner{background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:16px;display:flex;align-items:center;justify-content:space-between;margin-top:20px}
-.latest-banner .label{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
-.latest-banner .title{font-family:Outfit;font-size:14px;font-weight:600;margin-top:2px}
-.latest-btn{background:var(--accent);color:#fff;padding:8px 18px;border-radius:6px;font-family:Outfit;font-weight:600;font-size:12px}
-footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:30px}
-footer a{color:var(--accent);text-decoration:none;margin:0 8px}
 .mobile-nav{display:none;justify-content:center;gap:12px;padding:8px;border-bottom:1px solid var(--border)}
 .mobile-nav a{color:var(--muted);text-decoration:none;font-size:11px;font-family:Outfit;padding:4px 10px;border:1px solid var(--border);border-radius:6px}
 .mobile-nav a.active{color:var(--accent);border-color:var(--accent)}
-@media(max-width:768px){.topbar nav{display:none}.mobile-nav{display:flex}}
+@media(max-width:768px){.mobile-nav{display:flex}}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:30px}
+footer a{color:var(--accent);text-decoration:none;margin:0 8px}
 </style>
 </head>
 <body>
@@ -71,33 +72,59 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
 <div class="sub">SQ（特別清算指数）サイクルごとに整理した市場分析レポート一覧</div>
 </div>
 
-<div class="latest-banner" style="max-width:800px;margin:16px auto">
+<div class="container">
+
+<div class="latest-banner">
 <div><div class="label">Latest Report</div><div class="title">最新の分析ダッシュボード</div></div>
 <a href="index.html" class="latest-btn">最新版を見る →</a>
 </div>
 
-<div class="container">
+<!-- ═══ 6月限SQサイクル（2026/3/16〜6/12） ═══ -->
 
-<!-- ═══ 6月限SQサイクル（2026/4/10〜6/12） ═══ -->
 <div class="sq-section">
 <div class="sq-header">
 <span class="sq-badge current">6月限SQ</span>
 <span class="sq-meta">SQ日: 2026/06/12（金）</span>
-<span class="sq-range">次回SQ期間</span>
+<span class="sq-range">期間中</span>
 </div>
-<div style="padding:10px 16px;background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:12px;text-align:center">
-4月限SQ（4/10）通過後に更新されます
-</div>
-</div>
-  <a href="JPX_portal_20260316.html" class="entry">
-  <span class="entry-date">2026.03.16</span>
-  <span class="entry-weekday">月</span>
+
+<div id="archive-list-0625">
+<!-- ▼ 6月限SQサイクルの新規エントリーはここに追加（最新が上） -->
+
+<a href="JPX_portal_20260317.html" class="entry">
+  <span class="entry-date">2026.03.17</span>
+  <span class="entry-weekday">火</span>
   <span class="entry-tags">
-    <span class="etag etag-nikkei">53,751 (-68)</span>
-    <span class="etag etag-vi">VI 42.50</span>
+    <span class="etag etag-nikkei down">53,700.39 (-50.76)</span>
+    <span class="etag etag-vi high">VI 33.00</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
+
+<a href="JPX_portal_20260316.html" class="entry">
+  <span class="entry-date">2026.03.16</span>
+  <span class="entry-weekday">月</span>
+  <span class="entry-tags">
+    <span class="etag etag-nikkei down">53,751.15 (-68.46)</span>
+    <span class="etag etag-vi high">VI 42.50</span>
+  </span>
+  <span class="entry-arrow">→</span>
+</a>
+
+</div><!-- /archive-list-0625 -->
+</div><!-- /sq-section 6月限 -->
+
+<!-- ═══ 3月限SQサイクル（2026/2/14〜3/13） ═══ -->
+
+<div class="sq-section">
+<div class="sq-header">
+<span class="sq-badge">3月限SQ</span>
+<span class="sq-meta">SQ日: 2026/03/13（金）</span>
+<span class="sq-range">59,332 → 53,820</span>
+</div>
+
+<div id="archive-list-mar">
+
 <a href="JPX_portal_20260313.html" class="entry">
   <span class="entry-date">2026.03.13</span>
   <span class="entry-weekday">金</span>
@@ -108,19 +135,6 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
   </span>
   <span class="entry-arrow">→</span>
 </a>
-
-<!-- ═══ 3月限SQサイクル（2026/2/14〜3/13） ═══ -->
-<div class="sq-section">
-<div class="sq-header">
-<span class="sq-badge">3月限SQ</span>
-<span class="sq-meta">SQ日: 2026/03/13（金）</span>
-<span class="sq-range">59,332 → 53,820</span>
-</div>
-
-<div id="archive-list-mar">
-
-<!-- 以下を archive.html の archive-list 内の先頭に追加 -->
-
 
 <a href="JPX_portal_20260311.html" class="entry">
   <span class="entry-date">2026.03.11</span>
@@ -138,6 +152,16 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
   <span class="entry-tags">
     <span class="etag etag-nikkei down">54,844.22 (-234.18)</span>
     <span class="etag etag-vi high">VI 42.94</span>
+  </span>
+  <span class="entry-arrow">→</span>
+</a>
+
+<a href="JPX_portal_20260309.html" class="entry">
+  <span class="entry-date">2026.03.09</span>
+  <span class="entry-weekday">月</span>
+  <span class="entry-tags">
+    <span class="etag etag-nikkei down">52,728.72 (-2,892.12)</span>
+    <span class="etag etag-vi high">VI 44.25</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
@@ -187,7 +211,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
   <span class="entry-weekday">月</span>
   <span class="entry-tags">
     <span class="etag etag-nikkei down">58,057.24 (-793.03)</span>
-    <span class="etag etag-vi">VI 34.99</span>
+    <span class="etag etag-vi high">VI 34.99</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
@@ -217,7 +241,7 @@ footer a{color:var(--accent);text-decoration:none;margin:0 8px}
   <span class="entry-weekday">金</span>
   <span class="entry-tags">
     <span class="etag etag-nikkei down">55,958.10 (-642)</span>
-    <span class="etag etag-vi">VI 30.80</span>
+    <span class="etag etag-vi high">VI 30.80</span>
   </span>
   <span class="entry-arrow">→</span>
 </a>
