@@ -1,351 +1,101 @@
 <!DOCTYPE html>
-
-<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>JPX Market Analysis — 2026.03.18</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPX Market Analysis - 2026/03/19</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--card-hover:#161638;--border:#1e1e3a;--accent:#818cf8;--accent2:#6366f1;--text:#e2e8f0;--sub:#94a3b8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--down:#ef4444;--us:#93c5fd;--eu:#c4b5fd;--hf:#fbbf24;--dom:#f87171;--sea:#60a5fa}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--text);font-family:"Noto Sans JP",sans-serif;font-size:13px;line-height:1.6}
-.mono{font-family:"DM Mono",monospace}.outfit{font-family:"Outfit",sans-serif}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 20px;display:flex;align-items:center;justify-content:space-between}
-.topbar .logo{font-family:Outfit;font-weight:700;font-size:15px;color:var(--accent)}.topbar nav a{color:var(--sub);text-decoration:none;font-size:12px;margin-left:16px;font-family:Outfit}.topbar nav a:hover{color:var(--accent)}
-.hero{text-align:center;padding:28px 16px 12px;background:radial-gradient(ellipse at 50% 0%,rgba(99,102,241,.12) 0%,transparent 60%)}
-.hero h1{font-family:Outfit;font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}.hero .sub{color:var(--sub);font-size:12px}
-.kpi-strip{display:flex;justify-content:center;gap:20px;padding:10px 16px 16px;flex-wrap:wrap}
-.kpi{text-align:center}.kpi .label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;font-family:Outfit}.kpi .val{font-family:"DM Mono";font-size:18px;font-weight:500;color:#fff}.kpi .chg{font-size:11px;font-family:"DM Mono"}
-.mobile-nav{display:none;justify-content:center;gap:12px;padding:8px;border-bottom:1px solid var(--border)}.mobile-nav a{color:var(--sub);text-decoration:none;font-size:11px;font-family:Outfit;padding:4px 10px;border:1px solid var(--border);border-radius:6px}
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--dim:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--gold:#fbbf24;--purple:#c4b5fd;--put:#f87171;--call:#60a5fa}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:Outfit;font-weight:700;font-size:16px;color:var(--accent)}
+.topbar nav a{font-family:Outfit;font-size:13px;color:var(--dim);text-decoration:none;margin-left:18px;transition:color .2s}
+.topbar nav a:hover{color:var(--accent)}
+.hero{text-align:center;padding:28px 20px 12px;background:radial-gradient(ellipse at 50% 0%,rgba(129,140,248,.08) 0%,transparent 60%)}
+.hero h1{font-family:Outfit;font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.hero .sub{font-family:'DM Mono';font-size:12px;color:var(--dim)}
+.kpi-strip{display:flex;justify-content:center;gap:24px;padding:10px 20px 18px;flex-wrap:wrap}
+.kpi{text-align:center}
+.kpi .label{font-size:11px;color:var(--dim);font-family:Outfit}
+.kpi .val{font-family:'DM Mono';font-size:18px;font-weight:500;color:#fff}
+.kpi .chg{font-family:'DM Mono';font-size:12px}
+.up{color:var(--green)}.dn{color:var(--red)}
+.mobile-nav{display:none;justify-content:center;gap:16px;padding:8px;border-bottom:1px solid var(--border)}
+.mobile-nav a{font-family:Outfit;font-size:12px;color:var(--dim);text-decoration:none;padding:4px 10px;border:1px solid var(--border);border-radius:6px}
 @media(max-width:768px){.topbar nav{display:none}.mobile-nav{display:flex}}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;padding:0 12px 20px;max-width:1400px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .25s}.card:hover{border-color:var(--accent);background:var(--card-hover)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;padding:10px 16px;max-width:1400px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .25s}
+.card:hover{border-color:var(--accent)}
 .card.open{grid-column:1/-1;border-color:var(--accent);background:var(--panel);cursor:default}
-.card-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}.card-head .icon{font-size:18px}.card-head .title{font-family:Outfit;font-weight:600;font-size:14px;color:#fff}
-.card-preview{font-size:12px;color:var(--sub)}.card-detail{display:none;margin-top:12px;font-size:12px}.card.open .card-detail{display:block}
-.mini-metric{display:inline-block;background:rgba(255,255,255,.04);border-radius:6px;padding:4px 8px;margin:2px;font-family:"DM Mono";font-size:11px}
-.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-family:"DM Mono";margin:1px}
-.tag-put{background:rgba(248,113,113,.15);color:var(--put)}.tag-call{background:rgba(96,165,250,.15);color:var(--call)}.tag-up{background:rgba(74,222,128,.15);color:var(--up)}.tag-down{background:rgba(239,68,68,.15);color:var(--down)}.tag-atm{background:rgba(251,191,36,.15);color:var(--atm)}
-.bar-row{display:flex;align-items:center;gap:6px;margin:3px 0;font-size:11px}.bar-label{width:80px;text-align:right;font-family:"DM Mono";color:var(--sub);flex-shrink:0}.bar-track{flex:1;height:16px;background:rgba(255,255,255,.03);border-radius:3px;position:relative;overflow:hidden}.bar-fill{height:100%;border-radius:3px;min-width:2px}
-.tbl{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}.tbl th{background:rgba(255,255,255,.04);padding:6px 8px;text-align:left;font-family:Outfit;font-weight:500;color:var(--sub);border-bottom:1px solid var(--border)}.tbl td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.03);font-family:"DM Mono"}.tbl tr:hover{background:rgba(255,255,255,.02)}
-.insight{background:rgba(129,140,248,.08);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-size:12px;color:var(--sub);line-height:1.7}
-.insight strong{color:var(--text)}
-.section-title{font-family:Outfit;font-size:13px;font-weight:600;color:var(--accent);margin:12px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--border)}
-.summary-box{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}.summary-item{flex:1;min-width:140px;background:rgba(255,255,255,.03);border-radius:8px;padding:10px;text-align:center}.summary-item .s-label{font-size:10px;color:var(--sub);font-family:Outfit}.summary-item .s-val{font-family:"DM Mono";font-size:16px;font-weight:500;margin-top:2px}
-.sr-chart{position:relative;height:120px;margin:12px 0;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid var(--border);overflow:hidden}
-.sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px;margin:14px 0;text-align:center}
-.footer{text-align:center;padding:20px;color:var(--sub);font-size:11px;border-top:1px solid var(--border);margin-top:20px}.footer a{color:var(--accent);text-decoration:none;margin:0 8px}
-</style></head><body>
-<div class="topbar"><span class="logo">JPX Analysis</span><nav><a href="index.html">Dashboard</a><a href="pnl_simulator.html">P&L Simulator</a><a href="archive.html">Archive</a></nav></div>
-<div class="hero"><h1 class="outfit">JPX Derivatives Dashboard</h1><div class="sub">2026.03.18 Wed — FOMC Day 1</div></div>
+.card-head{display:flex;align-items:center;gap:8px}
+.card-head .icon{font-size:18px}
+.card-head .title{font-family:Outfit;font-size:14px;font-weight:600;color:#fff}
+.card-head .arrow{margin-left:auto;color:var(--dim);font-size:12px;transition:transform .2s}
+.card.open .arrow{transform:rotate(90deg)}
+.preview{margin-top:10px}
+.mini-metrics{display:flex;gap:12px;flex-wrap:wrap}
+.mm{background:rgba(255,255,255,.03);border-radius:6px;padding:6px 10px;min-width:80px}
+.mm .ml{font-size:10px;color:var(--dim);font-family:Outfit}
+.mm .mv{font-family:'DM Mono';font-size:14px;font-weight:500}
+.detail{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.card.open .detail{display:block}
+.tag{display:inline-block;font-family:'DM Mono';font-size:11px;padding:2px 8px;border-radius:4px;margin:2px}
+.tag-p{background:rgba(248,113,113,.15);color:var(--put)}
+.tag-c{background:rgba(96,165,250,.15);color:var(--call)}
+.tag-up{background:rgba(74,222,128,.12);color:var(--green)}
+.tag-dn{background:rgba(239,68,68,.12);color:var(--red)}
+.tag-us{background:rgba(147,197,253,.15);color:#93c5fd}
+.tag-eu{background:rgba(196,181,253,.15);color:#c4b5fd}
+.tag-hf{background:rgba(251,191,36,.15);color:#fbbf24}
+.tag-jp{background:rgba(248,113,113,.15);color:#f87171}
+table.dt{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+table.dt th{font-family:Outfit;font-size:11px;color:var(--dim);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)}
+table.dt td{padding:5px 8px;border-bottom:1px solid rgba(30,30,58,.5);font-family:'DM Mono';font-size:12px}
+table.dt tr:hover{background:rgba(129,140,248,.04)}
+.bar-wrap{height:12px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:6px;transition:width .4s}
+.insight{background:rgba(129,140,248,.06);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;margin:14px 0;font-size:12px;line-height:1.7}
+.insight strong{color:var(--accent)}
+.sr-level{display:flex;align-items:center;gap:6px;margin:4px 0;font-family:'DM Mono';font-size:12px}
+.sr-dot{width:8px;height:8px;border-radius:50%}
+.analysis-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin:12px 0}
+.ac{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;line-height:1.7}
+.ac .ac-title{font-family:Outfit;font-weight:600;font-size:13px;margin-bottom:6px;color:#fff}
+.footer{text-align:center;padding:30px 20px;border-top:1px solid var(--border);margin-top:20px}
+.footer a{color:var(--dim);text-decoration:none;font-size:12px;margin:0 12px}
+.footer a:hover{color:var(--accent)}
+.sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px}
+</style>
+</head>
+<body>
+<div class="topbar">
+<div class="logo">JPX Analysis</div>
+<nav>
+<a href="index.html">Dashboard</a>
+<a href="pnl_simulator.html">P&L Simulator</a>
+<a href="archive.html">Archive</a>
+</nav>
+</div>
+
+<div class="hero">
+<h1>JPX Derivatives Dashboard</h1>
+<div class="sub">2026.03.19 Thu | ATM 52,990 | VI 39.05 | FOMC&#x2193; Mid-East Oil&#x2191;</div>
+</div>
+
 <div class="kpi-strip">
-<div class="kpi"><div class="label">Nikkei 225</div><div class="val mono">55,239</div><div class="chg mono" style="color:var(--up)">+1,539 (+2.87%)</div></div>
-<div class="kpi"><div class="label">VI</div><div class="val mono">33.00</div><div class="chg mono" style="color:var(--up)">-9.50 (-22.4%)</div></div>
-<div class="kpi"><div class="label">TOPIX</div><div class="val mono">3,686.5</div><div class="chg mono" style="color:var(--up)">+92.0</div></div>
-<div class="kpi"><div class="label">ATM (Jun)</div><div class="val mono">54,910</div><div class="chg mono" style="color:var(--up)">+1,490</div></div>
+<div class="kpi"><div class="label">Nikkei 225</div><div class="val">53,372</div><div class="chg dn">-1,866.87 (-3.4%)</div></div>
+<div class="kpi"><div class="label">VI</div><div class="val">39.05</div><div class="chg dn">+4.05</div></div>
+<div class="kpi"><div class="label">TOPIX</div><div class="val">3,573.5</div><div class="chg dn">-113.0</div></div>
+<div class="kpi"><div class="label">ATM (Jun)</div><div class="val">52,990</div><div class="chg dn">-1,920</div></div>
 </div>
-<div class="mobile-nav"><a href="index.html">Dashboard</a><a href="pnl_simulator.html">P&L</a><a href="archive.html">Archive</a></div>
-<div class="grid">
-<div class="card" data-card="futures">
-<div class="card-head"><span class="icon">📈</span><span class="title">先物建玉増減</span></div>
-<div class="card-preview"><span class="mini-metric">N225L <span style="color:var(--up)">+1,157</span></span><span class="mini-metric">mini <span style="color:var(--up)">+4,443</span></span><span class="mini-metric">TOPIX <span style="color:var(--up)">+3,283</span></span></div>
-<div class="card-detail" id="detail-futures"></div>
+
+<div class="mobile-nav">
+<a href="index.html">Dashboard</a>
+<a href="pnl_simulator.html">P&L</a>
+<a href="archive.html">Archive</a>
 </div>
-<div class="card" data-card="opval">
-<div class="card-head"><span class="icon">💰</span><span class="title">OP取引代金</span></div>
-<div class="card-preview"><span class="mini-metric">P: 27,195枚</span><span class="mini-metric">C: 13,405枚</span><span class="mini-metric">J-NET: 87.7%</span></div>
-<div class="card-detail" id="detail-opval"></div>
-</div>
-<div class="card" data-card="opoi">
-<div class="card-head"><span class="icon">📊</span><span class="title">OP建玉増減</span></div>
-<div class="card-preview"><span class="mini-metric">P合計 <span style="color:var(--up)">+7,320</span></span><span class="mini-metric">C合計 <span style="color:var(--up)">+3,333</span></span></div>
-<div class="card-detail" id="detail-opoi"></div>
-</div>
-<div class="card" data-card="sigchg">
-<div class="card-head"><span class="icon">⚡</span><span class="title">重要建玉変化</span></div>
-<div class="card-preview"><span class="tag tag-put">P2605-36K +1,406</span><span class="tag tag-put">P2604-54.5K +559</span><span class="tag tag-call">C2606-57K +450</span></div>
-<div class="card-detail" id="detail-sigchg"></div>
-</div>
-<div class="card" data-card="butterfly">
-<div class="card-head"><span class="icon">🦋</span><span class="title">建玉分布</span></div>
-<div class="card-preview"><span class="mini-metric">P壁: 50,000 (3,509)</span><span class="mini-metric">ATM: 54,910</span><span class="mini-metric">C壁: 58,000 (2,254)</span></div>
-<div class="card-detail" id="detail-butterfly"></div>
-</div>
-<div class="card" data-card="jnet">
-<div class="card-head"><span class="icon">🏛</span><span class="title">大口手口(J-NET)</span></div>
-<div class="card-preview"><span class="tag" style="background:rgba(196,181,253,.15);color:var(--eu)">UBS 550</span><span class="tag" style="background:rgba(251,191,36,.15);color:var(--hf)">ABN 550</span><span class="tag" style="background:rgba(251,191,36,.15);color:var(--hf)">BNP 240</span></div>
-<div class="card-detail" id="detail-jnet"></div>
-</div>
-<div class="card" data-card="assess">
-<div class="card-head"><span class="icon">🎯</span><span class="title">総合評価</span></div>
-<div class="card-preview"><span class="mini-metric">Range: 52,000-58,000</span><span class="mini-metric">S: 50,000</span><span class="mini-metric">R: 58,000</span></div>
-<div class="card-detail" id="detail-assess"></div>
-</div>
-<div class="card" data-card="participants">
-<div class="card-head"><span class="icon">🌏</span><span class="title">参加者分析</span></div>
-<div class="card-preview"><span class="mini-metric">海外N225 <span style="color:var(--down)">-21,486</span></span><span class="mini-metric">国内N225 <span style="color:var(--up)">+21,000</span></span></div>
-<div class="card-detail" id="detail-participants"></div>
-</div>
-<div class="card" data-card="strategy">
-<div class="card-head"><span class="icon">🎲</span><span class="title">戦略マップ</span></div>
-<div class="card-preview"><span class="mini-metric">Best P: 50,000 ★4</span><span class="mini-metric">Best C: 60,000 ★4</span><span class="mini-metric">VI: 33</span><span class="mini-metric">Hedge: 6月mini</span></div>
-<div class="card-detail" id="detail-strategy"></div>
-</div>
-</div>
-<div class="footer"><a href="pnl_simulator.html">P&L Simulator</a><a href="archive.html">Archive</a><br>Data: JPX / Nikkei Inc. | Generated by Claude</div>
-<script>
-(function(){
-var openCard=null;
-function toggle(el){
-  if(openCard&&openCard!==el){openCard.classList.remove("open");openCard=null;}
-  if(el.classList.contains("open")){el.classList.remove("open");openCard=null;return;}
-  el.classList.add("open");openCard=el;
-  if(!el.dataset.built){el.dataset.built="1";var id=el.dataset.card;var d=document.getElementById("detail-"+id);if(builders[id])d.innerHTML=builders[id]();}
-  el.scrollIntoView({behavior:"smooth",block:"start"});
-}
-document.querySelector(".grid").addEventListener("click",function(e){
-  var card=e.target.closest(".card");if(card)toggle(card);
-});
-var builders={};
-builders.futures=function(){
-var h="";
-h+="<div class=\"section-title\">先物建玉 前日比</div>";
-h+="<table class=\"tbl\"><tr><th>銘柄</th><th>限月</th><th>前日比</th><th>建玉残高</th></tr>";
-h+="<tr><td>N225ラージ</td><td>合計</td><td style=\"color:var(--up)\">+1,157</td><td>179,121</td></tr>";
-h+="<tr><td></td><td>6月限</td><td style=\"color:var(--up)\">+1,138</td><td>149,209</td></tr>";
-h+="<tr><td></td><td>9月限</td><td style=\"color:var(--up)\">+18</td><td>1,956</td></tr>";
-h+="<tr><td></td><td>12月限</td><td style=\"color:var(--down)\">-100</td><td>13,450</td></tr>";
-h+="<tr><td>N225 mini</td><td>合計</td><td style=\"color:var(--up)\">+4,443</td><td>217,190</td></tr>";
-h+="<tr><td></td><td>4月限</td><td style=\"color:var(--up)\">+398</td><td>61,145</td></tr>";
-h+="<tr><td></td><td>6月限</td><td style=\"color:var(--up)\">+3,577</td><td>142,070</td></tr>";
-h+="<tr><td></td><td>9月限</td><td style=\"color:var(--up)\">+395</td><td>2,292</td></tr>";
-h+="<tr><td>TOPIX</td><td>合計</td><td style=\"color:var(--up)\">+3,283</td><td>405,714</td></tr>";
-h+="<tr><td></td><td>6月限</td><td style=\"color:var(--up)\">+3,283</td><td>397,744</td></tr>";
-h+="</table>";
-h+="<div class=\"insight\"><strong>解釈:</strong> 全セクター全面買い増し。5日ぶり大反発でショートカバー＋新規ロング流入。miniの+4,443が特に目立ち、短期勢が積極的に買い参入。TOPIX+3,283は機関の安定的な買い集積。</div>";
-return h;};
-builders.opval=function(){
-var h="";
-h+="<div class=\"section-title\">日経225オプション（ラージ）</div>";
-h+="<table class=\"tbl\"><tr><th>区分</th><th>取引高</th><th>取引代金(百万)</th></tr>";
-h+="<tr><td style=\"color:var(--put)\">プット</td><td>27,195</td><td>20,057</td></tr>";
-h+="<tr><td style=\"color:var(--call)\">コール</td><td>13,405</td><td>12,831</td></tr>";
-h+="<tr style=\"font-weight:700\"><td>合計</td><td>40,600</td><td>32,888</td></tr>";
-h+="<tr><td>J-NET</td><td>27,883 (68.7%)</td><td>28,838 (87.7%)</td></tr>";
-h+="</table>";
-h+="<div class=\"section-title\">日経225ミニオプション</div>";
-h+="<table class=\"tbl\"><tr><th>区分</th><th>取引高</th><th>取引代金(百万)</th></tr>";
-h+="<tr><td style=\"color:var(--put)\">プット</td><td>41,698</td><td>766</td></tr>";
-h+="<tr><td style=\"color:var(--call)\">コール</td><td>34,309</td><td>876</td></tr>";
-h+="<tr style=\"font-weight:700\"><td>合計</td><td>76,007</td><td>1,643</td></tr>";
-h+="<tr><td>J-NET</td><td>10,470 (13.8%)</td><td>52 (3.2%)</td></tr>";
-h+="</table>";
-h+="<div class=\"insight\"><strong>注目:</strong> ラージJ-NET比率87.7%（代金ベース）。機関大口OTCフロー活発。P取引高がC比2倍超 — 反発局面でもヘッジ需要旺盛。ミニは立会中心（J-NET 13.8%）。</div>";
-return h;};
-builders.opoi=function(){
-var h="";
-h+="<div class=\"section-title\">ラージ 建玉増減</div>";
-h+="<div class=\"summary-box\">";
-h+="<div class=\"summary-item\"><div class=\"s-label\">P合計</div><div class=\"s-val\" style=\"color:var(--up)\">+7,320</div></div>";
-h+="<div class=\"summary-item\"><div class=\"s-label\">C合計</div><div class=\"s-val\" style=\"color:var(--up)\">+3,333</div></div>";
-h+="</div>";
-h+="<table class=\"tbl\"><tr><th>限月</th><th>P前日比</th><th>P残高</th><th>C前日比</th><th>C残高</th></tr>";
-h+="<tr><td>4月限</td><td style=\"color:var(--up)\">+1,204</td><td>87,501</td><td style=\"color:var(--up)\">+1,649</td><td>55,824</td></tr>";
-h+="<tr><td>5月限</td><td style=\"color:var(--up)\">+3,840</td><td>23,998</td><td style=\"color:var(--up)\">+425</td><td>15,013</td></tr>";
-h+="<tr><td>6月限</td><td style=\"color:var(--up)\">+1,250</td><td>103,885</td><td style=\"color:var(--up)\">+951</td><td>61,708</td></tr>";
-h+="</table>";
-h+="<div class=\"section-title\">ミニ 建玉増減</div>";
-h+="<div class=\"summary-box\">";
-h+="<div class=\"summary-item\"><div class=\"s-label\">P合計</div><div class=\"s-val\" style=\"color:var(--up)\">+9,640</div></div>";
-h+="<div class=\"summary-item\"><div class=\"s-label\">C合計</div><div class=\"s-val\" style=\"color:var(--up)\">+6,717</div></div>";
-h+="</div>";
-h+="<div class=\"insight\"><strong>注目:</strong> 5月限P+3,840が突出。中期下値ヘッジ。全限月P増>C増でプロテクション需要継続。4月限Cの+1,649は反発に乗じた上値追い。</div>";
-return h;};
-builders.sigchg=function(){
-var h="";
-h+="<div class=\"section-title\">重要建玉変化（±300枚以上）</div>";
-h+="<table class=\"tbl\"><tr><th>銘柄</th><th>前日比</th><th>OI</th><th>解釈</th></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2605-36000</td><td style=\"color:var(--up)\">+1,406</td><td>1,556</td><td style=\"color:var(--sub)\">Deep OTM Pテールヘッジ</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2605-45000</td><td style=\"color:var(--up)\">+693</td><td>1,499</td><td style=\"color:var(--sub)\">5月OTM P新設</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-54500</td><td style=\"color:var(--up)\">+559</td><td>1,047</td><td style=\"color:var(--sub)\">ATM近傍P短期ヘッジ</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-50000</td><td style=\"color:var(--down)\">-543</td><td>4,561</td><td style=\"color:var(--sub)\">P利確解消</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2605-51250</td><td style=\"color:var(--up)\">+508</td><td>563</td><td style=\"color:var(--sub)\">5月P新設</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2605-54250</td><td style=\"color:var(--up)\">+486</td><td>511</td><td style=\"color:var(--sub)\">5月ATM近傍P</td></tr>";
-h+="<tr><td style=\"color:var(--call)\">C2606-57000</td><td style=\"color:var(--up)\">+450</td><td>1,963</td><td style=\"color:var(--sub)\">上値テスト見通し</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2606-45000</td><td style=\"color:var(--down)\">-450</td><td>3,519</td><td style=\"color:var(--sub)\">6月P解消</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2606-30000</td><td style=\"color:var(--up)\">+400</td><td>3,301</td><td style=\"color:var(--sub)\">極端リスクヘッジ</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-52000</td><td style=\"color:var(--up)\">+383</td><td>3,289</td><td style=\"color:var(--sub)\">4月P積み増し</td></tr>";
-h+="<tr><td style=\"color:var(--call)\">C2604-59500</td><td style=\"color:var(--up)\">+314</td><td>1,516</td><td style=\"color:var(--sub)\">OTM C上値期待</td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-25000</td><td style=\"color:var(--down)\">-1,025</td><td>1,662</td><td style=\"color:var(--sub)\">超Deep OTM P解消</td></tr>";
-h+="</table>";
-h+="<div class=\"insight\"><strong>注目:</strong> P2605-36000の+1,406枚が最大 — 5月限のDeep OTMで大量のテールヘッジ新設。反発日にもかかわらずP建玉増加が支配的。C2606-57000の+450枚が唯一の上値追い材料。</div>";
-return h;};
-builders.butterfly=function(){
-var h="";
-h+="<div class=\"section-title\">6月限 建玉分布（ATM±5,000円）</div>";
-h+="<div style=\"text-align:center;font-size:11px;color:var(--sub);margin-bottom:8px\">ATM = 54,910</div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">50000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:100%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:44%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">3509</span> / <span style=\"color:var(--call)\">1575</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">51000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:75%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:32%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">2661</span> / <span style=\"color:var(--call)\">1157</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">52000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:43%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:20%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">1518</span> / <span style=\"color:var(--call)\">726</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">53000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:71%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:32%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">2503</span> / <span style=\"color:var(--call)\">1135</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">54000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:49%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:40%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">1746</span> / <span style=\"color:var(--call)\">1418</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\" style=\"color:var(--atm);font-weight:700\">55000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:70%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:62%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">2465</span> / <span style=\"color:var(--call)\">2207</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">56000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:17%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:54%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">625</span> / <span style=\"color:var(--call)\">1897</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">57000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:50%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:55%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">1765</span> / <span style=\"color:var(--call)\">1963</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">58000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:5%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:64%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">200</span> / <span style=\"color:var(--call)\">2254</span></div></div>";
-h+="<div class=\"bar-row\"><div class=\"bar-label\">59000</div>";
-h+="<div style=\"flex:1;display:flex;align-items:center;gap:2px\"><div style=\"flex:1;display:flex;justify-content:flex-end\"><div class=\"bar-fill\" style=\"width:12%;background:var(--put);height:14px;border-radius:3px\"></div></div>";
-h+="<div style=\"width:2px;height:20px;background:var(--atm);opacity:.3\"></div>";
-h+="<div style=\"flex:1\"><div class=\"bar-fill\" style=\"width:26%;background:var(--call);height:14px;border-radius:3px\"></div></div></div>";
-h+="<div style=\"width:100px;text-align:right;font-family:DM Mono;font-size:10px\"><span style=\"color:var(--put)\">435</span> / <span style=\"color:var(--call)\">939</span></div></div>";
-h+="<div class=\"insight\"><strong>壁構造:</strong> P壁 = 50,000（3,509枚）が最厚の下値防衛ライン。C壁 = 58,000（2,254枚）が上値の蓋。ATM帯（54,000-55,000）はP/C拮抗。57,000Cが+450増で上値テストの機運あり。</div>";
-return h;};
-builders.jnet=function(){
-var h="";
-h+="<div class=\"section-title\">大口手口（J-NET）NIKKEI 225 OOP</div>";
-h+="<table class=\"tbl\"><tr><th>銘柄</th><th>参加者</th><th>枚数</th><th>区分</th></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-54500</td><td>UBS証券</td><td class=\"mono\">550</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--eu)\">欧系</span></td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-54500</td><td>ABNクリアリン証券</td><td class=\"mono\">550</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--hf)\">HF代理</span></td></tr>";
-h+="<tr><td style=\"color:var(--call)\">C2604-56000</td><td>ABNクリアリン証券</td><td class=\"mono\">300</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--hf)\">HF代理</span></td></tr>";
-h+="<tr><td style=\"color:var(--call)\">C2604-55000</td><td>BNPパリバ証券</td><td class=\"mono\">240</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--hf)\">HF代理</span></td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-54625</td><td>シティグループ証券</td><td class=\"mono\">200</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">米系</span></td></tr>";
-h+="<tr><td style=\"color:var(--put)\">P2604-54625</td><td>ビーオブエー証券</td><td class=\"mono\">200</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">米系</span></td></tr>";
-h+="<tr><td style=\"color:var(--call)\">C2604-56000</td><td>シティグループ証券</td><td class=\"mono\">200</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">米系</span></td></tr>";
-h+="<tr><td style=\"color:var(--call)\">C2604-56000</td><td>UBS証券</td><td class=\"mono\">100</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--eu)\">欧系</span></td></tr>";
-h+="</table>";
-h+="<div class=\"section-title\">対当ペア</div>";
-h+="<div style=\"display:flex;gap:8px;flex-wrap:wrap\">";
-h+="<div style=\"flex:1;min-width:200px;background:rgba(255,255,255,.03);border-radius:8px;padding:10px\"><div style=\"font-size:10px;color:var(--sub)\">P2604-54500 x 550枚</div><div style=\"margin-top:4px\"><span class=\"tag\" style=\"background:rgba(196,181,253,.15);color:var(--eu)\">UBS</span> \u2194 <span class=\"tag\" style=\"background:rgba(251,191,36,.15);color:var(--hf)\">ABN</span></div></div>";
-h+="<div style=\"flex:1;min-width:200px;background:rgba(255,255,255,.03);border-radius:8px;padding:10px\"><div style=\"font-size:10px;color:var(--sub)\">P2604-54625 x 200枚</div><div style=\"margin-top:4px\"><span class=\"tag\" style=\"background:rgba(147,197,253,.15);color:var(--us)\">Citi</span> \u2194 <span class=\"tag\" style=\"background:rgba(147,197,253,.15);color:var(--us)\">BofA</span></div></div>";
-h+="</div>";
-h+="<div class=\"insight\"><strong>解釈:</strong> ABNがP54500売り+C56000売り — ショートストラングル型。UBSが対当相手。BNPはC55000で240枚。機関はATM近傍でプレミアム売りに積極的。HF代理勢が主導。</div>";
-return h;};
-builders.assess=function(){
-var h="";
-h+="<div class=\"section-title\">サポート / レジスタンス</div>";
-h+="<div style=\"position:relative;height:100px;margin:12px 0;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid var(--border);overflow:hidden;padding:8px\">";
-h+="<div style=\"position:absolute;left:12%;top:10px;bottom:10px;width:2px;background:var(--up);opacity:.5\"></div>";
-h+="<div style=\"position:absolute;left:12%;top:2px;transform:translateX(-50%);font-size:9px;color:var(--up);font-family:DM Mono\">50000</div>";
-h+="<div style=\"position:absolute;left:12%;bottom:2px;transform:translateX(-50%);font-size:9px;color:var(--sub);font-family:Outfit\">S2</div>";
-h+="<div style=\"position:absolute;left:35%;top:10px;bottom:10px;width:2px;background:var(--up);opacity:.5\"></div>";
-h+="<div style=\"position:absolute;left:35%;top:2px;transform:translateX(-50%);font-size:9px;color:var(--up);font-family:DM Mono\">53000</div>";
-h+="<div style=\"position:absolute;left:35%;bottom:2px;transform:translateX(-50%);font-size:9px;color:var(--sub);font-family:Outfit\">S1</div>";
-h+="<div style=\"position:absolute;left:55%;top:10px;bottom:10px;width:2px;background:var(--atm);opacity:.5\"></div>";
-h+="<div style=\"position:absolute;left:55%;top:2px;transform:translateX(-50%);font-size:9px;color:var(--atm);font-family:DM Mono\">54910</div>";
-h+="<div style=\"position:absolute;left:55%;bottom:2px;transform:translateX(-50%);font-size:9px;color:var(--sub);font-family:Outfit\">ATM</div>";
-h+="<div style=\"position:absolute;left:75%;top:10px;bottom:10px;width:2px;background:var(--down);opacity:.5\"></div>";
-h+="<div style=\"position:absolute;left:75%;top:2px;transform:translateX(-50%);font-size:9px;color:var(--down);font-family:DM Mono\">57000</div>";
-h+="<div style=\"position:absolute;left:75%;bottom:2px;transform:translateX(-50%);font-size:9px;color:var(--sub);font-family:Outfit\">R1</div>";
-h+="<div style=\"position:absolute;left:85%;top:10px;bottom:10px;width:2px;background:var(--down);opacity:.5\"></div>";
-h+="<div style=\"position:absolute;left:85%;top:2px;transform:translateX(-50%);font-size:9px;color:var(--down);font-family:DM Mono\">58000</div>";
-h+="<div style=\"position:absolute;left:85%;bottom:2px;transform:translateX(-50%);font-size:9px;color:var(--sub);font-family:Outfit\">R2</div>";
-h+="</div>";
-h+="<div class=\"section-title\">予想レンジ（〜4月SQ）</div>";
-h+="<div style=\"text-align:center;padding:12px;background:rgba(255,255,255,.03);border-radius:8px\"><span class=\"mono\" style=\"font-size:20px;color:var(--accent)\">52,000 \u2014 58,000</span></div>";
-h+="<div class=\"section-title\">分析</div>";
-h+="<div style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px\">";
-h+="<div style=\"background:rgba(255,255,255,.03);border-radius:8px;padding:10px\"><div style=\"font-size:12px;font-weight:600;color:var(--accent);font-family:Outfit;margin-bottom:4px\">📊 需給</div><div style=\"font-size:11px;color:var(--sub)\">先物全面買い増し（L+1,157/m+4,443/T+3,283）。ショートカバー+新規ロング。miniの急増が短期勢の参入を示唆。</div></div>";
-h+="<div style=\"background:rgba(255,255,255,.03);border-radius:8px;padding:10px\"><div style=\"font-size:12px;font-weight:600;color:var(--accent);font-family:Outfit;margin-bottom:4px\">🏛 手口</div><div style=\"font-size:11px;color:var(--sub)\">ABN=ショートストラングル型、UBS=対当。BNP=C55000。機関はATM近傍でプレミアム売り積極化。</div></div>";
-h+="<div style=\"background:rgba(255,255,255,.03);border-radius:8px;padding:10px\"><div style=\"font-size:12px;font-weight:600;color:var(--accent);font-family:Outfit;margin-bottom:4px\">📈 建玉</div><div style=\"font-size:11px;color:var(--sub)\">P+7,320 vs C+3,333。反発日でもP増優位 — ヘッジ需要根強い。5月P36000の+1,406がテールヘッジ象徴。</div></div>";
-h+="<div style=\"background:rgba(255,255,255,.03);border-radius:8px;padding:10px\"><div style=\"font-size:12px;font-weight:600;color:var(--accent);font-family:Outfit;margin-bottom:4px\">🎯 結論</div><div style=\"font-size:11px;color:var(--sub)\">ホルムズ不安後退で大反発。VI 33→依然高水準。FOMC据え置き織り込み済み。イラン再エスカレがテール。日米会談までの買い持続力が焦点。</div></div>";
-h+="</div>";
-return h;};
-builders.participants=function(){
-var h="";
-h+="<div style=\"font-size:10px;color:var(--atm);margin-bottom:8px\">\u26a0 3/13\u6642\u70b9\u30fb\u53c2\u8003\uff08\u6b21\u56de\u6708\u66dc\u66f4\u65b0\u307e\u3067\u6709\u52b9\uff09</div>";
-h+="<div class=\"section-title\">\u6d77\u5916 vs \u56fd\u5185 \u30b5\u30de\u30ea\u30fc</div>";
-h+="<div class=\"summary-box\">";
-h+="<div class=\"summary-item\"><div class=\"s-label\">\u6d77\u5916 N225</div><div class=\"s-val\" style=\"color:var(--down)\">-21,486</div></div>";
-h+="<div class=\"summary-item\"><div class=\"s-label\">\u56fd\u5185 N225</div><div class=\"s-val\" style=\"color:var(--up)\">+21,000</div></div>";
-h+="<div class=\"summary-item\"><div class=\"s-label\">\u6d77\u5916 TOPIX</div><div class=\"s-val\" style=\"color:var(--up)\">+61,934</div></div>";
-h+="<div class=\"summary-item\"><div class=\"s-label\">\u6d77\u5916 P Net</div><div class=\"s-val\" style=\"color:var(--up)\">+947</div></div>";
-h+="</div>";
-h+="<div class=\"section-title\">\u7d71\u5408\u30d7\u30ed\u30d5\u30a1\u30a4\u30eb</div>";
-h+="<table class=\"tbl\"><tr><th>\u53c2\u52a0\u8005</th><th>\u533a\u5206</th><th>N225</th><th>TOPIX</th><th>\u63a8\u5b9a\u6226\u7565</th></tr>";
-h+="<tr><td>HSBC</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--eu)\">\u6b27\u7cfb</span></td><td class=\"mono\">-31,783</td><td class=\"mono\">\u2014</td><td style=\"color:var(--sub)\">\u30d9\u30a2</td></tr>";
-h+="<tr><td>\u91ce\u6751</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--dom)\">\u56fd\u5185</span></td><td class=\"mono\">+29,416</td><td class=\"mono\">\u2014</td><td style=\"color:var(--sub)\">N225\u30d6\u30eb</td></tr>";
-h+="<tr><td>GS</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">\u7c73\u7cfb</span></td><td class=\"mono\">-10,157</td><td class=\"mono\">-51,849</td><td style=\"color:var(--sub)\">TOPIX\u30d9\u30a2</td></tr>";
-h+="<tr><td>JPM</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">\u7c73\u7cfb</span></td><td class=\"mono\">\u2014</td><td class=\"mono\">+34,985</td><td style=\"color:var(--sub)\">TOPIX\u30ed\u30f3\u30b0</td></tr>";
-h+="<tr><td>\u30e2\u30eb\u30ac\u30f3MUFG</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">\u7c73\u7cfb</span></td><td class=\"mono\">-16,164</td><td class=\"mono\">+28,490</td><td style=\"color:var(--sub)\">N225\u2193/TOPIX\u2191</td></tr>";
-h+="<tr><td>\u30d0\u30fc\u30af\u30ec\u30a4\u30ba</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--eu)\">\u6b27\u7cfb</span></td><td class=\"mono\">+5,745</td><td class=\"mono\">+32,777</td><td style=\"color:var(--sub)\">\u30d6\u30eb</td></tr>";
-h+="<tr><td>\u30b7\u30c6\u30a3</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--us)\">\u7c73\u7cfb</span></td><td class=\"mono\">+5,305</td><td class=\"mono\">+29,538</td><td style=\"color:var(--sub)\">\u30d6\u30eb</td></tr>";
-h+="<tr><td>UBS</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--eu)\">\u6b27\u7cfb</span></td><td class=\"mono\">+9,118</td><td class=\"mono\">\u2014</td><td style=\"color:var(--sub)\">N225\u30d6\u30eb</td></tr>";
-h+="<tr><td>ABN</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--hf)\">HF\u4ee3\u7406</span></td><td class=\"mono\">\u2014</td><td class=\"mono\">\u2014</td><td style=\"color:var(--sub)\">OP\u58f2\u308a</td></tr>";
-h+="<tr><td>BNP</td><td><span class=\"tag\" style=\"background:rgba(255,255,255,.06);color:var(--hf)\">HF\u4ee3\u7406</span></td><td class=\"mono\">\u2014</td><td class=\"mono\">-36,107</td><td style=\"color:var(--sub)\">TOPIX\u30d9\u30a2</td></tr>";
-h+="</table>";
-h+="<div class=\"insight\"><strong>\u6ce8\u76ee:</strong> HSBC=-31,783\u304c\u6700\u30d9\u30a2\u3002\u672c\u65e5\u306e\u5927\u5e45\u53cd\u767a\u3067\u30b7\u30e7\u30fc\u30c8\u30ab\u30d0\u30fc\u304c\u9032\u3093\u3060\u53ef\u80fd\u6027\u3002GS\u306fTOPIX-51,849\u3068\u5927\u5e45\u30b7\u30e7\u30fc\u30c8\u3002JPM\u306fTOPIX+34,985+P\u8cb7\u3044\u3067\u30d7\u30ed\u30c6\u30af\u30c6\u30a3\u30d6\u578b\u3002ABN\u306fOP\u58f2\u308a\u4e3b\u4f53\u3002</div>";
-return h;};
-builders.strategy=function(){
-var h="";
-h+="<div class=\"section-title\">\u30e9\u30fc\u30b8 vs \u30df\u30cb \u30d7\u30ed\u30c0\u30af\u30c8\u6bd4\u8f03</div>";
-h+="<table class=\"tbl\"><tr><th></th><th>\u30e9\u30fc\u30b8</th><th>\u30df\u30cb</th></tr>";
-h+="<tr><td>\u53d6\u5f15\u5358\u4f4d</td><td>\u00d71,000\u5186</td><td>\u00d7100\u5186</td></tr>";
-h+="<tr><td>\u884c\u4f7f\u4fa1\u683c</td><td>500/250\u5186\u523b\u307f</td><td>125\u5186\u523b\u307f</td></tr>";
-h+="<tr><td>\u9650\u6708</td><td>\u6708\u6b21</td><td>\u9031\u6b21</td></tr>";
-h+="<tr><td>\u672c\u65e5\u53d6\u5f15\u9ad8</td><td>40,600\u679a</td><td>76,007\u679a</td></tr>";
-h+="</table>";
-h+="<div class=\"section-title\">OTM\u78ba\u7387\u30c6\u30fc\u30d6\u30eb\uff086\u6708SQ\u30fb\u6b8b62\u65e5\uff09</div>";
-h+="<table class=\"tbl\"><tr><th>\u884c\u4f7f\u4fa1\u683c</th><th>\u30bf\u30a4\u30d7</th><th>VI=23</th><th>VI=33</th><th>VI=43</th></tr>";
-h+="<tr><td class=\"mono\">50,000</td><td style=\"color:var(--put)\">P\u58f2</td><td class=\"mono\">79.3%</td><td class=\"mono\">71.6%</td><td class=\"mono\">66.9%</td></tr>";
-h+="<tr><td class=\"mono\">52,000</td><td style=\"color:var(--put)\">P\u58f2</td><td class=\"mono\">68.3%</td><td class=\"mono\">63.0%</td><td class=\"mono\">60.0%</td></tr>";
-h+="<tr><td class=\"mono\">53,000</td><td style=\"color:var(--put)\">P\u58f2</td><td class=\"mono\">62.1%</td><td class=\"mono\">58.5%</td><td class=\"mono\">56.6%</td></tr>";
-h+="<tr><td class=\"mono\">57,000</td><td style=\"color:var(--call)\">C\u58f2</td><td class=\"mono\">62.8%</td><td class=\"mono\">59.0%</td><td class=\"mono\">56.9%</td></tr>";
-h+="<tr><td class=\"mono\">58,000</td><td style=\"color:var(--call)\">C\u58f2</td><td class=\"mono\">68.4%</td><td class=\"mono\">63.0%</td><td class=\"mono\">60.1%</td></tr>";
-h+="<tr><td class=\"mono\">60,000</td><td style=\"color:var(--call)\">C\u58f2</td><td class=\"mono\">78.1%</td><td class=\"mono\">70.5%</td><td class=\"mono\">66.1%</td></tr>";
-h+="</table>";
-h+="<div class=\"section-title\">\u30be\u30fc\u30f3\u5225\u58f2\u308a\u30a8\u30c3\u30b8</div>";
-h+="<table class=\"tbl\"><tr><th>\u30be\u30fc\u30f3</th><th>\u7bc4\u56f2</th><th>\u30a8\u30c3\u30b8</th><th>\u63a8\u5968</th></tr>";
-h+="<tr><td>Deep OTM P</td><td>\u301c50,000</td><td>\u2605\u2605\u2605\u2605</td><td style=\"color:var(--put)\">P50000\u58f2</td></tr>";
-h+="<tr><td>OTM P</td><td>50K\u301c54K</td><td>\u2605\u2605\u2605</td><td style=\"color:var(--put)\">P52-53K\u58f2</td></tr>";
-h+="<tr><td>ATM\u5e2f</td><td>53K\u301c57K</td><td>\u2605\u2605</td><td style=\"color:var(--sub)\">\u30b9\u30d7\u30ec\u30c3\u30c9\u306e\u307f</td></tr>";
-h+="<tr><td>OTM C</td><td>57K\u301c59K</td><td>\u2605\u2605\u2605</td><td style=\"color:var(--call)\">C57-58K\u58f2</td></tr>";
-h+="<tr><td>Deep OTM C</td><td>59K\u301c</td><td>\u2605\u2605\u2605\u2605</td><td style=\"color:var(--call)\">C60000\u58f2</td></tr>";
-h+="</table>";
-h+="<div class=\"section-title\">\u30d8\u30c3\u30b8\u30c8\u30ea\u30ac\u30fc</div>";
-h+="<table class=\"tbl\"><tr><th>\u30c8\u30ea\u30ac\u30fc</th><th>\u65b9\u5411</th><th>\u679a\u6570(OP10\u679a\u5bfe\u6bd4)</th><th>\u9650\u6708</th></tr>";
-h+="<tr><td class=\"mono\">53,500</td><td style=\"color:var(--up)\">mini\u8cb7</td><td>3\u679a</td><td>6\u6708\u9650</td></tr>";
-h+="<tr><td class=\"mono\">52,000</td><td style=\"color:var(--up)\">mini\u8cb7\u8ffd\u52a0</td><td>2\u679a</td><td>6\u6708\u9650</td></tr>";
-h+="<tr><td class=\"mono\">56,500</td><td style=\"color:var(--down)\">mini\u58f2</td><td>3\u679a</td><td>6\u6708\u9650</td></tr>";
-h+="<tr><td class=\"mono\">58,000</td><td style=\"color:var(--down)\">mini\u58f2\u8ffd\u52a0</td><td>2\u679a</td><td>6\u6708\u9650</td></tr>";
-h+="</table>";
-h+="<div style=\"margin:14px 0;text-align:center\"><a href=\"pnl_simulator.html\" class=\"sim-btn\">\ud83d\udcca P&L \u30b7\u30df\u30e5\u30ec\u30fc\u30bf\u30fc\u3092\u958b\u304f \u2192</a></div>";
-h+="<div class=\"insight\"><strong>\u74b0\u5883\u8a8d\u8b58:</strong> VI=33\u306e\u9ad8\u30dc\u30e9\u30c6\u30a3\u30ea\u30c6\u30a3\u74b0\u5883\u3067\u30d7\u30ec\u30df\u30a2\u30e0\u58f2\u308a\u306e\u59d9\u529b\u5927\u3002\u305f\u3060\u3057\u4e2d\u6771\u30ea\u30b9\u30af\u518d\u71c3\u5019\u88dc\u3042\u308a\u3002Deep OTM\u306e\u58f2\u308a\u30a8\u30c3\u30b8\u304c\u6700\u3082\u9ad8\u3044\u304c\u3001\u30c6\u30fc\u30eb\u30ea\u30b9\u30af\u306b\u306f\u5148\u7269\u30d8\u30c3\u30b8\u5fc5\u9808\u3002\u3053\u308c\u306f\u74b0\u5883\u8a8d\u8b58\u30c4\u30fc\u30eb\u3067\u3042\u308a\u58f2\u8cb7\u63a8\u5968\u3067\u306f\u3042\u308a\u307e\u305b\u3093\u3002</div>";
-return h;};
-})();
-</script>
-</body></html>
+
+<div class="grid" id="grid">
+<div class="card" data-card="0"><div class="card-head"><span class="icon">📈</span><span class="title">先物建玉増減</span><span class="arrow">›</span></div><div class="preview"><div class="mini-metrics"><div class="mm"><div class="ml">N225 Large</div><div class="mv up">+21</div></div><div class="mm"><div class="ml">N225 mini</div><div class="mv up">+17,213</div></div><div class="mm"><div class="ml">TOPIX</div><div class="mv up">+1,480</div></div></div></div><div class="detail" id="d0"></div></div><div class="card" data-card="1"><div class="card-head"><span class="icon">💰</span><span class="title">オプション取引代金</span><span class="arrow">›</span></div><div class="preview"><div class="mini-metrics"><div class="mm"><div class="ml">Put</div><div class="mv">19,486</div></div><div class="mm"><div class="ml">Call</div><div class="mv">10,057</div></div><div class="mm"><div class="ml">J-NET率</div><div class="mv">54.3%</div></div></div></div><div class="detail" id="d1"></div></div><div class="card" data-card="2"><div class="card-head"><span class="icon">📊</span><span class="title">オプション建玉増減</span><span class="arrow">›</span></div><div class="preview"><div class="mini-metrics"><div class="mm"><div class="ml">Put合計</div><div class="mv tag-p">+4,557</div></div><div class="mm"><div class="ml">Call合計</div><div class="mv tag-c">+3,042</div></div><div class="mm"><div class="ml">Mini P</div><div class="mv tag-p">+5,935</div></div></div></div><div class="detail" id="d2"></div></div><div class="card" data-card="3"><div class="card-head"><span class="icon">⚡</span><span class="title">重要建玉変化</span><span class="arrow">›</span></div><div class="preview"><span class="tag tag-p">P32000 +1,003</span><span class="tag tag-p">P30000 -925</span><span class="tag tag-c">C54000 +371</span><span class="tag tag-c">C57500 +307</span></div><div class="detail" id="d3"></div></div><div class="card" data-card="4"><div class="card-head"><span class="icon">🦋</span><span class="title">建玉分布</span><span class="arrow">›</span></div><div class="preview"><div style="font-family:DM Mono;font-size:12px"><span class="tag tag-p">P壁 50,000(3,629)</span><span class="tag" style="background:rgba(251,191,36,.12);color:var(--gold)">ATM 53,000</span><span class="tag tag-c">C壁 58,000(2,354)</span></div></div><div class="detail" id="d4"></div></div><div class="card" data-card="5"><div class="card-head"><span class="icon">🏛</span><span class="title">大口手口 (J-NET)</span><span class="arrow">›</span></div><div class="preview"><span class="tag tag-hf">ABN 350</span><span class="tag tag-us">Morgan MUFG 350</span><span class="tag tag-c">C54000 対当</span></div><div class="detail" id="d5"></div></div><div class="card" data-card="6"><div class="card-head"><span class="icon">🎯</span><span class="title">総合評価</span><span class="arrow">›</span></div><div class="preview"><div style="font-family:DM Mono;font-size:12px">Range: <span style="color:var(--put)">50,500</span> - <span style="color:var(--call)">56,000</span> | S: 52,000 / R: 55,000</div></div><div class="detail" id="d6"></div></div><div class="card" data-card="7"><div class="card-head"><span class="icon">🌏</span><span class="title">参加者別建玉 (3/13参考)</span><span class="arrow">›</span></div><div class="preview"><div class="mini-metrics"><div class="mm"><div class="ml">海外 N225</div><div class="mv dn">-21,486</div></div><div class="mm"><div class="ml">国内 N225</div><div class="mv up">+21,000</div></div></div></div><div class="detail" id="d7"></div></div><div class="card" data-card="8"><div class="card-head"><span class="icon">🎲</span><span class="title">戦略マップ (P売り+ヘッジ)</span><span class="arrow">›</span></div><div class="preview"><div class="mini-metrics"><div class="mm"><div class="ml">Best P売</div><div class="mv">48,000</div></div><div class="mm"><div class="ml">Best C売</div><div class="mv">58,000</div></div><div class="mm"><div class="ml">VI環境</div><div class="mv dn">39.05</div></div><div class="mm"><div class="ml">Hedge</div><div class="mv">Jun mini</div></div></div></div><div class="detail" id="d8"></div></div></div><div class="footer"><a href="pnl_simulator.html">P&L Simulator</a><a href="archive.html">Archive</a><div style="margin-top:8px;font-size:11px;color:var(--dim)">JPX Market Analysis Dashboard | Data: JPX/OSE | Generated by Claude</div></div><script>var G=document.getElementById("grid");G.addEventListener("click",function(e){var c=e.target.closest(".card");if(!c)return;var idx=c.getAttribute("data-card");if(c.classList.contains("open")){c.classList.remove("open");return;}var all=G.querySelectorAll(".card");for(var i=0;i<all.length;i++){all[i].classList.remove("open");}c.classList.add("open");if(!c.dataset.built){c.dataset.built="1";buildCard(idx);}});function buildCard(idx){var el=document.getElementById("d"+idx);if(!el)return;var h="";if(idx==="0"){h=bFutures();}else if(idx==="1"){h=bOpvol();}else if(idx==="2"){h=bOIchg();}else if(idx==="3"){h=bImportant();}else if(idx==="4"){h=bDist();}else if(idx==="5"){h=bJnet();}else if(idx==="6"){h=bAssess();}else if(idx==="7"){h=bPart();}else if(idx==="8"){h=bStrat();}el.innerHTML=h;}function bFutures(){var h="";h+="<table class=\"dt\"><thead><tr><th>銘柄</th><th>限月</th><th>建玉</th><th>前日比</th></tr></thead><tbody>";h+="<tr><td>N225 Large</td><td>合計</td><td>179,142</td><td class=\"up\">+21</td></tr>";h+="<tr><td></td><td>6月</td><td>149,231</td><td class=\"up\">+22</td></tr>";h+="<tr><td>N225 mini</td><td>合計</td><td>234,403</td><td class=\"up\">+17,213</td></tr>";h+="<tr><td></td><td>4月</td><td>60,496</td><td class=\"dn\">-649</td></tr>";h+="<tr><td></td><td>6月</td><td>156,597</td><td class=\"up\">+14,527</td></tr>";h+="<tr><td></td><td>7月</td><td>3,070</td><td class=\"up\">+3,017</td></tr>";h+="<tr><td>TOPIX</td><td>合計</td><td>407,194</td><td class=\"up\">+1,480</td></tr>";h+="<tr><td></td><td>6月</td><td>399,224</td><td class=\"up\">+1,480</td></tr>";h+="</tbody></table>";h+="<div class=\"insight\"><strong>mini+17,213枚</strong>は6月限ロールイン(+14,527)主体。4月限-649でロールアウト進行中。7月限+3,017は新規流入。ラージは+21と横ばい。</div>";return h;}function bOpvol(){var h="";h+="<table class=\"dt\"><thead><tr><th></th><th>Put</th><th>Call</th><th>合計</th></tr></thead><tbody>";h+="<tr><td>Large 取引高</td><td>19,486</td><td>10,057</td><td>29,543</td></tr>";h+="<tr><td>Large 代金(百万)</td><td>14,322</td><td>5,258</td><td>19,580</td></tr>";h+="<tr><td>J-NET率</td><td>53.5%</td><td>56.0%</td><td>54.3%</td></tr>";h+="<tr style=\"border-top:2px solid var(--border)\"><td>Mini 取引高</td><td>17,299</td><td>14,257</td><td>31,556</td></tr>";h+="<tr><td>Mini 代金(百万)</td><td>1,151</td><td>611</td><td>1,762</td></tr>";h+="</tbody></table>";h+="<div class=\"insight\">ラージP取引高はCの<strong>約2倍</strong>。急落でプット需要急増。J-NET率54%は機関主導。ミニ取引高31,556枚はラージを上回る。</div>";return h;}function bOIchg(){var h="";h+="<table class=\"dt\"><thead><tr><th></th><th>Put前日比</th><th>Call前日比</th></tr></thead><tbody>";h+="<tr><td>Large合計</td><td class=\"up\">+4,557</td><td class=\"up\">+3,042</td></tr>";h+="<tr><td>4月限</td><td class=\"up\">+1,151</td><td class=\"up\">+2,097</td></tr>";h+="<tr><td>5月限</td><td class=\"up\">+1,041</td><td class=\"up\">+38</td></tr>";h+="<tr><td>6月限</td><td class=\"up\">+999</td><td class=\"up\">+223</td></tr>";h+="<tr style=\"border-top:2px solid var(--border)\"><td>Mini合計</td><td class=\"up\">+5,935</td><td class=\"up\">+4,658</td></tr>";h+="</tbody></table>";h+="<div class=\"insight\">P/C両建て大幅増加。ラージPはC比<strong>+1,500枚のP偏重</strong>。ミニは週次限月(3/24-3/26)に短期ヘッジ集中。</div>";return h;}function bImportant(){var h="";h+="<table class=\"dt\"><thead><tr><th>限月</th><th>Type</th><th>Strike</th><th>OI</th><th>Chg</th></tr></thead><tbody>";h+="<tr><td>2604</td><td class=\"dn\">P</td><td>32,000</td><td>2,931</td><td class=\"up\">+1,003</td></tr>";h+="<tr><td>2604</td><td class=\"dn\">P</td><td>30,000</td><td>2,893</td><td class=\"dn\">-925</td></tr>";h+="<tr><td>2604</td><td style=\"color:var(--call)\">C</td><td>54,000</td><td>1,187</td><td class=\"up\">+371</td></tr>";h+="<tr><td>2604</td><td style=\"color:var(--call)\">C</td><td>57,500</td><td>1,544</td><td class=\"up\">+307</td></tr>";h+="<tr><td>2605</td><td class=\"dn\">P</td><td>43,000</td><td>751</td><td class=\"up\">+347</td></tr>";h+="<tr><td>2606</td><td class=\"dn\">P</td><td>49,250</td><td>300</td><td class=\"up\">+300</td></tr>";h+="</tbody></table>";h+="<div class=\"insight\">P32000+1,003は<strong>Deep OTMテールヘッジ</strong>積み増し。C54000+371とC57500+307はATM上方の<strong>コール売り</strong>構築。P30000-925は利確/ロールアウト。</div>";return h;}function bDist(){var h="";var maxOI=3629;var data=[[48000,3031,200],[49000,1315,439],[50000,3629,1575],[51000,2661,1157],[52000,1563,726],[53000,2513,1135],[54000,1746,1418],[55000,2465,2207],[56000,625,1897],[57000,1765,1963],[58000,200,2354]];h+="<div style=\"font-family:DM Mono;font-size:11px;text-align:center;margin-bottom:8px;color:var(--dim)\">6\u6708\u9650 ATM=52,990</div>";for(var i=0;i<data.length;i++){var s=data[i][0],p=data[i][1],c=data[i][2];var pw=Math.round(p/maxOI*100),cw=Math.round(c/maxOI*100);var isATM=(s===53000);var bg=isATM?"rgba(251,191,36,.08)":"transparent";h+="<div style=\"display:grid;grid-template-columns:60px 1fr 30px 1fr 60px;gap:4px;align-items:center;padding:3px 0;font-family:DM Mono;font-size:11px;background:"+bg+"\">";h+="<div style=\"text-align:right;color:var(--put)\">"+p.toLocaleString()+"</div>";h+="<div style=\"display:flex;justify-content:flex-end\"><div style=\"height:10px;width:"+pw+"%;background:var(--put);border-radius:3px;min-width:2px\"></div></div>";h+="<div style=\"text-align:center;font-weight:600;color:"+(isATM?"var(--gold)":"#fff")+"\">"+(s/1000)+"K</div>";h+="<div><div style=\"height:10px;width:"+cw+"%;background:var(--call);border-radius:3px;min-width:2px\"></div></div>";h+="<div style=\"color:var(--call)\">"+c.toLocaleString()+"</div>";h+="</div>";}h+="<div class=\"insight\"><strong>P\u58c1</strong>: 50,000(3,629), 53,000(2,513). <strong>C\u58c1</strong>: 58,000(2,354), 55,000(2,207). P/C\u6bd4: ATM\u4ed8\u8fd1\u306f\u62ee\u6297\u3001\u4e0a\u65b9\u306fC\u512a\u52e2\u3002</div>";return h;}function bJnet(){var h="";h+="<div style=\"background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:12px;margin-bottom:10px\">";h+="<div style=\"font-family:Outfit;font-weight:600;font-size:13px;color:var(--gold);margin-bottom:6px\">C2604-54000 \u5bfe\u5f53\u30da\u30a2 350\u679a</div>";h+="<div style=\"display:flex;gap:12px;font-size:12px\">";h+="<span class=\"tag tag-hf\">ABN 350</span>";h+="<span class=\"tag tag-us\">\u30e2\u30eb\u30ac\u30f3MUFG 350</span>";h+="</div></div>";h+="<div class=\"insight\">ABN(HF\u4ee3\u7406)\u00d7\u30e2\u30eb\u30ac\u30f3MUFG(\u7c73\u7cfb)\u306eC54000\u5bfe\u5f53350\u679a\u3002\u6025\u843d\u5c40\u9762\u3067ATM\u8fd1\u508d\u30b3\u30fc\u30eb\u53d6\u5f15\u306f\u65b9\u5411\u611f\u30b7\u30d5\u30c8\u3092\u793a\u5506\u3002P\u5074\u306eJ-NET\u5927\u53e3(\u2265100)\u306f\u306a\u3057\u3002</div>";return h;}function bAssess(){var h="";h+="<div style=\"margin:10px 0\">";h+="<div class=\"sr-level\"><div class=\"sr-dot\" style=\"background:var(--green)\"></div>S1: 52,000 (P\u58c15,137\u679a)</div>";h+="<div class=\"sr-level\"><div class=\"sr-dot\" style=\"background:var(--green)\"></div>S2: 50,000 (P\u58c13,629\u679a / OTM 62%)</div>";h+="<div class=\"sr-level\"><div class=\"sr-dot\" style=\"background:var(--gold)\"></div>ATM: 52,990</div>";h+="<div class=\"sr-level\"><div class=\"sr-dot\" style=\"background:var(--red)\"></div>R1: 55,000 (C\u58c12,207\u679a)</div>";h+="<div class=\"sr-level\"><div class=\"sr-dot\" style=\"background:var(--red)\"></div>R2: 58,000 (C\u58c12,354\u679a)</div>";h+="</div>";h+="<div style=\"background:rgba(129,140,248,.06);border-radius:8px;padding:12px;margin:10px 0;text-align:center\">";h+="<div style=\"font-family:Outfit;font-size:12px;color:var(--dim)\">1\u9031\u9593\u4e88\u60f3\u30ec\u30f3\u30b8</div>";h+="<div style=\"font-family:DM Mono;font-size:20px;font-weight:600\"><span class=\"dn\">50,500</span> \u2014 <span class=\"up\">56,000</span></div>";h+="</div>";h+="<div class=\"analysis-cards\">";h+="<div class=\"ac\"><div class=\"ac-title\">\ud83d\udcca \u9700\u7d66</div>mini+17,213\u306f6\u6708\u9650\u30ed\u30fc\u30eb\u30a4\u30f3\u4e3b\u4f53\u3002Large\u306f\u6a2a\u3070\u3044(+21)\u3067\u6a5f\u95a2\u9759\u89b3\u3002</div>";h+="<div class=\"ac\"><div class=\"ac-title\">\ud83c\udfe6 \u624b\u53e3</div>ABN\u00d7Morgan MUFG\u306eC54000\u5bfe\u5f53350\u679a\u3002HF\u306e\u30b3\u30fc\u30eb\u58f2\u308a\u30dd\u30b8\u30b7\u30e7\u30f3\u8abf\u6574\u3002</div>";h+="<div class=\"ac\"><div class=\"ac-title\">\ud83d\udcc8 \u5efa\u7389</div>P+4,557/C+3,042\u3067P\u504f\u91cd\u3002P32000+1,003\u306f\u30c6\u30fc\u30eb\u30d8\u30c3\u30b8\u7a4d\u307f\u5897\u3057\u3002C54000+371\u306f\u30b3\u30fc\u30eb\u58f2\u308a\u3002</div>";h+="<div class=\"ac\"><div class=\"ac-title\">\ud83c\udfaf \u7d50\u8ad6</div>FOMC+\u539f\u6cb9\u00d7\u65e5\u7c73\u9996\u8133\u4f1a\u8ac7(3/20)+3\u9023\u4f11\u3002\u30ea\u30b9\u30af\u30aa\u30d5\u52a0\u901f\u306e\u53ef\u80fd\u6027\u3002\u4e0b\u5024S=52,000\u3001\u4e0a\u5024R=55,000\u3002</div>";h+="</div>";return h;}function bPart(){var h="";h+="<div style=\"font-size:11px;color:var(--dim);margin-bottom:8px\">3/13\u6642\u70b9\u30fb\u53c2\u8003 | \u6b21\u56de\u6708\u66dc\u66f4\u65b0\u307e\u3067\u6709\u52b9</div>";h+="<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px\">";h+="<div style=\"background:rgba(96,165,250,.06);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px;text-align:center\">";h+="<div style=\"font-family:Outfit;font-size:12px;color:var(--blue)\">\u6d77\u5916</div>";h+="<div style=\"font-family:DM Mono;font-size:13px\">N225 <span class=\"dn\">-21,486</span></div>";h+="<div style=\"font-family:DM Mono;font-size:13px\">TOPIX <span class=\"up\">+61,934</span></div>";h+="</div>";h+="<div style=\"background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:10px;text-align:center\">";h+="<div style=\"font-family:Outfit;font-size:12px;color:var(--red)\">\u56fd\u5185</div>";h+="<div style=\"font-family:DM Mono;font-size:13px\">N225 <span class=\"up\">+21,000</span></div>";h+="<div style=\"font-family:DM Mono;font-size:13px\">TOPIX <span class=\"dn\">-61,906</span></div>";h+="</div></div>";h+="<table class=\"dt\"><thead><tr><th>\u53c2\u52a0\u8005</th><th>\u5206\u985e</th><th>N225</th><th>TOPIX</th><th>\u63a8\u5b9a\u6226\u7565</th></tr></thead><tbody>";h+="<tr><td>HSBC</td><td><span class=\"tag tag-eu\">\u6b27</span></td><td class=\"dn\">-31,783</td><td>-</td><td>\u30d9\u30a2</td></tr>";h+="<tr><td>\u91ce\u6751</td><td><span class=\"tag tag-jp\">\u56fd\u5185</span></td><td class=\"up\">+29,416</td><td>-</td><td>\u30ab\u30d0\u30fc\u30c9\u30b3\u30fc\u30eb</td></tr>";h+="<tr><td>Morgan MUFG</td><td><span class=\"tag tag-us\">\u7c73</span></td><td class=\"dn\">-16,164</td><td class=\"up\">+28,490</td><td>NT\u7e2e\u5c0f</td></tr>";h+="<tr><td>GS</td><td><span class=\"tag tag-us\">\u7c73</span></td><td class=\"dn\">-10,157</td><td class=\"dn\">-51,849</td><td>\u5168\u65b9\u4f4d\u30d9\u30a2</td></tr>";h+="<tr><td>UBS</td><td><span class=\"tag tag-eu\">\u6b27</span></td><td class=\"up\">+9,118</td><td>-</td><td>\u30d6\u30eb</td></tr>";h+="<tr><td>ABN</td><td><span class=\"tag tag-hf\">HF</span></td><td class=\"up\">mini+17k</td><td>-</td><td>OP\u58f2\u308a+\u03b4\u8abf\u6574</td></tr>";h+="</tbody></table>";h+="<div class=\"insight\"><strong>\u6d77\u5916\u52e2</strong>\u306f\u300cN225\u58f2\u308a\u30fbTOPIX\u8cb7\u3044\u300d\u306eNT\u500d\u7387\u7e2e\u5c0f\u30dd\u30b8\u30b7\u30e7\u30f3\u3002HSBC(-31,783)\u304c\u58f2\u308a\u4e3b\u8ef8\u3002\u91ce\u6751(+29,416)\u304c\u56fd\u5185\u6700\u5927\u8cb7\u3044\u624b\u3002ABN\u306fmini\u8cb7\u3044+OP\u58f2\u308a\u3067\u30c7\u30eb\u30bf\u8abf\u6574\u578b\u3002</div>";return h;}function bStrat(){var h="";h+="<div style=\"display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:10px 0\">";h+="<div style=\"background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px\">";h+="<div style=\"font-family:Outfit;font-weight:600;font-size:12px;color:var(--put)\">Deep OTM P</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;color:var(--dim)\">\u2264 48,000</div>";h+="<div style=\"font-size:12px;margin-top:4px\">\u2605\u2605\u2605\u2605</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;margin-top:4px\">OTM: OTM 70.2%</div>";h+="<div style=\"font-family:DM Mono;font-size:11px\">\u58c1: P\u58c1 3,031</div>";h+="</div>";h+="<div style=\"background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px\">";h+="<div style=\"font-family:Outfit;font-weight:600;font-size:12px;color:var(--put)\">OTM P</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;color:var(--dim)\">48K-52K</div>";h+="<div style=\"font-size:12px;margin-top:4px\">\u2605\u2605\u2605</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;margin-top:4px\">OTM: OTM 54-62%</div>";h+="<div style=\"font-family:DM Mono;font-size:11px\">\u58c1: P\u58c1 3,629(50K)</div>";h+="</div>";h+="<div style=\"background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px\">";h+="<div style=\"font-family:Outfit;font-weight:600;font-size:12px;color:var(--gold)\">ATM</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;color:var(--dim)\">51K-55K</div>";h+="<div style=\"font-size:12px;margin-top:4px\">\u58f2\u308a\u975e\u63a8\u5968</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;margin-top:4px\">OTM: -</div>";h+="<div style=\"font-family:DM Mono;font-size:11px\">\u58c1: -</div>";h+="</div>";h+="<div style=\"background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px\">";h+="<div style=\"font-family:Outfit;font-weight:600;font-size:12px;color:var(--call)\">OTM C</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;color:var(--dim)\">55K-57K</div>";h+="<div style=\"font-size:12px;margin-top:4px\">\u2605\u2605\u2605</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;margin-top:4px\">OTM: OTM 58-62%</div>";h+="<div style=\"font-family:DM Mono;font-size:11px\">\u58c1: C\u58c1 2,207(55K)</div>";h+="</div>";h+="<div style=\"background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px\">";h+="<div style=\"font-family:Outfit;font-weight:600;font-size:12px;color:var(--call)\">Deep OTM C</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;color:var(--dim)\">\u2265 58,000</div>";h+="<div style=\"font-size:12px;margin-top:4px\">\u2605\u2605\u2605\u2605</div>";h+="<div style=\"font-family:DM Mono;font-size:11px;margin-top:4px\">OTM: OTM 68.6%</div>";h+="<div style=\"font-family:DM Mono;font-size:11px\">\u58c1: C\u58c1 2,354</div>";h+="</div>";h+="</div>";h+="<table class=\"dt\"><thead><tr><th>Zone</th><th>Trigger</th><th>Dir</th><th>mini\u679a\u6570</th></tr></thead><tbody>";h+="<tr><td>P50K\u58f2</td><td>51,000\u5272\u308c</td><td class=\"dn\">mini\u58f2</td><td>10\u2192 3</td></tr>";h+="<tr><td>P48K\u58f2</td><td>49,000\u5272\u308c</td><td class=\"dn\">mini\u58f2</td><td>10\u2192 5</td></tr>";h+="<tr><td>C55K\u58f2</td><td>54,500\u8d85</td><td class=\"up\">mini\u8cb7</td><td>10\u2192 3</td></tr>";h+="<tr><td>C58K\u58f2</td><td>57,000\u8d85</td><td class=\"up\">mini\u8cb7</td><td>10\u2192 5</td></tr>";h+="</tbody></table>";h+="<div style=\"margin:14px 0;text-align:center\">";h+="<a href=\"pnl_simulator.html\" class=\"sim-btn\">\ud83d\udcca P&L\u30b7\u30df\u30e5\u30ec\u30fc\u30bf\u30fc\u3092\u958b\u304f \u2192</a>";h+="</div>";h+="<div class=\"insight\">VI 39\u74b0\u5883\u3067OTM\u78ba\u7387\u304c\u538b\u7e2e\u3055\u308c\u3066\u3044\u308b\u304c\u3001Deep OTM (P48K/C58K)\u306f\u7d04<strong>70%</strong>\u3002\u5efa\u7389\u58c1\u3068OTM\u78ba\u7387\u306e\u4e21\u65b9\u304c\u63c3\u3046\u30be\u30fc\u30f3\u3067\u306e\u58f2\u308a\u306b\u69cb\u9020\u7684\u30a8\u30c3\u30b8\u304c\u5b58\u5728\u3002\u305f\u3060\u3057\u4e2d\u6771\u60c5\u52e2\u30fb\u65e5\u7c73\u9996\u8133\u4f1a\u8ac7\u30ea\u30b9\u30af\u306b\u7559\u610f\u3002</div>";return h;}</script></body></html>
