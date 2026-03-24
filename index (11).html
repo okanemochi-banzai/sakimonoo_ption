@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JPX市場分析 2026.03.24</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--dim:#8888aa;--accent:#818cf8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--down:#ef4444;--us:#93c5fd;--eu:#c4b5fd;--hf:#fbbf24;--dom:#f87171;--overseas:#60a5fa}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;line-height:1.6}
+.mono{font-family:'DM Mono',monospace}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:Outfit;font-weight:700;font-size:16px;color:var(--accent)}
+.topbar nav a{color:var(--dim);text-decoration:none;font-size:13px;margin-left:16px;transition:color .2s}
+.topbar nav a:hover,.topbar nav a.active{color:var(--accent)}
+@media(max-width:768px){.topbar nav{display:none}}
+.hero{text-align:center;padding:28px 16px 12px;position:relative}
+.hero h1{font-family:Outfit;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--accent),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:fadeUp .6s}
+.hero .sub{color:var(--dim);font-size:12px;margin-top:4px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.kpi-strip{display:flex;justify-content:center;gap:24px;padding:8px 16px 16px;flex-wrap:wrap}
+.kpi{text-align:center}
+.kpi .label{font-size:11px;color:var(--dim);letter-spacing:.5px}
+.kpi .val{font-family:'DM Mono';font-size:18px;font-weight:500;margin-top:2px}
+.kpi .chg{font-size:11px;margin-top:1px}
+.mobile-nav{display:none;justify-content:center;gap:12px;padding:8px 16px;border-bottom:1px solid var(--border)}
+.mobile-nav a{color:var(--dim);text-decoration:none;font-size:12px;padding:4px 10px;border:1px solid var(--border);border-radius:6px}
+.mobile-nav a:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:768px){.mobile-nav{display:flex}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;padding:0 16px 24px;max-width:1200px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .25s}
+.card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.card.open{grid-column:1/-1;border-color:var(--accent);background:var(--panel);cursor:default}
+.card-hdr{display:flex;align-items:center;gap:8px}
+.card-hdr .icon{font-size:18px}
+.card-hdr .ttl{font-family:Outfit;font-weight:600;font-size:14px}
+.card-hdr .arrow{margin-left:auto;color:var(--dim);font-size:12px;transition:transform .2s}
+.card.open .card-hdr .arrow{transform:rotate(90deg)}
+.preview{margin-top:10px}
+.mini-metrics{display:flex;gap:12px;flex-wrap:wrap}
+.mm{background:rgba(255,255,255,.03);border-radius:6px;padding:6px 10px;flex:1;min-width:80px}
+.mm .ml{font-size:10px;color:var(--dim)}
+.mm .mv{font-family:'DM Mono';font-size:14px;font-weight:500;margin-top:2px}
+.detail{margin-top:14px;display:none}
+.card.open .detail{display:block}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:4px;margin:2px}
+.tag-p{background:rgba(248,113,113,.15);color:var(--put)}
+.tag-c{background:rgba(96,165,250,.15);color:var(--call)}
+.tag-up{background:rgba(74,222,128,.15);color:var(--up)}
+.tag-down{background:rgba(239,68,68,.15);color:var(--down)}
+.tag-us{background:rgba(147,197,253,.12);color:var(--us)}
+.tag-eu{background:rgba(196,181,253,.12);color:var(--eu)}
+.tag-hf{background:rgba(251,191,36,.12);color:var(--hf)}
+.tag-dom{background:rgba(248,113,113,.12);color:var(--dom)}
+.butterfly{margin:10px 0}
+.bf-row{display:flex;align-items:center;margin:2px 0;font-size:11px}
+.bf-strike{width:60px;text-align:center;font-family:'DM Mono';font-size:11px;flex-shrink:0}
+.bf-strike.atm{color:var(--atm);font-weight:700}
+.bf-left{flex:1;display:flex;justify-content:flex-end}
+.bf-right{flex:1;display:flex;justify-content:flex-start}
+.bf-bar{height:14px;border-radius:2px;display:flex;align-items:center;font-family:'DM Mono';font-size:9px;color:#fff;min-width:1px}
+.bf-p{background:var(--put);justify-content:flex-end;padding-right:4px}
+.bf-c{background:var(--call);padding-left:4px}
+.insight{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);border-radius:8px;padding:12px;margin-top:12px;font-size:13px;line-height:1.7}
+.insight .ih{font-family:Outfit;font-weight:600;font-size:13px;color:var(--accent);margin-bottom:6px}
+table.dt{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+table.dt th{background:rgba(255,255,255,.04);padding:6px 8px;text-align:left;font-weight:500;border-bottom:1px solid var(--border);font-size:11px;color:var(--dim)}
+table.dt td{padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.03);font-family:'DM Mono';font-size:11px}
+table.dt tr:hover{background:rgba(255,255,255,.02)}
+.range-box{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:10px;margin:10px 0;text-align:center}
+.range-box .rt{font-size:11px;color:var(--atm)}
+.range-box .rv{font-family:'DM Mono';font-size:16px;font-weight:600;margin-top:4px}
+.sr-level{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.sr-line{flex:1;height:2px;border-radius:1px}
+.sr-r{background:var(--put)}
+.sr-s{background:var(--up)}
+.analysis-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin:10px 0}
+.ac{background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px}
+.ac .at{font-family:Outfit;font-weight:600;font-size:13px;margin-bottom:6px}
+.ac p{font-size:12px;line-height:1.6;color:var(--dim)}
+footer{text-align:center;padding:24px 16px;border-top:1px solid var(--border);color:var(--dim);font-size:11px}
+footer a{color:var(--accent);text-decoration:none}
+.sim-btn{display:inline-block;padding:10px 24px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-family:Outfit;font-weight:600;font-size:13px}
+
+</style></head><body>
+<div class="topbar">
+<div class="logo">JPX Dashboard</div>
+<nav>
+<a href="index.html" class="active">&#x30C0;&#x30C3;&#x30B7;&#x30E5;&#x30DC;&#x30FC;&#x30C9;</a>
+<a href="pnl_simulator.html">P&amp;L&#x30B7;&#x30DF;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;</a>
+<a href="archive.html">&#x30A2;&#x30FC;&#x30AB;&#x30A4;&#x30D6;</a>
+</nav></div>
+<div class="hero">
+<h1>JPX &#x30C7;&#x30EA;&#x30D0;&#x30C6;&#x30A3;&#x30D6;&#x5E02;&#x5834;&#x5206;&#x6790;</h1>
+<div class="sub">2026.03.24 (火) | ATM 52,240 | VI 36.35 | SQ 2026/04/10 (&#x6B8B;12&#x65E5;)</div>
+</div>
+<div class="kpi-strip">
+<div class="kpi"><div class="label">&#x65E5;&#x7D4C;&#x5E73;&#x5747;</div><div class="val mono">52,252.28</div><div class="chg" style="color:var(--up)">+736.79 (+1.43%)</div></div>
+<div class="kpi"><div class="label">VI</div><div class="val mono" style="color:var(--put)">36.35</div><div class="chg" style="color:var(--up)">-4.58</div></div>
+<div class="kpi"><div class="label">TOPIX</div><div class="val mono">3,546</div><div class="chg" style="color:var(--up)">+102</div></div>
+<div class="kpi"><div class="label">ATM</div><div class="val mono" style="color:var(--atm)">52,240</div></div>
+</div>
+<div class="mobile-nav">
+<a href="index.html">&#x30C0;&#x30C3;&#x30B7;&#x30E5;&#x30DC;&#x30FC;&#x30C9;</a><a href="pnl_simulator.html">P&amp;L</a><a href="archive.html">&#x30A2;&#x30FC;&#x30AB;&#x30A4;&#x30D6;</a>
+</div>
+<div class="grid" id="grid">
+<div class="card" data-card="1">
+<div class="card-hdr"><span class="icon">&#x1F4C8;</span><span class="ttl">&#x5148;&#x7269;&#x5EFA;&#x7389;&#x589E;&#x6E1B;</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">N225&#x30E9;&#x30FC;&#x30B8;</div><div class="mv mono" style="color:var(--up)">+1,838</div></div>
+<div class="mm"><div class="ml">N225 mini</div><div class="mv mono" style="color:var(--up)">+51,989</div></div>
+<div class="mm"><div class="ml">TOPIX</div><div class="mv mono" style="color:var(--down)">-3,223</div></div>
+</div></div>
+<div class="detail" id="d1"></div></div>
+<div class="card" data-card="2">
+<div class="card-hdr"><span class="icon">&#x1F4B0;</span><span class="ttl">&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x53D6;&#x5F15;&#x4EE3;&#x91D1;</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">&#x30D7;&#x30C3;&#x30C8;&#x53D6;&#x5F15;&#x9AD8;</div><div class="mv mono" style="color:var(--put)">25,278</div></div>
+<div class="mm"><div class="ml">&#x30B3;&#x30FC;&#x30EB;&#x53D6;&#x5F15;&#x9AD8;</div><div class="mv mono" style="color:var(--call)">25,391</div></div>
+<div class="mm"><div class="ml">J-NET&#x6BD4;&#x7387;</div><div class="mv mono">65%</div></div>
+</div></div>
+<div class="detail" id="d2"></div></div>
+<div class="card" data-card="3">
+<div class="card-hdr"><span class="icon">&#x1F4CA;</span><span class="ttl">&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x5EFA;&#x7389;&#x589E;&#x6E1B;</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">&#x30D7;&#x30C3;&#x30C8;&#x5408;&#x8A08;</div><div class="mv mono" style="color:var(--put)">+4,630</div></div>
+<div class="mm"><div class="ml">&#x30B3;&#x30FC;&#x30EB;&#x5408;&#x8A08;</div><div class="mv mono" style="color:var(--call)">+6,711</div></div>
+</div></div>
+<div class="detail" id="d3"></div></div>
+<div class="card" data-card="4">
+<div class="card-hdr"><span class="icon">&#x26A1;</span><span class="ttl">&#x91CD;&#x8981;&#x5EFA;&#x7389;&#x5909;&#x5316; (&#xB1;300)</span><span class="arrow">&#9654;</span></div>
+<div class="preview">
+<span class="tag tag-c">C62000</span><span class="tag tag-up">+1,485</span> 
+<span class="tag tag-c">C57000</span><span class="tag tag-up">+1,255</span> 
+<span class="tag tag-c">C59500</span><span class="tag tag-down">-996</span> 
+<span class="tag tag-c">C58000</span><span class="tag tag-up">+900</span> 
+</div>
+<div class="detail" id="d4"></div></div>
+<div class="card" data-card="5">
+<div class="card-hdr"><span class="icon">&#x1F98B;</span><span class="ttl">&#x5EFA;&#x7389;&#x5206;&#x5E03;</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">P&#x58C1;</div><div class="mv mono" style="color:var(--put)">50,000 (10,241)</div></div>
+<div class="mm"><div class="ml">ATM</div><div class="mv mono" style="color:var(--atm)">52,240</div></div>
+<div class="mm"><div class="ml">C&#x58C1;</div><div class="mv mono" style="color:var(--call)">57,000 (10,363)</div></div>
+</div></div>
+<div class="detail" id="d5"></div></div>
+<div class="card" data-card="6">
+<div class="card-hdr"><span class="icon">&#x1F3DB;</span><span class="ttl">&#x5927;&#x53E3;&#x624B;&#x53E3; (J-NET)</span><span class="arrow">&#9654;</span></div>
+<div class="preview">
+<span class="tag tag-hf">ABN 325</span> 
+<span class="tag tag-us">GS 100</span> 
+<span class="tag tag-us">JPM 100</span> 
+<span class="tag tag-us">BofA 100</span> 
+</div>
+<div class="detail" id="d6"></div></div>
+<div class="card" data-card="7">
+<div class="card-hdr"><span class="icon">&#x1F3AF;</span><span class="ttl">&#x7DCF;&#x5408;&#x8A55;&#x4FA1;</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">&#x9031;&#x9593;&#x4E88;&#x60F3;&#x30EC;&#x30F3;&#x30B8;</div><div class="mv mono" style="color:var(--atm)">49,600 - 54,900</div></div>
+</div></div>
+<div class="detail" id="d7"></div></div>
+<div class="card" data-card="8">
+<div class="card-hdr"><span class="icon">&#x1F30F;</span><span class="ttl">&#x53C2;&#x52A0;&#x8005;&#x5225;&#x5EFA;&#x7389; (3/19時点・参考)</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">&#x6D77;&#x5916; N225</div><div class="mv mono" style="color:var(--down)">&#x58F2;&#x8D85;</div></div>
+<div class="mm"><div class="ml">&#x56FD;&#x5185; N225</div><div class="mv mono" style="color:var(--up)">&#x8CB7;&#x8D85;</div></div>
+</div></div>
+<div class="detail" id="d8"></div></div>
+<div class="card" data-card="9">
+<div class="card-hdr"><span class="icon">&#x1F3B2;</span><span class="ttl">&#x6226;&#x7565;&#x30DE;&#x30C3;&#x30D7; (P&#x58F2;&#x308A;+&#x30D8;&#x30C3;&#x30B8;)</span><span class="arrow">&#9654;</span></div>
+<div class="preview"><div class="mini-metrics">
+<div class="mm"><div class="ml">&#x63A8;&#x5968;P&#x58F2;&#x308A;</div><div class="mv mono" style="color:var(--put)">50,000</div></div>
+<div class="mm"><div class="ml">&#x63A8;&#x5968;C&#x58F2;&#x308A;</div><div class="mv mono" style="color:var(--call)">55,000</div></div>
+<div class="mm"><div class="ml">VI&#x74B0;&#x5883;</div><div class="mv mono" style="color:var(--put)">&#x9AD8;</div></div>
+<div class="mm"><div class="ml">SQ&#x307E;&#x3067;</div><div class="mv mono">12&#x65E5;</div></div>
+</div></div>
+<div class="detail" id="d9"></div></div>
+</div>
+<footer>
+<a href="pnl_simulator.html">P&amp;L&#x30B7;&#x30DF;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;</a> | <a href="archive.html">&#x30A2;&#x30FC;&#x30AB;&#x30A4;&#x30D6;</a><br>
+JPX &#x30C7;&#x30EA;&#x30D0;&#x30C6;&#x30A3;&#x30D6;&#x5206;&#x6790; | &#x30C7;&#x30FC;&#x30BF;: JPX/OSE | 2026.03.24
+</footer>
+<script>
+function fmt(n){if(n===null||n===undefined)return"-";var s=Math.abs(n).toLocaleString();return n>0?"+"+s:n<0?"-"+s:s;}
+function bFutures(){var h="";
+h+="<table class=dt><tr><th>&#x9280;&#x67C4;</th><th>06&#x6708;&#x9650;&#x524D;&#x65E5;&#x6BD4;</th><th>&#x5408;&#x8A08;&#x524D;&#x65E5;&#x6BD4;</th><th>&#x5EFA;&#x7389;&#x6B8B;&#x9AD8;</th></tr>";
+h+="<tr><td>&#x65E5;&#x7D4C;225&#x30E9;&#x30FC;&#x30B8;</td><td class=mono style=color:var(--up)>+1,845</td><td class=mono style=color:var(--up)>+1,838</td><td class=mono>182,696</td></tr>";
+h+="<tr><td>&#x65E5;&#x7D4C;225 mini</td><td class=mono style=color:var(--up)>+52,614</td><td class=mono style=color:var(--up)>+51,989</td><td class=mono>304,193</td></tr>";
+h+="<tr><td>TOPIX</td><td class=mono style=color:var(--down)>-3,224</td><td class=mono style=color:var(--down)>-3,223</td><td class=mono>409,414</td></tr>";
+h+="</table>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="N225 mini +5.2&#x4E07;&#x679A;&#x306E;&#x5927;&#x5E45;&#x8CB7;&#x3044;&#x5EFA;&#x3066;&#x589E;&#xFF1D;&#x30EA;&#x30D0;&#x30A6;&#x30F3;&#x30C9;&#x65E5;&#x306E;&#x6A5F;&#x95A2;&#x30DD;&#x30B8;&#x30B7;&#x30E7;&#x30F3;&#x69CB;&#x7BC9;&#x3002;TOPIX -3.2k&#x306F;N225&#x3068;&#x9006;&#x884C;&#xFF1D;&#x30BB;&#x30AF;&#x30BF;&#x30FC;&#x30ED;&#x30FC;&#x30C6;&#x30FC;&#x30B7;&#x30E7;&#x30F3;/&#x30D8;&#x30C3;&#x30B8;&#x3002;&#x30E9;&#x30FC;&#x30B8;N225 +1.8k&#x306F;&#x7A0E;&#x3084;&#x304B;&#x306A;&#x589E;&#x52A0;&#x3002;";
+h+="</div>";
+return h;}
+function bOpTrade(){var h="";
+h+="<table class=dt><tr><th></th><th>P&#x53D6;&#x5F15;&#x9AD8;</th><th>P&#x4EE3;&#x91D1;(&#x767E;&#x4E07;)</th><th>C&#x53D6;&#x5F15;&#x9AD8;</th><th>C&#x4EE3;&#x91D1;(&#x767E;&#x4E07;)</th><th>&#x5408;&#x8A08;</th><th>&#x5408;&#x8A08;&#x4EE3;&#x91D1;</th></tr>";
+h+="<tr><td>&#x30E9;&#x30FC;&#x30B8;</td><td class=mono>25,278</td><td class=mono>33,635</td><td class=mono>25,391</td><td class=mono>15,900</td><td class=mono>50,669</td><td class=mono>49,535</td></tr>";
+h+="<tr><td>&#x30DF;&#x30CB;</td><td class=mono>19,494</td><td class=mono>1,080</td><td class=mono>31,121</td><td class=mono>899</td><td class=mono>50,615</td><td class=mono>1,980</td></tr>";
+h+="<tr><td style=color:var(--dim)>J-NET(&#x30E9;&#x30FC;&#x30B8;)</td><td class=mono style=color:var(--dim)>32,948</td><td class=mono style=color:var(--dim)>40,899</td><td colspan=4 class=mono style=color:var(--dim)>&#x6BD4;&#x7387;: 65.0%(&#x53D6;&#x5F15;&#x9AD8;) / 82.6%(&#x4EE3;&#x91D1;)</td></tr>";
+h+="</table>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="J-NET&#x6BD4;&#x7387; 65.0%&#xFF1D;&#x6A5F;&#x95A2;&#x306E;&#x30D6;&#x30ED;&#x30C3;&#x30AF;&#x53D6;&#x5F15;&#x304C;&#x652F;&#x914D;&#x7684;&#x3002;&#x30D7;&#x30C3;&#x30C8;&#x4EE3;&#x91D1;(336&#x5104;)&#x304C;&#x30B3;&#x30FC;&#x30EB;&#x4EE3;&#x91D1;(159&#x5104;)&#x306E;2&#x500D;&#x4EE5;&#x4E0A;&#xFF1D;VI36&#x74B0;&#x5883;&#x4E0B;&#x306E;&#x4E0B;&#x65B9;&#x30D8;&#x30C3;&#x30B8;&#x9700;&#x8981;&#x304C;&#x5F37;&#x3044;&#x3002;";
+h+="</div>";
+return h;}
+function bOiChg(){var h="";
+h+="<table class=dt><tr><th></th><th>&#x30D7;&#x30C3;&#x30C8;&#x524D;&#x65E5;&#x6BD4;</th><th>&#x30B3;&#x30FC;&#x30EB;&#x524D;&#x65E5;&#x6BD4;</th></tr>";
+h+="<tr><td>&#x30E9;&#x30FC;&#x30B8;&#x5408;&#x8A08;</td><td class=mono style=color:var(--put)>+4,630</td><td class=mono style=color:var(--call)>+6,711</td></tr>";
+h+="<tr><td>&#x30E9;&#x30FC;&#x30B8;06&#x6708;&#x9650;</td><td class=mono style=color:var(--put)>+1,471</td><td class=mono style=color:var(--call)>+1,379</td></tr>";
+h+="<tr><td>&#x30DF;&#x30CB;&#x5408;&#x8A08;</td><td class=mono>+821</td><td class=mono>+1,644</td></tr>";
+h+="</table>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="P(+4,630)&#x30FBC(+6,711)&#x3068;&#x3082;&#x306B;&#x5927;&#x5E45;&#x62E1;&#x5927;&#x3002;C&#x5EFA;&#x7389;&#x589E;&#x304C;P&#x3092;&#x4E0A;&#x56DE;&#x308B;&#xFF1D;&#x4E0A;&#x65B9;&#x30D8;&#x30C3;&#x30B8;/&#x30DD;&#x30B8;&#x30B7;&#x30E7;&#x30CB;&#x30F3;&#x30B0;&#x304C;&#x3084;&#x3084;&#x512A;&#x52E2;&#x3002;&#x6025;&#x843D;&#x5F8C;&#x306E;&#x30EA;&#x30D0;&#x30A6;&#x30F3;&#x30C9;&#x65E5;&#x3068;&#x6574;&#x5408;&#xFF1A;&#x5229;&#x76CA;&#x78BA;&#x4FDD;+&#x4E0A;&#x65B9;&#x30D9;&#x30C3;&#x30C8;&#x8FFD;&#x52A0;&#x3002;";
+h+="</div>";
+return h;}
+function bSigChg(){var h="";
+h+="<table class=dt><tr><th>&#x7A2E;&#x985E;</th><th>&#x9650;&#x6708;</th><th>&#x884C;&#x4F7F;&#x4FA1;&#x683C;</th><th>&#x524D;&#x65E5;&#x6BD4;</th></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2605</td><td class=mono>62,000</td><td class=mono style=color:var(--up)>+1,485</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2605</td><td class=mono>57,000</td><td class=mono style=color:var(--up)>+1,255</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2604</td><td class=mono>59,500</td><td class=mono style=color:var(--down)>-996</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2604</td><td class=mono>58,000</td><td class=mono style=color:var(--up)>+900</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2604</td><td class=mono>61,000</td><td class=mono style=color:var(--down)>-867</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2605</td><td class=mono>25,000</td><td class=mono style=color:var(--up)>+801</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2604</td><td class=mono>30,000</td><td class=mono style=color:var(--up)>+653</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2604</td><td class=mono>52,000</td><td class=mono style=color:var(--up)>+616</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2606</td><td class=mono>50,000</td><td class=mono style=color:var(--up)>+600</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2606</td><td class=mono>47,000</td><td class=mono style=color:var(--up)>+500</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2606</td><td class=mono>47,000</td><td class=mono style=color:var(--up)>+500</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2605</td><td class=mono>56,000</td><td class=mono style=color:var(--up)>+469</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2605</td><td class=mono>54,000</td><td class=mono style=color:var(--up)>+400</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2606</td><td class=mono>62,000</td><td class=mono style=color:var(--up)>+400</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2604</td><td class=mono>47,000</td><td class=mono style=color:var(--down)>-389</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2604</td><td class=mono>53,000</td><td class=mono style=color:var(--down)>-375</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2604</td><td class=mono>52,500</td><td class=mono style=color:var(--down)>-348</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2605</td><td class=mono>47,000</td><td class=mono style=color:var(--up)>+345</td></tr>";
+h+="<tr><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P</span></td><td class=mono>2606</td><td class=mono>57,000</td><td class=mono style=color:var(--down)>-304</td></tr>";
+h+="<tr><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C</span></td><td class=mono>2606</td><td class=mono>58,000</td><td class=mono style=color:var(--up)>+300</td></tr>";
+h+="</table>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="&#x6700;&#x5927;&#x5897;: C2605-62000 +1,485&#x30FBC2605-57000 +1,255&#xFF1D;5&#x6708;&#x9650;&#x306E;&#x9060;OTM&#x30B3;&#x30FC;&#x30EB;&#x7A4D;&#x307F;&#x4E0A;&#x3052;&#x3002;C2604-58000 +900&#xFF1D;&#x76F4;&#x8FD1;&#x306E;&#x4E0A;&#x65B9;&#x30D8;&#x30C3;&#x30B8;&#x3002;P2604-30000 +653&#xFF1D;&#x30C7;&#x30A3;&#x30FC;&#x30D7;OTM&#x30C6;&#x30FC;&#x30EB;&#x30EA;&#x30B9;&#x30AF;&#x30D7;&#x30ED;&#x30C6;&#x30AF;&#x30B7;&#x30E7;&#x30F3;&#x3002;&#x4E3B;&#x306A;&#x5DFB;&#x304D;&#x623B;&#x3057;: C2604-59500 -996, C2604-61000 -867&#xFF1D;4&#x6708;&#x9650;&#x9060;OTM&#x30B3;&#x30FC;&#x30EB;&#x306E;&#x5229;&#x78BA;&#x3002;";
+h+="</div>";
+return h;}
+function bDist(){var h="";
+h+="<div class=butterfly>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:70%>7,341</div></div><div class='bf-strike'>47k</div><div class=bf-right><div class='bf-bar bf-c' style=width:21%>2,206</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:8%>832</div></div><div class='bf-strike'>47k</div><div class=bf-right><div class='bf-bar bf-c' style=width:1%>1</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:69%>7,168</div></div><div class='bf-strike'>48k</div><div class=bf-right><div class='bf-bar bf-c' style=width:1%>200</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:39%>4,084</div></div><div class='bf-strike'>48k</div><div class=bf-right><div class='bf-bar bf-c' style=width:1%>0</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:61%>6,392</div></div><div class='bf-strike'>49k</div><div class=bf-right><div class='bf-bar bf-c' style=width:4%>442</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:19%>2,018</div></div><div class='bf-strike'>49k</div><div class=bf-right><div class='bf-bar bf-c' style=width:4%>491</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:98%>10,241</div></div><div class='bf-strike'>50k</div><div class=bf-right><div class='bf-bar bf-c' style=width:19%>2,061</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:12%>1,335</div></div><div class='bf-strike'>50k</div><div class=bf-right><div class='bf-bar bf-c' style=width:3%>311</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:70%>7,262</div></div><div class='bf-strike'>51k</div><div class=bf-right><div class='bf-bar bf-c' style=width:12%>1,262</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:14%>1,494</div></div><div class='bf-strike'>51k</div><div class=bf-right><div class='bf-bar bf-c' style=width:6%>699</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:52%>5,426</div></div><div class='bf-strike atm'>52k</div><div class=bf-right><div class='bf-bar bf-c' style=width:16%>1,703</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:32%>3,332</div></div><div class='bf-strike'>52k</div><div class=bf-right><div class='bf-bar bf-c' style=width:4%>466</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:68%>7,142</div></div><div class='bf-strike'>53k</div><div class=bf-right><div class='bf-bar bf-c' style=width:24%>2,509</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:21%>2,212</div></div><div class='bf-strike'>53k</div><div class=bf-right><div class='bf-bar bf-c' style=width:3%>369</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:47%>4,931</div></div><div class='bf-strike'>54k</div><div class=bf-right><div class='bf-bar bf-c' style=width:40%>4,227</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:12%>1,303</div></div><div class='bf-strike'>54k</div><div class=bf-right><div class='bf-bar bf-c' style=width:12%>1,315</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:62%>6,495</div></div><div class='bf-strike'>55k</div><div class=bf-right><div class='bf-bar bf-c' style=width:60%>6,246</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:4%>430</div></div><div class='bf-strike'>55k</div><div class=bf-right><div class='bf-bar bf-c' style=width:8%>892</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:21%>2,245</div></div><div class='bf-strike'>56k</div><div class=bf-right><div class='bf-bar bf-c' style=width:54%>5,636</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:6%>666</div></div><div class='bf-strike'>56k</div><div class=bf-right><div class='bf-bar bf-c' style=width:17%>1,795</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:24%>2,560</div></div><div class='bf-strike'>57k</div><div class=bf-right><div class='bf-bar bf-c' style=width:100%>10,363</div></div></div>";
+h+="<div class=bf-row><div class=bf-left><div class='bf-bar bf-p' style=width:5%>565</div></div><div class='bf-strike'>57k</div><div class=bf-right><div class='bf-bar bf-c' style=width:18%>1,889</div></div></div>";
+h+="</div>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="P&#x58C1;: 50,000&#x5186;(10,241&#x679A;)&#x30FB;49,000&#x5186;(6,392&#x679A;)&#x304C;&#x4E0B;&#x65B9;&#x30B5;&#x30DD;&#x30FC;&#x30C8;&#x3002;C&#x58C1;: 57,000&#x5186;(10,363&#x679A;&#x30FB;&#x672C;&#x65E5;+1,116)&#x30FB;55,000&#x5186;(6,246&#x679A;)&#x304C;&#x4E0A;&#x65B9;&#x30AD;&#x30E3;&#x30C3;&#x30D7;&#x3002;ATM&#x5E2F;52k-53k&#x306F;P&#x5DFB;&#x304D;&#x623B;&#x3057;(-114/-272)&#xFF1D;&#x73FE;&#x6C34;&#x6E96;&#x3067;&#x306E;&#x30B3;&#x30F3;&#x30D3;&#x30AF;&#x30B7;&#x30E7;&#x30F3;&#x4F4E;&#x4E0B;&#x3002;";
+h+="</div>";
+return h;}
+function bJnet(){var h="";
+h+="<table class=dt><tr><th>&#x53C2;&#x52A0;&#x8005;</th><th>&#x9298;&#x67C4;</th><th>&#x53D6;&#x5F15;&#x9AD8;</th><th>&#x5206;&#x985E;</th></tr>";
+h+="<tr><td><span class='tag tag-hf'>ABN</span></td><td class=mono>C2604-53000</td><td class=mono>325</td><td>HF&#x4EE3;&#x7406;</td></tr>";
+h+="<tr><td><span class='tag tag-us'>GS</span></td><td class=mono>C2604-53000</td><td class=mono>100</td><td>&#x7C73;&#x7CFB;</td></tr>";
+h+="<tr><td><span class='tag tag-us'>JPM</span></td><td class=mono>C2604-53000</td><td class=mono>100</td><td>&#x7C73;&#x7CFB;</td></tr>";
+h+="<tr><td><span class='tag tag-us'>BofA</span></td><td class=mono>C2604-53000</td><td class=mono>100</td><td>&#x7C73;&#x7CFB;</td></tr>";
+h+="</table>";
+h+="<div style='background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:10px;margin:10px 0'>";
+h+="<div style=font-size:12px;font-weight:600;color:var(--atm)>&#x5BFE;&#x5F53;&#x30DA;&#x30A2;</div>";
+h+="<div style=font-size:12px;margin-top:4px;color:var(--dim)>ABN 325&#x679A; vs GS+JPM+BofA (100+100+100) &#xFF5C; C2604-53000&#x3002;HF&#x4EE3;&#x7406;&#x304C;&#x7C73;&#x7CFB;3&#x793E;&#x306B;&#x30B3;&#x30FC;&#x30EB;&#x58F2;&#x308A;&#xFF1D;53,000&#x5186;&#x306B;&#x4E0A;&#x5024;&#x306E;&#x84CB;&#x8A2D;&#x5B9A;&#x3002;</div>";
+h+="</div>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="ABN(HF&#x4EE3;&#x7406;)&#x304C;C53000&#x3092;325&#x679A;&#x58F2;&#x308A; vs &#x7C73;&#x7CFB;3&#x793E;&#x304C;&#x8CB7;&#x3044;&#xFF1D;53,000&#x5186;&#x306B;&#x6A5F;&#x95A2;&#x306E;&#x5929;&#x4E95;&#x3002;57,000&#x5186;C&#x58C1;&#x3068;&#x5408;&#x308F;&#x305B;&#x3066;&#x3001;&#x77ED;&#x671F;&#x306E;&#x4E0A;&#x5024;&#x306F;53,000-57,000&#x5186;&#x306B;&#x5236;&#x9650;&#x3055;&#x308C;&#x308B;&#x53EF;&#x80FD;&#x6027;&#x3002;";
+h+="</div>";
+return h;}
+function bAssess(){var h="";
+h+="<div style=margin:10px 0>";
+h+="<div class=sr-level><span style=color:var(--put);width:80px;font-size:11px>R2 57,000</span><div class='sr-line sr-r' style=opacity:.5></div><span class=mono style=font-size:10px;color:var(--dim)>C&#x58C1; 10,363</span></div>";
+h+="<div class=sr-level><span style=color:var(--put);width:80px;font-size:11px>R1 55,000</span><div class='sr-line sr-r' style=opacity:.7></div><span class=mono style=font-size:10px;color:var(--dim)>C&#x58C1; 6,246</span></div>";
+h+="<div class=sr-level><span style=color:var(--atm);width:80px;font-size:11px>ATM 52,240</span><div class=sr-line style=background:var(--atm)></div></div>";
+h+="<div class=sr-level><span style=color:var(--up);width:80px;font-size:11px>S1 50,000</span><div class='sr-line sr-s' style=opacity:.7></div><span class=mono style=font-size:10px;color:var(--dim)>P&#x58C1; 10,241</span></div>";
+h+="<div class=sr-level><span style=color:var(--up);width:80px;font-size:11px>S2 49,000</span><div class='sr-line sr-s' style=opacity:.5></div><span class=mono style=font-size:10px;color:var(--dim)>P&#x58C1; 6,392</span></div>";
+h+="</div>";
+h+="<div class=range-box><div class=rt>&#x9031;&#x9593;&#x4E88;&#x60F3;&#x30EC;&#x30F3;&#x30B8; (VI 36.4)</div><div class=rv>49,618 &#xFF5E; 54,886</div><div style=font-size:10px;color:var(--dim);margin-top:4px>&#x65E5;&#x6B21;: 51,051 &#xFF5E; 53,454 (1,201&#x5186;&#x5E45;)</div></div>";
+h+="<div class=analysis-cards>";
+h+="<div class=ac><div class=at>&#x1F4CA; &#x9700;&#x7D66;</div><p>N225 mini +5.2&#x4E07;&#x679A;&#xFF1D;&#x30EA;&#x30D0;&#x30A6;&#x30F3;&#x30C9;&#x65E5;&#x306B;&#x6A5F;&#x95A2;&#x304C;&#x5927;&#x898F;&#x6A21;&#x30ED;&#x30F3;&#x30B0;&#x69CB;&#x7BC9;&#x3002;TOPIX -3.2k&#x306F;&#x30BB;&#x30AF;&#x30BF;&#x30FC;&#x30ED;&#x30FC;&#x30C6;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x3002;P&#x4EE3;&#x91D1;&#x304C;C&#x306E;2&#x500D;&#xFF1D;VI36&#x4E0B;&#x3067;&#x306E;&#x30D8;&#x30C3;&#x30B8;&#x9700;&#x8981;&#x6301;&#x7D9A;&#x3002;</p></div>";
+h+="<div class=ac><div class=at>&#x1F3DB; &#x624B;&#x53E3;&#x89E3;&#x91C8;</div><p>ABN&#x304C;J-NET&#x3067;C53000&#x3092;&#x58F2;&#x308A;&#xFF1D;HF&#x4EE3;&#x7406;&#x304C;&#x5929;&#x4E95;&#x8A2D;&#x5B9A;&#x3002;&#x7C73;&#x7CFB;(GS/JPM/BofA)&#x304C;C53000&#x3092;&#x8CB7;&#x3044;&#xFF1D;&#x30EA;&#x30D0;&#x30A6;&#x30F3;&#x30C9;&#x7D99;&#x7D9A;&#x306B;&#x30DD;&#x30B8;&#x30B7;&#x30E7;&#x30CB;&#x30F3;&#x30B0;&#x3002;53,000&#x5186;&#x304C;&#x4E3B;&#x6226;&#x5834;&#x3002;</p></div>";
+h+="<div class=ac><div class=at>&#x1F4C8; &#x5EFA;&#x7389;&#x69CB;&#x9020;</div><p>P+C&#x3068;&#x3082;&#x306B;&#x62E1;&#x5927;&#xFF1D;&#x6025;&#x843D;&#x5F8C;&#x306E;&#x30D8;&#x30C3;&#x30B8;&#x6D3B;&#x52D5;&#x6025;&#x589E;&#x3002;P&#x58C1;: 50k(10,241)&#x30FB;49k(6,392)&#x3067;&#x4E0B;&#x5024;&#x652F;&#x6301;&#x3002;C&#x58C1;: 57k(10,363&#x30FB;+1,116)&#x30FB;55k(6,246)&#x3067;&#x4E0A;&#x5024;&#x30AD;&#x30E3;&#x30C3;&#x30D7;&#x3002;&#x69CB;&#x9020;&#x7684;&#x306B;50k-57k&#x306E;&#x30EC;&#x30F3;&#x30B8;&#x76F8;&#x5834;&#x3002;</p></div>";
+h+="<div class=ac><div class=at>&#x1F3AF; &#x7D50;&#x8AD6;</div><p>&#x6025;&#x843D;&#x5F8C;&#x306E;&#x30EA;&#x30D0;&#x30A6;&#x30F3;&#x30C9;(+736&#x5186;)&#x3002;&#x30B5;&#x30DD;&#x30FC;&#x30C8;: 50,000&#x5186;(P&#x58C1;+mini&#x5EFA;&#x7389;)&#x3002;&#x30EC;&#x30B8;&#x30B9;&#x30BF;&#x30F3;&#x30B9;: 53,000&#x5186;(J-NET&#x5929;&#x4E95;)&#x2192;55,000-57,000&#x5186;(C&#x58C1;)&#x3002;VI36&#x306F;&#x4F9D;&#x7136;&#x9AD8;&#x6C34;&#x6E96;&#xFF1D;&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x58F2;&#x308A;&#x30A8;&#x30C3;&#x30B8;&#x3042;&#x308A;&#x3002;&#x4E2D;&#x6771;&#x60C5;&#x52E2;&#x304C;&#x6700;&#x5927;&#x30EA;&#x30B9;&#x30AF;&#x8981;&#x56E0;&#x3002;</p></div>";
+h+="</div>";
+h+="<div class=insight><div class=ih>&#x53C2;&#x52A0;&#x8005;&#x30B3;&#x30F3;&#x30C6;&#x30AD;&#x30B9;&#x30C8; (3/19時点・参考)</div>";
+h+="&#x6D77;&#x5916;&#x52E2;&#x306F;N225&#x58F2;&#x8D85;(HSBC -31.7k/MUFG -16.9k/GS -10k)&#x3002;&#x56FD;&#x5185;&#x52E2;&#x306F;&#x8CB7;&#x8D85;(&#x91CE;&#x6751; +29.4k)&#x3002;TOPIX&#x306F;&#x6D77;&#x5916;&#x304C;&#x5206;&#x88C2;(&#x30B7;&#x30C6;&#x30A3; +36k vs GS -56.5k)&#x3002;OP: JPM&#x304C;P&#x8CB7;&#x3044;(&#x30D7;&#x30ED;&#x30C6;&#x30AF;&#x30C6;&#x30A3;&#x30D6;)&#x3001;ABN&#x304C;C&#x58F2;&#x308A;(&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x53CE;&#x7A6B;)&#x3002;&#x6D77;&#x5916;&#x6A5F;&#x95A2;&#x306F;&#x614E;&#x91CD;&#x59FF;&#x52E2;&#x3001;&#x56FD;&#x5185;&#x52E2;&#x304C;&#x652F;&#x3048;&#x308B;&#x69CB;&#x56F3;&#x3002;";
+h+="</div>";
+return h;}
+function bPart(){var h="";
+h+="<div style=font-size:11px;color:var(--dim);margin-bottom:8px>&#x30C7;&#x30FC;&#x30BF;: 3/19時点・参考 | &#x6B21;&#x56DE;&#x66F4;&#x65B0;: &#x6708;&#x66DC;</div>";
+h+="<div style=display:flex;gap:8px;margin:10px 0;flex-wrap:wrap>";
+h+="<div style=flex:1;min-width:140px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:10px><div style=font-size:11px;color:var(--overseas)>&#x6D77;&#x5916;&#x52E2;</div><div style=font-size:12px;margin-top:4px>N225: &#x58F2;&#x8D85;</div><div style=font-size:12px>TOPIX: &#x6DF7;&#x5728;</div><div style=font-size:12px>OP: P&#x8CB7;&#x3044; / C&#x58F2;&#x308A;</div></div>";
+h+="<div style=flex:1;min-width:140px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:10px><div style=font-size:11px;color:var(--dom)>&#x56FD;&#x5185;&#x52E2;</div><div style=font-size:12px;margin-top:4px>N225: &#x8CB7;&#x8D85;</div><div style=font-size:12px>TOPIX: &#x58F2;&#x8D85;</div><div style=font-size:12px>OP: P&#x58F2;&#x308A;</div></div>";
+h+="</div>";
+h+="<table class=dt><tr><th>&#x53C2;&#x52A0;&#x8005;</th><th>&#x5206;&#x985E;</th><th>N225</th><th>TOPIX</th><th>OP</th><th>&#x63A8;&#x5B9A;&#x6226;&#x7565;</th></tr>";
+h+="<tr><td><span class='tag tag-eu'>&#x6B27;&#x7CFB;</span> HSBC</td><td class=mono>&#x6B27;&#x7CFB;</td><td class=mono>-31,725</td><td class=mono></td><td class=mono></td><td style=font-size:10px>&#x30D9;&#x30A2;(&#x5927;&#x898F;&#x6A21;&#x58F2;&#x8D85;)</td></tr>";
+h+="<tr><td><span class='tag tag-dom'>&#x56FD;&#x5185;</span> &#x91CE;&#x6751;</td><td class=mono>&#x56FD;&#x5185;</td><td class=mono>+29,370</td><td class=mono></td><td class=mono>-P1,034</td><td style=font-size:10px>&#x30AB;&#x30D0;&#x30FC;&#x30C9;P&#x58F2;&#x308A;</td></tr>";
+h+="<tr><td><span class='tag tag-us'>&#x7C73;&#x7CFB;</span> MUFG</td><td class=mono>&#x7C73;&#x7CFB;</td><td class=mono>-16,861</td><td class=mono>+27,254</td><td class=mono></td><td style=font-size:10px>N225&#x5F31;&#x6C17;/TOPIX&#x5F37;&#x6C17;</td></tr>";
+h+="<tr><td><span class='tag tag-us'>&#x7C73;&#x7CFB;</span> GS</td><td class=mono>&#x7C73;&#x7CFB;</td><td class=mono>-10,020</td><td class=mono>-56,545</td><td class=mono></td><td style=font-size:10px>&#x5168;&#x65B9;&#x4F4D;&#x5F31;&#x6C17;</td></tr>";
+h+="<tr><td><span class='tag tag-eu'>&#x6B27;&#x7CFB;</span> UBS</td><td class=mono>&#x6B27;&#x7CFB;</td><td class=mono>+9,646</td><td class=mono></td><td class=mono>+P538/+C375</td><td style=font-size:10px>&#x30ED;&#x30F3;&#x30B0;&#x30DC;&#x30E9;</td></tr>";
+h+="<tr><td><span class='tag tag-us'>&#x7C73;&#x7CFB;</span> &#x30B7;&#x30C6;&#x30A3;</td><td class=mono>&#x7C73;&#x7CFB;</td><td class=mono>+4,810</td><td class=mono>+36,241</td><td class=mono></td><td style=font-size:10px>&#x5F37;&#x6C17;(TOPIX&#x91CD;&#x70B9;)</td></tr>";
+h+="<tr><td><span class='tag tag-us'>&#x7C73;&#x7CFB;</span> JPM</td><td class=mono>&#x7C73;&#x7CFB;</td><td class=mono></td><td class=mono>+33,069</td><td class=mono>+P796</td><td style=font-size:10px>&#x30D7;&#x30ED;&#x30C6;&#x30AF;&#x30C6;&#x30A3;&#x30D6;P</td></tr>";
+h+="<tr><td><span class='tag tag-eu'>&#x6B27;&#x7CFB;</span> &#x30D0;&#x30FC;&#x30AF;&#x30EC;&#x30A4;&#x30BA;</td><td class=mono>&#x6B27;&#x7CFB;</td><td class=mono>+5,423</td><td class=mono>+32,779</td><td class=mono></td><td style=font-size:10px>&#x7A4F;&#x5065;&#x5F37;&#x6C17;</td></tr>";
+h+="<tr><td><span class='tag tag-hf'>HF&#x4EE3;&#x7406;</span> ABN</td><td class=mono>HF&#x4EE3;&#x7406;</td><td class=mono>mini+15.9k</td><td class=mono></td><td class=mono>-P291/-C585</td><td style=font-size:10px>&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x53CE;&#x7A6B;</td></tr>";
+h+="<tr><td><span class='tag tag-hf'>HF&#x4EE3;&#x7406;</span> BNP</td><td class=mono>HF&#x4EE3;&#x7406;</td><td class=mono>mini-20k</td><td class=mono></td><td class=mono>-P808</td><td style=font-size:10px>P&#x58F2;&#x308A;/mini&#x30B7;&#x30E7;&#x30FC;&#x30C8;</td></tr>";
+h+="</table>";
+h+="<div class=insight><div class=ih>&#x30DD;&#x30A4;&#x30F3;&#x30C8;</div>";
+h+="&#x6D77;&#x5916;&#x52E2;&#x306F;N225&#x5927;&#x5E45;&#x58F2;&#x8D85;(HSBC -31.7k&#x304C;&#x7A81;&#x51FA;)&#x3002;&#x91CE;&#x6751;&#x304C;&#x56FD;&#x5185;&#x30ED;&#x30F3;&#x30B0;&#x306E;&#x67F1;(+29.4k)&#x3067;P&#x58F2;&#x308A;&#x4F75;&#x7528;&#x3002;GS&#x306F;N225&#x30FBTOPIX&#x4E21;&#x65B9;&#x5F31;&#x6C17;&#x3002;JPM&#x306F;TOPIX&#x30ED;&#x30F3;&#x30B0;&#x306B;P&#x8CB7;&#x3044;&#x3067;&#x30D8;&#x30C3;&#x30B8;&#x3002;ABN&#x306F;OP&#x58F2;&#x308A;+mini&#x3067;&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x53CE;&#x7A6B;&#x3002;VI36+&#x74B0;&#x5883;&#x306F;&#x58F2;&#x308A;&#x65B9;&#x6709;&#x5229;&#x3002;";
+h+="</div>";
+return h;}
+function bStrat(){var h="";
+h+="<div style=display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;font-size:11px>";
+h+="<div style=flex:1;min-width:200px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px><div style=font-weight:600;margin-bottom:4px>&#x65E5;&#x7D4C;225&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;(&#x30E9;&#x30FC;&#x30B8;)</div><div>&#x53D6;&#x5F15;&#x5358;&#x4F4D;: &#x6307;&#x6570;&#xD7;1,000&#x5186;</div><div>&#x884C;&#x4F7F;&#x4FA1;&#x683C;: 500/250&#x5186;&#x523B;&#x307F;</div><div>&#x9650;&#x6708;: &#x6708;&#x6B21;</div><div>&#x672C;&#x65E5;&#x53D6;&#x5F15;&#x9AD8;: 50,669</div></div>";
+h+="<div style=flex:1;min-width:200px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px><div style=font-weight:600;margin-bottom:4px>&#x65E5;&#x7D4C;225&#x30DF;&#x30CB;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;</div><div>&#x53D6;&#x5F15;&#x5358;&#x4F4D;: &#x6307;&#x6570;&#xD7;100&#x5186;</div><div>&#x884C;&#x4F7F;&#x4FA1;&#x683C;: 125&#x5186;&#x523B;&#x307F;</div><div>&#x9650;&#x6708;: &#x9031;&#x6B21;</div><div>&#x672C;&#x65E5;&#x53D6;&#x5F15;&#x9AD8;: 50,615</div></div>";
+h+="</div>";
+h+="<div style=font-size:11px;color:var(--dim);margin:6px 0>&#x63DB;&#x7B97;: &#x30E9;&#x30FC;&#x30B8;1&#x679A; &#x2248; &#x30DF;&#x30CB;10&#x679A;(&#x8A3C;&#x62E0;&#x91D1;&#x30FB;&#x640D;&#x76CA;&#x3068;&#x3082;1/10)</div>";
+h+="<div style=margin:12px 0><div style=font-weight:600;font-size:13px;margin-bottom:6px>OTM&#x5931;&#x52B9;&#x78BA;&#x7387; (SQ 2026/04/10, &#x6B8B;12&#x65E5;)</div>";
+h+="<table class=dt><tr><th>&#x884C;&#x4F7F;&#x4FA1;&#x683C;</th><th>&#x7A2E;&#x985E;</th><th>VI 26</th><th>VI 36</th><th>VI 46</th></tr>";
+h+="<tr><td class=mono>47,000</td><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P&#x58F2;&#x308A;</span></td><td class=mono>96.6%</td><td class=mono style=font-weight:600>90.8%</td><td class=mono>85.1%</td></tr>";
+h+="<tr><td class=mono>49,000</td><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P&#x58F2;&#x308A;</span></td><td class=mono>86.6%</td><td class=mono style=font-weight:600>78.9%</td><td class=mono>73.6%</td></tr>";
+h+="<tr><td class=mono>50,000</td><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P&#x58F2;&#x308A;</span></td><td class=mono>77.6%</td><td class=mono style=font-weight:600>70.9%</td><td class=mono>66.7%</td></tr>";
+h+="<tr><td class=mono>51,000</td><td><span class=tag-p style=padding:1px_5px;border-radius:3px;font-size:10px>P&#x58F2;&#x308A;</span></td><td class=mono>66.1%</td><td class=mono style=font-weight:600>61.9%</td><td class=mono>59.4%</td></tr>";
+h+="<tr><td class=mono>54,000</td><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C&#x58F2;&#x308A;</span></td><td class=mono>71.7%</td><td class=mono style=font-weight:600>66.1%</td><td class=mono>62.8%</td></tr>";
+h+="<tr><td class=mono>55,000</td><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C&#x58F2;&#x308A;</span></td><td class=mono>81.4%</td><td class=mono style=font-weight:600>74.1%</td><td class=mono>69.4%</td></tr>";
+h+="<tr><td class=mono>57,000</td><td><span class=tag-c style=padding:1px_5px;border-radius:3px;font-size:10px>C&#x58F2;&#x308A;</span></td><td class=mono>93.5%</td><td class=mono style=font-weight:600>86.3%</td><td class=mono>80.5%</td></tr>";
+h+="</table></div>";
+h+="<div style=margin:12px 0>";
+h+="<div style=background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0>";
+h+="<div style=display:flex;justify-content:space-between;align-items:center><span style=font-weight:600;color:var(--atm)>&#x30C7;&#x30A3;&#x30FC;&#x30D7;OTM&#x30D7;&#x30C3;&#x30C8;</span><span class=mono style=font-size:11px>47,000&#x4EE5;&#x4E0B;</span><span style=color:var(--atm)>&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>";
+h+="<div style=font-size:11px;color:var(--dim);margin-top:4px>OTM&#x78BA;&#x7387;: 90.8% | &#x58C1;: P&#x58C1; 7,341 + &#x30D5;&#x30ED;&#x30FC;+456</div>";
+h+="<div style=font-size:11px;margin-top:2px>&#x4F4E;&#x30EA;&#x30B9;&#x30AF;&#x30FB;&#x4F4E;&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;</div>";
+h+="</div>";
+h+="<div style=background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0>";
+h+="<div style=display:flex;justify-content:space-between;align-items:center><span style=font-weight:600;color:var(--atm)>OTM&#x30D7;&#x30C3;&#x30C8;</span><span class=mono style=font-size:11px>47,000-51,000</span><span style=color:var(--atm)>&#9733;&#9733;&#9733;&#9733;&#9734;</span></div>";
+h+="<div style=font-size:11px;color:var(--dim);margin-top:4px>OTM&#x78BA;&#x7387;: 78.9% | &#x58C1;: P&#x58C1; 50k(10.2k)+49k(6.4k)</div>";
+h+="<div style=font-size:11px;margin-top:2px>&#x6700;&#x826F;&#x306E;&#x30EA;&#x30B9;&#x30AF;/&#x30EA;&#x30EF;&#x30FC;&#x30C9;</div>";
+h+="</div>";
+h+="<div style=background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0>";
+h+="<div style=display:flex;justify-content:space-between;align-items:center><span style=font-weight:600;color:var(--atm)>ATM&#x5E2F;</span><span class=mono style=font-size:11px>50,000-54,000</span><span style=color:var(--atm)>&#9733;&#9734;&#9734;&#9734;&#9734;</span></div>";
+h+="<div style=font-size:11px;color:var(--dim);margin-top:4px>OTM&#x78BA;&#x7387;: N/A% | &#x58C1;: &#x9AD8;&#x30AC;&#x30F3;&#x30DE;&#x30BE;&#x30FC;&#x30F3;</div>";
+h+="<div style=font-size:11px;margin-top:2px>&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x58F2;&#x308A;&#x975E;&#x63A8;&#x5968;</div>";
+h+="</div>";
+h+="<div style=background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0>";
+h+="<div style=display:flex;justify-content:space-between;align-items:center><span style=font-weight:600;color:var(--atm)>OTM&#x30B3;&#x30FC;&#x30EB;</span><span class=mono style=font-size:11px>54,000-57,000</span><span style=color:var(--atm)>&#9733;&#9733;&#9733;&#9734;&#9734;</span></div>";
+h+="<div style=font-size:11px;color:var(--dim);margin-top:4px>OTM&#x78BA;&#x7387;: 74.1% | &#x58C1;: C&#x58C1;&#x69CB;&#x7BC9;&#x4E2D; 55k-57k</div>";
+h+="<div style=font-size:11px;margin-top:2px>&#x30EA;&#x30D0;&#x30A6;&#x30F3;&#x30C9;&#x306B;&#x6CE8;&#x610F;</div>";
+h+="</div>";
+h+="<div style=background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0>";
+h+="<div style=display:flex;justify-content:space-between;align-items:center><span style=font-weight:600;color:var(--atm)>&#x30C7;&#x30A3;&#x30FC;&#x30D7;OTM&#x30B3;&#x30FC;&#x30EB;</span><span class=mono style=font-size:11px>57,000&#x4EE5;&#x4E0A;</span><span style=color:var(--atm)>&#9733;&#9733;&#9733;&#9733;&#9734;</span></div>";
+h+="<div style=font-size:11px;color:var(--dim);margin-top:4px>OTM&#x78BA;&#x7387;: 86.3% | &#x58C1;: C&#x58C1; 57k (10.4k) &#x5DE8;&#x5927;</div>";
+h+="<div style=font-size:11px;margin-top:2px>&#x5F37;&#x3044;&#x69CB;&#x9020;&#x7684;&#x30AD;&#x30E3;&#x30C3;&#x30D7;</div>";
+h+="</div>";
+h+="</div>";
+h+="<div style=margin:12px 0><div style=font-weight:600;font-size:13px;margin-bottom:6px>&#x6226;&#x7565;&#x4F8B;</div>";
+h+="<div style=background:rgba(129,140,248,.05);border:1px solid rgba(129,140,248,.15);border-radius:6px;padding:8px;margin:4px 0;font-size:12px>";
+h+="<div style=font-weight:600;color:var(--accent)>&#x30A2;&#x30A4;&#x30A2;&#x30F3;&#x30B3;&#x30F3;&#x30C9;&#x30EB;</div>";
+h+="<div class=mono style=font-size:11px;margin-top:2px>P49000&#x58F2; / P47000&#x8CB7; + C55000&#x58F2; / C57000&#x8CB7;</div>";
+h+="<div style=font-size:10px;color:var(--dim);margin-top:2px>ATM&#x7740;&#x5730;&#x3067;&#x6700;&#x5927;&#x5229;&#x76CA;&#x3001;&#x30EA;&#x30B9;&#x30AF;&#x9650;&#x5B9A;</div>";
+h+="</div>";
+h+="<div style=background:rgba(129,140,248,.05);border:1px solid rgba(129,140,248,.15);border-radius:6px;padding:8px;margin:4px 0;font-size:12px>";
+h+="<div style=font-weight:600;color:var(--accent)>&#x30D7;&#x30C3;&#x30C8;&#x30AF;&#x30EC;&#x30B8;&#x30C3;&#x30C8;&#x30B9;&#x30D7;&#x30EC;&#x30C3;&#x30C9;</div>";
+h+="<div class=mono style=font-size:11px;margin-top:2px>P49000&#x58F2; / P47000&#x8CB7;</div>";
+h+="<div style=font-size:10px;color:var(--dim);margin-top:2px>OTM&#x78BA;&#x7387; ~79%</div>";
+h+="</div>";
+h+="<div style=background:rgba(129,140,248,.05);border:1px solid rgba(129,140,248,.15);border-radius:6px;padding:8px;margin:4px 0;font-size:12px>";
+h+="<div style=font-weight:600;color:var(--accent)>&#x30B3;&#x30FC;&#x30EB;&#x30AF;&#x30EC;&#x30B8;&#x30C3;&#x30C8;&#x30B9;&#x30D7;&#x30EC;&#x30C3;&#x30C9;</div>";
+h+="<div class=mono style=font-size:11px;margin-top:2px>C55000&#x58F2; / C57000&#x8CB7;</div>";
+h+="<div style=font-size:10px;color:var(--dim);margin-top:2px>OTM&#x78BA;&#x7387; ~74%</div>";
+h+="</div>";
+h+="<div style=background:rgba(129,140,248,.05);border:1px solid rgba(129,140,248,.15);border-radius:6px;padding:8px;margin:4px 0;font-size:12px>";
+h+="<div style=font-weight:600;color:var(--accent)>&#x30B7;&#x30E7;&#x30FC;&#x30C8;&#x30B9;&#x30C8;&#x30E9;&#x30F3;&#x30B0;&#x30EB;</div>";
+h+="<div class=mono style=font-size:11px;margin-top:2px>P49000&#x58F2; + C55000&#x58F2; (&#x30D8;&#x30C3;&#x30B8;&#x5FC5;&#x9808;)</div>";
+h+="<div style=font-size:10px;color:var(--dim);margin-top:2px>&#x9AD8;&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x30FB;&#x9AD8;&#x30EA;&#x30B9;&#x30AF;</div>";
+h+="</div>";
+h+="<div style=background:rgba(129,140,248,.05);border:1px solid rgba(129,140,248,.15);border-radius:6px;padding:8px;margin:4px 0;font-size:12px>";
+h+="<div style=font-weight:600;color:var(--accent)>&#x30DF;&#x30CB;&#x9031;&#x6B21;&#x03B8;&#x30CF;&#x30FC;&#x30D9;&#x30B9;&#x30C8;</div>";
+h+="<div class=mono style=font-size:11px;margin-top:2px>&#x30DF;&#x30CB;P50000&#x58F2; + &#x30DF;&#x30CB;C55000&#x58F2; (&#x9031;&#x6B21;&#x9650;&#x6708;)</div>";
+h+="<div style=font-size:10px;color:var(--dim);margin-top:2px>&#x9AD8;&#x901F;&#x03B8;&#x6E1B;&#x8870;&#x3001;1/10&#x30B5;&#x30A4;&#x30BA;</div>";
+h+="</div>";
+h+="</div>";
+h+="<div style=margin:14px 0;text-align:center><a href=pnl_simulator.html class=sim-btn>&#x1F4CA; P&L&#x30B7;&#x30DF;&#x30E5;&#x30EC;&#x30FC;&#x30BF;&#x30FC;&#x3092;&#x958B;&#x304F; &#x2192;</a></div>";
+h+="<div class=insight><div class=ih>&#x5206;&#x6790;</div>";
+h+="VI 36&#xFF1D;&#x9AD8;&#x30D7;&#x30EC;&#x30DF;&#x30A2;&#x30E0;&#x74B0;&#x5883;&#x3002;OTM P&#x58F2;&#x308A;&#x306F;49,000-50,000&#x5186;&#x30BE;&#x30FC;&#x30F3;&#x304C;&#x6700;&#x826F;&#xFF1A;&#x5DE8;&#x5927;P&#x58C1;&#x3001;OTM&#x78BA;&#x7387;~79%&#x3001;&#x6A5F;&#x95A2;&#x306E;&#x652F;&#x6301;&#x3002;C&#x58F2;&#x308A;&#x306F;55,000-57,000&#x5186;&#xFF1A;C&#x58C1;&#x69CB;&#x7BC9;&#x4E2D;&#x3002;&#x30D8;&#x30C3;&#x30B8;&#x306F;mini&#x5148;&#x7269;&#x3067;&#x30C8;&#x30EA;&#x30AC;&#x30FC;&#x30EC;&#x30D9;&#x30EB;&#x3067;&#x3002;&#x6700;&#x5927;&#x30EA;&#x30B9;&#x30AF;: &#x4E2D;&#x6771;&#x30A8;&#x30B9;&#x30AB;&#x30EC;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x3067;P&#x58C1;&#x5D29;&#x58CA;&#x306E;&#x53EF;&#x80FD;&#x6027;&#x3002;";
+h+="</div>";
+return h;}
+var builders={1:bFutures,2:bOpTrade,3:bOiChg,4:bSigChg,5:bDist,6:bJnet,7:bAssess,8:bPart,9:bStrat};
+document.getElementById("grid").addEventListener("click",function(e){
+var card=e.target.closest("[data-card]");
+if(!card)return;
+var id=card.getAttribute("data-card");
+if(card.classList.contains("open")){card.classList.remove("open");return;}
+var all=document.querySelectorAll(".card.open");
+for(var i=0;i<all.length;i++)all[i].classList.remove("open");
+if(!card.dataset.built){
+var d=document.getElementById("d"+id);
+if(d&&builders[id])d.innerHTML=builders[id]();
+card.dataset.built="1";}
+card.classList.add("open");
+setTimeout(function(){card.scrollIntoView({behavior:"smooth",block:"start"});},100);
+});
+</script>
+</body></html>
