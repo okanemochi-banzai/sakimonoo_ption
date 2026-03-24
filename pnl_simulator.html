@@ -1,369 +1,144 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P&L Simulator - 2026/03/19</title>
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P&L シミュレーター | JPX</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--dim:#8888aa;--accent:#818cf8;--red:#f87171;--green:#4ade80;--blue:#60a5fa;--gold:#fbbf24}
-body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--text:#e2e2f0;--dim:#8888aa;--accent:#818cf8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--down:#ef4444}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px}
+.mono{font-family:'DM Mono',monospace}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:Outfit;font-weight:700;font-size:16px;color:var(--accent)}
-.topbar .sub{font-family:'DM Mono';font-size:11px;color:var(--dim);margin-left:12px}
-.topbar nav a{font-family:Outfit;font-size:13px;color:var(--dim);text-decoration:none;margin-left:18px}
+.topbar .sub{font-size:11px;color:var(--dim);margin-left:12px}
+.topbar nav a{color:var(--dim);text-decoration:none;font-size:13px;margin-left:16px}
 .topbar nav a:hover{color:var(--accent)}
-.kpi-strip{display:flex;justify-content:center;gap:20px;padding:16px 20px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
-.kpi{text-align:center}
-.kpi .label{font-size:10px;color:var(--dim);font-family:Outfit}
-.kpi .val{font-family:'DM Mono';font-size:16px;font-weight:500;color:#fff}
-.section{max-width:1100px;margin:0 auto;padding:16px}
-.section-title{font-family:Outfit;font-size:15px;font-weight:600;color:#fff;margin-bottom:10px}
-.presets{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-.presets button{font-family:Outfit;font-size:12px;padding:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);cursor:pointer;transition:all .2s}
+.kpi-strip{display:flex;justify-content:center;gap:24px;padding:16px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.kpi{text-align:center}.kpi .label{font-size:11px;color:var(--dim)}.kpi .val{font-family:'DM Mono';font-size:18px;font-weight:500;margin-top:2px}
+.section{max-width:1000px;margin:0 auto;padding:16px}
+.section h2{font-family:Outfit;font-size:16px;font-weight:600;margin-bottom:12px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.presets button{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-family:'Noto Sans JP';transition:all .2s}
 .presets button:hover{border-color:var(--accent);color:var(--accent)}
-.leg-area{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px}
-.add-btns{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.add-btns button{font-family:Outfit;font-size:12px;padding:5px 12px;background:rgba(129,140,248,.1);border:1px solid var(--accent);border-radius:6px;color:var(--accent);cursor:pointer}
-.add-btns button.clr{background:rgba(248,113,113,.1);border-color:var(--red);color:var(--red)}
-.leg-row{display:grid;grid-template-columns:80px 70px 90px 80px 60px 60px 30px;gap:6px;align-items:center;margin:6px 0;font-size:12px}
-.leg-row select,.leg-row input{font-family:'DM Mono';font-size:12px;padding:4px 6px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);width:100%}
-.leg-row .del{cursor:pointer;color:var(--red);font-size:14px;text-align:center}
-.results{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
-.sum-strip{display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap}
-.sum-item{background:var(--card);border-radius:8px;padding:8px 14px;min-width:120px}
-.sum-item .sl{font-size:10px;color:var(--dim);font-family:Outfit}
-.sum-item .sv{font-family:'DM Mono';font-size:16px;font-weight:600}
-canvas{width:100%;height:300px;display:block;margin:12px 0}
-table.pnl{width:100%;border-collapse:collapse;font-size:11px;margin-top:12px}
-table.pnl th{font-family:Outfit;font-size:10px;color:var(--dim);text-align:left;padding:4px 6px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--panel)}
-table.pnl td{padding:3px 6px;border-bottom:1px solid rgba(30,30,58,.3);font-family:'DM Mono'}
-table.pnl tr.atm{background:rgba(251,191,36,.06)}
-.up{color:var(--green)}.dn{color:var(--red)}
-.pnl-bar{height:8px;border-radius:4px;display:inline-block;vertical-align:middle}
-@media(max-width:768px){.leg-row{grid-template-columns:1fr 1fr;font-size:11px}}
-</style>
-</head>
-<body>
+.legs{margin:12px 0}
+.leg{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;margin:6px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+.leg select,.leg input{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;font-family:'DM Mono';font-size:12px;width:90px}
+.leg select{width:70px}
+.leg .rm{color:var(--down);cursor:pointer;margin-left:auto;font-size:16px}
+.add-btns{display:flex;gap:6px;margin:8px 0}
+.add-btns button{background:transparent;border:1px solid var(--border);color:var(--dim);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px}
+.add-btns button:hover{border-color:var(--accent);color:var(--accent)}
+.calc-btn{background:var(--accent);color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-family:Outfit;font-weight:600;font-size:14px;margin:12px 0}
+.summary{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}
+.sum-box{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.sum-box .sl{font-size:11px;color:var(--dim)}.sum-box .sv{font-family:'DM Mono';font-size:18px;font-weight:600;margin-top:4px}
+canvas{width:100%;max-height:300px;margin:12px 0}
+table.res{width:100%;border-collapse:collapse;font-size:11px;margin:12px 0}
+table.res th{background:rgba(255,255,255,.04);padding:5px 6px;text-align:right;font-weight:500;border-bottom:1px solid var(--border);font-size:10px;color:var(--dim)}
+table.res td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.03);font-family:'DM Mono';text-align:right;font-size:10px}
+table.res tr.atm-row{background:rgba(251,191,36,.08)}
+.pnl-bar{display:inline-block;height:10px;border-radius:2px;vertical-align:middle}
+footer{text-align:center;padding:24px;border-top:1px solid var(--border);color:var(--dim);font-size:11px;margin-top:24px}
+footer a{color:var(--accent);text-decoration:none}
+
+</style></head><body>
 <div class="topbar">
-<div><span class="logo">P&L Simulator</span><span class="sub">2026.03.19 | ATM 52,990 | VI 39.05 | SQ Jun 6/12 (57d)</span></div>
-<nav>
-<a href="index.html">&larr; Dashboard</a>
-<a href="archive.html">Archive</a>
-</nav>
+<div><span class="logo">P&L \u30b7\u30df\u30e5\u30ec\u30fc\u30bf\u30fc</span><span class="sub">2026.03.24 | ATM 52,240 | VI 36.4 | SQ\u307e\u306712\u65e5</span></div>
+<nav><a href="index.html">&larr; \u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9</a><a href="archive.html">\u30a2\u30fc\u30ab\u30a4\u30d6</a></nav>
 </div>
-
 <div class="kpi-strip">
-<div class="kpi"><div class="label">ATM</div><div class="val">52,990</div></div>
-<div class="kpi"><div class="label">VI</div><div class="val">39.05</div></div>
-<div class="kpi"><div class="label">SQ</div><div class="val">Jun 6/12</div></div>
-<div class="kpi"><div class="label">Days</div><div class="val">57</div></div>
+<div class="kpi"><div class="label">ATM</div><div class="val mono">52,240</div></div>
+<div class="kpi"><div class="label">VI</div><div class="val mono" style="color:var(--put)">36.4</div></div>
+<div class="kpi"><div class="label">SQ\u65e5</div><div class="val mono">2026/04/10</div></div>
+<div class="kpi"><div class="label">\u6b8b\u308a</div><div class="val mono">12\u65e5</div></div>
 </div>
-
 <div class="section">
-<div class="section-title">Presets</div>
+<h2>\u30d7\u30ea\u30bb\u30c3\u30c8\u6226\u7565</h2>
 <div class="presets">
-<button onclick="preset('ic')">Iron Condor</button>
-<button onclick="preset('pcs')">Put Credit Spread</button>
-<button onclick="preset('ccs')">Call Credit Spread</button>
-<button onclick="preset('ss')">Short Strangle</button>
-<button onclick="preset('ph')">P売+mini Hedge</button>
-<button onclick="preset('wt')">Mini Weekly &theta;</button>
+<button onclick="loadPreset('ic')">\u30a2\u30a4\u30a2\u30f3\u30b3\u30f3\u30c9\u30eb</button>
+<button onclick="loadPreset('pcs')">P\u30af\u30ec\u30b8\u30c3\u30c8\u30b9\u30d7\u30ec\u30c3\u30c9</button>
+<button onclick="loadPreset('ccs')">C\u30af\u30ec\u30b8\u30c3\u30c8\u30b9\u30d7\u30ec\u30c3\u30c9</button>
+<button onclick="loadPreset('ss')">\u30b7\u30e7\u30fc\u30c8\u30b9\u30c8\u30e9\u30f3\u30b0\u30eb</button>
+<button onclick="loadPreset('ph')">P\u58f2\u308a+\u30d8\u30c3\u30b8</button>
+<button onclick="loadPreset('mt')">\u30df\u30cb\u03b8\u30cf\u30fc\u30d9\u30b9\u30c8</button>
 </div>
-
-<div class="section-title">Leg Builder</div>
-<div class="leg-area">
+<h2>\u30ec\u30b0\u30d3\u30eb\u30c0\u30fc</h2>
+<div id="legs" class="legs"></div>
 <div class="add-btns">
-<button onclick="addLeg('P')">+ Put</button>
-<button onclick="addLeg('C')">+ Call</button>
-<button onclick="addLeg('F')">+ mini Futures</button>
-<button class="clr" onclick="clearLegs()">Clear</button>
+<button onclick="addLeg('P')">+ \u30d7\u30c3\u30c8</button>
+<button onclick="addLeg('C')">+ \u30b3\u30fc\u30eb</button>
+<button onclick="addLeg('F')">+ \u5148\u7269mini</button>
+<button onclick="clearLegs()">\u30af\u30ea\u30a2</button>
 </div>
-<div id="legs">
-<div style="font-size:11px;color:var(--dim);display:grid;grid-template-columns:80px 70px 90px 80px 60px 60px 30px;gap:6px;padding:0 0 4px">
-<span>Type</span><span>Side</span><span>Strike/Entry</span><span>Premium</span><span>Qty</span><span>Multi</span><span></span>
-</div>
-</div>
-</div>
-
-<div class="results" id="results" style="display:none">
-<div class="section-title">Results</div>
-<div class="sum-strip" id="summary"></div>
-<canvas id="chart" width="1000" height="300"></canvas>
-<div style="max-height:400px;overflow-y:auto">
-<table class="pnl" id="pnltable"></table>
+<button class="calc-btn" onclick="calculate()">\u640d\u76ca\u8a08\u7b97</button>
+<div id="results" style="display:none">
+<h2>\u7d50\u679c</h2>
+<div id="summary" class="summary"></div>
+<canvas id="chart" height="250"></canvas>
+<div id="table"></div>
 </div>
 </div>
-</div>
-
+<footer><a href="index.html">\u30c0\u30c3\u30b7\u30e5\u30dc\u30fc\u30c9</a> | <a href="archive.html">\u30a2\u30fc\u30ab\u30a4\u30d6</a><br>P&L \u30b7\u30df\u30e5\u30ec\u30fc\u30bf\u30fc | 2026.03.24</footer>
 <script>
-var ATM=52990,VI=39.05,T=57/250,legs=[];
+function N(x){var t=1/(1+0.2316419*Math.abs(x));var d=0.3989422804*Math.exp(-x*x/2);var p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.3302744))));return x>0?1-p:p;}
+function bsPrice(type,K,F,s,T){if(T<=0||s<=0)return 0;var d1=(Math.log(F/K)+0.5*s*s*T)/(s*Math.sqrt(T));var d2=d1-s*Math.sqrt(T);if(type==="P")return K*N(-d2)-F*N(-d1);return F*N(d1)-K*N(d2);}
+var ATM=52240,VI=36.35,T=0.048,legs=[];
 var legId=0;
-
-function normCDF(x){
-var t=1/(1+0.2316419*Math.abs(x));
-var d=0.3989422804*Math.exp(-x*x/2);
-var p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
-return x>0?1-p:p;
-}
-
-function bsPrice(type,K,F,sig,t){
-if(t<=0)return type==='P'?Math.max(K-F,0):Math.max(F-K,0);
-var d1=(Math.log(F/K)+0.5*sig*sig*t)/(sig*Math.sqrt(t));
-var d2=d1-sig*Math.sqrt(t);
-if(type==='P')return K*normCDF(-d2)-F*normCDF(-d1);
-return F*normCDF(d1)-K*normCDF(d2);
-}
-
-function addLeg(type){
-var id=legId++;
-var el=document.getElementById('legs');
-var div=document.createElement('div');
-div.className='leg-row';
-div.id='leg-'+id;
-var h='';
-if(type==='F'){
-h+='<select disabled><option>Futures</option></select>';
-h+='<select onchange="calc()"><option value="S">Short</option><option value="L">Long</option></select>';
-h+='<input type="number" value="'+ATM+'" step="5" onchange="calc()">';
-h+='<input type="number" value="0" disabled>';
-h+='<input type="number" value="1" min="1" onchange="calc()">';
-h+='<select onchange="calc()"><option value="100">mini</option><option value="1000">Large</option></select>';
-}else{
-h+='<select disabled><option>'+type+'ut</option></select>';
-h+='<select onchange="calc()"><option value="S">Short</option><option value="L">Long</option></select>';
-var defK=type==='P'?50000:56000;
-h+='<input type="number" value="'+defK+'" step="125" onchange="updatePrem(this,''+type+'');calc()">';
-var prem=Math.round(bsPrice(type,defK,ATM,VI/100,T));
-h+='<input type="number" value="'+prem+'" step="1" onchange="calc()">';
-h+='<input type="number" value="1" min="1" onchange="calc()">';
-h+='<select onchange="calc()"><option value="1000">Large</option><option value="100">mini</option></select>';
-}
-h+='<div class="del" onclick="removeLeg('+id+')">&#x2715;</div>';
-div.innerHTML=h;
-div.dataset.type=type;
-el.appendChild(div);
-legs.push(id);
-calc();
-}
-
-function updatePrem(inp,type){
-var row=inp.parentNode;
-var K=parseFloat(inp.value);
-var p=Math.round(bsPrice(type,K,ATM,VI/100,T));
-row.children[3].value=p;
-}
-
-function removeLeg(id){
-var el=document.getElementById('leg-'+id);
-if(el)el.remove();
-legs=legs.filter(function(x){return x!==id;});
-calc();
-}
-
-function clearLegs(){
-var el=document.getElementById('legs');
-var rows=el.querySelectorAll('.leg-row');
-for(var i=0;i<rows.length;i++)rows[i].remove();
-legs=[];
-document.getElementById('results').style.display='none';
-}
-
-function calc(){
-var rows=document.querySelectorAll('.leg-row');
-if(rows.length===0){document.getElementById('results').style.display='none';return;}
-document.getElementById('results').style.display='block';
-var legData=[];
-for(var i=0;i<rows.length;i++){
-var r=rows[i];
-var type=r.dataset.type;
-var side=r.children[1].value;
-var strike=parseFloat(r.children[2].value);
-var prem=parseFloat(r.children[3].value);
-var qty=parseInt(r.children[4].value)||1;
-var multi=parseInt(r.children[5].value);
-legData.push({type:type,side:side,strike:strike,prem:prem,qty:qty,multi:multi});
-}
-var sqMin=ATM-6000,sqMax=ATM+6000,step=500;
-var results=[];
-var maxP=-Infinity,minP=Infinity,bePoints=[];
-for(var sq=sqMin;sq<=sqMax;sq+=step){
-var total=0;
-var legPnls=[];
-for(var j=0;j<legData.length;j++){
-var L=legData[j];
-var pnl=0;
-if(L.type==='F'){
-pnl=(L.side==='S')?(L.strike-sq):(sq-L.strike);
-}else if(L.type==='P'){
-if(L.side==='S')pnl=L.prem-Math.max(L.strike-sq,0);
-else pnl=Math.max(L.strike-sq,0)-L.prem;
-}else{
-if(L.side==='S')pnl=L.prem-Math.max(sq-L.strike,0);
-else pnl=Math.max(sq-L.strike,0)-L.prem;
-}
-var yen=pnl*L.qty*L.multi;
-legPnls.push(yen);
-total+=yen;
-}
-results.push({sq:sq,legs:legPnls,total:total});
-if(total>maxP)maxP=total;
-if(total<minP)minP=total;
-}
-for(var k=1;k<results.length;k++){
-if((results[k-1].total<=0&&results[k].total>0)||(results[k-1].total>0&&results[k].total<=0)){
-bePoints.push(results[k].sq);
-}
-}
-var sumH='';
-sumH+='<div class="sum-item"><div class="sl">Max Profit</div><div class="sv up">'+fmtYen(maxP)+'</div></div>';
-sumH+='<div class="sum-item"><div class="sl">Max Loss</div><div class="sv dn">'+fmtYen(minP)+'</div></div>';
-var beStr=bePoints.length>0?bePoints.map(function(x){return x.toLocaleString();}).join(', '):'-';
-sumH+='<div class="sum-item"><div class="sl">B/E</div><div class="sv">'+beStr+'</div></div>';
-document.getElementById('summary').innerHTML=sumH;
-drawChart(results,maxP,minP,bePoints);
-drawTable(results,legData);
-}
-
-function fmtYen(v){
-if(Math.abs(v)>=10000)return (v/10000).toFixed(1)+'\u4e07';
-return v.toLocaleString()+'\u5186';
-}
-
-function drawChart(data,maxP,minP,bePts){
-var c=document.getElementById('chart');
-var ctx=c.getContext('2d');
-var W=c.width,H=c.height;
-ctx.clearRect(0,0,W,H);
-var pad={l:60,r:20,t:20,b:40};
-var pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
-var range=Math.max(Math.abs(maxP),Math.abs(minP))*1.1;
-if(range===0)range=1;
-function x2px(sq){return pad.l+(sq-data[0].sq)/(data[data.length-1].sq-data[0].sq)*pw;}
-function y2px(v){return pad.t+ph/2-v/range*(ph/2);}
-ctx.strokeStyle='rgba(255,255,255,.08)';
-ctx.lineWidth=1;
-ctx.setLineDash([4,4]);
-ctx.beginPath();ctx.moveTo(pad.l,y2px(0));ctx.lineTo(W-pad.r,y2px(0));ctx.stroke();
-ctx.strokeStyle='rgba(251,191,36,.3)';
-ctx.beginPath();ctx.moveTo(x2px(ATM),pad.t);ctx.lineTo(x2px(ATM),H-pad.b);ctx.stroke();
-ctx.setLineDash([]);
-ctx.beginPath();
-for(var i=0;i<data.length;i++){
-var px=x2px(data[i].sq),py=y2px(data[i].total);
-if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
-}
-ctx.strokeStyle='#818cf8';ctx.lineWidth=2;ctx.stroke();
-for(var i=0;i<data.length;i++){
-var px=x2px(data[i].sq),py=y2px(data[i].total);
-var zy=y2px(0);
-ctx.fillStyle=data[i].total>=0?'rgba(74,222,128,.1)':'rgba(248,113,113,.1)';
-ctx.fillRect(px-pw/data.length/2,Math.min(py,zy),pw/data.length,Math.abs(py-zy));
-}
-ctx.fillStyle='var(--dim)';ctx.font='10px DM Mono';ctx.textAlign='center';
-for(var i=0;i<data.length;i+=2){
-ctx.fillStyle='#8888aa';
-ctx.fillText((data[i].sq/1000)+'K',x2px(data[i].sq),H-pad.b+14);
-}
-ctx.textAlign='right';
-var steps=[maxP,maxP/2,0,-Math.abs(minP)/2,minP];
-for(var i=0;i<steps.length;i++){
-ctx.fillStyle='#8888aa';
-ctx.fillText(fmtYen(Math.round(steps[i])),pad.l-4,y2px(steps[i])+3);
-}
-}
-
-function drawTable(data,legData){
-var t=document.getElementById('pnltable');
-var h='<thead><tr><th>SQ</th>';
-for(var j=0;j<legData.length;j++){
-var L=legData[j];
-var lbl=(L.side==='S'?'S':'L')+' ';
-if(L.type==='F')lbl+='Fut '+L.strike;
-else lbl+=L.type+(L.strike/1000)+'K';
-h+='<th>'+lbl+'</th>';
-}
-h+='<th>Total</th><th style="width:100px">Bar</th></tr></thead><tbody>';
-var absMax=0;
-for(var i=0;i<data.length;i++){if(Math.abs(data[i].total)>absMax)absMax=Math.abs(data[i].total);}
-if(absMax===0)absMax=1;
-for(var i=0;i<data.length;i++){
-var d=data[i];
-var isATM=Math.abs(d.sq-ATM)<250;
-h+='<tr'+(isATM?' class="atm"':'')+'>';
-h+='<td>'+(d.sq).toLocaleString()+'</td>';
-for(var j=0;j<d.legs.length;j++){
-var cls=d.legs[j]>=0?'up':'dn';
-h+='<td class="'+cls+'">'+d.legs[j].toLocaleString()+'</td>';
-}
-var tcls=d.total>=0?'up':'dn';
-h+='<td class="'+tcls+'" style="font-weight:600">'+fmtYen(d.total)+'</td>';
-var bw=Math.round(Math.abs(d.total)/absMax*80);
-var bc=d.total>=0?'var(--green)':'var(--red)';
-h+='<td><span class="pnl-bar" style="width:'+bw+'px;background:'+bc+'"></span></td>';
-h+='</tr>';
-}
-h+='</tbody>';
-t.innerHTML=h;
-}
-
-function preset(name){
-clearLegs();
-if(name==='ic'){
-addLegDirect('P','S',50000,1,1000);
-addLegDirect('P','L',48000,1,1000);
-addLegDirect('C','S',56000,1,1000);
-addLegDirect('C','L',58000,1,1000);
-}else if(name==='pcs'){
-addLegDirect('P','S',50000,1,1000);
-addLegDirect('P','L',48000,1,1000);
-}else if(name==='ccs'){
-addLegDirect('C','S',56000,1,1000);
-addLegDirect('C','L',58000,1,1000);
-}else if(name==='ss'){
-addLegDirect('P','S',50000,1,1000);
-addLegDirect('C','S',56000,1,1000);
-}else if(name==='ph'){
-addLegDirect('P','S',50000,1,1000);
-addLegDirect('F','S',ATM,1,100);
-}else if(name==='wt'){
-addLegDirect('P','S',51000,10,100);
-addLegDirect('C','S',55000,10,100);
-}
-}
-
-function addLegDirect(type,side,strike,qty,multi){
-var id=legId++;
-var el=document.getElementById('legs');
-var div=document.createElement('div');
-div.className='leg-row';
-div.id='leg-'+id;
-div.dataset.type=type;
-var h='';
-if(type==='F'){
-h+='<select disabled><option>Futures</option></select>';
-h+='<select onchange="calc()"><option value="S"'+(side==='S'?' selected':'')+'>Short</option><option value="L"'+(side==='L'?' selected':'')+'>Long</option></select>';
-h+='<input type="number" value="'+strike+'" step="5" onchange="calc()">';
-h+='<input type="number" value="0" disabled>';
-h+='<input type="number" value="'+qty+'" min="1" onchange="calc()">';
-h+='<select onchange="calc()"><option value="100"'+(multi===100?' selected':'')+'>mini</option><option value="1000"'+(multi===1000?' selected':'')+'>Large</option></select>';
-}else{
-var tname=type==='P'?'Put':'Call';
-h+='<select disabled><option>'+tname+'</option></select>';
-h+='<select onchange="calc()"><option value="S"'+(side==='S'?' selected':'')+'>Short</option><option value="L"'+(side==='L'?' selected':'')+'>Long</option></select>';
-h+='<input type="number" value="'+strike+'" step="125" onchange="updatePrem(this,\''+type+'\');calc()">';
-var prem=Math.round(bsPrice(type,strike,ATM,VI/100,T));
-h+='<input type="number" value="'+prem+'" step="1" onchange="calc()">';
-h+='<input type="number" value="'+qty+'" min="1" onchange="calc()">';
-h+='<select onchange="calc()"><option value="1000"'+(multi===1000?' selected':'')+'>Large</option><option value="100"'+(multi===100?' selected':'')+'>mini</option></select>';
-}
-h+='<div class="del" onclick="removeLeg('+id+')">&#x2715;</div>';
-div.innerHTML=h;
-el.appendChild(div);
-legs.push(id);
-calc();
-}
-</script>
-</body>
-</html>
+function addLeg(type){var id=++legId;var l={id:id,type:type,side:"S",strike:ATM,premium:0,qty:1,mult:type==="F"?100:1000};if(type==="P")l.strike=ATM-2000;if(type==="C")l.strike=ATM+2000;if(type==="F"){l.strike=ATM;l.premium=0;}l.premium=type==="F"?0:Math.round(bsPrice(type,l.strike,ATM,VI/100,T));legs.push(l);renderLegs();}
+function renderLegs(){var c=document.getElementById("legs");c.innerHTML="";for(var i=0;i<legs.length;i++){var l=legs[i];var d=document.createElement("div");d.className="leg";
+var typeLabel=l.type==="P"?"\u30d7\u30c3\u30c8":l.type==="C"?"\u30b3\u30fc\u30eb":"\u5148\u7269";
+var sideOpts=l.type==="F"?"<option value=S>\u58f2</option><option value=L>\u8cb7</option>":"<option value=S>\u58f2</option><option value=L>\u8cb7</option>";
+d.innerHTML="<span style=color:"+(l.type==="P"?"var(--put)":l.type==="C"?"var(--call)":"var(--atm)")+";font-weight:600;width:55px>"+typeLabel+"</span>"
++"<select data-id="+l.id+" data-f=side>"+sideOpts+"</select>"
++"<label style=font-size:10px;color:var(--dim)>\u884c\u4f7f\u4fa1</label><input type=number data-id="+l.id+" data-f=strike value="+l.strike+" step=500>"
++(l.type!=="F"?"<label style=font-size:10px;color:var(--dim)>\u30d7\u30ec\u30df\u30a2\u30e0</label><input type=number data-id="+l.id+" data-f=premium value="+l.premium+" step=10>":"<label style=font-size:10px;color:var(--dim)>\u30a8\u30f3\u30c8\u30ea\u30fc</label><input type=number data-id="+l.id+" data-f=strike value="+l.strike+" step=5>")
++"<label style=font-size:10px;color:var(--dim)>\u679a\u6570;</label><input type=number data-id="+l.id+" data-f=qty value="+l.qty+" step=1 style=width:50px>"
++"<select data-id="+l.id+" data-f=mult><option value=1000"+(l.mult===1000?" selected":"")+">\u30e9\u30fc\u30b8x1000</option><option value=100"+(l.mult===100?" selected":"")+">\u30df\u30cbx100</option></select>"
++"<span class=rm data-rm="+l.id+">\u00d7</span>";
+var sel=d.querySelector("[data-f=side]");sel.value=l.side;c.appendChild(d);}}
+document.getElementById("legs").addEventListener("change",function(e){var el=e.target;var id=parseInt(el.getAttribute("data-id"));var f=el.getAttribute("data-f");if(!id||!f)return;for(var i=0;i<legs.length;i++){if(legs[i].id===id){if(f==="side")legs[i].side=el.value;else if(f==="strike"){legs[i].strike=parseFloat(el.value);if(legs[i].type!=="F")legs[i].premium=Math.round(bsPrice(legs[i].type,legs[i].strike,ATM,VI/100,T));}else if(f==="premium")legs[i].premium=parseFloat(el.value);else if(f==="qty")legs[i].qty=parseInt(el.value);else if(f==="mult")legs[i].mult=parseInt(el.value);break;}}renderLegs();});
+document.getElementById("legs").addEventListener("click",function(e){var rm=e.target.getAttribute("data-rm");if(rm){legs=legs.filter(function(l){return l.id!==parseInt(rm);});renderLegs();}});
+function clearLegs(){legs=[];renderLegs();document.getElementById("results").style.display="none";}
+function loadPreset(p){legs=[];
+if(p==="ic"){addLeg("P");legs[legs.length-1].strike=49000;legs[legs.length-1].side="S";addLeg("P");legs[legs.length-1].strike=47000;legs[legs.length-1].side="L";addLeg("C");legs[legs.length-1].strike=55000;legs[legs.length-1].side="S";addLeg("C");legs[legs.length-1].strike=57000;legs[legs.length-1].side="L";}
+if(p==="pcs"){addLeg("P");legs[legs.length-1].strike=49000;legs[legs.length-1].side="S";addLeg("P");legs[legs.length-1].strike=47000;legs[legs.length-1].side="L";}
+if(p==="ccs"){addLeg("C");legs[legs.length-1].strike=55000;legs[legs.length-1].side="S";addLeg("C");legs[legs.length-1].strike=57000;legs[legs.length-1].side="L";}
+if(p==="ss"){addLeg("P");legs[legs.length-1].strike=49000;legs[legs.length-1].side="S";addLeg("C");legs[legs.length-1].strike=55000;legs[legs.length-1].side="S";}
+if(p==="ph"){addLeg("P");legs[legs.length-1].strike=50000;legs[legs.length-1].side="S";addLeg("F");legs[legs.length-1].strike=ATM;legs[legs.length-1].side="S";legs[legs.length-1].qty=0;legs[legs.length-1].mult=100;}
+if(p==="mt"){addLeg("P");legs[legs.length-1].strike=50000;legs[legs.length-1].side="S";legs[legs.length-1].mult=100;addLeg("C");legs[legs.length-1].strike=55000;legs[legs.length-1].side="S";legs[legs.length-1].mult=100;}
+for(var i=0;i<legs.length;i++){if(legs[i].type!=="F")legs[i].premium=Math.round(bsPrice(legs[i].type,legs[i].strike,ATM,VI/100,T));}renderLegs();calculate();}
+function calculate(){if(legs.length===0)return;var results=[];var minPnl=Infinity,maxPnl=-Infinity,beps=[];
+for(var sq=ATM-6000;sq<=ATM+6000;sq+=500){var total=0;var legPnls=[];for(var i=0;i<legs.length;i++){var l=legs[i];var pnl=0;
+if(l.type==="P"){pnl=l.side==="S"?l.premium-Math.max(l.strike-sq,0):Math.max(l.strike-sq,0)-l.premium;}
+else if(l.type==="C"){pnl=l.side==="S"?l.premium-Math.max(sq-l.strike,0):Math.max(sq-l.strike,0)-l.premium;}
+else{pnl=l.side==="S"?l.strike-sq:sq-l.strike;}
+var jpn=pnl*l.qty*l.mult;legPnls.push(jpn);total+=jpn;}
+results.push({sq:sq,legs:legPnls,total:total});if(total<minPnl)minPnl=total;if(total>maxPnl)maxPnl=total;}
+for(var i=1;i<results.length;i++){if((results[i-1].total>=0&&results[i].total<0)||(results[i-1].total<0&&results[i].total>=0)){beps.push(results[i].sq);}}
+var sm=document.getElementById("summary");sm.innerHTML="";
+sm.innerHTML="<div class=sum-box><div class=sl>\u6700\u5927\u5229\u76ca</div><div class=sv style=color:var(--up)>"+(maxPnl>=0?"+":"")+maxPnl.toLocaleString()+"\u5186</div></div>"
++"<div class=sum-box><div class=sl>\u6700\u5927\u640d\u5931</div><div class=sv style=color:var(--down)>"+(minPnl>=0?"+":"")+minPnl.toLocaleString()+"\u5186</div></div>"
++"<div class=sum-box><div class=sl>\u640d\u76ca\u5206\u5c90\u70b9</div><div class=sv>"+beps.map(function(b){return b.toLocaleString();}).join(" / ")+"</div></div>";
+var cv=document.getElementById("chart");var ctx=cv.getContext("2d");cv.width=cv.offsetWidth*2;cv.height=500;ctx.scale(2,2);var W=cv.offsetWidth,H=250;
+ctx.fillStyle="#06060f";ctx.fillRect(0,0,W,H);var pad=50,gW=W-pad*2,gH=H-pad*2;
+var yMin=minPnl*1.2,yMax=maxPnl*1.2;if(yMin===yMax){yMin-=1000;yMax+=1000;}
+function xPos(sq){return pad+(sq-(ATM-6000))/(12000)*gW;}function yPos(v){return pad+gH-(v-yMin)/(yMax-yMin)*gH;}
+ctx.strokeStyle="rgba(255,255,255,.06)";ctx.lineWidth=0.5;for(var sq=ATM-6000;sq<=ATM+6000;sq+=2000){ctx.beginPath();ctx.moveTo(xPos(sq),pad);ctx.lineTo(xPos(sq),pad+gH);ctx.stroke();}
+ctx.strokeStyle="rgba(255,255,255,.15)";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad,yPos(0));ctx.lineTo(pad+gW,yPos(0));ctx.stroke();ctx.setLineDash([]);
+ctx.strokeStyle="rgba(251,191,36,.3)";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xPos(ATM),pad);ctx.lineTo(xPos(ATM),pad+gH);ctx.stroke();ctx.setLineDash([]);
+ctx.strokeStyle="#818cf8";ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<results.length;i++){var x=xPos(results[i].sq),y=yPos(results[i].total);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();
+for(var i=1;i<results.length;i++){var x1=xPos(results[i-1].sq),x2=xPos(results[i].sq);var y1=yPos(results[i-1].total),y2=yPos(results[i].total),y0=yPos(0);ctx.fillStyle=results[i].total>=0?"rgba(74,222,128,.12)":"rgba(239,68,68,.12)";ctx.beginPath();ctx.moveTo(x1,y0);ctx.lineTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x2,y0);ctx.fill();}
+ctx.fillStyle="#8888aa";ctx.font="10px DM Mono";ctx.textAlign="center";for(var sq=ATM-6000;sq<=ATM+6000;sq+=2000){ctx.fillText((sq/1000)+"k",xPos(sq),pad+gH+14);}
+ctx.textAlign="right";ctx.fillText(maxPnl.toLocaleString(),pad-4,yPos(maxPnl)+4);ctx.fillText(minPnl.toLocaleString(),pad-4,yPos(minPnl)+4);ctx.fillText("0",pad-4,yPos(0)+4);
+var tb=document.getElementById("table");var th="<table class=res><tr><th style=text-align:left>SQ\u7740\u5730</th>";
+for(var i=0;i<legs.length;i++){var l=legs[i];var lbl=(l.type==="F"?"\u5148\u7269":l.type)+(l.strike/1000)+"k "+(l.side==="S"?"\u58f2":"\u8cb7");th+="<th>"+lbl+"</th>";}
+th+="<th>\u5408\u8a08P&L</th><th style=width:80px></th></tr>";
+var maxAbs=Math.max(Math.abs(minPnl),Math.abs(maxPnl));
+for(var i=0;i<results.length;i++){var r=results[i];var cls=Math.abs(r.sq-ATM)<=250?"atm-row":"";
+th+="<tr class="+cls+"><td style=text-align:left>"+r.sq.toLocaleString()+"</td>";
+for(var j=0;j<r.legs.length;j++){var c=r.legs[j]>=0?"var(--up)":"var(--down)";th+="<td style=color:"+c+">"+r.legs[j].toLocaleString()+"</td>";}
+var tc=r.total>=0?"var(--up)":"var(--down)";th+="<td style=color:"+tc+";font-weight:600>"+r.total.toLocaleString()+"</td>";
+var bw=Math.abs(r.total)/maxAbs*40;var bc=r.total>=0?"var(--up)":"var(--down)";
+if(r.total>=0)th+="<td><div style=display:flex;justify-content:flex-start><div class=pnl-bar style=width:"+bw+"px;background:"+bc+"></div></div></td>";
+else th+="<td><div style=display:flex;justify-content:flex-end><div class=pnl-bar style=width:"+bw+"px;background:"+bc+"></div></div></td>";
+th+="</tr>";}th+="</table>";tb.innerHTML=th;
+document.getElementById("results").style.display="block";}
+</script></body></html>
