@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>P&amp;Lシミュレーター | JPX 2026.03.25</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;900&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06060f;--panel:#0c0c1d;--card:#111128;--border:#1e1e3a;--accent:#818cf8;--put:#f87171;--call:#60a5fa;--atm:#fbbf24;--up:#4ade80;--dn:#ef4444;--txt:#e2e8f0;--txt2:#94a3b8;--mono:"DM Mono",monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:"Noto Sans JP",sans-serif;font-size:13px}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
+.topbar .logo{font-family:Outfit;font-weight:900;font-size:16px;color:var(--accent)}
+.topbar nav a{color:var(--txt2);text-decoration:none;font-size:12px;margin-left:16px}
+.topbar nav a:hover{color:var(--accent)}
+.kpi-bar{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--border)}
+.kpi-bar .k{text-align:center}.kpi-bar .kl{font-size:9px;color:var(--txt2)}.kpi-bar .kv{font-family:var(--mono);font-size:16px;font-weight:700;color:#fff}
+.container{max-width:900px;margin:0 auto;padding:16px}
+.section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px}
+.section h2{font-size:14px;font-weight:700;margin-bottom:10px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.presets button{background:var(--panel);border:1px solid var(--border);color:var(--txt);padding:6px 12px;border-radius:6px;font-size:11px;cursor:pointer}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+.leg{display:flex;gap:6px;align-items:center;margin:4px 0;flex-wrap:wrap}
+.leg select,.leg input{background:var(--panel);border:1px solid var(--border);color:var(--txt);padding:4px 8px;border-radius:4px;font-size:11px;font-family:var(--mono)}
+.leg input{width:80px}.leg select{width:80px}
+.leg .rm{background:none;border:none;color:var(--dn);cursor:pointer;font-size:14px;padding:0 4px}
+.add-btns{display:flex;gap:6px;margin:8px 0}
+.add-btns button{background:var(--panel);border:1px solid var(--border);color:var(--txt);padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer}
+.add-btns button:hover{border-color:var(--accent)}
+canvas{width:100%;max-height:300px}
+.result-kpi{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.rk{text-align:center}.rk .rl{font-size:9px;color:var(--txt2)}.rk .rv{font-family:var(--mono);font-size:16px;font-weight:700}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:11px}
+th{text-align:left;padding:5px 6px;border-bottom:1px solid var(--border);color:var(--txt2);font-size:9px}
+td{padding:4px 6px;border-bottom:1px solid rgba(30,30,58,.5);font-family:var(--mono)}
+</style></head><body>
+<div class="topbar"><div class="logo">P&amp;L シミュレーター</div><nav>
+<a href="index.html">&larr; ダッシュボード</a>
+<a href="archive.html">アーカイブ</a></nav></div>
+<div class="kpi-bar">
+<div class="k"><div class="kl">ATM</div><div class="kv">53,480</div></div>
+<div class="k"><div class="kl">日経VI</div><div class="kv">37.66</div></div>
+<div class="k"><div class="kl">SQ日</div><div class="kv">2026-04-10</div></div>
+<div class="k"><div class="kl">残り</div><div class="kv">11日</div></div>
+</div>
+<div class="container">
+<div class="section"><h2>プリセット戦略</h2>
+<div class="presets">
+<button onclick="loadPreset(0)">Iron Condor</button>
+<button onclick="loadPreset(1)">Put Credit Spread</button>
+<button onclick="loadPreset(2)">Call Credit Spread</button>
+<button onclick="loadPreset(3)">Short Strangle</button>
+<button onclick="loadPreset(4)">P売り+先物ヘッジ</button>
+<button onclick="loadPreset(5)">ミニ週次θ</button>
+</div></div>
+<div class="section"><h2>レグビルダー</h2>
+<div id="legs"></div>
+<div class="add-btns">
+<button onclick="addLeg('put')">+ プット</button>
+<button onclick="addLeg('call')">+ コール</button>
+<button onclick="addLeg('fut')">+ 先物mini</button>
+<button onclick="clearLegs()">クリア</button>
+<button onclick="calc()" style="background:var(--accent);color:#fff;font-weight:600">計算実行</button>
+</div></div>
+<div class="section"><h2>結果</h2>
+<div class="result-kpi" id="rkpi"></div>
+<canvas id="chart" height="250"></canvas>
+<div id="tbl"></div>
+</div></div>
+<script>
+var ATM=53480,VI=37.66,T=11/250,sigma=37.66/100;
+var legs=[];
+var presets=[
+[{t:"put",sd:"s",k:48500,pr:0,qty:1,m:1000},{t:"put",sd:"l",k:47000,pr:0,qty:1,m:1000},{t:"call",sd:"s",k:57000,pr:0,qty:1,m:1000},{t:"call",sd:"l",k:58500,pr:0,qty:1,m:1000}],
+[{t:"put",sd:"s",k:50000,pr:0,qty:1,m:1000},{t:"put",sd:"l",k:48500,pr:0,qty:1,m:1000}],
+[{t:"call",sd:"s",k:57000,pr:0,qty:1,m:1000},{t:"call",sd:"l",k:58500,pr:0,qty:1,m:1000}],
+[{t:"put",sd:"s",k:49000,pr:0,qty:1,m:1000},{t:"call",sd:"s",k:57000,pr:0,qty:1,m:1000}],
+[{t:"put",sd:"s",k:50000,pr:0,qty:1,m:1000},{t:"fut",sd:"s",k:53480,pr:0,qty:3,m:100}],
+[{t:"put",sd:"s",k:52000,pr:0,qty:1,m:100},{t:"call",sd:"s",k:55000,pr:0,qty:1,m:100}]
+];
+function ncdf(x){var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;var s=x>=0?1:-1;x=Math.abs(x)/Math.sqrt(2);var t=1/(1+p*x);var y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);return 0.5*(1+s*y);}
+function bsPrice(type,K,F,sig,t){if(t<=0){if(type==="put")return Math.max(K-F,0);return Math.max(F-K,0);}var d1=(Math.log(F/K)+0.5*sig*sig*t)/(sig*Math.sqrt(t));var d2=d1-sig*Math.sqrt(t);if(type==="put")return K*ncdf(-d2)-F*ncdf(-d1);return F*ncdf(d1)-K*ncdf(d2);}
+function addLeg(type){var k=ATM;if(type==="put")k=ATM-2000;if(type==="call")k=ATM+2000;var pr=0;if(type!=="fut")pr=Math.round(bsPrice(type,k,ATM,sigma,T));legs.push({t:type,sd:"s",k:k,pr:pr,qty:1,m:type==="fut"?100:1000});renderLegs();}
+function clearLegs(){legs=[];renderLegs();document.getElementById("rkpi").innerHTML="";document.getElementById("tbl").innerHTML="";}
+function loadPreset(i){legs=JSON.parse(JSON.stringify(presets[i]));for(var j=0;j<legs.length;j++){var lg=legs[j];if(lg.t!=="fut"&&lg.pr===0){lg.pr=Math.round(bsPrice(lg.t,lg.k,ATM,sigma,T));}}renderLegs();calc();}
+function renderLegs(){var el=document.getElementById("legs");var h="";
+for(var i=0;i<legs.length;i++){var lg=legs[i];
+h+="<div class=\"leg\">";
+h+="<select onchange=\"legs["+i+"].t=this.value;updatePr("+i+")\">";
+h+="<option value=\"put\""+(lg.t==="put"?" selected":"")+">\u30D7\u30C3\u30C8</option>";
+h+="<option value=\"call\""+(lg.t==="call"?" selected":"")+">\u30B3\u30FC\u30EB</option>";
+h+="<option value=\"fut\""+(lg.t==="fut"?" selected":"")+">\u5148\u7269</option></select>";
+h+="<select onchange=\"legs["+i+"].sd=this.value\">";
+h+="<option value=\"s\""+(lg.sd==="s"?" selected":"")+">\u58F2\u308A</option>";
+h+="<option value=\"l\""+(lg.sd==="l"?" selected":"")+">\u8CB7\u3044</option></select>";
+h+="<input type=\"number\" value=\""+lg.k+"\" onchange=\"legs["+i+"].k=+this.value;updatePr("+i+")\" placeholder=\"\u884C\u4F7F\u4FA1\u683C\">";
+h+="<input type=\"number\" value=\""+lg.pr+"\" onchange=\"legs["+i+"].pr=+this.value\" placeholder=\"\u30D7\u30EC\u30DF\u30A2\u30E0\">";
+h+="<input type=\"number\" value=\""+lg.qty+"\" onchange=\"legs["+i+"].qty=+this.value\" placeholder=\"\u679A\u6570\" style=\"width:50px\">";
+h+="<select onchange=\"legs["+i+"].m=+this.value\">";
+h+="<option value=\"1000\""+(lg.m===1000?" selected":"")+">\u30E9\u30FC\u30B8x1000</option>";
+h+="<option value=\"100\""+(lg.m===100?" selected":"")+">\u30DF\u30CBx100</option></select>";
+h+="<button class=\"rm\" onclick=\"legs.splice("+i+",1);renderLegs()\">x</button>";
+h+="</div>";}el.innerHTML=h;}
+function updatePr(i){var lg=legs[i];if(lg.t!=="fut"){lg.pr=Math.round(bsPrice(lg.t,lg.k,ATM,sigma,T));}renderLegs();}
+function calc(){if(legs.length===0)return;var range=[];for(var sq=ATM-6000;sq<=ATM+6000;sq+=500)range.push(sq);var results=[];var maxP=-Infinity,minP=Infinity;
+for(var ri=0;ri<range.length;ri++){var sq=range[ri];var total=0;var legPnls=[];for(var li=0;li<legs.length;li++){var lg=legs[li];var pnl=0;
+if(lg.t==="put"){if(lg.sd==="s")pnl=lg.pr-Math.max(lg.k-sq,0);else pnl=Math.max(lg.k-sq,0)-lg.pr;}
+else if(lg.t==="call"){if(lg.sd==="s")pnl=lg.pr-Math.max(sq-lg.k,0);else pnl=Math.max(sq-lg.k,0)-lg.pr;}
+else{if(lg.sd==="s")pnl=lg.k-sq;else pnl=sq-lg.k;}
+var yen=pnl*lg.qty*lg.m;legPnls.push(yen);total+=yen;}results.push({sq:sq,legs:legPnls,total:total});if(total>maxP)maxP=total;if(total<minP)minP=total;}
+var bkevens=[];for(var ri=1;ri<results.length;ri++){if((results[ri-1].total<=0&&results[ri].total>=0)||(results[ri-1].total>=0&&results[ri].total<=0)){bkevens.push(results[ri].sq);}}
+var rkpi=document.getElementById("rkpi");var bks=bkevens.length>0?bkevens.join(", "):"N/A";
+rkpi.innerHTML="<div class=\"rk\"><div class=\"rl\">\u6700\u5927\u5229\u76CA</div><div class=\"rv\" style=\"color:var(--up)\">"+maxP.toLocaleString()+"\u5186</div></div>"
++"<div class=\"rk\"><div class=\"rl\">\u6700\u5927\u640D\u5931</div><div class=\"rv\" style=\"color:var(--dn)\">"+minP.toLocaleString()+"\u5186</div></div>"
++"<div class=\"rk\"><div class=\"rl\">\u640D\u76CA\u5206\u5C90\u70B9</div><div class=\"rv\">"+bks+"</div></div>";
+var canvas=document.getElementById("chart");var ctx=canvas.getContext("2d");canvas.width=canvas.offsetWidth*2;canvas.height=500;ctx.scale(2,2);
+var W=canvas.offsetWidth,H=250;var pad={l:60,r:20,t:20,b:30};var pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
+ctx.fillStyle="#06060f";ctx.fillRect(0,0,W,H);
+var yMin=minP*1.1,yMax=maxP*1.1;if(yMin>0)yMin=-1000;if(yMax<0)yMax=1000;var yRange=yMax-yMin;
+function xPos(sq){return pad.l+(sq-range[0])/(range[range.length-1]-range[0])*pw;}
+function yPos(v){return pad.t+(1-(v-yMin)/yRange)*ph;}
+ctx.strokeStyle="rgba(255,255,255,.15)";ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad.l,yPos(0));ctx.lineTo(pad.l+pw,yPos(0));ctx.stroke();ctx.setLineDash([]);
+ctx.strokeStyle="rgba(251,191,36,.3)";ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(xPos(ATM),pad.t);ctx.lineTo(xPos(ATM),pad.t+ph);ctx.stroke();ctx.setLineDash([]);
+ctx.beginPath();ctx.moveTo(xPos(range[0]),yPos(0));for(var ri=0;ri<results.length;ri++){ctx.lineTo(xPos(results[ri].sq),yPos(results[ri].total));}ctx.lineTo(xPos(range[range.length-1]),yPos(0));ctx.closePath();
+var grad=ctx.createLinearGradient(0,pad.t,0,pad.t+ph);grad.addColorStop(0,"rgba(74,222,128,.15)");grad.addColorStop(0.5,"rgba(74,222,128,.02)");grad.addColorStop(0.5,"rgba(239,68,68,.02)");grad.addColorStop(1,"rgba(239,68,68,.15)");ctx.fillStyle=grad;ctx.fill();
+ctx.strokeStyle="#818cf8";ctx.lineWidth=2;ctx.beginPath();for(var ri=0;ri<results.length;ri++){var x=xPos(results[ri].sq),y=yPos(results[ri].total);if(ri===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();
+ctx.fillStyle="#94a3b8";ctx.font="10px DM Mono";ctx.textAlign="center";for(var ri=0;ri<range.length;ri+=2){ctx.fillText((range[ri]/1000)+"K",xPos(range[ri]),pad.t+ph+16);}
+ctx.textAlign="right";var steps=5;for(var i=0;i<=steps;i++){var v=yMin+(yMax-yMin)*i/steps;ctx.fillText(Math.round(v/10000)+"\u4E07",pad.l-6,yPos(v)+3);}
+var th="<table><tr><th>SQ\u7740\u5730</th>";for(var li=0;li<legs.length;li++){var lg=legs[li];th+="<th>"+lg.t[0].toUpperCase()+lg.k+(lg.sd==="s"?"\u58F2":"\u8CB7")+"</th>";}th+="<th>\u5408\u8A08P&L</th><th>\u30D0\u30FC</th></tr>";
+var maxAbs=Math.max(Math.abs(maxP),Math.abs(minP));
+for(var ri=0;ri<results.length;ri++){var r=results[ri];var isATM=r.sq>=ATM-250&&r.sq<=ATM+250;var bg=isATM?"background:rgba(251,191,36,.06)":"";
+th+="<tr style=\""+bg+"\"><td>"+(r.sq/1000)+"K</td>";
+for(var li=0;li<r.legs.length;li++){var v=r.legs[li];var cls=v>=0?"color:var(--up)":"color:var(--dn)";th+="<td style=\""+cls+"\">"+(v>=0?"+":"")+Math.round(v).toLocaleString()+"</td>";}
+var tc=r.total>=0?"color:var(--up);font-weight:700":"color:var(--dn);font-weight:700";th+="<td style=\""+tc+"\">"+(r.total>=0?"+":"")+Math.round(r.total).toLocaleString()+"\u5186</td>";
+var bw=maxAbs>0?Math.abs(r.total)/maxAbs*50:0;var bc=r.total>=0?"var(--up)":"var(--dn)";var dir=r.total>=0?"margin-left:50%":"margin-left:"+(50-bw)+"%";
+th+="<td><div style=\"width:100px;height:12px;background:rgba(255,255,255,.03);border-radius:2px;position:relative\">";
+th+="<div style=\"position:absolute;"+dir+";width:"+bw+"%;height:100%;background:"+bc+";border-radius:2px;opacity:.6\"></div></div></td></tr>";}
+th+="</table>";document.getElementById("tbl").innerHTML=th;}
+</script></body></html>
