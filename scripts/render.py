@@ -325,32 +325,37 @@ DASHBOARD_CSS = r"""
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP','Outfit',sans-serif;font-size:13px;line-height:1.6}
 a{color:var(--accent);text-decoration:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .topbar{position:sticky;top:0;z-index:100;background:rgba(6,6,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between}
 .topbar .logo{font-family:Outfit;font-weight:700;font-size:16px;color:var(--accent)}
-.topbar nav a{margin-left:16px;font-size:12px;color:var(--sub)}
-.topbar nav a:hover{color:var(--text)}
-.hero{text-align:center;padding:28px 16px 10px}
-.hero h1{font-family:Outfit;font-size:22px;font-weight:700;color:#fff}
-.hero .sub{color:var(--sub);font-size:12px;margin-top:4px}
-.kpi-strip{display:flex;justify-content:center;gap:20px;padding:10px 16px 16px;flex-wrap:wrap}
-.kpi{text-align:center}
-.kpi .label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px}
+.topbar nav a{margin-left:16px;font-size:12px;color:var(--sub);transition:color .2s}
+.topbar nav a:hover{color:var(--accent)}
+.hero{text-align:center;padding:32px 16px 8px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(129,140,248,.12) 0%,transparent 70%);pointer-events:none}
+.hero h1{font-family:Outfit;font-size:22px;font-weight:700;color:#fff;position:relative;animation:fadeUp .6s ease-out}
+.hero .sub{color:var(--sub);font-size:12px;margin-top:4px;position:relative}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.kpi-strip{display:flex;justify-content:center;gap:24px;padding:12px 16px 18px;flex-wrap:wrap}
+.kpi{text-align:center;padding:8px 16px;background:rgba(17,17,40,.6);border:1px solid var(--border);border-radius:8px;backdrop-filter:blur(4px)}
+.kpi .label{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.8px}
 .kpi .value{font-family:'DM Mono',monospace;font-size:18px;font-weight:700;color:#fff}
 .kpi .value.up{color:var(--green)}
 .kpi .value.down{color:var(--red)}
 .mobile-nav{display:none;text-align:center;padding:6px;border-bottom:1px solid var(--border)}
 .mobile-nav a{margin:0 8px;font-size:11px;color:var(--sub)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;padding:10px 16px 30px;max-width:1200px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:border-color .2s,background .2s}
-.card:hover{border-color:var(--accent)}
-.card.open{grid-column:1/-1;border-color:var(--accent);background:var(--panel);cursor:default}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .25s ease}
+.card:hover{border-color:rgba(129,140,248,.4);box-shadow:0 0 20px rgba(129,140,248,.06)}
+.card.open{grid-column:1/-1;border-color:var(--accent);background:var(--panel);cursor:default;box-shadow:0 0 30px rgba(129,140,248,.08)}
 .card-hdr{display:flex;align-items:center;gap:8px}
 .card-hdr .icon{font-size:18px}
 .card-hdr .title{font-family:Outfit;font-weight:600;font-size:14px;color:#fff}
-.card-hdr .arrow{margin-left:auto;color:var(--sub);font-size:12px;transition:transform .2s}
-.card.open .card-hdr .arrow{transform:rotate(90deg)}
+.card-hdr .arrow{margin-left:auto;color:var(--sub);font-size:12px;transition:transform .25s}
+.card.open .card-hdr .arrow{transform:rotate(90deg);color:var(--accent)}
 .card-preview{margin-top:10px}
-.card-detail{display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.card-detail{display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px;animation:fadeUp .3s ease-out}
 .card.open .card-detail{display:block}
 .mini-metrics{display:flex;gap:12px;flex-wrap:wrap}
 .mini-metric{flex:1;min-width:80px}
@@ -365,22 +370,37 @@ a{color:var(--accent);text-decoration:none}
 .tag-eu{background:rgba(196,181,253,.15);color:var(--eu)}
 .tag-hf{background:rgba(251,191,36,.15);color:var(--hf)}
 .tag-dom{background:rgba(248,113,113,.15);color:var(--dom)}
+.summary-box{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.summary-item{flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.summary-item .si-label{font-size:10px;color:var(--sub)}
+.summary-item .si-value{font-family:'DM Mono',monospace;font-size:16px;font-weight:600;margin-top:2px}
 table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
-th{background:var(--card);color:var(--sub);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)}
-td{padding:5px 8px;border-bottom:1px solid rgba(30,30,58,.5)}
+th{background:rgba(17,17,40,.8);color:var(--sub);font-weight:600;text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);position:sticky;top:0}
+td{padding:5px 8px;border-bottom:1px solid rgba(30,30,58,.4)}
+tr:hover td{background:rgba(129,140,248,.03)}
 tr.atm-row{background:rgba(251,191,36,.08)}
+tr.atm-row:hover td{background:rgba(251,191,36,.12)}
 .bar-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:11px}
 .bar-label{width:120px;text-align:right;color:var(--sub);flex-shrink:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.bar-track{flex:1;height:16px;background:var(--card);border-radius:3px;position:relative;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px;min-width:1px}
-.bar-fill.put{background:var(--put)}
-.bar-fill.call{background:var(--call)}
-.bar-fill.up{background:var(--green)}
-.bar-fill.down{background:var(--red)}
+.bar-track{flex:1;height:16px;background:rgba(17,17,40,.6);border-radius:3px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;min-width:1px;transition:width .4s ease}
+.bar-fill.put{background:linear-gradient(90deg,var(--put),rgba(248,113,113,.6))}
+.bar-fill.call{background:linear-gradient(90deg,var(--call),rgba(96,165,250,.6))}
+.bar-fill.up{background:linear-gradient(90deg,var(--green),rgba(74,222,128,.6))}
+.bar-fill.down{background:linear-gradient(90deg,var(--red),rgba(239,68,68,.6))}
 .bar-val{width:60px;font-family:'DM Mono',monospace;font-size:11px;flex-shrink:0}
-.insight{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);border-radius:8px;padding:12px;margin-top:12px;font-size:12px;color:var(--sub);line-height:1.7}
+.insight{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.15);border-radius:8px;padding:12px;margin-top:14px;font-size:12px;color:var(--sub);line-height:1.7}
 .insight strong{color:var(--text)}
-.footer{text-align:center;padding:20px;color:var(--sub);font-size:11px;border-top:1px solid var(--border)}
+.analysis-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin:12px 0}
+.analysis-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px}
+.analysis-card .ac-title{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:4px}
+.analysis-card .ac-body{font-size:11px;color:var(--sub);line-height:1.5}
+.zone-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin:8px 0}
+.zone-card .zc-header{display:flex;justify-content:space-between;align-items:center}
+.zone-card .zc-name{font-weight:600;font-size:13px}
+.zone-card .zc-stars{color:var(--yellow);font-size:14px}
+.zone-card .zc-detail{font-size:10px;color:var(--sub);margin-top:4px}
+.footer{text-align:center;padding:24px;color:var(--sub);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
 .footer a{margin:0 8px}
 .positive{color:var(--green)}
 .negative{color:var(--red)}
@@ -389,6 +409,8 @@ tr.atm-row{background:rgba(251,191,36,.08)}
   .mobile-nav{display:block}
   .grid{grid-template-columns:1fr}
   .kpi .value{font-size:15px}
+  .kpi{padding:6px 10px}
+  .analysis-cards{grid-template-columns:1fr}
 }
 """
 
@@ -776,6 +798,16 @@ def _detail_dist_js(s06):
     max_oi = max([max(d['put_oi'], d['call_oi']) for d in dist] or [1])
     js = "var h='';"
     js += "h+='<div style=\"font-size:11px;color:var(--sub);margin-bottom:8px\">ATM = %s</div>';" % _js_str(fnum(s06.get('atm')))
+    # Column headers
+    js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:10px;color:var(--sub);font-weight:600\">';"
+    js += "h+='<div style=\"width:50px;text-align:right\">P増減</div>';"
+    js += "h+='<div style=\"width:50px;text-align:right\">P建玉</div>';"
+    js += "h+='<div style=\"width:150px;text-align:center;color:var(--put)\">← PUT</div>';"
+    js += "h+='<div style=\"width:60px;text-align:center\">行使価格</div>';"
+    js += "h+='<div style=\"width:150px;text-align:center;color:var(--call)\">CALL →</div>';"
+    js += "h+='<div style=\"width:50px\">C建玉</div>';"
+    js += "h+='<div style=\"width:50px\">C増減</div>';"
+    js += "h+='</div>';"
 
     for d in dist:
         pw = int(d['put_oi'] / max_oi * 150) if max_oi else 0
@@ -819,24 +851,77 @@ def _detail_jnet_js(s07):
 
 
 def _detail_assess_js(data):
-    """Assessment card - shows ranges and placeholder for LLM text."""
+    """Assessment card - shows ranges and structured analysis cards."""
     s01 = data.get('s01', {})
+    s02 = data.get('s02', {})
+    s04 = data.get('s04', {})
+    s06 = data.get('s06', {})
+    s07 = data.get('s07', [])
     r1d = s01.get('range_1d', {})
     r1w = s01.get('range_1w', {})
     js = "var h='';"
-    if r1d:
-        js += "h+='<div style=\"background:var(--card);border-radius:8px;padding:12px;margin:8px 0\">';"
-        js += "h+='<div style=\"color:var(--sub);font-size:10px\">1日予測値幅</div>';"
-        js += "h+='<div style=\"font-family:DM Mono;font-size:16px;color:var(--yellow)\">%s 〜 %s</div>';" % (_js_str(fnum(r1d.get('low'))), _js_str(fnum(r1d.get('high'))))
-        js += "h+='<div style=\"color:var(--sub);font-size:10px\">幅: %s円</div>';" % _js_str(fnum(r1d.get('width')))
+
+    # Range boxes
+    if r1d or r1w:
+        js += "h+='<div class=\"summary-box\">';"
+        if r1d:
+            js += "h+='<div class=\"summary-item\"><div class=\"si-label\">1日予測値幅</div><div class=\"si-value\" style=\"color:var(--yellow)\">%s 〜 %s</div></div>';" % (_js_str(fnum(r1d.get('low'))), _js_str(fnum(r1d.get('high'))))
+        if r1w:
+            js += "h+='<div class=\"summary-item\"><div class=\"si-label\">1週予測値幅</div><div class=\"si-value\" style=\"color:var(--yellow)\">%s 〜 %s</div></div>';" % (_js_str(fnum(r1w.get('low'))), _js_str(fnum(r1w.get('high'))))
         js += "h+='</div>';"
-    if r1w:
-        js += "h+='<div style=\"background:var(--card);border-radius:8px;padding:12px;margin:8px 0\">';"
-        js += "h+='<div style=\"color:var(--sub);font-size:10px\">1週予測値幅</div>';"
-        js += "h+='<div style=\"font-family:DM Mono;font-size:16px;color:var(--yellow)\">%s 〜 %s</div>';" % (_js_str(fnum(r1w.get('low'))), _js_str(fnum(r1w.get('high'))))
-        js += "h+='<div style=\"color:var(--sub);font-size:10px\">幅: %s円</div>';" % _js_str(fnum(r1w.get('width')))
-        js += "h+='</div>';"
-    js += "h+='<div class=\"insight\"><strong>⑧ 総合評価</strong>: LLMによる定性分析が必要です。data.json をClaudeに渡して生成してください。</div>';"
+
+    # Structured analysis cards
+    js += "h+='<div class=\"analysis-cards\">';"
+
+    # Card 1: Supply/Demand
+    mini_chg = s02.get('nk225_mini', {}).get('total_change', 0)
+    large_chg = s02.get('nk225_large', {}).get('total_change', 0)
+    js += "h+='<div class=\"analysis-card\"><div class=\"ac-title\">📈 需給構造</div><div class=\"ac-body\">"
+    js += "ラージ %s / mini %s" % (_js_str(fnum(large_chg, plus=True)), _js_str(fnum(mini_chg, plus=True)))
+    if mini_chg > 0 and large_chg < 0:
+        js += "<br>個人買い vs 機関売り"
+    elif mini_chg < 0 and large_chg > 0:
+        js += "<br>機関買い vs 個人売り"
+    js += "</div></div>';"
+
+    # Card 2: Positioning from J-NET
+    js += "h+='<div class=\"analysis-card\"><div class=\"ac-title\">🏛 手口シグナル</div><div class=\"ac-body\">"
+    if s07:
+        top = s07[0]
+        js += "%s %s枚" % (_js_str(esc(top['participant'][:8])), _js_str(fnum(top['volume'])))
+        if len(s07) > 1:
+            js += "<br>他%d件の大口取引" % (len(s07) - 1)
+    else:
+        js += "大口取引なし"
+    js += "</div></div>';"
+
+    # Card 3: OI changes
+    lg = s04.get('large', {})
+    pc = lg.get('put_total_change', 0)
+    cc = lg.get('call_total_change', 0)
+    js += "h+='<div class=\"analysis-card\"><div class=\"ac-title\">📊 建玉変動</div><div class=\"ac-body\">"
+    js += "P %s / C %s" % (_js_str(fnum(pc, plus=True)), _js_str(fnum(cc, plus=True)))
+    if pc > 0 and cc > 0:
+        js += "<br>両建て増加"
+    elif pc > cc:
+        js += "<br>プット優位"
+    elif cc > pc:
+        js += "<br>コール優位"
+    js += "</div></div>';"
+
+    # Card 4: Support/Resistance
+    dist = s06.get('distribution', [])
+    if dist:
+        max_p = max(dist, key=lambda d: d['put_oi'])
+        max_c = max(dist, key=lambda d: d['call_oi'])
+        js += "h+='<div class=\"analysis-card\"><div class=\"ac-title\">🎯 S/R水準</div><div class=\"ac-body\">"
+        js += "<span style=\"color:var(--put)\">S: %s</span> (%s枚)" % (_js_str(fnum(max_p['strike'])), _js_str(fnum(max_p['put_oi'])))
+        js += "<br><span style=\"color:var(--call)\">R: %s</span> (%s枚)" % (_js_str(fnum(max_c['strike'])), _js_str(fnum(max_c['call_oi'])))
+        js += "</div></div>';"
+
+    js += "h+='</div>';"  # analysis-cards
+
+    js += "h+='<div class=\"insight\"><strong>⑧ 総合評価</strong>: 定性分析はLLM連携で自動生成予定。Anthropic API統合後に更新されます。</div>';"
     js += "return h;"
     return js
 
@@ -846,8 +931,33 @@ def _detail_participants_js(s09):
         return "var h='<div>週次データなし</div>';return h;"
 
     js = "var h='';"
-    profiles = s09.get('profiles', [])
+    
+    # Cache indicator
+    if s09.get('source') == 'cache':
+        js += "h+='<div style=\"background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);border-radius:6px;padding:8px;margin-bottom:10px;font-size:11px;color:var(--yellow)\">%s時点のキャッシュデータ（参考値）</div>';" % _js_str(s09.get('data_date', '?'))
 
+    # Summary boxes (overseas vs domestic)
+    fut = s09.get('futures', {})
+    nk = fut.get('nk225_large', {})
+    topix = fut.get('topix', {})
+    js += "h+='<div class=\"summary-box\">';"
+    for sec_data, label in [(nk, 'N225'), (topix, 'TOPIX')]:
+        on = sec_data.get('overseas_net', 0)
+        dn = sec_data.get('domestic_net', 0)
+        js += "h+='<div class=\"summary-item\">';"
+        js += "h+='<div class=\"si-label\">%s 海外</div>';" % label
+        on_cls = 'color:var(--green)' if on > 0 else 'color:var(--red)'
+        js += "h+='<div class=\"si-value\" style=\"%s\">%s</div>';" % (on_cls, _js_str(fnum(on, plus=True)))
+        js += "h+='</div>';"
+        js += "h+='<div class=\"summary-item\">';"
+        js += "h+='<div class=\"si-label\">%s 国内</div>';" % label
+        dn_cls = 'color:var(--green)' if dn > 0 else 'color:var(--red)'
+        js += "h+='<div class=\"si-value\" style=\"%s\">%s</div>';" % (dn_cls, _js_str(fnum(dn, plus=True)))
+        js += "h+='</div>';"
+    js += "h+='</div>';"
+
+    # Profiles table
+    profiles = s09.get('profiles', [])
     if profiles:
         js += "h+='<table><tr><th>参加者</th><th>分類</th><th>N225</th><th>mini</th><th>TOPIX</th><th>P Net</th><th>C Net</th><th>戦略</th></tr>';"
         for p in profiles[:12]:
@@ -864,10 +974,14 @@ def _detail_participants_js(s09):
         js += "h+='</table>';"
 
         # OP details for top participants
+        js += "h+='<div style=\"margin-top:10px\">';"
         for p in profiles[:5]:
             if p.get('op_detail'):
-                js += "h+='<div style=\"font-size:10px;color:var(--sub);margin:2px 0\">%s: %s</div>';" % (
+                cat_tag = {'us': 'tag-us', 'eu': 'tag-eu', 'hf': 'tag-hf', 'domestic': 'tag-dom'}.get(p['category'], '')
+                js += "h+='<div style=\"font-size:10px;margin:3px 0\"><span class=\"tag %s\" style=\"font-size:9px\">%s</span> %s: <span style=\"color:var(--text)\">%s</span></div>';" % (
+                    cat_tag, _js_str(p['category_label']),
                     _js_str(esc(p['name'][:10])), _js_str(esc(p['op_detail'][:60])))
+        js += "h+='</div>';"
 
     js += "return h;"
     return js
@@ -898,15 +1012,26 @@ def _detail_strategy_js(s11, atm):
         js += "h+='<h3 style=\"color:#fff;font-size:13px;margin:12px 0 4px\">ゾーン別エッジ評価</h3>';"
         for e in edges:
             stars = '★' * e['stars'] + '☆' * (5 - e['stars'])
-            zone_color = 'var(--put)' if 'プット' in e['zone'] else 'var(--call)' if 'コール' in e['zone'] else 'var(--yellow)'
-            js += "h+='<div style=\"background:var(--card);border-radius:6px;padding:10px;margin:6px 0\">';"
-            js += "h+='<div style=\"display:flex;justify-content:space-between;align-items:center\">';"
-            js += "h+='<span style=\"color:%s;font-weight:600\">%s</span>';" % (zone_color, _js_str(e['zone']))
-            js += "h+='<span style=\"color:var(--yellow)\">%s</span>';" % stars
+            if 'プット' in e['zone']:
+                zone_color = 'var(--put)'
+                border_color = 'rgba(248,113,113,.2)'
+            elif 'コール' in e['zone']:
+                zone_color = 'var(--call)'
+                border_color = 'rgba(96,165,250,.2)'
+            else:
+                zone_color = 'var(--yellow)'
+                border_color = 'rgba(251,191,36,.2)'
+            js += "h+='<div class=\"zone-card\" style=\"border-color:%s\">';" % border_color
+            js += "h+='<div class=\"zc-header\">';"
+            js += "h+='<span class=\"zc-name\" style=\"color:%s\">%s</span>';" % (zone_color, _js_str(e['zone']))
+            js += "h+='<span class=\"zc-stars\">%s</span>';" % stars
             js += "h+='</div>';"
+            js += "h+='<div class=\"zc-detail\">';"
             if e['wall_max_oi']:
-                js += "h+='<div style=\"font-size:10px;color:var(--sub)\">壁: %s枚 @%s</div>';" % (
-                    _js_str(fnum(e['wall_max_oi'])), _js_str(fnum(e['wall_strike'])))
+                js += "h+='🧱 壁: %s枚 @%s &nbsp; ';" % (_js_str(fnum(e['wall_max_oi'])), _js_str(fnum(e['wall_strike'])))
+            js += "h+='📈 OTM: %.1f%% &nbsp; ';" % (e.get('otm_score', 0) * 50 + 50)
+            js += "h+='スコア: %.2f';" % e.get('total_score', 0)
+            js += "h+='</div>';"
             js += "h+='</div>';"
 
     # P&L Simulator link
