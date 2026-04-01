@@ -279,124 +279,161 @@ def extract_s01(nikkei_close, vi, atm):
 
 
 def extract_s02(wb_oi):
-    """Section ②: Futures open interest changes."""
+    """Section ②: Futures open interest changes.
+    
+    Sheet layout: left side (A-F) and right side (H-M) have different products.
+    指数先物 section starts with '＜OSE 指数先物取引＞'.
+    Left: 日経225 large (rows ~30-49), TOPIX (rows ~50-63)
+    Right: 日経225mini (rows ~36-52), ミニTOPIX (rows ~58-61)
+    """
     ws = wb_oi['デリバティブ建玉残高状況']
     result = {'nk225_large': {}, 'nk225_mini': {}, 'topix': {}}
 
-    current_section = None
-    today = datetime.now()
-    major_y, major_m = next_major_month(today)
-
+    # Step 1: Find 指数先物 section boundaries
+    fut_start = None
+    fut_end = None
     for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
         a_val = str(row[0].value).strip() if row[0].value else ''
-        h_val = str(row[7].value).strip() if len(row) > 7 and row[7].value else ''
+        if '指数先物取引' in a_val:
+            fut_start = row[0].row
+        elif fut_start and ('商品先物' in a_val or '国債先物オプション' in a_val or '指数オプション' in a_val):
+            fut_end = row[0].row
+            break
+    
+    if not fut_start:
+        return result
+    if not fut_end:
+        fut_end = min(fut_start + 80, ws.max_row)
 
-        # Detect section headers
-        if '日経225' in a_val and 'mini' not in a_val.lower() and 'ミニ' not in a_val:
-            current_section = 'nk225_large'
-        elif '日経225mini' in a_val.lower() or '日経225ミニ' in a_val or 'mini' in a_val.lower():
-            current_section = 'nk225_mini'
-        elif '日経225mini' in h_val.lower() or '日経225ミニ' in h_val:
-            current_section = 'nk225_mini'
-        elif 'TOPIX' in a_val.upper() and current_section != 'topix':
-            current_section = 'topix'
+    # Step 2: Parse LEFT side (A-F) — 日経225 large, then TOPIX
+    left_section = None
+    for row in ws.iter_rows(min_row=fut_start, max_row=fut_end, values_only=False):
+        a_val = str(row[0].value).strip() if row[0].value else ''
+        b_val = str(row[1].value).strip() if len(row) > 1 and row[1].value else ''
 
-        if not current_section:
+        # Detect left-side product headers
+        if '日経225' in a_val and 'mini' not in a_val.lower() and 'ミニ' not in a_val and 'マイクロ' not in a_val and 'オプション' not in a_val:
+            left_section = 'nk225_large'
+        elif 'TOPIX' in a_val and 'ミニ' not in a_val:
+            left_section = 'topix'
+        elif a_val and a_val not in ('', ' ') and left_section and '日経' not in a_val and 'TOPIX' not in a_val:
+            # Hit a different product on left side — stop
+            if left_section == 'topix':
+                left_section = None
+
+        if not left_section:
             continue
 
-        # For large/TOPIX: check A-E columns
-        if current_section in ('nk225_large', 'topix'):
-            b_val = str(row[1].value).strip() if len(row) > 1 and row[1].value else ''
+        # Total row
+        if '合計' in b_val:
+            result[left_section]['total_oi'] = safe_num(row[3].value if len(row) > 3 else None)
+            result[left_section]['total_change'] = safe_num(row[4].value if len(row) > 4 else None)
+            if left_section == 'nk225_large':
+                left_section = None  # done with large, TOPIX will follow
 
-            if '合計' in a_val or '合計' in b_val:
-                chg = safe_num(row[4].value if len(row) > 4 else None)
-                oi = safe_num(row[2].value if len(row) > 2 else None)
-                result[current_section]['total_change'] = chg
-                result[current_section]['total_oi'] = oi
+        # Month rows
+        elif b_val and ('月限' in b_val or '年' in b_val):
+            oi = safe_num(row[3].value if len(row) > 3 else None)
+            chg = safe_num(row[4].value if len(row) > 4 else None)
+            if 'months' not in result[left_section]:
+                result[left_section]['months'] = []
+            result[left_section]['months'].append({
+                'label': b_val, 'oi': oi, 'change': chg,
+            })
 
-            # Individual months
-            if b_val and ('月限' in b_val or '年' in b_val):
-                chg = safe_num(row[4].value if len(row) > 4 else None)
-                oi = safe_num(row[2].value if len(row) > 2 else None)
-                if 'months' not in result[current_section]:
-                    result[current_section]['months'] = []
-                result[current_section]['months'].append({
-                    'label': b_val,
-                    'oi': oi,
-                    'change': chg,
-                })
+    # Step 3: Parse RIGHT side (H-M) — 日経225mini
+    right_section = None
+    for row in ws.iter_rows(min_row=fut_start, max_row=fut_end, values_only=False):
+        h_val = str(row[7].value).strip() if len(row) > 7 and row[7].value else ''
+        i_val = str(row[8].value).strip() if len(row) > 8 and row[8].value else ''
 
-        # For mini: check H-L columns
-        if current_section == 'nk225_mini':
-            i_val = str(row[8].value).strip() if len(row) > 8 and row[8].value else ''
-            h_check = str(row[7].value).strip() if len(row) > 7 and row[7].value else ''
+        # Detect right-side product headers
+        if '日経225mini' in h_val or '日経225ミニ' in h_val:
+            right_section = 'nk225_mini'
+        elif '日経225マイクロ' in h_val or 'ミニTOPIX' in h_val:
+            right_section = None  # skip micro/mini-TOPIX for now
 
-            if '合計' in h_check or '合計' in i_val:
-                chg = safe_num(row[11].value if len(row) > 11 else None)
-                oi = safe_num(row[9].value if len(row) > 9 else None)
-                result['nk225_mini']['total_change'] = chg
-                result['nk225_mini']['total_oi'] = oi
+        if right_section != 'nk225_mini':
+            continue
 
-            if i_val and ('月限' in i_val or '年' in i_val):
-                chg = safe_num(row[11].value if len(row) > 11 else None)
-                oi = safe_num(row[9].value if len(row) > 9 else None)
-                if 'months' not in result['nk225_mini']:
-                    result['nk225_mini']['months'] = []
-                result['nk225_mini']['months'].append({
-                    'label': i_val,
-                    'oi': oi,
-                    'change': chg,
-                })
+        # Total row
+        if '合計' in i_val:
+            result['nk225_mini']['total_oi'] = safe_num(row[10].value if len(row) > 10 else None)
+            result['nk225_mini']['total_change'] = safe_num(row[11].value if len(row) > 11 else None)
+            right_section = None  # done
+
+        # Month rows
+        elif i_val and ('月限' in i_val or '年' in i_val):
+            oi = safe_num(row[10].value if len(row) > 10 else None)
+            chg = safe_num(row[11].value if len(row) > 11 else None)
+            if 'months' not in result['nk225_mini']:
+                result['nk225_mini']['months'] = []
+            result['nk225_mini']['months'].append({
+                'label': i_val, 'oi': oi, 'change': chg,
+            })
 
     return result
 
 
 def extract_s03(wb_market):
-    """Section ③: Options trading volume/value."""
+    """Section ③: Options trading volume/value.
+    
+    Sheet layout: two blocks side by side.
+    Block 1 (rows ~6-16): Left=国債先物OP, Right=日経225OP (N-X columns)
+    Block 2 (rows ~18-28): Left=日経225ミニOP (B-L cols), Right=JPX400OP (N-X cols)
+    Block 3 (rows ~30-40): Left=TOPIXオプション, Right=有価証券OP
+    Each block has 合計 row (total) followed by J-NET row (next row below).
+    """
     ws = wb_market['オプション']
     result = {'large': {}, 'mini': {}}
 
+    large_done = False
+    mini_done = False
     in_mini_block = False
 
-    for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
+    for row in ws.iter_rows(min_row=1, max_row=60, values_only=False):
         a_val = str(row[0].value).strip() if row[0].value else ''
         b_val = str(row[1].value).strip() if len(row) > 1 and row[1].value else ''
 
-        # Detect mini options block
+        # Detect mini options block start
         if '日経225ミニ' in b_val or 'ミニオプション' in b_val:
             in_mini_block = True
 
-        if '合' in a_val and '計' in a_val:
-            if not in_mini_block:
-                # Large options: N,P,R,T,V,X columns (indices 13,15,17,19,21,23)
-                total_row = row
-                result['large']['put_volume'] = safe_num(total_row[13].value if len(total_row) > 13 else None)
-                result['large']['put_value'] = safe_num(total_row[15].value if len(total_row) > 15 else None)
-                result['large']['call_volume'] = safe_num(total_row[17].value if len(total_row) > 17 else None)
-                result['large']['call_value'] = safe_num(total_row[19].value if len(total_row) > 19 else None)
-                result['large']['total_volume'] = safe_num(total_row[21].value if len(total_row) > 21 else None)
-                result['large']['total_value'] = safe_num(total_row[23].value if len(total_row) > 23 else None)
+        if '合' not in a_val or '計' not in a_val:
+            continue
 
-                # Next row = J-NET breakdown
-                next_row_idx = total_row[0].row + 1
-                for r2 in ws.iter_rows(min_row=next_row_idx, max_row=next_row_idx, values_only=False):
-                    result['large']['jnet_volume'] = safe_num(r2[21].value if len(r2) > 21 else None)
-                    result['large']['jnet_value'] = safe_num(r2[23].value if len(r2) > 23 else None)
+        # First 合計 before mini block = large options (right side: N-X)
+        if not in_mini_block and not large_done:
+            result['large']['put_volume'] = safe_num(row[13].value if len(row) > 13 else None)
+            result['large']['put_value'] = safe_num(row[15].value if len(row) > 15 else None)
+            result['large']['call_volume'] = safe_num(row[17].value if len(row) > 17 else None)
+            result['large']['call_value'] = safe_num(row[19].value if len(row) > 19 else None)
+            result['large']['total_volume'] = safe_num(row[21].value if len(row) > 21 else None)
+            result['large']['total_value'] = safe_num(row[23].value if len(row) > 23 else None)
+            # J-NET = next row
+            nr = row[0].row + 1
+            for r2 in ws.iter_rows(min_row=nr, max_row=nr, values_only=False):
+                result['large']['jnet_volume'] = safe_num(r2[21].value if len(r2) > 21 else None)
+                result['large']['jnet_value'] = safe_num(r2[23].value if len(r2) > 23 else None)
+            large_done = True
 
-            else:
-                # Mini options: B,D,F,H,J,L columns (indices 1,3,5,7,9,11)
-                total_row = row
-                result['mini']['put_volume'] = safe_num(total_row[1].value if len(total_row) > 1 else None)
-                result['mini']['put_value'] = safe_num(total_row[3].value if len(total_row) > 3 else None)
-                result['mini']['call_volume'] = safe_num(total_row[5].value if len(total_row) > 5 else None)
-                result['mini']['call_value'] = safe_num(total_row[7].value if len(total_row) > 7 else None)
-                result['mini']['total_volume'] = safe_num(total_row[9].value if len(total_row) > 9 else None)
-                result['mini']['total_value'] = safe_num(total_row[11].value if len(total_row) > 11 else None)
+        # First 合計 after mini block header = mini options (left side: B-L)
+        elif in_mini_block and not mini_done:
+            result['mini']['put_volume'] = safe_num(row[1].value if len(row) > 1 else None)
+            result['mini']['put_value'] = safe_num(row[3].value if len(row) > 3 else None)
+            result['mini']['call_volume'] = safe_num(row[5].value if len(row) > 5 else None)
+            result['mini']['call_value'] = safe_num(row[7].value if len(row) > 7 else None)
+            result['mini']['total_volume'] = safe_num(row[9].value if len(row) > 9 else None)
+            result['mini']['total_value'] = safe_num(row[11].value if len(row) > 11 else None)
+            # J-NET = next row
+            nr = row[0].row + 1
+            for r2 in ws.iter_rows(min_row=nr, max_row=nr, values_only=False):
+                result['mini']['jnet_volume'] = safe_num(r2[9].value if len(r2) > 9 else None)
+                result['mini']['jnet_value'] = safe_num(r2[11].value if len(r2) > 11 else None)
+            mini_done = True
 
-                next_row_idx = total_row[0].row + 1
-                for r2 in ws.iter_rows(min_row=next_row_idx, max_row=next_row_idx, values_only=False):
-                    result['mini']['jnet_volume'] = safe_num(r2[9].value if len(r2) > 9 else None)
-                    result['mini']['jnet_value'] = safe_num(r2[11].value if len(r2) > 11 else None)
+        if large_done and mini_done:
+            break
 
     # Calculate J-NET ratios
     for block in ('large', 'mini'):
