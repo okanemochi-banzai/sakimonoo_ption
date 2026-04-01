@@ -200,7 +200,7 @@ def detect_files(data_dir):
         elif 'indexfut_oi_by_tp' in fl and fl.endswith('.xlsx'):
             files['fut_participants'] = fp
 
-        elif fl.startswith('stock_vol') and fl.endswith('.xls'):
+        elif (fl.startswith('stock_vol') or fl.startswith('stock_val')) and fl.endswith('.xls'):
             files['stock_vol'] = fp
 
     return files
@@ -948,54 +948,91 @@ def estimate_strategy(fut_dir, put_net, call_net):
 
 
 def extract_s10(stock_vol_path):
-    """Section ⑩: Stock flow by investor type (weekly .xls)."""
+    """Section ⑩: Stock flow by investor type (weekly .xls).
+    
+    TSE Prime sheet structure:
+    - Col 0: Category name (自己計, 法人, 個人, 海外投資家, 投資信託)
+    - Col 6: Balance (差引き) for previous week (千円, string with commas)
+    - Col 10: Balance (差引き) for current week (千円, string with commas)
+    - Balance appears on either 売り or 買い row (check both rows per category)
+    """
     try:
         import xlrd
     except ImportError:
         return {'error': 'xlrd not installed'}
 
     wb = xlrd.open_workbook(stock_vol_path)
-    # Find TSE Prime sheet
     ws = None
     for name in wb.sheet_names():
-        if 'Prime' in name or 'プライム' in name or 'TSE' in name:
+        if 'Prime' in name or 'プライム' in name:
             ws = wb.sheet_by_name(name)
             break
-
     if not ws:
         ws = wb.sheet_by_index(0)
 
-    result = {}
-    # Search for key categories by row labels
-    search_terms = {
+    # Extract period label from header area
+    period = ''
+    for r in range(min(5, ws.nrows)):
+        val = str(ws.cell_value(r, 0)) if ws.ncols > 0 else ''
+        if '週' in val or 'week' in val.lower():
+            period = val.strip()
+            break
+
+    # Categories to extract: key -> search keywords in col 0
+    categories = {
         'foreigners': ['海外投資家', 'Foreigners'],
         'individuals': ['個人', 'Individuals'],
         'institutions': ['法人', 'Institutions'],
-        'investment_trusts': ['投資信託', 'Investment Trusts'],
+        'investment_trusts': ['投資信託', 'Investment'],
         'proprietary': ['自己計', 'Proprietary'],
     }
 
-    for row_idx in range(ws.nrows):
-        for key, terms in search_terms.items():
-            for term in terms:
-                cell_val = str(ws.cell_value(row_idx, 0) if ws.ncols > 0 else '')
-                if term in cell_val:
-                    # Balance column (around col 11 for current week)
-                    for col_try in [11, 10, 9, 8]:
-                        # Look in row+2 for the "Balance/差引き" row
-                        for r_offset in [0, 1, 2]:
-                            check_row = row_idx + r_offset
-                            if check_row < ws.nrows:
-                                label = str(ws.cell_value(check_row, 1) if ws.ncols > 1 else '')
-                                if '差引' in label or 'Balance' in label or 'balance' in label:
-                                    val = ws.cell_value(check_row, col_try) if ws.ncols > col_try else 0
-                                    if isinstance(val, (int, float)) and val != 0:
-                                        # Convert from 千円 to 億円
-                                        result[key] = {
-                                            'raw_1000yen': val,
-                                            'oku_yen': round(val / 100000, 1),
-                                        }
-                                    break
+    result = {'period': period}
+    found_rows = {}
+
+    # Step 1: Find the starting row for each category
+    for r in range(ws.nrows):
+        c0 = str(ws.cell_value(r, 0)) if ws.ncols > 0 else ''
+        c0_clean = c0.replace('\u3000', '').replace(' ', '')  # strip full/half-width spaces
+        for key, keywords in categories.items():
+            if key not in found_rows:
+                for kw in keywords:
+                    if kw in c0 or kw in c0_clean:
+                        found_rows[key] = r
+                        break
+
+    # Step 2: For each category, check its row and next 1-2 rows for balance values
+    for key, start_row in found_rows.items():
+        current_balance = None
+        prev_balance = None
+        for r_offset in range(3):  # check up to 3 rows
+            r = start_row + r_offset
+            if r >= ws.nrows:
+                break
+            # Column 10 = current week balance
+            val10 = ws.cell_value(r, 10) if ws.ncols > 10 else ''
+            if val10 and str(val10).strip() and str(val10).strip() not in ('千円,%  1,000 yen, %', '差引き Balance'):
+                parsed = safe_num(val10)
+                if parsed != 0 or '-0' in str(val10):
+                    current_balance = parsed
+            # Column 6 = previous week balance
+            val6 = ws.cell_value(r, 6) if ws.ncols > 6 else ''
+            if val6 and str(val6).strip():
+                parsed6 = safe_num(val6)
+                if parsed6 != 0 or '-0' in str(val6):
+                    prev_balance = parsed6
+
+            if current_balance is not None:
+                break
+
+        if current_balance is not None:
+            result[key] = {
+                'raw_1000yen': current_balance,
+                'oku_yen': round(current_balance / 100000, 1),
+            }
+            if prev_balance is not None:
+                result[key]['prev_1000yen'] = prev_balance
+                result[key]['prev_oku_yen'] = round(prev_balance / 100000, 1)
 
     return result
 
