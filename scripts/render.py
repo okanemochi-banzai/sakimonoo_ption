@@ -1309,6 +1309,107 @@ def build_archive_snippet(data):
     return snippet
 
 
+def update_archive(archive_path, data):
+    """Update archive.html by inserting new entry into the correct SQ section.
+    
+    Finds <div id="archive-list-XXXX"> and inserts the new entry at the top.
+    If archive.html doesn't exist, skip silently.
+    If the date already exists, skip to avoid duplicates.
+    """
+    if not os.path.exists(archive_path):
+        print('[render.py] archive.html not found at %s — skipping auto-update' % archive_path)
+        return False
+
+    meta = data['metadata']
+    date_str = meta.get('date', '')
+    s01 = data.get('s01', {})
+    nikkei = s01.get('nikkei_close', 0)
+    vi = s01.get('vi', 0)
+
+    WEEKDAYS = ['月', '火', '水', '木', '金', '土', '日']
+    dt = None
+    try:
+        from datetime import datetime as _dt
+        dt = _dt.strptime(date_str, '%Y%m%d')
+    except:
+        pass
+
+    weekday = WEEKDAYS[dt.weekday()] if dt else ''
+    date_disp = '%s.%s.%s' % (date_str[:4], date_str[4:6], date_str[6:8]) if len(date_str) == 8 else date_str
+
+    # Determine SQ section ID: major month as MMDD of SQ
+    major_month = meta.get('major_month', '')  # e.g. '202606'
+    if len(major_month) >= 6:
+        mm = major_month[4:6]  # '06'
+        # SQ = 2nd Friday, typically around 12-13th
+        section_id = 'archive-list-%s' % mm  # e.g. 'archive-list-06'
+    else:
+        section_id = 'archive-list-06'
+
+    # Build entry HTML
+    vi_class = 'etag-vi high' if vi and vi > 30 else 'etag-vi'
+    nk_class = 'etag-nikkei'
+
+    entry = ''
+    entry += '    <a href="JPX_portal_%s.html" class="entry">\n' % date_str
+    entry += '      <span class="entry-date">%s</span>\n' % date_disp
+    entry += '      <span class="entry-weekday">%s</span>\n' % weekday
+    entry += '      <span class="entry-tags">\n'
+    entry += '        <span class="etag %s">%s</span>\n' % (nk_class, fnum(nikkei) if nikkei else '-')
+    entry += '        <span class="etag %s">VI %s</span>\n' % (vi_class, vi if vi else '-')
+    entry += '      </span>\n'
+    entry += '      <span class="entry-arrow">&rarr;</span>\n'
+    entry += '    </a>\n'
+
+    # Read existing archive.html
+    with open(archive_path, 'r', encoding='utf-8') as f:
+        html = f.read()
+
+    # Check for duplicate
+    portal_link = 'JPX_portal_%s.html' % date_str
+    if portal_link in html:
+        print('[render.py] archive.html already contains entry for %s — skipping' % date_str)
+        return False
+
+    # Find the target section and insert
+    import re
+    # Pattern: <div id="archive-list-XX"> (possibly with other attributes)
+    pattern = r'(<div[^>]*id=["\']%s["\'][^>]*>)' % re.escape(section_id)
+    match = re.search(pattern, html)
+
+    if match:
+        # Insert entry right after the opening div tag
+        insert_pos = match.end()
+        html = html[:insert_pos] + '\n' + entry + html[insert_pos:]
+        print('[render.py] Inserted entry into %s' % section_id)
+    else:
+        # Section not found — try broader patterns
+        # Look for any archive-list div
+        alt_patterns = [
+            r'(<div[^>]*id=["\']archive-list-\d+["\'][^>]*>)',  # archive-list-0625 etc
+            r'(<div[^>]*id=["\']archive-list[^"\']*["\'][^>]*>)',
+        ]
+        inserted = False
+        for alt_pat in alt_patterns:
+            match = re.search(alt_pat, html)
+            if match:
+                insert_pos = match.end()
+                html = html[:insert_pos] + '\n' + entry + html[insert_pos:]
+                print('[render.py] Inserted entry into first available archive-list (section %s not found)' % section_id)
+                inserted = True
+                break
+
+        if not inserted:
+            print('[render.py] WARNING: No archive-list section found in archive.html — entry not inserted')
+            return False
+
+    # Write updated archive.html
+    with open(archive_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+
+    return True
+
+
 # ============================================================
 # Main Pipeline
 # ============================================================
@@ -1349,16 +1450,20 @@ def run(args):
         f.write(html)
     print('[render.py] Portal: %s' % portal_path)
 
-    # 5. Archive snippet
+    # 5. Archive snippet (for reference)
     snippet = build_archive_snippet(data)
     snippet_path = os.path.join(outdir, 'archive_snippet_%s.txt' % date_str)
     with open(snippet_path, 'w', encoding='utf-8') as f:
         f.write(snippet)
     print('[render.py] Snippet: %s' % snippet_path)
-    print('\n--- Archive snippet ---')
-    print(snippet)
 
-    print('\n[render.py] Done. %d files generated.' % 5)
+    # 6. Auto-update archive.html
+    archive_path = os.path.join(outdir, 'archive.html')
+    updated = update_archive(archive_path, data)
+    if updated:
+        print('[render.py] archive.html updated successfully')
+
+    print('\n[render.py] Done. Files generated.')
 
 
 if __name__ == '__main__':
