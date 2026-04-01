@@ -1,0 +1,90 @@
+# .github/workflows/jpx-analysis.yml
+# JPX Market Analysis - Automated Pipeline
+#
+# Triggers:
+#   1. Push Excel files to data/ directory
+#   2. Manual dispatch (with optional Nikkei/VI override)
+#
+# What it does:
+#   1. Fetches Nikkei 225 close and VI (or uses manual input)
+#   2. Runs extract.py to parse Excel files → data.json
+#   3. Runs render.py to generate HTML/MD files
+#   4. Commits generated files and deploys via GitHub Pages
+
+name: JPX Daily Analysis
+
+on:
+  push:
+    paths:
+      - 'data/*.xlsx'
+      - 'data/*.xls'
+  workflow_dispatch:
+    inputs:
+      nikkei:
+        description: 'Nikkei 225 close (leave empty for auto-fetch)'
+        required: false
+        type: string
+      vi:
+        description: 'Nikkei VI close (leave empty for auto-fetch)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install openpyxl xlrd
+
+      - name: List data files
+        run: |
+          echo "=== Files in data/ ==="
+          ls -la data/ || echo "No data/ directory"
+
+      - name: Run pipeline
+        run: |
+          ARGS="--datadir data --outdir ."
+          if [ -n "${{ github.event.inputs.nikkei }}" ]; then
+            ARGS="$ARGS --nikkei ${{ github.event.inputs.nikkei }}"
+          fi
+          if [ -n "${{ github.event.inputs.vi }}" ]; then
+            ARGS="$ARGS --vi ${{ github.event.inputs.vi }}"
+          fi
+          python scripts/run_pipeline.py $ARGS
+
+      - name: List generated files
+        run: |
+          echo "=== Generated files ==="
+          ls -la *.html *.md data/data.json 2>/dev/null || true
+
+      - name: Commit and push
+        run: |
+          git config user.name "JPX Analysis Bot"
+          git config user.email "bot@jpx-analysis.local"
+          
+          # Stage generated files
+          git add index.html pnl_simulator.html archive.html JPX_portal_*.html JPX_market_analysis_*.md
+          git add data/data.json data/market_latest.json 2>/dev/null || true
+          
+          # Check if there are changes to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            DATE=$(date +%Y%m%d)
+            git commit -m "${DATE} analysis update [automated]"
+            git push
+          fi
