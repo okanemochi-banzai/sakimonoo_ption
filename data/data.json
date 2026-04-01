@@ -2191,7 +2191,9 @@
         "strategy": "カバードコール",
         "significance": 6530.2
       }
-    ]
+    ],
+    "source": "live",
+    "data_date": "20260401"
   },
   "s10": {
     "period": "2026年3月第3週 2026/3 week3  ( 3/16 - 3/19 )",
@@ -2224,7 +2226,9 @@
       "oku_yen": 56.0,
       "prev_1000yen": -111846727,
       "prev_oku_yen": -1118.5
-    }
+    },
+    "source": "live",
+    "data_date": "20260401"
   },
   "s11": {
     "mini_oi": {
