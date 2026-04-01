@@ -212,6 +212,10 @@ def build_markdown(data):
     md.append('## ⑨ 参加者別建玉分析')
     md.append('')
     if 'error' not in s09:
+        # Show cache indicator
+        if s09.get('source') == 'cache':
+            md.append('> ※ %s時点のキャッシュデータ（参考値）' % s09.get('data_date', '?'))
+            md.append('')
         # Futures summary
         fut = s09.get('futures', {})
         if fut:
@@ -640,6 +644,8 @@ def _preview_participants(s09):
     dn = nk.get('domestic_net', 0)
     h += '<div class="mini-metric"><div class="mm-label">海外Net</div><div class="mm-value %s">%s</div></div>' % (sign_class(on), fnum(on, plus=True))
     h += '<div class="mini-metric"><div class="mm-label">国内Net</div><div class="mm-value %s">%s</div></div>' % (sign_class(dn), fnum(dn, plus=True))
+    if s09.get('source') == 'cache':
+        h += '<div class="mini-metric"><div class="mm-label" style="color:var(--yellow)">%s時点</div></div>' % esc(s09.get('data_date', '?')[:8])
     h += '</div>'
     return h
 
