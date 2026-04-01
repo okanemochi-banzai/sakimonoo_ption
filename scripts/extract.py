@@ -1401,7 +1401,8 @@ def run(args):
     else:
         output['s07'] = []
 
-    # ⑨ Participant analysis
+    # ⑨ Participant analysis (with caching)
+    cache_s09_path = os.path.join(data_dir, 'cache_s09.json')
     fut_data = None
     op_data = None
 
@@ -1419,15 +1420,60 @@ def run(args):
             'futures': fut_data or {},
             'options': op_data or {},
             'profiles': profiles,
+            'source': 'live',
+            'data_date': date_str,
         }
         print('[extract.py] ⑨-C done: %d profiles' % len(profiles))
+
+        # Save to cache
+        try:
+            with open(cache_s09_path, 'w', encoding='utf-8') as f:
+                json.dump(output['s09'], f, ensure_ascii=False, indent=2)
+            print('[extract.py] ⑨ cached to %s' % cache_s09_path)
+        except Exception as e:
+            print('[extract.py] ⑨ cache write failed: %s' % e)
+
+    elif os.path.exists(cache_s09_path):
+        # Load from cache
+        try:
+            with open(cache_s09_path, 'r', encoding='utf-8') as f:
+                cached = json.load(f)
+            cached['source'] = 'cache'
+            cached_date = cached.get('data_date', '?')
+            output['s09'] = cached
+            print('[extract.py] ⑨ loaded from cache (%s時点・参考)' % cached_date)
+        except Exception as e:
+            print('[extract.py] ⑨ cache read failed: %s' % e)
+            output['s09'] = {'error': 'No weekly data and cache unreadable'}
     else:
         output['s09'] = {'error': 'No weekly participant files'}
 
-    # ⑩ Stock flow
+    # ⑩ Stock flow (with caching)
+    cache_s10_path = os.path.join(data_dir, 'cache_s10.json')
+
     if 'stock_vol' in files:
         output['s10'] = extract_s10(files['stock_vol'])
+        output['s10']['source'] = 'live'
+        output['s10']['data_date'] = date_str
         print('[extract.py] ⑩ done')
+
+        # Save to cache
+        try:
+            with open(cache_s10_path, 'w', encoding='utf-8') as f:
+                json.dump(output['s10'], f, ensure_ascii=False, indent=2)
+            print('[extract.py] ⑩ cached')
+        except:
+            pass
+
+    elif os.path.exists(cache_s10_path):
+        try:
+            with open(cache_s10_path, 'r', encoding='utf-8') as f:
+                cached = json.load(f)
+            cached['source'] = 'cache'
+            output['s10'] = cached
+            print('[extract.py] ⑩ loaded from cache (%s時点)' % cached.get('data_date', '?'))
+        except:
+            output['s10'] = {'skipped': True}
     else:
         output['s10'] = {'skipped': True}
 
