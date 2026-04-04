@@ -71,6 +71,24 @@ jobs:
           echo "=== Generated files ==="
           ls -la *.html *.md data/data.json 2>/dev/null || true
 
+      - name: Cleanup old daily files in data/
+        run: |
+          cd data
+          # For each daily file type, keep only the latest and remove older ones
+          for pattern in "open_interest" "market_data" "volume_by_participant"; do
+            files=$(ls -1 *${pattern}* 2>/dev/null | sort -r)
+            count=0
+            for f in $files; do
+              count=$((count + 1))
+              if [ $count -gt 1 ]; then
+                echo "Removing old: $f"
+                git rm "$f" 2>/dev/null || rm -f "$f"
+              else
+                echo "Keeping latest: $f"
+              fi
+            done
+          done
+
       - name: Commit and push
         run: |
           git config user.name "JPX Analysis Bot"
@@ -78,7 +96,7 @@ jobs:
           
           # Stage generated files
           git add index.html pnl_simulator.html archive.html JPX_portal_*.html JPX_market_analysis_*.md
-          git add data/data.json data/market_latest.json data/cache_s09.json data/cache_s10.json 2>/dev/null || true
+          git add data/ 2>/dev/null || true
           
           # Check if there are changes to commit
           if git diff --cached --quiet; then
