@@ -3270,5 +3270,56 @@
         }
       }
     }
+  },
+  "indicators": {
+    "pcr_volume": 1.26,
+    "pcr_oi": 1.67,
+    "pcr_signal": "やや弱気",
+    "max_pain": 54000,
+    "max_pain_total": 58097000,
+    "max_pain_diff": 800,
+    "basis": 77,
+    "basis_pct": 0.14,
+    "basis_signal": "コンタンゴ（先物プレミアム）",
+    "walls_reinforced": [
+      {
+        "strike": 56000,
+        "type": "C",
+        "oi": 10639,
+        "change": 565
+      },
+      {
+        "strike": 58000,
+        "type": "C",
+        "oi": 12510,
+        "change": 431
+      },
+      {
+        "strike": 55000,
+        "type": "C",
+        "oi": 8322,
+        "change": 363
+      },
+      {
+        "strike": 54000,
+        "type": "C",
+        "oi": 6548,
+        "change": 348
+      },
+      {
+        "strike": 53000,
+        "type": "P",
+        "oi": 6572,
+        "change": 282
+      }
+    ],
+    "walls_weakened": [
+      {
+        "strike": 57000,
+        "type": "C",
+        "oi": 11837,
+        "change": -355
+      }
+    ]
   }
 }
