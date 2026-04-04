@@ -507,6 +507,13 @@ def build_dashboard_html(data):
         h += '  <div class="kpi"><div class="label">1日値幅</div><div class="value">%s</div></div>\n' % fnum(r1d.get('width'))
     h += '</div>\n'
 
+    # TradingView Chart
+    h += '<div style="max-width:1200px;margin:0 auto;padding:0 16px 10px">\n'
+    h += '  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px">\n'
+    h += '    <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=D&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja" style="width:100%;height:100%;border:none"></iframe>\n'
+    h += '  </div>\n'
+    h += '</div>\n'
+
     # Mobile nav
     h += '<div class="mobile-nav">\n'
     h += '  <a href="index.html">ダッシュボード</a>\n'
