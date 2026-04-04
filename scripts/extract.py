@@ -1311,6 +1311,109 @@ def build_strategy_presets(atm, vi, T):
 
 
 # ============================================================
+# Derived Indicators
+# ============================================================
+
+def compute_indicators(data):
+    """Compute derived trading indicators from extracted data."""
+    indicators = {}
+    s03 = data.get('s03', {})
+    s04 = data.get('s04', {})
+    s06 = data.get('s06', {})
+    s01 = data.get('s01', {})
+    meta = data.get('metadata', {})
+
+    # --- Put/Call Ratio ---
+    lg = s03.get('large', {})
+    pv = lg.get('put_volume', 0)
+    cv = lg.get('call_volume', 0)
+    indicators['pcr_volume'] = round(pv / cv, 2) if cv else None
+
+    lg_oi = s04.get('large', {})
+    p_oi = lg_oi.get('put_total_oi', 0)
+    c_oi = lg_oi.get('call_total_oi', 0)
+    indicators['pcr_oi'] = round(p_oi / c_oi, 2) if c_oi else None
+
+    # PCR interpretation
+    pcr = indicators.get('pcr_volume')
+    if pcr is not None:
+        if pcr > 1.3:
+            indicators['pcr_signal'] = '強い弱気（逆張り買いシグナル）'
+        elif pcr > 1.0:
+            indicators['pcr_signal'] = 'やや弱気'
+        elif pcr > 0.7:
+            indicators['pcr_signal'] = 'ニュートラル'
+        elif pcr > 0.5:
+            indicators['pcr_signal'] = 'やや強気'
+        else:
+            indicators['pcr_signal'] = '強い強気（逆張り売りシグナル）'
+
+    # --- Max Pain ---
+    dist = s06.get('distribution', [])
+    if dist:
+        min_pain = None
+        max_pain_strike = None
+        for target in dist:
+            K = target['strike']
+            total_pain = 0
+            for d in dist:
+                # Pain for put holders if SQ = K
+                if d['put_oi'] > 0:
+                    put_itm = max(d['strike'] - K, 0)
+                    total_pain += put_itm * d['put_oi']
+                # Pain for call holders if SQ = K
+                if d['call_oi'] > 0:
+                    call_itm = max(K - d['strike'], 0)
+                    total_pain += call_itm * d['call_oi']
+            if min_pain is None or total_pain < min_pain:
+                min_pain = total_pain
+                max_pain_strike = K
+
+        indicators['max_pain'] = max_pain_strike
+        indicators['max_pain_total'] = min_pain
+
+        # Distance from ATM
+        atm = meta.get('atm')
+        if atm and max_pain_strike:
+            indicators['max_pain_diff'] = max_pain_strike - atm
+
+    # --- Futures Basis ---
+    nikkei = s01.get('nikkei_close')
+    atm = meta.get('atm')
+    if nikkei and atm:
+        basis = atm - nikkei
+        indicators['basis'] = round(basis)
+        indicators['basis_pct'] = round(basis / nikkei * 100, 2)
+        if basis > 0:
+            indicators['basis_signal'] = 'コンタンゴ（先物プレミアム）'
+        else:
+            indicators['basis_signal'] = 'バックワーデーション（先物ディスカウント）'
+
+    # --- Wall Changes Summary ---
+    if dist:
+        reinforced = []
+        weakened = []
+        for d in dist:
+            # Put walls
+            if d['put_oi'] > 3000 and d['put_change'] > 200:
+                reinforced.append({'strike': d['strike'], 'type': 'P', 'oi': d['put_oi'], 'change': d['put_change']})
+            elif d['put_oi'] > 3000 and d['put_change'] < -200:
+                weakened.append({'strike': d['strike'], 'type': 'P', 'oi': d['put_oi'], 'change': d['put_change']})
+            # Call walls
+            if d['call_oi'] > 3000 and d['call_change'] > 200:
+                reinforced.append({'strike': d['strike'], 'type': 'C', 'oi': d['call_oi'], 'change': d['call_change']})
+            elif d['call_oi'] > 3000 and d['call_change'] < -200:
+                weakened.append({'strike': d['strike'], 'type': 'C', 'oi': d['call_oi'], 'change': d['call_change']})
+
+        reinforced.sort(key=lambda x: -x['change'])
+        weakened.sort(key=lambda x: x['change'])
+        indicators['walls_reinforced'] = reinforced[:5]
+        indicators['walls_weakened'] = weakened[:5]
+
+    return indicators
+
+
+# ============================================================
 # Main pipeline
 # ============================================================
 
@@ -1525,6 +1628,12 @@ def run(args):
         print('[extract.py] ⑪-B/C/F done')
 
     output['s11'] = s11
+
+    # Derived indicators (PCR, Max Pain, Basis, Wall changes)
+    output['indicators'] = compute_indicators(output)
+    ind = output['indicators']
+    print('[extract.py] Indicators: PCR=%.2f MaxPain=%s Basis=%s' % (
+        ind.get('pcr_volume') or 0, ind.get('max_pain', '-'), ind.get('basis', '-')))
 
     # Write output
     out_path = args.out
