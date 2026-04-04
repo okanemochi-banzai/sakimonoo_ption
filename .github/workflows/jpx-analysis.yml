@@ -78,7 +78,7 @@ jobs:
           
           # Stage generated files
           git add index.html pnl_simulator.html archive.html JPX_portal_*.html JPX_market_analysis_*.md
-          git add data/data.json data/market_latest.json 2>/dev/null || true
+          git add data/data.json data/market_latest.json data/cache_s09.json data/cache_s10.json 2>/dev/null || true
           
           # Check if there are changes to commit
           if git diff --cached --quiet; then
