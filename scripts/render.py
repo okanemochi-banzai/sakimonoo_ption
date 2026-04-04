@@ -496,6 +496,7 @@ def build_dashboard_html(data):
     h += '</div>\n'
 
     # KPI Strip
+    ind = data.get('indicators', {})
     h += '<div class="kpi-strip">\n'
     nk_cls = ''
     h += '  <div class="kpi"><div class="label">日経平均</div><div class="value %s">%s</div></div>\n' % (nk_cls, fnum(nikkei) if nikkei else '-')
@@ -505,6 +506,15 @@ def build_dashboard_html(data):
     r1d = s01.get('range_1d', {})
     if r1d:
         h += '  <div class="kpi"><div class="label">1日値幅</div><div class="value">%s</div></div>\n' % fnum(r1d.get('width'))
+    # PCR
+    pcr = ind.get('pcr_volume')
+    if pcr is not None:
+        pcr_cls = 'down' if pcr > 1.0 else 'up' if pcr < 0.7 else ''
+        h += '  <div class="kpi"><div class="label">PCR</div><div class="value %s">%.2f</div></div>\n' % (pcr_cls, pcr)
+    # Max Pain
+    mp = ind.get('max_pain')
+    if mp:
+        h += '  <div class="kpi"><div class="label">Max Pain</div><div class="value">%s</div></div>\n' % fnum(mp)
     h += '</div>\n'
 
     # TradingView Chart
@@ -530,9 +540,9 @@ def build_dashboard_html(data):
         ('opval', '💰', 'オプション取引代金', _preview_opval(s03), _detail_opval_js(s03)),
         ('oichg', '📊', 'オプション建玉増減', _preview_oichg(s04), _detail_oichg_js(s04)),
         ('important', '⚡', '重要建玉変化', _preview_important(s05), _detail_important_js(s05)),
-        ('dist', '🦋', '建玉分布', _preview_dist(s06), _detail_dist_js(s06)),
+        ('dist', '🦋', '建玉分布', _preview_dist(s06), _detail_dist_js(s06, ind)),
         ('jnet', '🏛', '大口手口（J-NET）', _preview_jnet(s07), _detail_jnet_js(s07)),
-        ('assess', '🎯', '総合評価', _preview_assess(s01), _detail_assess_js(data)),
+        ('assess', '🎯', '総合評価', _preview_assess(s01, ind), _detail_assess_js(data)),
         ('participants', '🌏', '参加者別建玉分析', _preview_participants(s09), _detail_participants_js(s09)),
         ('strategy', '🎲', '戦略マップ', _preview_strategy(s11), _detail_strategy_js(s11, atm)),
     ]
@@ -657,11 +667,21 @@ def _preview_jnet(s07):
     return h
 
 
-def _preview_assess(s01):
+def _preview_assess(s01, ind=None):
+    ind = ind or {}
+    h = '<div class="mini-metrics">'
     r1w = s01.get('range_1w', {})
     if r1w:
-        return '<div class="mini-metrics"><div class="mini-metric"><div class="mm-label">1週予想レンジ</div><div class="mm-value" style="color:var(--yellow)">%s 〜 %s</div></div></div>' % (fnum(r1w.get('low')), fnum(r1w.get('high')))
-    return '<span class="mm-label">LLM分析が必要</span>'
+        h += '<div class="mini-metric"><div class="mm-label">1週予想</div><div class="mm-value" style="color:var(--yellow)">%s〜%s</div></div>' % (fnum(r1w.get('low')), fnum(r1w.get('high')))
+    pcr = ind.get('pcr_volume')
+    if pcr is not None:
+        pcr_cls = 'negative' if pcr > 1.0 else 'positive' if pcr < 0.7 else ''
+        h += '<div class="mini-metric"><div class="mm-label">PCR</div><div class="mm-value %s">%.2f</div></div>' % (pcr_cls, pcr)
+    mp = ind.get('max_pain')
+    if mp:
+        h += '<div class="mini-metric"><div class="mm-label">MaxPain</div><div class="mm-value">%s</div></div>' % fnum(mp)
+    h += '</div>'
+    return h
 
 
 def _preview_participants(s09):
@@ -825,11 +845,12 @@ def _detail_important_js(s05):
     return js
 
 
-def _detail_dist_js(s06):
+def _detail_dist_js(s06, ind=None):
     if 'distribution' not in s06:
         return "var h='<div>データなし</div>';return h;"
     dist = s06['distribution']
     max_oi = max([max(d['put_oi'], d['call_oi']) for d in dist] or [1])
+    ind = ind or {}
     js = "var h='';"
     js += "h+='<div style=\"font-size:11px;color:var(--sub);margin-bottom:8px\">ATM = %s</div>';" % _js_str(fnum(s06.get('atm')))
     # Column headers
@@ -863,6 +884,50 @@ def _detail_dist_js(s06):
         js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (ccls, _js_str(fnum(d['call_change'], plus=True)))
         js += "h+='</div>';"
 
+    # Max Pain indicator
+    mp = ind.get('max_pain')
+    if mp:
+        js += "h+='<div style=\"margin:10px 0;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:6px;font-size:11px\">';"
+        js += "h+='<span style=\"color:var(--yellow);font-weight:600\">Max Pain: %s</span>';" % _js_str(fnum(mp))
+        diff = ind.get('max_pain_diff')
+        if diff is not None:
+            js += "h+=' <span style=\"color:var(--sub)\">(ATM%s)</span>';" % (_js_str(fnum(diff, plus=True)))
+        js += "h+='</div>';"
+
+    # Wall changes summary
+    reinforced = ind.get('walls_reinforced', [])
+    weakened = ind.get('walls_weakened', [])
+    if reinforced or weakened:
+        js += "h+='<div style=\"margin-top:10px\">';"
+        js += "h+='<div style=\"font-size:11px;font-weight:600;color:var(--accent);margin-bottom:4px\">壁の変化</div>';"
+        if reinforced:
+            js += "h+='<div style=\"font-size:10px;color:var(--sub);margin:2px 0\">🧱 補強: ';"
+            for w in reinforced:
+                color = 'var(--put)' if w['type'] == 'P' else 'var(--call)'
+                js += "h+='<span style=\"color:%s;margin-right:8px\">%s%s +%s</span>';" % (color, w['type'], _js_str(fnum(w['strike'])), _js_str(fnum(w['change'])))
+            js += "h+='</div>';"
+        if weakened:
+            js += "h+='<div style=\"font-size:10px;color:var(--sub);margin:2px 0\">⚠️ 崩壊: ';"
+            for w in weakened:
+                color = 'var(--put)' if w['type'] == 'P' else 'var(--call)'
+                js += "h+='<span style=\"color:%s;margin-right:8px\">%s%s %s</span>';" % (color, w['type'], _js_str(fnum(w['strike'])), _js_str(fnum(w['change'])))
+            js += "h+='</div>';"
+        js += "h+='</div>';"
+
+    js += "return h;"
+    return js
+    if not s07:
+        return "var h='<div>該当なし</div>';return h;"
+    js = "var h='';"
+    js += "h+='<table><tr><th>銘柄</th><th>参加者</th><th>取引高</th><th>分類</th></tr>';"
+    for t in s07:
+        cat_tag = {'us': 'tag-us', 'eu': 'tag-eu', 'hf': 'tag-hf', 'domestic': 'tag-dom'}.get(t['category'], '')
+        cat_label = {'us': '米系', 'eu': '欧系', 'hf': 'HF代理', 'domestic': '国内'}.get(t['category'], 'その他')
+        pair = ' <span style="color:var(--yellow)">🔄</span>' if t.get('is_pair') else ''
+        js += "h+='<tr><td>%s</td><td>%s%s</td><td>%s</td><td><span class=\"tag %s\">%s</span></td></tr>';" % (
+            _js_str(esc(t['product'][:30])), _js_str(esc(t['participant'])), pair,
+            _js_str(fnum(t['volume'])), cat_tag, cat_label)
+    js += "h+='</table>';"
     js += "return h;"
     return js
 
@@ -891,6 +956,7 @@ def _detail_assess_js(data):
     s04 = data.get('s04', {})
     s06 = data.get('s06', {})
     s07 = data.get('s07', [])
+    ind = data.get('indicators', {})
     r1d = s01.get('range_1d', {})
     r1w = s01.get('range_1w', {})
     js = "var h='';"
@@ -902,6 +968,28 @@ def _detail_assess_js(data):
             js += "h+='<div class=\"summary-item\"><div class=\"si-label\">1日予測値幅</div><div class=\"si-value\" style=\"color:var(--yellow)\">%s 〜 %s</div></div>';" % (_js_str(fnum(r1d.get('low'))), _js_str(fnum(r1d.get('high'))))
         if r1w:
             js += "h+='<div class=\"summary-item\"><div class=\"si-label\">1週予測値幅</div><div class=\"si-value\" style=\"color:var(--yellow)\">%s 〜 %s</div></div>';" % (_js_str(fnum(r1w.get('low'))), _js_str(fnum(r1w.get('high'))))
+        js += "h+='</div>';"
+
+    # Indicator summary
+    pcr = ind.get('pcr_volume')
+    mp = ind.get('max_pain')
+    if pcr or mp:
+        js += "h+='<div class=\"summary-box\">';"
+        if pcr is not None:
+            pcr_color = 'var(--red)' if pcr > 1.0 else 'var(--green)' if pcr < 0.7 else 'var(--text)'
+            js += "h+='<div class=\"summary-item\"><div class=\"si-label\">PCR（取引高）</div><div class=\"si-value\" style=\"color:%s\">%.2f</div><div style=\"font-size:9px;color:var(--sub)\">%s</div></div>';" % (pcr_color, pcr, _js_str(ind.get('pcr_signal', '')))
+        if mp:
+            js += "h+='<div class=\"summary-item\"><div class=\"si-label\">Max Pain</div><div class=\"si-value\">%s</div><div style=\"font-size:9px;color:var(--sub)\">ATM%s</div></div>';" % (_js_str(fnum(mp)), _js_str(fnum(ind.get('max_pain_diff', 0), plus=True)))
+        js += "h+='</div>';"
+
+        # PCR explanation
+        js += "h+='<div style=\"background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px;margin:8px 0;font-size:10px;color:var(--sub);line-height:1.6\">';"
+        js += "h+='<div style=\"font-weight:600;color:var(--accent);margin-bottom:2px\">PCR（Put/Call Ratio）の見方</div>';"
+        js += "h+='<span style=\"color:var(--red)\">1.3超</span> → 弱気過多（逆張りの買いシグナル）<br>';"
+        js += "h+='<span style=\"color:var(--red)\">1.0〜1.3</span> → やや弱気（プット優位）<br>';"
+        js += "h+='<span style=\"color:var(--text)\">0.7〜1.0</span> → ニュートラル<br>';"
+        js += "h+='<span style=\"color:var(--green)\">0.5〜0.7</span> → やや強気（コール優位）<br>';"
+        js += "h+='<span style=\"color:var(--green)\">0.5未満</span> → 強気過多（逆張りの売りシグナル）';"
         js += "h+='</div>';"
 
     # Structured analysis cards
