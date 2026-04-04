@@ -1,0 +1,33 @@
+{
+  "period": "2026年3月第4週 2026/3 week4  ( 3/23 - 3/27 )",
+  "proprietary": {
+    "raw_1000yen": 1274734351,
+    "oku_yen": 12747.3,
+    "prev_1000yen": 462840545,
+    "prev_oku_yen": 4628.4
+  },
+  "institutions": {
+    "raw_1000yen": 227225318,
+    "oku_yen": 2272.3,
+    "prev_1000yen": -260779434,
+    "prev_oku_yen": -2607.8
+  },
+  "individuals": {
+    "raw_1000yen": -4516517,
+    "oku_yen": -45.2
+  },
+  "foreigners": {
+    "raw_1000yen": -1508629733,
+    "oku_yen": -15086.3,
+    "prev_1000yen": -491896033,
+    "prev_oku_yen": -4919.0
+  },
+  "investment_trusts": {
+    "raw_1000yen": 352895026,
+    "oku_yen": 3529.0,
+    "prev_1000yen": 5603495,
+    "prev_oku_yen": 56.0
+  },
+  "source": "live",
+  "data_date": "20260403"
+}
