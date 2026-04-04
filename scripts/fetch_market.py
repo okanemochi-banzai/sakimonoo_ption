@@ -76,6 +76,42 @@ def fetch_stooq_vi():
     return None
 
 
+def fetch_yahoo_vi():
+    """Fetch Nikkei VI from Yahoo Finance Japan."""
+    try:
+        url = 'https://finance.yahoo.co.jp/quote/2035.T'
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        resp = urlopen(req, timeout=10)
+        text = resp.read().decode('utf-8')
+        # Look for price pattern
+        m = re.search(r'<span[^>]*class="[^"]*StyledNumber[^"]*"[^>]*>([\d,.]+)</span>', text)
+        if m:
+            val = float(m.group(1).replace(',', ''))
+            if 10 < val < 100:
+                return val
+    except Exception as e:
+        print('[fetch] yahoo VI failed: %s' % e, file=sys.stderr)
+    return None
+
+
+def fetch_investing_vi():
+    """Fetch Nikkei VI from Investing.com historical data page."""
+    try:
+        url = 'https://jp.investing.com/indices/nikkei-volatility'
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0', 'Accept-Language': 'ja'})
+        resp = urlopen(req, timeout=10)
+        text = resp.read().decode('utf-8')
+        # Look for last price
+        m = re.search(r'data-test="instrument-price-last"[^>]*>([\d,.]+)', text)
+        if m:
+            val = float(m.group(1).replace(',', ''))
+            if 10 < val < 100:
+                return val
+    except Exception as e:
+        print('[fetch] investing VI failed: %s' % e, file=sys.stderr)
+    return None
+
+
 def run(args):
     nikkei = None
     vi = None
@@ -90,7 +126,20 @@ def run(args):
         if nikkei:
             source = 'yahoo'
 
+    # Try multiple sources for VI
     vi = fetch_stooq_vi()
+    if vi:
+        print('[fetch] VI from stooq: %.2f' % vi, file=sys.stderr)
+    else:
+        vi = fetch_investing_vi()
+        if vi:
+            print('[fetch] VI from investing.com: %.2f' % vi, file=sys.stderr)
+        else:
+            vi = fetch_yahoo_vi()
+            if vi:
+                print('[fetch] VI from yahoo: %.2f' % vi, file=sys.stderr)
+            else:
+                print('[fetch] VI unavailable from all sources', file=sys.stderr)
 
     result = {
         'nikkei_close': nikkei,
