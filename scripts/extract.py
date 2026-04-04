@@ -173,35 +173,65 @@ def round500(x):
 # ============================================================
 
 def detect_files(data_dir):
-    """Auto-detect JPX files in directory by naming pattern."""
+    """Auto-detect JPX files in directory by naming pattern.
+    When multiple files match the same type, picks the one with the latest date.
+    """
     files = {}
     all_files = os.listdir(data_dir)
+
+    # Collect candidates per type: {type: [(date_str, filepath), ...]}
+    candidates = {
+        'open_interest': [],
+        'jnet': [],
+        'market_data': [],
+        'op_participants': [],
+        'fut_participants': [],
+        'stock_vol': [],
+    }
 
     for f in all_files:
         fp = os.path.join(data_dir, f)
         fl = f.lower()
 
+        # Extract date from filename
+        m = re.search(r'(\d{8})', f)
+        if not m:
+            m = re.search(r'(\d{6})', f)  # YYMMDD for stock_vol
+        fdate = m.group(1) if m else '00000000'
+
         if 'open_interest' in fl and fl.endswith('.xlsx'):
-            files['open_interest'] = fp
-            # Extract date from filename like 20260402open_interest.xlsx
-            m = re.search(r'(\d{8})', f)
-            if m:
-                files['date_str'] = m.group(1)
+            candidates['open_interest'].append((fdate, fp))
 
         elif 'volume_by_participant' in fl and 'j-net' in fl and fl.endswith('.xlsx'):
-            files['jnet'] = fp
+            candidates['jnet'].append((fdate, fp))
 
         elif 'market_data' in fl and fl.endswith('.xlsx'):
-            files['market_data'] = fp
+            candidates['market_data'].append((fdate, fp))
 
         elif 'nk225op_oi_by_tp' in fl and fl.endswith('.xlsx'):
-            files['op_participants'] = fp
+            candidates['op_participants'].append((fdate, fp))
 
         elif 'indexfut_oi_by_tp' in fl and fl.endswith('.xlsx'):
-            files['fut_participants'] = fp
+            candidates['fut_participants'].append((fdate, fp))
 
         elif (fl.startswith('stock_vol') or fl.startswith('stock_val')) and fl.endswith('.xls'):
-            files['stock_vol'] = fp
+            candidates['stock_vol'].append((fdate, fp))
+
+    # Pick latest file per type
+    for key, cands in candidates.items():
+        if cands:
+            cands.sort(key=lambda x: x[0], reverse=True)  # latest date first
+            files[key] = cands[0][1]
+
+    # Extract analysis date from the latest daily file (open_interest preferred)
+    for key in ['open_interest', 'jnet', 'market_data']:
+        cands = candidates.get(key, [])
+        if cands:
+            cands.sort(key=lambda x: x[0], reverse=True)
+            date_candidate = cands[0][0]
+            if len(date_candidate) == 8:
+                files['date_str'] = date_candidate
+                break
 
     return files
 
