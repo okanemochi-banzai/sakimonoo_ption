@@ -586,8 +586,8 @@ def _preview_opval(s03):
         return '<span class="mm-label">データなし</span>'
     lg = s03.get('large', {})
     h = '<div class="mini-metrics">'
-    h += '<div class="mini-metric"><div class="mm-label">プット</div><div class="mm-value">%s枚</div></div>' % fnum(lg.get('put_volume'))
-    h += '<div class="mini-metric"><div class="mm-label">コール</div><div class="mm-value">%s枚</div></div>' % fnum(lg.get('call_volume'))
+    h += '<div class="mini-metric"><div class="mm-label">プット代金</div><div class="mm-value">%sM</div></div>' % fnum(lg.get('put_value'))
+    h += '<div class="mini-metric"><div class="mm-label">コール代金</div><div class="mm-value">%sM</div></div>' % fnum(lg.get('call_value'))
     h += '<div class="mini-metric"><div class="mm-label">J-NET率</div><div class="mm-value">%s</div></div>' % fpct(lg.get('jnet_ratio'))
     h += '</div>'
     return h
@@ -612,10 +612,11 @@ def _preview_important(s05):
     h = ''
     for c in s05[:4]:
         cls = 'tag-put' if c['type'] == 'P' else 'tag-call'
-        direction = 'tag-up' if c['change'] > 0 else 'tag-down'
         h += '<span class="tag %s">%s%s %s</span>' % (cls, c['type'], fnum(c['strike']), fnum(c['change'], plus=True))
     if len(s05) > 4:
-        h += '<span class="tag">+%d件</span>' % (len(s05) - 4)
+        # Count by expiry
+        expiries = set(c.get('expiry', '') for c in s05)
+        h += '<span class="tag">他%d件 (%d限月)</span>' % (len(s05) - 4, len(expiries))
     return h
 
 
@@ -713,18 +714,20 @@ def _detail_futures_js(s02):
         oi = sec.get('total_oi', 0)
         cls = 'positive' if chg > 0 else 'negative' if chg < 0 else ''
         js += "h+='<div class=\"bar-row\">';"
-        js += "h+='<div class=\"bar-label\">%s</div>';" % _js_str(label)
+        js += "h+='<div class=\"bar-label\">%s 合計</div>';" % _js_str(label)
         js += "h+='<div class=\"bar-track\"><div class=\"bar-fill %s\" style=\"width:%dpx\"></div></div>';" % (
             'up' if chg > 0 else 'down', min(abs(chg) // 50 + 5, 200) if chg else 0)
         js += "h+='<div class=\"bar-val %s\">%s</div>';" % (cls, _js_str(fnum(chg, plus=True)))
         js += "h+='</div>';"
 
-        # Monthly details
-        for m in sec.get('months', []):
+        # Only show first month (nearest major month)
+        months = sec.get('months', [])
+        if months:
+            m = months[0]
             mc = m.get('change', 0)
             mcls = 'positive' if mc > 0 else 'negative' if mc < 0 else ''
             js += "h+='<div class=\"bar-row\">';"
-            js += "h+='<div class=\"bar-label\" style=\"font-size:10px\">%s</div>';" % _js_str(m['label'][:12])
+            js += "h+='<div class=\"bar-label\" style=\"font-size:10px;padding-left:16px\">%s (OI: %s)</div>';" % (_js_str(m['label'][:12]), _js_str(fnum(m.get('oi'))))
             js += "h+='<div class=\"bar-track\"><div class=\"bar-fill %s\" style=\"width:%dpx\"></div></div>';" % (
                 'up' if mc > 0 else 'down', min(abs(mc) // 50 + 3, 150) if mc else 0)
             js += "h+='<div class=\"bar-val %s\" style=\"font-size:10px\">%s</div>';" % (mcls, _js_str(fnum(mc, plus=True)))
@@ -780,13 +783,37 @@ def _detail_oichg_js(s04):
 def _detail_important_js(s05):
     if not s05:
         return "var h='<div>該当なし</div>';return h;"
-    js = "var h='';"
-    js += "h+='<table><tr><th>銘柄</th><th>建玉</th><th>前日比</th></tr>';"
+    
+    # Group by expiry
+    from collections import OrderedDict
+    groups = OrderedDict()
     for c in s05:
-        cls = 'positive' if c['change'] > 0 else 'negative'
-        js += "h+='<tr><td>%s</td><td>%s</td><td class=\"%s\">%s</td></tr>';" % (
-            _js_str(esc(c['name'])), _js_str(fnum(c.get('oi'))), cls, _js_str(fnum(c['change'], plus=True)))
-    js += "h+='</table>';"
+        exp = c.get('expiry', '?')
+        if exp not in groups:
+            groups[exp] = []
+        groups[exp].append(c)
+    
+    # Map expiry code to label: '2604' -> '2026年04月限', '2606' -> '2026年06月限'
+    def expiry_label(exp):
+        if len(exp) == 4:
+            return '20%s年%s月限' % (exp[:2], exp[2:])
+        return exp
+    
+    js = "var h='';"
+    for exp, items in groups.items():
+        label = expiry_label(exp)
+        js += "h+='<div style=\"margin-top:10px;margin-bottom:4px;font-size:12px;font-weight:600;color:var(--accent)\">%s</div>';" % _js_str(label)
+        js += "h+='<table><tr><th>タイプ</th><th>行使価格</th><th>建玉</th><th>前日比</th></tr>';"
+        for c in items:
+            chg_cls = 'positive' if c['change'] > 0 else 'negative'
+            type_color = 'var(--put)' if c['type'] == 'P' else 'var(--call)'
+            js += "h+='<tr>';"
+            js += "h+='<td style=\"color:%s;font-weight:600\">%s</td>';" % (type_color, c['type'])
+            js += "h+='<td style=\"font-family:DM Mono\">%s</td>';" % _js_str(fnum(c['strike']))
+            js += "h+='<td style=\"font-family:DM Mono\">%s</td>';" % _js_str(fnum(c.get('oi')))
+            js += "h+='<td class=\"%s\" style=\"font-family:DM Mono\">%s</td>';" % (chg_cls, _js_str(fnum(c['change'], plus=True)))
+            js += "h+='</tr>';"
+        js += "h+='</table>';"
     js += "return h;"
     return js
 
