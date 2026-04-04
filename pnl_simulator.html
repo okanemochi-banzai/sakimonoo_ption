@@ -129,17 +129,23 @@ tr.atm-row:hover td{background:rgba(251,191,36,.12)}
 </div>
 <div class="hero">
   <h1>P&L Simulator</h1>
-  <div class="sub">2026/4/3（金） / ATM 53,200 / VI None / SQまで50日</div>
+  <div class="sub">2026/4/3（金） / ATM 53,200 / VI 27.17 / SQまで50日</div>
 </div>
 <div class="kpi-strip">
   <div class="kpi"><div class="label">ATM</div><div class="value">53,200</div></div>
-  <div class="kpi"><div class="label">VI</div><div class="value">None</div></div>
+  <div class="kpi"><div class="label">VI</div><div class="value">27.17</div></div>
   <div class="kpi"><div class="label">SQ</div><div class="value">2026-06-12</div></div>
   <div class="kpi"><div class="label">残り営業日</div><div class="value">50</div></div>
 </div>
 <div class="sim-section">
 <div style="margin:12px 0">
 <div style="color:var(--sub);font-size:11px;margin-bottom:6px">プリセット戦略</div>
+<span class="preset-btn" data-preset="0">Iron Condor</span>
+<span class="preset-btn" data-preset="1">Put Credit Spread</span>
+<span class="preset-btn" data-preset="2">Call Credit Spread</span>
+<span class="preset-btn" data-preset="3">Short Strangle + 先物ヘッジ</span>
+<span class="preset-btn" data-preset="4">P売り + mini先物ヘッジ</span>
+<span class="preset-btn" data-preset="5">ミニ週次θハーベスト</span>
 </div>
 <div style="margin:12px 0">
 <div style="display:flex;gap:8px;margin-bottom:8px">
@@ -159,8 +165,8 @@ tr.atm-row:hover td{background:rgba(251,191,36,.12)}
 </div>
 <div class="footer"><a href="index.html">ダッシュボード</a> <a href="archive.html">アーカイブ</a></div>
 <script>
-var ATM=53200,VI=0,T=0.2,DAYS=50;
-var PRESETS=[];
+var ATM=53200,VI=27.17,T=0.2,DAYS=50;
+var PRESETS=[{"name": "Iron Condor", "legs": [{"type": "put", "side": "short", "strike": 51000, "qty": 1, "multiplier": 1000, "premium": 1574.7}, {"type": "put", "side": "long", "strike": 49000, "qty": 1, "multiplier": 1000, "premium": 920.8}, {"type": "call", "side": "short", "strike": 55000, "qty": 1, "multiplier": 1000, "premium": 1818.4}, {"type": "call", "side": "long", "strike": 57000, "qty": 1, "multiplier": 1000, "premium": 1187.7}]}, {"name": "Put Credit Spread", "legs": [{"type": "put", "side": "short", "strike": 51000, "qty": 1, "multiplier": 1000, "premium": 1574.7}, {"type": "put", "side": "long", "strike": 49000, "qty": 1, "multiplier": 1000, "premium": 920.8}]}, {"name": "Call Credit Spread", "legs": [{"type": "call", "side": "short", "strike": 55000, "qty": 1, "multiplier": 1000, "premium": 1818.4}, {"type": "call", "side": "long", "strike": 57000, "qty": 1, "multiplier": 1000, "premium": 1187.7}]}, {"name": "Short Strangle + 先物ヘッジ", "legs": [{"type": "put", "side": "short", "strike": 51000, "qty": 1, "multiplier": 1000, "premium": 1574.7}, {"type": "call", "side": "short", "strike": 55000, "qty": 1, "multiplier": 1000, "premium": 1818.4}, {"type": "futures", "side": "short", "entry": 53200, "qty": 0, "multiplier": 100}]}, {"name": "P売り + mini先物ヘッジ", "legs": [{"type": "put", "side": "short", "strike": 51000, "qty": 1, "multiplier": 1000, "premium": 1574.7}, {"type": "futures", "side": "short", "entry": 51500, "qty": 3, "multiplier": 100}]}, {"name": "ミニ週次θハーベスト", "legs": [{"type": "put", "side": "short", "strike": 51500, "qty": 10, "multiplier": 100, "premium": 701.8}, {"type": "call", "side": "short", "strike": 54500, "qty": 10, "multiplier": 100, "premium": 872.5}]}];
 
 var legs=[];
 var legId=0;
