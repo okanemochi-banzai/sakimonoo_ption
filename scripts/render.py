@@ -1117,7 +1117,28 @@ def _detail_assess_js(data):
 
     js += "h+='</div>';"  # analysis-cards
 
-    js += "h+='<div class=\"insight\"><strong>⑧ 総合評価</strong>: 定性分析はLLM連携で自動生成予定。Anthropic API統合後に更新されます。</div>';"
+    # ⑧ Assessment text (from Gemini or placeholder)
+    assessment = data.get('s08_assessment', '')
+    if assessment:
+        # Format assessment: split by ■ headers and display
+        js += "h+='<div class=\"insight\" style=\"white-space:pre-wrap;line-height:1.8\">';"
+        # Escape and split by ■
+        parts = assessment.split('■')
+        for i, part in enumerate(parts):
+            part = part.strip()
+            if not part:
+                continue
+            # First line is the header
+            lines = part.split('\n', 1)
+            header = lines[0].strip()
+            body = lines[1].strip() if len(lines) > 1 else ''
+            js += "h+='<div style=\"margin-top:%dpx\">';" % (0 if i <= 1 else 10)
+            js += "h+='<strong style=\"color:var(--accent)\">■ %s</strong><br>';" % _js_str(esc(header))
+            js += "h+='%s';" % _js_str(esc(body))
+            js += "h+='</div>';"
+        js += "h+='</div>';"
+    else:
+        js += "h+='<div class=\"insight\"><strong>⑧ 総合評価</strong>: GEMINI_API_KEY を設定すると自動生成されます。</div>';"
     js += "return h;"
     return js
 
