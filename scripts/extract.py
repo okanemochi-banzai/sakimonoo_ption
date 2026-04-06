@@ -601,26 +601,22 @@ def extract_s05(wb_oi):
 
 
 def extract_s06(wb_oi, atm):
-    """Section ⑥: OI distribution (500-yen intervals, ATM ± 5000)."""
+    """Section ⑥: OI distribution by expiry month (500-yen intervals, ATM ± 5000)."""
     if not atm:
         return {'error': 'ATM not determined'}
 
     ws = wb_oi['別紙1']
-    distribution = []
 
     atm_round = round500(atm)
     low = atm_round - 5000
     high = atm_round + 5000
 
-    # Build lookup: strike -> {put_oi, put_chg, call_oi, call_chg}
-    put_data = {}
-    call_data = {}
+    # Parse: expiry -> strike -> {put_oi, put_chg, call_oi, call_chg}
+    pat_put = re.compile(r'NIKKEI\s*225\s*P\s*(\d{4})-(\d+)')
+    pat_call = re.compile(r'NIKKEI\s*225\s*C\s*(\d{4})-(\d+)')
 
-    pat_put = re.compile(r'NIKKEI\s*225\s*P\s*\d{4}-(\d+)')
-    pat_call = re.compile(r'NIKKEI\s*225\s*C\s*\d{4}-(\d+)')
-
-    today = datetime.now()
-    major_y, major_m = next_major_month(today)
+    # {expiry: {strike: {put_oi, put_change, call_oi, call_change}}}
+    by_expiry = defaultdict(lambda: defaultdict(lambda: {'put_oi': 0, 'put_change': 0, 'call_oi': 0, 'call_change': 0}))
 
     for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
         a_val = str(row[0].value).strip() if row[0].value else ''
@@ -629,45 +625,79 @@ def extract_s06(wb_oi, atm):
         # Put side
         m = pat_put.match(a_val)
         if m:
-            strike = int(m.group(1))
+            expiry = m.group(1)
+            strike = int(m.group(2))
             if low <= strike <= high and strike % 500 == 0:
                 oi = safe_num(row[2].value if len(row) > 2 else None)
                 chg = safe_num(row[3].value if len(row) > 3 else None)
-                # Accumulate across months (or just use the nearest major)
-                if strike not in put_data:
-                    put_data[strike] = {'oi': 0, 'change': 0}
-                put_data[strike]['oi'] += oi
-                put_data[strike]['change'] += chg
+                by_expiry[expiry][strike]['put_oi'] += oi
+                by_expiry[expiry][strike]['put_change'] += chg
 
         # Call side
         m = pat_call.match(g_val)
         if m:
-            strike = int(m.group(1))
+            expiry = m.group(1)
+            strike = int(m.group(2))
             if low <= strike <= high and strike % 500 == 0:
                 oi = safe_num(row[8].value if len(row) > 8 else None)
                 chg = safe_num(row[9].value if len(row) > 9 else None)
-                if strike not in call_data:
-                    call_data[strike] = {'oi': 0, 'change': 0}
-                call_data[strike]['oi'] += oi
-                call_data[strike]['change'] += chg
+                by_expiry[expiry][strike]['call_oi'] += oi
+                by_expiry[expiry][strike]['call_change'] += chg
 
-    # Build distribution table
+    # Sort expiries: nearest first
+    sorted_expiries = sorted(by_expiry.keys())
+
+    # Build per-expiry distributions
+    expiry_distributions = []
+    for expiry in sorted_expiries:
+        data = by_expiry[expiry]
+        # Skip expiries with very little OI
+        total_oi = sum(d['put_oi'] + d['call_oi'] for d in data.values())
+        if total_oi < 100:
+            continue
+
+        # Expiry label: '2604' -> '2026年04月限'
+        label = '20%s年%s月限' % (expiry[:2], expiry[2:]) if len(expiry) == 4 else expiry
+
+        dist = []
+        for strike in range(low, high + 1, 500):
+            d = data.get(strike, {'put_oi': 0, 'put_change': 0, 'call_oi': 0, 'call_change': 0})
+            dist.append({
+                'strike': strike,
+                'put_oi': d['put_oi'],
+                'put_change': d['put_change'],
+                'call_oi': d['call_oi'],
+                'call_change': d['call_change'],
+                'is_atm': (strike == atm_round),
+            })
+        expiry_distributions.append({
+            'expiry': expiry,
+            'label': label,
+            'total_oi': total_oi,
+            'distribution': dist,
+        })
+
+    # Also build combined (all expiries) for backward compatibility
+    combined = []
     for strike in range(low, high + 1, 500):
-        pd = put_data.get(strike, {'oi': 0, 'change': 0})
-        cd = call_data.get(strike, {'oi': 0, 'change': 0})
-        distribution.append({
+        p_oi = sum(by_expiry[e].get(strike, {}).get('put_oi', 0) for e in by_expiry)
+        p_chg = sum(by_expiry[e].get(strike, {}).get('put_change', 0) for e in by_expiry)
+        c_oi = sum(by_expiry[e].get(strike, {}).get('call_oi', 0) for e in by_expiry)
+        c_chg = sum(by_expiry[e].get(strike, {}).get('call_change', 0) for e in by_expiry)
+        combined.append({
             'strike': strike,
-            'put_oi': pd['oi'],
-            'put_change': pd['change'],
-            'call_oi': cd['oi'],
-            'call_change': cd['change'],
+            'put_oi': p_oi,
+            'put_change': p_chg,
+            'call_oi': c_oi,
+            'call_change': c_chg,
             'is_atm': (strike == atm_round),
         })
 
     return {
         'atm': atm,
         'atm_round': atm_round,
-        'distribution': distribution,
+        'distribution': combined,  # backward compat for Max Pain etc
+        'by_expiry': expiry_distributions,
     }
 
 
