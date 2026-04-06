@@ -79,6 +79,19 @@ def main():
         print(result.stderr, file=sys.stderr)
         sys.exit(1)
 
+    # Step 2.5: Generate ⑧ assessment (if API key available)
+    gemini_key = os.environ.get('GEMINI_API_KEY', '')
+    if gemini_key:
+        print('\n=== Step 2.5: Generating assessment (Gemini) ===')
+        assess_cmd = [sys.executable, os.path.join(scripts_dir, 'generate_assessment.py'),
+                      '--data', data_json, '--key', gemini_key]
+        result = subprocess.run(assess_cmd, capture_output=True, text=True)
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr)
+    else:
+        print('\n[SKIP] No GEMINI_API_KEY — ⑧ assessment will use placeholder')
+
     # Step 3: Render outputs
     print('\n=== Step 3: Rendering outputs ===')
     render_cmd = [sys.executable, os.path.join(scripts_dir, 'render.py'),
