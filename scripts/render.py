@@ -1033,6 +1033,39 @@ def _detail_assess_js(data):
         js += "h+='<span style=\"color:var(--green)\">0.5未満</span> → 強気過多（逆張りの売りシグナル）';"
         js += "h+='</div>';"
 
+    # OHLC + Pivot Level Map
+    ohlc = data.get('metadata', {}).get('ohlc', {})
+    if ohlc.get('pivot'):
+        js += "h+='<div style=\"background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px;margin:10px 0\">';"
+        js += "h+='<div style=\"font-weight:600;color:var(--accent);margin-bottom:6px;font-size:12px\">前日4本値 + ピボットポイント</div>';"
+        # OHLC row
+        js += "h+='<div class=\"summary-box\" style=\"margin-bottom:8px\">';"
+        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">始値</div><div class=\"si-value\" style=\"font-size:14px\">%s</div></div>';" % _js_str(fnum(ohlc['open']))
+        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">高値</div><div class=\"si-value\" style=\"font-size:14px;color:var(--green)\">%s</div></div>';" % _js_str(fnum(ohlc['high']))
+        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">安値</div><div class=\"si-value\" style=\"font-size:14px;color:var(--red)\">%s</div></div>';" % _js_str(fnum(ohlc['low']))
+        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">清算値</div><div class=\"si-value\" style=\"font-size:14px\">%s</div></div>';" % _js_str(fnum(ohlc['close']))
+        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">値幅</div><div class=\"si-value\" style=\"font-size:14px\">%s</div></div>';" % _js_str(fnum(ohlc['range']))
+        js += "h+='</div>';"
+        # Pivot levels - visual level map
+        levels = [
+            ('R3', ohlc.get('r3', 0), 'var(--call)'),
+            ('R2', ohlc.get('r2', 0), 'var(--call)'),
+            ('R1', ohlc.get('r1', 0), 'var(--call)'),
+            ('PP', ohlc.get('pivot', 0), 'var(--yellow)'),
+            ('S1', ohlc.get('s1', 0), 'var(--put)'),
+            ('S2', ohlc.get('s2', 0), 'var(--put)'),
+            ('S3', ohlc.get('s3', 0), 'var(--put)'),
+        ]
+        for label, val, color in levels:
+            is_pp = label == 'PP'
+            weight = 'font-weight:700;' if is_pp else ''
+            border = 'border-top:1px solid var(--yellow);' if is_pp else ''
+            js += "h+='<div style=\"display:flex;justify-content:space-between;padding:3px 8px;font-size:11px;%s%s\">';" % (weight, border)
+            js += "h+='<span style=\"color:%s\">%s</span>';" % (color, label)
+            js += "h+='<span style=\"font-family:DM Mono;color:%s\">%s</span>';" % (color, _js_str(fnum(val)))
+            js += "h+='</div>';"
+        js += "h+='</div>';"
+
     # Structured analysis cards
     js += "h+='<div class=\"analysis-cards\">';"
 
