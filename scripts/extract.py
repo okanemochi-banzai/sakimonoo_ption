@@ -364,6 +364,31 @@ def extract_ohlc_pivot(wb_market):
     return result
 
 
+def extract_vi_from_excel(wb_market):
+    """Extract Nikkei VI futures settlement price from market_data."""
+    ws = wb_market['指数先物']
+    in_table = False
+
+    for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
+        a_val = str(row[0].value).strip() if row[0].value else ''
+
+        if '取引相場表' in a_val:
+            in_table = True
+            continue
+
+        if not in_table:
+            continue
+
+        # Find 日経VI row
+        if '日経VI' in a_val or '日経ＶＩ' in a_val:
+            # Q column (index 16) = settlement price
+            q_val = safe_num(row[16].value if len(row) > 16 else None)
+            if q_val and 10 < q_val < 100:
+                return q_val
+
+    return None
+
+
 def extract_s01(nikkei_close, vi, atm):
     """Section ①: Nikkei/VI analysis + predicted ranges."""
     data = {
@@ -1599,9 +1624,16 @@ def run(args):
     output['metadata']['atm'] = atm
     output['metadata']['ohlc'] = ohlc if wb_market else {}
 
-    # Nikkei / VI (from args or placeholder)
+    # Nikkei / VI (from args, or fallback to Excel)
     nikkei = args.nikkei
     vi = args.vi
+    if vi is None and wb_market:
+        vi = extract_vi_from_excel(wb_market)
+        if vi:
+            print('[extract.py] VI from Excel (先物清算値): %.1f' % vi)
+    if nikkei is None and atm:
+        nikkei = float(atm)
+        print('[extract.py] Nikkei fallback to ATM: %s' % atm)
     output['metadata']['nikkei_close'] = nikkei
     output['metadata']['vi'] = vi
 
