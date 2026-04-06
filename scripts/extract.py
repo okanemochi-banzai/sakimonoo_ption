@@ -283,6 +283,87 @@ def extract_atm(wb_market):
     return atm
 
 
+def extract_ohlc_pivot(wb_market):
+    """Extract N225 futures OHLC and compute Pivot Points."""
+    ws = wb_market['指数先物']
+    result = {}
+
+    # Find 取引相場表 section, then N225 large row
+    in_table = False
+    for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
+        a_val = str(row[0].value).strip() if row[0].value else ''
+
+        if '取引相場表' in a_val:
+            in_table = True
+            continue
+
+        if not in_table:
+            continue
+
+        # Find N225 large (not mini, not micro)
+        if '日経225' in a_val and 'mini' not in a_val.lower() and 'ミニ' not in a_val and 'マイクロ' not in a_val:
+            # Next rows have the data. Scan for the major month.
+            for r2 in ws.iter_rows(min_row=row[0].row, max_row=min(row[0].row + 5, ws.max_row), values_only=False):
+                b_val = str(r2[1].value).strip() if len(r2) > 1 and r2[1].value else ''
+                # Look for 6-digit month code like 202606
+                if not b_val or not b_val.isdigit():
+                    continue
+
+                # Full-day OHLC from 3 sessions
+                # D(3)=夜間始値 E(4)=夜間高値 F(5)=夜間安値 G(6)=夜間終値
+                # H(7)=前場始値 I(8)=前場高値 J(9)=前場安値 K(10)=前場終値
+                # L(11)=後場始値 M(12)=後場高値 N(13)=後場安値 O(14)=後場終値
+                # Q(16)=清算値
+                night_o = safe_num(r2[3].value if len(r2) > 3 else None)
+                night_h = safe_num(r2[4].value if len(r2) > 4 else None)
+                night_l = safe_num(r2[5].value if len(r2) > 5 else None)
+                am_h = safe_num(r2[8].value if len(r2) > 8 else None)
+                am_l = safe_num(r2[9].value if len(r2) > 9 else None)
+                pm_h = safe_num(r2[12].value if len(r2) > 12 else None)
+                pm_l = safe_num(r2[13].value if len(r2) > 13 else None)
+                pm_c = safe_num(r2[14].value if len(r2) > 14 else None)
+                settle = safe_num(r2[16].value if len(r2) > 16 else None)
+
+                # Compute full-day OHLC
+                highs = [h for h in [night_h, am_h, pm_h] if h and h > 10000]
+                lows = [l for l in [night_l, am_l, pm_l] if l and l > 10000]
+
+                if highs and lows and night_o and night_o > 10000:
+                    O = int(night_o)
+                    H = int(max(highs))
+                    L = int(min(lows))
+                    C = int(settle) if settle and settle > 10000 else int(pm_c) if pm_c and pm_c > 10000 else 0
+
+                    if C > 0:
+                        result['open'] = O
+                        result['high'] = H
+                        result['low'] = L
+                        result['close'] = C
+                        result['range'] = H - L
+                        result['month'] = b_val
+
+                        # Pivot Points
+                        PP = round((H + L + C) / 3)
+                        R1 = 2 * PP - L
+                        S1 = 2 * PP - H
+                        R2 = PP + (H - L)
+                        S2 = PP - (H - L)
+                        R3 = H + 2 * (PP - L)
+                        S3 = L - 2 * (H - PP)
+
+                        result['pivot'] = PP
+                        result['r1'] = R1
+                        result['r2'] = R2
+                        result['r3'] = R3
+                        result['s1'] = S1
+                        result['s2'] = S2
+                        result['s3'] = S3
+
+                        return result
+
+    return result
+
+
 def extract_s01(nikkei_close, vi, atm):
     """Section ①: Nikkei/VI analysis + predicted ranges."""
     data = {
@@ -1505,12 +1586,18 @@ def run(args):
         wb_op = openpyxl.load_workbook(files['op_participants'], data_only=True)
         print('[extract.py] Loaded options participants')
 
-    # Extract ATM
+    # Extract ATM + OHLC
     atm = None
+    ohlc = {}
     if wb_market:
         atm = extract_atm(wb_market)
         print('[extract.py] ATM =', atm)
+        ohlc = extract_ohlc_pivot(wb_market)
+        if ohlc:
+            print('[extract.py] OHLC: O=%s H=%s L=%s C=%s PP=%s' % (
+                ohlc.get('open'), ohlc.get('high'), ohlc.get('low'), ohlc.get('close'), ohlc.get('pivot')))
     output['metadata']['atm'] = atm
+    output['metadata']['ohlc'] = ohlc if wb_market else {}
 
     # Nikkei / VI (from args or placeholder)
     nikkei = args.nikkei
