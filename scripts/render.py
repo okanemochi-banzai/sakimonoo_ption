@@ -503,18 +503,19 @@ def build_dashboard_html(data):
     vi_cls = 'down' if vi and vi > 30 else ''
     h += '  <div class="kpi"><div class="label">VI</div><div class="value %s">%s</div></div>\n' % (vi_cls, vi if vi else '-')
     h += '  <div class="kpi"><div class="label">ATM</div><div class="value">%s</div></div>\n' % (fnum(atm) if atm else '-')
-    r1d = s01.get('range_1d', {})
-    if r1d:
-        h += '  <div class="kpi"><div class="label">1日値幅</div><div class="value">%s</div></div>\n' % fnum(r1d.get('width'))
-    # PCR
-    pcr = ind.get('pcr_volume')
-    if pcr is not None:
-        pcr_cls = 'down' if pcr > 1.0 else 'up' if pcr < 0.7 else ''
-        h += '  <div class="kpi"><div class="label">PCR</div><div class="value %s">%.2f</div></div>\n' % (pcr_cls, pcr)
     # Max Pain
     mp = ind.get('max_pain')
     if mp:
         h += '  <div class="kpi"><div class="label">Max Pain</div><div class="value">%s</div></div>\n' % fnum(mp)
+    # P壁 / C壁
+    dist = s06.get('distribution', [])
+    if dist:
+        max_p = max(dist, key=lambda d: d['put_oi'])
+        max_c = max(dist, key=lambda d: d['call_oi'])
+        if max_p['put_oi'] > 0:
+            h += '  <div class="kpi"><div class="label">P壁</div><div class="value" style="color:var(--put)">%s</div></div>\n' % fnum(max_p['strike'])
+        if max_c['call_oi'] > 0:
+            h += '  <div class="kpi"><div class="label">C壁</div><div class="value" style="color:var(--call)">%s</div></div>\n' % fnum(max_c['strike'])
     h += '</div>\n'
 
     # TradingView Chart
@@ -848,41 +849,81 @@ def _detail_important_js(s05):
 def _detail_dist_js(s06, ind=None):
     if 'distribution' not in s06:
         return "var h='<div>データなし</div>';return h;"
-    dist = s06['distribution']
-    max_oi = max([max(d['put_oi'], d['call_oi']) for d in dist] or [1])
     ind = ind or {}
     js = "var h='';"
     js += "h+='<div style=\"font-size:11px;color:var(--sub);margin-bottom:8px\">ATM = %s</div>';" % _js_str(fnum(s06.get('atm')))
-    # Column headers
-    js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:10px;color:var(--sub);font-weight:600\">';"
-    js += "h+='<div style=\"width:50px;text-align:right\">P増減</div>';"
-    js += "h+='<div style=\"width:50px;text-align:right\">P建玉</div>';"
-    js += "h+='<div style=\"width:150px;text-align:center;color:var(--put)\">← PUT</div>';"
-    js += "h+='<div style=\"width:60px;text-align:center\">行使価格</div>';"
-    js += "h+='<div style=\"width:150px;text-align:center;color:var(--call)\">CALL →</div>';"
-    js += "h+='<div style=\"width:50px\">C建玉</div>';"
-    js += "h+='<div style=\"width:50px\">C増減</div>';"
-    js += "h+='</div>';"
 
-    for d in dist:
-        pw = int(d['put_oi'] / max_oi * 150) if max_oi else 0
-        cw = int(d['call_oi'] / max_oi * 150) if max_oi else 0
-        atm_style = 'background:rgba(251,191,36,.12);' if d.get('is_atm') else ''
-        js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:11px;%s\">';" % atm_style
-        # Put bar (right-aligned)
-        pcls = 'positive' if d['put_change'] > 0 else 'negative' if d['put_change'] < 0 else ''
-        js += "h+='<div style=\"width:50px;text-align:right;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (pcls, _js_str(fnum(d['put_change'], plus=True)))
-        js += "h+='<div style=\"width:50px;text-align:right;font-family:DM Mono;font-size:10px\">%s</div>';" % _js_str(fnum(d['put_oi']))
-        js += "h+='<div style=\"width:150px;direction:rtl\"><div style=\"display:inline-block;height:12px;width:%dpx;background:var(--put);border-radius:2px\"></div></div>';" % pw
-        # Strike
-        strike_color = 'var(--yellow)' if d.get('is_atm') else '#fff'
-        js += "h+='<div style=\"width:60px;text-align:center;font-family:DM Mono;font-weight:600;color:%s\">%s</div>';" % (strike_color, _js_str(fnum(d['strike'])))
-        # Call bar
-        js += "h+='<div style=\"width:150px\"><div style=\"display:inline-block;height:12px;width:%dpx;background:var(--call);border-radius:2px\"></div></div>';" % cw
-        js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\">%s</div>';" % _js_str(fnum(d['call_oi']))
-        ccls = 'positive' if d['call_change'] > 0 else 'negative' if d['call_change'] < 0 else ''
-        js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (ccls, _js_str(fnum(d['call_change'], plus=True)))
+    # Per-expiry distributions
+    by_expiry = s06.get('by_expiry', [])
+    if by_expiry:
+        for ei, exp_data in enumerate(by_expiry):
+            dist = exp_data['distribution']
+            max_oi = max([max(d['put_oi'], d['call_oi']) for d in dist] or [1])
+            if max_oi < 10:
+                continue
+
+            # Expiry header
+            js += "h+='<div style=\"margin-top:%dpx;margin-bottom:6px;font-size:12px;font-weight:600;color:var(--accent)\">%s (OI: %s)</div>';" % (
+                14 if ei > 0 else 4, _js_str(exp_data['label']), _js_str(fnum(exp_data['total_oi'])))
+
+            # Column headers
+            js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:10px;color:var(--sub);font-weight:600\">';"
+            js += "h+='<div style=\"width:50px;text-align:right\">P増減</div>';"
+            js += "h+='<div style=\"width:50px;text-align:right\">P建玉</div>';"
+            js += "h+='<div style=\"width:150px;text-align:center;color:var(--put)\">← PUT</div>';"
+            js += "h+='<div style=\"width:60px;text-align:center\">行使価格</div>';"
+            js += "h+='<div style=\"width:150px;text-align:center;color:var(--call)\">CALL →</div>';"
+            js += "h+='<div style=\"width:50px\">C建玉</div>';"
+            js += "h+='<div style=\"width:50px\">C増減</div>';"
+            js += "h+='</div>';"
+
+            for d in dist:
+                if d['put_oi'] == 0 and d['call_oi'] == 0:
+                    continue
+                pw = int(d['put_oi'] / max_oi * 150) if max_oi else 0
+                cw = int(d['call_oi'] / max_oi * 150) if max_oi else 0
+                atm_style = 'background:rgba(251,191,36,.12);' if d.get('is_atm') else ''
+                js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:11px;%s\">';" % atm_style
+                pcls = 'positive' if d['put_change'] > 0 else 'negative' if d['put_change'] < 0 else ''
+                js += "h+='<div style=\"width:50px;text-align:right;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (pcls, _js_str(fnum(d['put_change'], plus=True)))
+                js += "h+='<div style=\"width:50px;text-align:right;font-family:DM Mono;font-size:10px\">%s</div>';" % _js_str(fnum(d['put_oi']))
+                js += "h+='<div style=\"width:150px;direction:rtl\"><div style=\"display:inline-block;height:12px;width:%dpx;background:var(--put);border-radius:2px\"></div></div>';" % pw
+                strike_color = 'var(--yellow)' if d.get('is_atm') else '#fff'
+                js += "h+='<div style=\"width:60px;text-align:center;font-family:DM Mono;font-weight:600;color:%s\">%s</div>';" % (strike_color, _js_str(fnum(d['strike'])))
+                js += "h+='<div style=\"width:150px\"><div style=\"display:inline-block;height:12px;width:%dpx;background:var(--call);border-radius:2px\"></div></div>';" % cw
+                js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\">%s</div>';" % _js_str(fnum(d['call_oi']))
+                ccls = 'positive' if d['call_change'] > 0 else 'negative' if d['call_change'] < 0 else ''
+                js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (ccls, _js_str(fnum(d['call_change'], plus=True)))
+                js += "h+='</div>';"
+    else:
+        # Fallback: combined view
+        dist = s06['distribution']
+        max_oi = max([max(d['put_oi'], d['call_oi']) for d in dist] or [1])
+        js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:10px;color:var(--sub);font-weight:600\">';"
+        js += "h+='<div style=\"width:50px;text-align:right\">P増減</div>';"
+        js += "h+='<div style=\"width:50px;text-align:right\">P建玉</div>';"
+        js += "h+='<div style=\"width:150px;text-align:center;color:var(--put)\">← PUT</div>';"
+        js += "h+='<div style=\"width:60px;text-align:center\">行使価格</div>';"
+        js += "h+='<div style=\"width:150px;text-align:center;color:var(--call)\">CALL →</div>';"
+        js += "h+='<div style=\"width:50px\">C建玉</div>';"
+        js += "h+='<div style=\"width:50px\">C増減</div>';"
         js += "h+='</div>';"
+        for d in dist:
+            pw = int(d['put_oi'] / max_oi * 150) if max_oi else 0
+            cw = int(d['call_oi'] / max_oi * 150) if max_oi else 0
+            atm_style = 'background:rgba(251,191,36,.12);' if d.get('is_atm') else ''
+            js += "h+='<div style=\"display:flex;align-items:center;gap:4px;padding:2px 0;font-size:11px;%s\">';" % atm_style
+            pcls = 'positive' if d['put_change'] > 0 else 'negative' if d['put_change'] < 0 else ''
+            js += "h+='<div style=\"width:50px;text-align:right;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (pcls, _js_str(fnum(d['put_change'], plus=True)))
+            js += "h+='<div style=\"width:50px;text-align:right;font-family:DM Mono;font-size:10px\">%s</div>';" % _js_str(fnum(d['put_oi']))
+            js += "h+='<div style=\"width:150px;direction:rtl\"><div style=\"display:inline-block;height:12px;width:%dpx;background:var(--put);border-radius:2px\"></div></div>';" % pw
+            strike_color = 'var(--yellow)' if d.get('is_atm') else '#fff'
+            js += "h+='<div style=\"width:60px;text-align:center;font-family:DM Mono;font-weight:600;color:%s\">%s</div>';" % (strike_color, _js_str(fnum(d['strike'])))
+            js += "h+='<div style=\"width:150px\"><div style=\"display:inline-block;height:12px;width:%dpx;background:var(--call);border-radius:2px\"></div></div>';" % cw
+            js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\">%s</div>';" % _js_str(fnum(d['call_oi']))
+            ccls = 'positive' if d['call_change'] > 0 else 'negative' if d['call_change'] < 0 else ''
+            js += "h+='<div style=\"width:50px;font-family:DM Mono;font-size:10px\" class=\"%s\">%s</div>';" % (ccls, _js_str(fnum(d['call_change'], plus=True)))
+            js += "h+='</div>';"
 
     # Max Pain indicator
     mp = ind.get('max_pain')
