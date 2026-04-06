@@ -139,7 +139,8 @@ def build_data_summary(data):
 
 
 def call_gemini(api_key, prompt, data_summary):
-    """Call Google Gemini API."""
+    """Call Google Gemini API with retry."""
+    import time
     url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=%s' % api_key
 
     payload = {
@@ -153,25 +154,34 @@ def call_gemini(api_key, prompt, data_summary):
     }
 
     body = json.dumps(payload).encode('utf-8')
-    req = Request(url, data=body, headers={'Content-Type': 'application/json'})
 
-    try:
-        resp = urlopen(req, timeout=30)
-        result = json.loads(resp.read().decode('utf-8'))
-        # Extract text from response
-        candidates = result.get('candidates', [])
-        if candidates:
-            parts = candidates[0].get('content', {}).get('parts', [])
-            if parts:
-                return parts[0].get('text', '')
-        print('[assess] Gemini returned no text', file=sys.stderr)
-        return None
-    except URLError as e:
-        print('[assess] Gemini API error: %s' % e, file=sys.stderr)
-        return None
-    except Exception as e:
-        print('[assess] Unexpected error: %s' % e, file=sys.stderr)
-        return None
+    for attempt in range(3):
+        try:
+            req = Request(url, data=body, headers={'Content-Type': 'application/json'})
+            resp = urlopen(req, timeout=30)
+            result = json.loads(resp.read().decode('utf-8'))
+            candidates = result.get('candidates', [])
+            if candidates:
+                parts = candidates[0].get('content', {}).get('parts', [])
+                if parts:
+                    return parts[0].get('text', '')
+            print('[assess] Gemini returned no text', file=sys.stderr)
+            return None
+        except URLError as e:
+            error_msg = str(e)
+            if '429' in error_msg:
+                wait = (attempt + 1) * 10
+                print('[assess] Rate limited (429). Retrying in %ds... (%d/3)' % (wait, attempt + 1), file=sys.stderr)
+                time.sleep(wait)
+            else:
+                print('[assess] Gemini API error: %s' % e, file=sys.stderr)
+                return None
+        except Exception as e:
+            print('[assess] Unexpected error: %s' % e, file=sys.stderr)
+            return None
+
+    print('[assess] All retries failed', file=sys.stderr)
+    return None
 
 
 def run(args):
