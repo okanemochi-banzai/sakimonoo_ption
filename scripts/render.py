@@ -498,8 +498,6 @@ def build_dashboard_html(data):
     # KPI Strip
     ind = data.get('indicators', {})
     h += '<div class="kpi-strip">\n'
-    nk_cls = ''
-    h += '  <div class="kpi"><div class="label">日経平均</div><div class="value %s">%s</div></div>\n' % (nk_cls, fnum(nikkei) if nikkei else '-')
     vi_cls = 'down' if vi and vi > 30 else ''
     h += '  <div class="kpi"><div class="label">VI</div><div class="value %s">%s</div></div>\n' % (vi_cls, vi if vi else '-')
     h += '  <div class="kpi"><div class="label">ATM</div><div class="value">%s</div></div>\n' % (fnum(atm) if atm else '-')
