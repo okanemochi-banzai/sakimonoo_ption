@@ -1,33 +1,33 @@
 {
-  "period": "2026年3月第4週 2026/3 week4  ( 3/23 - 3/27 )",
+  "period": "2026年4月第1週 2026/4 week1  ( 3/30 - 4/3 )",
   "proprietary": {
-    "raw_1000yen": 1274734351,
-    "oku_yen": 12747.3,
-    "prev_1000yen": 462840545,
-    "prev_oku_yen": 4628.4
+    "raw_1000yen": -1577995048,
+    "oku_yen": -15780.0
   },
   "institutions": {
-    "raw_1000yen": 227225318,
-    "oku_yen": 2272.3,
-    "prev_1000yen": -260779434,
-    "prev_oku_yen": -2607.8
+    "raw_1000yen": 139759351,
+    "oku_yen": 1397.6,
+    "prev_1000yen": 227225318,
+    "prev_oku_yen": 2272.3
   },
   "individuals": {
-    "raw_1000yen": -4516517,
-    "oku_yen": -45.2
+    "raw_1000yen": -450353357,
+    "oku_yen": -4503.5,
+    "prev_1000yen": -4516517,
+    "prev_oku_yen": -45.2
   },
   "foreigners": {
-    "raw_1000yen": -1508629733,
-    "oku_yen": -15086.3,
-    "prev_1000yen": -491896033,
-    "prev_oku_yen": -4919.0
+    "raw_1000yen": 1909324265,
+    "oku_yen": 19093.2,
+    "prev_1000yen": -1508629733,
+    "prev_oku_yen": -15086.3
   },
   "investment_trusts": {
-    "raw_1000yen": 352895026,
-    "oku_yen": 3529.0,
-    "prev_1000yen": 5603495,
-    "prev_oku_yen": 56.0
+    "raw_1000yen": 100788538,
+    "oku_yen": 1007.9,
+    "prev_1000yen": 352895026,
+    "prev_oku_yen": 3529.0
   },
   "source": "live",
-  "data_date": "20260408"
+  "data_date": "20260409"
 }
