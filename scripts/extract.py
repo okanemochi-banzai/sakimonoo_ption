@@ -57,6 +57,29 @@ PARTICIPANT_LABELS = {
 
 WEEKDAY_JA = ['月', '火', '水', '木', '金', '土', '日']
 
+# Customer type classification (ordered — first match wins)
+CUSTOMER_TYPES = [
+    ('ゴールドマン', 'グローバルマクロ'),
+    ('シティ', 'グローバルマクロ'),
+    ('ＪＰモルガン', 'グローバルマクロ'),
+    ('ビーオブエー', '長期投資志向'),
+    ('モルガンＭＵＦＧ', 'トレンドフォロー（CTA）'),
+    ('モルガン・スタンレー', 'トレンドフォロー（CTA）'),
+    ('モルガン', 'トレンドフォロー（CTA）'),
+    ('ＡＢＮ', 'アービトラージ（裁定取引）'),
+    ('ソシエテ', 'アービトラージ（裁定取引）'),
+    ('ＢＮＰ', 'アービトラージ（裁定取引）'),
+    ('みずほ', '国内機関投資家'),
+    ('野村', '国内機関投資家'),
+    ('eスマート', '国内個人投資家（ネットトレーダー）'),
+    ('ｅスマート', '国内個人投資家（ネットトレーダー）'),
+    ('ＳＢＩ', '国内個人投資家（ネットトレーダー）'),
+    ('楽天', '国内個人投資家（ネットトレーダー）'),
+    ('松井', '国内個人投資家（ネットトレーダー）'),
+    ('マネックス', '国内個人投資家（ネットトレーダー）'),
+    ('岩井', '国内個人投資家（ネットトレーダー）'),
+]
+
 
 # ============================================================
 # Helpers
@@ -92,6 +115,17 @@ def classify_participant(name):
 
 def is_overseas(cat):
     return cat in ('us', 'eu', 'hf')
+
+
+def classify_customer_type(name):
+    """Classify participant into customer type (e.g. グローバルマクロ)."""
+    if not name:
+        return 'ー'
+    s = str(name)
+    for kw, ctype in CUSTOMER_TYPES:
+        if kw in s:
+            return ctype
+    return 'ー'
 
 
 def next_major_month(dt):
@@ -1125,6 +1159,163 @@ def estimate_strategy(fut_dir, put_net, call_net):
     return 'ニュートラル'
 
 
+def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, step=500):
+    """Build participant x strike matrix for ATM-nearby options positions.
+
+    Each participant row includes:
+      - category/customer_type labels
+      - futures direction (N225 large/mini/TOPIX net)
+      - per-strike put/call net position (negative = net short / 売り越し)
+      - row totals
+
+    Returns dict with 'strikes' list and 'participants' list, or {} if no data.
+    """
+    if not wb_op or not atm:
+        return {}
+
+    ws = wb_op[wb_op.sheetnames[0]]
+    atm_round = round500(atm)
+
+    # Target strikes: ATM +/- half_range at step intervals
+    strikes = list(range(atm_round - half_range, atm_round + half_range + 1, step))
+    strike_set = set(strikes)
+
+    # {participant: {strike: {put_sell, put_buy, call_sell, call_buy}}}
+    raw = defaultdict(lambda: defaultdict(lambda: {
+        'put_sell': 0, 'put_buy': 0, 'call_sell': 0, 'call_buy': 0
+    }))
+
+    current_strike = None
+    for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
+        # B column (index 1) = strike anchor
+        b_val = row[1].value if len(row) > 1 else None
+        if b_val is not None:
+            try:
+                sc = int(float(str(b_val).replace(',', '')))
+                if 20000 < sc < 80000:
+                    current_strike = sc
+            except (ValueError, TypeError):
+                pass
+
+        if not current_strike or current_strike not in strike_set:
+            continue
+
+        # Put sell: D(3)=name, E(4)=volume
+        d_name = str(row[3].value).strip() if len(row) > 3 and row[3].value else ''
+        d_vol = safe_num(row[4].value if len(row) > 4 else None)
+        if d_name and d_vol > 0:
+            raw[d_name][current_strike]['put_sell'] += d_vol
+
+        # Put buy: G(6)=name, H(7)=volume
+        g_name = str(row[6].value).strip() if len(row) > 6 and row[6].value else ''
+        g_vol = safe_num(row[7].value if len(row) > 7 else None)
+        if g_name and g_vol > 0:
+            raw[g_name][current_strike]['put_buy'] += g_vol
+
+        # Call sell: N(13)=name, O(14)=volume
+        n_name = str(row[13].value).strip() if len(row) > 13 and row[13].value else ''
+        n_vol = safe_num(row[14].value if len(row) > 14 else None)
+        if n_name and n_vol > 0:
+            raw[n_name][current_strike]['call_sell'] += n_vol
+
+        # Call buy: Q(16)=name, R(17)=volume
+        q_name = str(row[16].value).strip() if len(row) > 16 and row[16].value else ''
+        q_vol = safe_num(row[17].value if len(row) > 17 else None)
+        if q_name and q_vol > 0:
+            raw[q_name][current_strike]['call_buy'] += q_vol
+
+    # Build participant list
+    participants = []
+    for name, strike_data in raw.items():
+        cat = classify_participant(name)
+
+        # Net positions per strike (positive = net long / 買い越し)
+        positions = {}
+        put_total = 0
+        call_total = 0
+        has_data = False
+
+        for strike in strikes:
+            sd = strike_data.get(strike, {
+                'put_sell': 0, 'put_buy': 0, 'call_sell': 0, 'call_buy': 0
+            })
+            p_net = sd['put_buy'] - sd['put_sell']
+            c_net = sd['call_buy'] - sd['call_sell']
+            if p_net != 0 or c_net != 0:
+                has_data = True
+            positions[str(strike)] = {'put': p_net, 'call': c_net}
+            put_total += p_net
+            call_total += c_net
+
+        if not has_data:
+            continue
+
+        # Futures direction from fut_data
+        fut_info = {
+            'nk225_large': 0, 'nk225_mini': 0, 'topix': 0,
+            'direction': 'ー', 'summary': ''
+        }
+        if fut_data:
+            for sec_key in ['nk225_large', 'nk225_mini', 'topix']:
+                sec = fut_data.get(sec_key, {})
+                sell = sum(s['volume'] for s in sec.get('sellers', [])
+                           if s['name'] == name)
+                buy = sum(b['volume'] for b in sec.get('buyers', [])
+                          if b['name'] == name)
+                if buy > 0 or sell > 0:
+                    fut_info[sec_key] = buy - sell
+
+            # Direction label from N225 large + mini/10
+            net_n225 = fut_info['nk225_large'] + fut_info['nk225_mini'] / 10.0
+            parts = []
+            if fut_info['nk225_large'] != 0:
+                parts.append('N225 %+d' % fut_info['nk225_large'])
+            if fut_info['nk225_mini'] != 0:
+                parts.append('mini %+d' % fut_info['nk225_mini'])
+            if fut_info['topix'] != 0:
+                parts.append('TOPIX %+d' % fut_info['topix'])
+            fut_info['summary'] = ' / '.join(parts) if parts else ''
+
+            if net_n225 > 100:
+                fut_info['direction'] = 'ロング'
+            elif net_n225 < -100:
+                fut_info['direction'] = 'ショート'
+            else:
+                tp = fut_info['topix']
+                if tp > 100:
+                    fut_info['direction'] = 'TOPIX ロング'
+                elif tp < -100:
+                    fut_info['direction'] = 'TOPIX ショート'
+                elif parts:
+                    fut_info['direction'] = 'フラット'
+                else:
+                    fut_info['direction'] = 'OP専業'
+
+        significance = abs(put_total) + abs(call_total)
+
+        participants.append({
+            'name': name,
+            'category': cat,
+            'category_label': PARTICIPANT_LABELS.get(cat, 'その他'),
+            'customer_type': classify_customer_type(name),
+            'futures': fut_info,
+            'positions': positions,
+            'put_total': put_total,
+            'call_total': call_total,
+            'significance': significance,
+        })
+
+    # Sort by significance descending, keep top 25
+    participants.sort(key=lambda p: -p['significance'])
+
+    return {
+        'atm': atm,
+        'atm_round': atm_round,
+        'strikes': strikes,
+        'participants': participants[:25],
+    }
+
+
 def extract_s10(stock_vol_path):
     """Section ⑩: Stock flow by investor type (weekly .xls).
     
@@ -1718,6 +1909,14 @@ def run(args):
             'data_date': date_str,
         }
         print('[extract.py] ⑨-C done: %d profiles' % len(profiles))
+
+        # ⑨-D: Strike matrix (participant x strike near ATM)
+        if wb_op and atm:
+            strike_matrix = build_strike_matrix(wb_op, fut_data, atm)
+            output['s09']['strike_matrix'] = strike_matrix
+            sm_p = len(strike_matrix.get('participants', []))
+            sm_s = len(strike_matrix.get('strikes', []))
+            print('[extract.py] ⑨-D strike matrix: %d participants x %d strikes' % (sm_p, sm_s))
 
         # Save to cache
         try:
