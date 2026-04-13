@@ -1038,30 +1038,8 @@ def _detail_participants_js(s09):
         js += "h+='<div class=\"summary-item\"><div class=\"si-label\">%s 海外</div><div class=\"si-value\" style=\"%s\">%s</div></div>';" % (label, on_cls, _js_str(fnum(on, plus=True)))
         js += "h+='<div class=\"summary-item\"><div class=\"si-label\">%s 国内</div><div class=\"si-value\" style=\"%s\">%s</div></div>';" % (label, dn_cls, _js_str(fnum(dn, plus=True)))
     js += "h+='</div>';"
-    profiles = s09.get('profiles', [])
-    if profiles:
-        js += "h+='<table><tr><th>参加者</th><th>分類</th><th>N225</th><th>mini</th><th>TOPIX</th><th>P Net</th><th>C Net</th><th>戦略</th></tr>';"
-        for p in profiles[:12]:
-            cat_tag = {'us': 'tag-us', 'eu': 'tag-eu', 'hf': 'tag-hf', 'domestic': 'tag-dom'}.get(p['category'], '')
-            js += "h+='<tr>';"
-            js += "h+='<td>%s</td>';" % _js_str(esc(p['name'][:12]))
-            js += "h+='<td><span class=\"tag %s\">%s</span></td>';" % (cat_tag, _js_str(p['category_label']))
-            for field in ['nk225_large', 'nk225_mini', 'topix', 'put_net', 'call_net']:
-                v = p.get(field, 0)
-                cls = 'positive' if v > 0 else 'negative' if v < 0 else ''
-                js += "h+='<td class=\"%s\" style=\"font-family:DM Mono;font-size:11px\">%s</td>';" % (cls, _js_str(fnum(v, plus=True)))
-            js += "h+='<td style=\"font-size:10px\">%s</td>';" % _js_str(esc(p['strategy'][:12]))
-            js += "h+='</tr>';"
-        js += "h+='</table>';"
-        js += "h+='<div style=\"margin-top:10px\">';"
-        for p in profiles[:5]:
-            if p.get('op_detail'):
-                cat_tag = {'us': 'tag-us', 'eu': 'tag-eu', 'hf': 'tag-hf', 'domestic': 'tag-dom'}.get(p['category'], '')
-                js += "h+='<div style=\"font-size:10px;margin:3px 0\"><span class=\"tag %s\" style=\"font-size:9px\">%s</span> %s: <span style=\"color:var(--text)\">%s</span></div>';" % (
-                    cat_tag, _js_str(p['category_label']), _js_str(esc(p['name'][:10])), _js_str(esc(p['op_detail'][:60])))
-        js += "h+='</div>';"
 
-    # === PATCH: Strike matrix table ===
+    # === Strike matrix table ===
     js += _strike_matrix_js(s09)
 
     js += "return h;"
