@@ -1191,32 +1191,27 @@ def estimate_strategy(fut_dir, put_net, call_net):
     return 'ニュートラル'
 
 
-def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, step=500):
+def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, max_strikes=11):
     """Build participant x strike matrix for ATM-nearby options positions.
 
-    Each participant row includes:
-      - category/customer_type labels
-      - futures direction (N225 large/mini/TOPIX net)
-      - per-strike put/call net position (negative = net short / 売り越し)
-      - row totals
-
-    Returns dict with 'strikes' list and 'participants' list, or {} if no data.
+    Auto-detects strike intervals from actual data (125/250/500 yen).
+    Selects up to max_strikes nearest ATM that have participant data.
     """
     if not wb_op or not atm:
         return {}
 
     ws = wb_op[wb_op.sheetnames[0]]
     atm_round = round500(atm)
-
-    # Target strikes: ATM +/- half_range at step intervals
-    strikes = list(range(atm_round - half_range, atm_round + half_range + 1, step))
-    strike_set = set(strikes)
+    range_low = atm_round - half_range
+    range_high = atm_round + half_range
 
     # {participant: {strike: {put_sell, put_buy, call_sell, call_buy}}}
     raw = defaultdict(lambda: defaultdict(lambda: {
         'put_sell': 0, 'put_buy': 0, 'call_sell': 0, 'call_buy': 0
     }))
 
+    # First pass: collect ALL strikes within range (no step filter)
+    all_strikes_with_data = set()
     current_strike = None
     for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
         # B column (index 1) = strike anchor
@@ -1229,32 +1224,48 @@ def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, step=500):
             except (ValueError, TypeError):
                 pass
 
-        if not current_strike or current_strike not in strike_set:
+        if not current_strike or current_strike < range_low or current_strike > range_high:
             continue
+
+        has_any = False
 
         # Put sell: D(3)=name, E(4)=volume
         d_name = str(row[3].value).strip() if len(row) > 3 and row[3].value else ''
         d_vol = safe_num(row[4].value if len(row) > 4 else None)
         if d_name and d_vol > 0:
             raw[d_name][current_strike]['put_sell'] += d_vol
+            has_any = True
 
         # Put buy: G(6)=name, H(7)=volume
         g_name = str(row[6].value).strip() if len(row) > 6 and row[6].value else ''
         g_vol = safe_num(row[7].value if len(row) > 7 else None)
         if g_name and g_vol > 0:
             raw[g_name][current_strike]['put_buy'] += g_vol
+            has_any = True
 
         # Call sell: N(13)=name, O(14)=volume
         n_name = str(row[13].value).strip() if len(row) > 13 and row[13].value else ''
         n_vol = safe_num(row[14].value if len(row) > 14 else None)
         if n_name and n_vol > 0:
             raw[n_name][current_strike]['call_sell'] += n_vol
+            has_any = True
 
         # Call buy: Q(16)=name, R(17)=volume
         q_name = str(row[16].value).strip() if len(row) > 16 and row[16].value else ''
         q_vol = safe_num(row[17].value if len(row) > 17 else None)
         if q_name and q_vol > 0:
             raw[q_name][current_strike]['call_buy'] += q_vol
+            has_any = True
+
+        if has_any:
+            all_strikes_with_data.add(current_strike)
+
+    if not all_strikes_with_data:
+        return {}
+
+    # Select strikes: nearest to ATM, up to max_strikes
+    sorted_strikes = sorted(all_strikes_with_data, key=lambda s: abs(s - atm_round))
+    strikes = sorted(sorted_strikes[:max_strikes])
 
     # Build participant list
     participants = []
