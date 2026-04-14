@@ -19,6 +19,7 @@ from urllib.error import URLError, HTTPError
 
 # Model: gemini-2.5-flash (stable, free tier)
 GEMINI_MODEL = 'gemini-2.5-flash'
+FALLBACK_MODELS = ['gemini-2.0-flash']
 
 SYSTEM_PROMPT = """あなたはJPXデリバティブ市場の専門アナリストです。
 以下のデータを統合し、日本語で簡潔な総合評価を生成してください。
@@ -125,10 +126,10 @@ def build_data_summary(data):
     return '\n'.join(lines)
 
 
-def call_gemini(api_key, prompt, data_summary):
-    """Call Google Gemini API with retry."""
-    import time
-    url = 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s' % (GEMINI_MODEL, api_key)
+def call_gemini(api_key, prompt, data_summary, model=None):
+    """Call Google Gemini API with retry on 429/503."""
+    model = model or GEMINI_MODEL
+    url = 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent?key=%s' % (model, api_key)
 
     payload = {
         'contents': [{
@@ -164,15 +165,16 @@ def call_gemini(api_key, prompt, data_summary):
                 body_text = e.read().decode('utf-8')[:300]
             except:
                 pass
-            if code == 429:
+            if code in (429, 503):
                 wait = (attempt + 1) * 15
-                print('[assess] Rate limited (429). Retrying in %ds... (%d/3)' % (wait, attempt + 1), file=sys.stderr)
+                label = 'Rate limited' if code == 429 else 'Service unavailable'
+                print('[assess] %s (%d). Retrying in %ds... (%d/3)' % (label, code, wait, attempt + 1), file=sys.stderr)
                 time.sleep(wait)
             elif code == 400:
                 print('[assess] Bad request (400): %s' % body_text, file=sys.stderr)
                 return None
             elif code == 403:
-                print('[assess] Forbidden (403) - check API key permissions: %s' % body_text, file=sys.stderr)
+                print('[assess] Forbidden (403) - check API key: %s' % body_text, file=sys.stderr)
                 return None
             else:
                 print('[assess] HTTP %d: %s' % (code, body_text), file=sys.stderr)
@@ -184,7 +186,7 @@ def call_gemini(api_key, prompt, data_summary):
             print('[assess] Unexpected error: %s' % e, file=sys.stderr)
             return None
 
-    print('[assess] All retries failed', file=sys.stderr)
+    print('[assess] All retries failed for %s' % model, file=sys.stderr)
     return None
 
 
@@ -199,19 +201,26 @@ def run(args):
 
     data_summary = build_data_summary(data)
     print('[assess] Data summary: %d chars' % len(data_summary), file=sys.stderr)
-    print('[assess] Using model: %s' % GEMINI_MODEL, file=sys.stderr)
-    print('[assess] Calling Gemini API...', file=sys.stderr)
 
-    assessment = call_gemini(api_key, SYSTEM_PROMPT, data_summary)
+    # Try primary model, then fallbacks
+    models_to_try = [GEMINI_MODEL] + FALLBACK_MODELS
+    assessment = None
+
+    for model in models_to_try:
+        print('[assess] Trying model: %s' % model, file=sys.stderr)
+        assessment = call_gemini(api_key, SYSTEM_PROMPT, data_summary, model=model)
+        if assessment:
+            print('[assess] Success with %s (%d chars)' % (model, len(assessment)), file=sys.stderr)
+            break
+        print('[assess] %s failed, trying next...' % model, file=sys.stderr)
 
     if assessment:
-        print('[assess] Generated %d chars' % len(assessment), file=sys.stderr)
         data['s08_assessment'] = assessment
         with open(args.data, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         print('[assess] Saved to %s' % args.data, file=sys.stderr)
     else:
-        print('[assess] Assessment generation failed', file=sys.stderr)
+        print('[assess] All models failed. Assessment not generated.', file=sys.stderr)
 
 
 if __name__ == '__main__':
