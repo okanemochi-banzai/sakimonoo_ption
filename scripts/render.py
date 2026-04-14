@@ -41,6 +41,21 @@ def fnum(n, plus=False):
         s = '+' + s
     return s
 
+def fnum_short(n, plus=False):
+    """Format number abbreviated: 28781932911 -> '287.8億', 44194 -> '44.2K'."""
+    if n is None:
+        return '-'
+    v = float(n)
+    sign = '+' if plus and v > 0 else ''
+    av = abs(v)
+    if av >= 1e8:  # 1億 = 100,000,000
+        return '%s%.1f億' % (sign, v / 1e8)
+    if av >= 1e4:  # 1万
+        return '%s%.1f万' % (sign, v / 1e4)
+    if av >= 1000:
+        return '%s%.1fK' % (sign, v / 1000)
+    return '%s%s' % (sign, fnum(int(v)))
+
 def fpct(n):
     if n is None:
         return '-'
@@ -455,9 +470,12 @@ def build_dashboard_html(data):
             h += '  <div class="kpi"><div class="label">C壁</div><div class="value" style="color:var(--call)">%s</div></div>\n' % fnum(max_c['strike'])
     h += '</div>\n'
 
-    h += '<div style="max-width:1200px;margin:0 auto;padding:0 16px 10px">\n'
-    h += '  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px">\n'
+    h += '<div style="max-width:1200px;margin:0 auto;padding:0 16px 10px;display:flex;gap:10px;flex-wrap:wrap">\n'
+    h += '  <div style="flex:1;min-width:300px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px">\n'
     h += '    <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=D&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
+    h += '  </div>\n'
+    h += '  <div style="flex:1;min-width:300px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px">\n'
+    h += '    <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
     h += '  </div>\n</div>\n'
 
     h += '<div class="mobile-nav">\n  <a href="index.html">ダッシュボード</a>\n  <a href="pnl_simulator.html">P&L</a>\n  <a href="archive.html">アーカイブ</a>\n</div>\n'
@@ -510,8 +528,8 @@ def _preview_opval(s03):
         return '<span class="mm-label">データなし</span>'
     lg = s03.get('large', {})
     h = '<div class="mini-metrics">'
-    h += '<div class="mini-metric"><div class="mm-label">プット代金</div><div class="mm-value">%sM</div></div>' % fnum(lg.get('put_value'))
-    h += '<div class="mini-metric"><div class="mm-label">コール代金</div><div class="mm-value">%sM</div></div>' % fnum(lg.get('call_value'))
+    h += '<div class="mini-metric"><div class="mm-label">P代金</div><div class="mm-value">%s</div></div>' % fnum_short(lg.get('put_value'))
+    h += '<div class="mini-metric"><div class="mm-label">C代金</div><div class="mm-value">%s</div></div>' % fnum_short(lg.get('call_value'))
     h += '<div class="mini-metric"><div class="mm-label">J-NET率</div><div class="mm-value">%s</div></div>' % fpct(lg.get('jnet_ratio'))
     h += '</div>'
     return h
@@ -586,13 +604,10 @@ def _preview_assess(s01, ind=None):
 def _preview_participants(s09):
     if 'error' in s09:
         return '<span class="mm-label">週次データなし</span>'
-    fut = s09.get('futures', {})
-    nk = fut.get('nk225_large', {})
+    sm = s09.get('strike_matrix', {})
+    n = len(sm.get('participants', []))
     h = '<div class="mini-metrics">'
-    on = nk.get('overseas_net', 0)
-    dn = nk.get('domestic_net', 0)
-    h += '<div class="mini-metric"><div class="mm-label">海外Net</div><div class="mm-value %s">%s</div></div>' % (sign_class(on), fnum(on, plus=True))
-    h += '<div class="mini-metric"><div class="mm-label">国内Net</div><div class="mm-value %s">%s</div></div>' % (sign_class(dn), fnum(dn, plus=True))
+    h += '<div class="mini-metric"><div class="mm-label">参加者数</div><div class="mm-value">%d社</div></div>' % n
     if s09.get('source') == 'cache':
         h += '<div class="mini-metric"><div class="mm-label" style="color:var(--yellow)">%s時点</div></div>' % esc(s09.get('data_date', '?')[:8])
     h += '</div>'
@@ -652,11 +667,11 @@ def _detail_opval_js(s03):
         if not b:
             continue
         js += "h+='<h3 style=\"color:#fff;font-size:13px;margin:8px 0 4px\">%s</h3>';" % bl
-        js += "h+='<table><tr><th></th><th>取引高</th><th>取引代金(百万)</th></tr>';"
-        js += "h+='<tr><td style=\"color:var(--put)\">プット</td><td>%s</td><td>%s</td></tr>';" % (_js_str(fnum(b.get('put_volume'))), _js_str(fnum(b.get('put_value'))))
-        js += "h+='<tr><td style=\"color:var(--call)\">コール</td><td>%s</td><td>%s</td></tr>';" % (_js_str(fnum(b.get('call_volume'))), _js_str(fnum(b.get('call_value'))))
-        js += "h+='<tr><td>合計</td><td>%s</td><td>%s</td></tr>';" % (_js_str(fnum(b.get('total_volume'))), _js_str(fnum(b.get('total_value'))))
-        js += "h+='<tr><td>J-NET</td><td>%s</td><td>%s (%s)</td></tr>';" % (_js_str(fnum(b.get('jnet_volume'))), _js_str(fnum(b.get('jnet_value'))), _js_str(fpct(b.get('jnet_ratio'))))
+        js += "h+='<table><tr><th></th><th>取引高</th><th>取引代金</th></tr>';"
+        js += "h+='<tr><td style=\"color:var(--put)\">プット</td><td>%s</td><td>%s</td></tr>';" % (_js_str(fnum_short(b.get('put_volume'))), _js_str(fnum_short(b.get('put_value'))))
+        js += "h+='<tr><td style=\"color:var(--call)\">コール</td><td>%s</td><td>%s</td></tr>';" % (_js_str(fnum_short(b.get('call_volume'))), _js_str(fnum_short(b.get('call_value'))))
+        js += "h+='<tr><td>合計</td><td>%s</td><td>%s</td></tr>';" % (_js_str(fnum_short(b.get('total_volume'))), _js_str(fnum_short(b.get('total_value'))))
+        js += "h+='<tr><td>J-NET</td><td>%s</td><td>%s (%s)</td></tr>';" % (_js_str(fnum_short(b.get('jnet_volume'))), _js_str(fnum_short(b.get('jnet_value'))), _js_str(fpct(b.get('jnet_ratio'))))
         js += "h+='</table>';"
     js += "return h;"
     return js
@@ -940,6 +955,15 @@ def _strike_matrix_js(s09):
     js += "h+='<div style=\"font-size:10px;color:var(--sub);margin-bottom:10px\">';"
     js += "h+='ATM %s / \\u8CA0=\\u58F2\\u308A\\u8D8A\\u3057 \\u6B63=\\u8CB7\\u3044\\u8D8A\\u3057';" % _js_str(fnum(atm_r))
     js += "h+='</div>';"
+    # Customer type legend
+    js += "h+='<div style=\"display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:12px;font-size:10px;color:var(--sub);line-height:1.7\">';"
+    js += "h+='<div><b style=\"color:var(--us)\">\\u30b0\\u30ed\\u30fc\\u30d0\\u30eb\\u30de\\u30af\\u30ed</b>: GS/Citi/JPM \\u65b9\\u5411\\u6027\\u30d9\\u30c3\\u30c8</div>';"
+    js += "h+='<div><b style=\"color:var(--us)\">\\u9577\\u671f\\u6295\\u8cc7\\u5fd7\\u5411</b>: BofA \\u4e2d\\u9577\\u671f\\u30dd\\u30b8\\u30b7\\u30e7\\u30f3</div>';"
+    js += "h+='<div><b style=\"color:var(--us)\">CTA</b>: \\u30e2\\u30eb\\u30ac\\u30f3MUFG \\u30c8\\u30ec\\u30f3\\u30c9\\u8ffd\\u5f93</div>';"
+    js += "h+='<div><b style=\"color:var(--hf)\">\\u30a2\\u30fc\\u30d3\\u30c8\\u30e9\\u30fc\\u30b8</b>: ABN/SocGen/BNP \\u88c1\\u5b9a\\u30fbHF\\u4ee3\\u7406</div>';"
+    js += "h+='<div><b style=\"color:var(--dom)\">\\u56fd\\u5185\\u6a5f\\u95a2</b>: \\u307f\\u305a\\u307b/\\u91ce\\u6751 \\u30d8\\u30c3\\u30b8\\u4e3b\\u4f53</div>';"
+    js += "h+='<div><b style=\"color:var(--dom)\">\\u56fd\\u5185\\u500b\\u4eba</b>: SBI/\\u697d\\u5929/\\u677e\\u4e95 \\u30cd\\u30c3\\u30c8\\u30c8\\u30ec\\u30fc\\u30c0\\u30fc</div>';"
+    js += "h+='</div>';"
     js += "h+='<div style=\"overflow-x:auto;-webkit-overflow-scrolling:touch\">';"
     js += "h+='<table style=\"font-size:10px;white-space:nowrap;border-collapse:collapse\">';"
     sty0 = 'min-width:72px;text-align:left;padding:4px 6px;position:sticky;left:0;background:var(--panel);z-index:2'
@@ -1026,18 +1050,6 @@ def _detail_participants_js(s09):
     js = "var h='';"
     if s09.get('source') == 'cache':
         js += "h+='<div style=\"background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);border-radius:6px;padding:8px;margin-bottom:10px;font-size:11px;color:var(--yellow)\">%s時点のキャッシュデータ（参考値）</div>';" % _js_str(s09.get('data_date', '?'))
-    fut = s09.get('futures', {})
-    nk = fut.get('nk225_large', {})
-    topix = fut.get('topix', {})
-    js += "h+='<div class=\"summary-box\">';"
-    for sec_data, label in [(nk, 'N225'), (topix, 'TOPIX')]:
-        on = sec_data.get('overseas_net', 0)
-        dn = sec_data.get('domestic_net', 0)
-        on_cls = 'color:var(--green)' if on > 0 else 'color:var(--red)'
-        dn_cls = 'color:var(--green)' if dn > 0 else 'color:var(--red)'
-        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">%s 海外</div><div class=\"si-value\" style=\"%s\">%s</div></div>';" % (label, on_cls, _js_str(fnum(on, plus=True)))
-        js += "h+='<div class=\"summary-item\"><div class=\"si-label\">%s 国内</div><div class=\"si-value\" style=\"%s\">%s</div></div>';" % (label, dn_cls, _js_str(fnum(dn, plus=True)))
-    js += "h+='</div>';"
 
     # === Strike matrix table ===
     js += _strike_matrix_js(s09)
