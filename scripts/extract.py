@@ -802,6 +802,9 @@ def extract_s06(wb_oi, atm):
     # {expiry: {strike: {put_oi, put_change, call_oi, call_change}}}
     by_expiry = defaultdict(lambda: defaultdict(lambda: {'put_oi': 0, 'put_change': 0, 'call_oi': 0, 'call_change': 0}))
 
+    # Also collect ALL strikes (no range limit) for global top ranking
+    global_oi = defaultdict(lambda: {'put_oi': 0, 'call_oi': 0})
+
     for row in ws.iter_rows(min_row=1, max_row=ws.max_row, values_only=False):
         a_val = str(row[0].value).strip() if row[0].value else ''
         g_val = str(row[6].value).strip() if len(row) > 6 and row[6].value else ''
@@ -811,9 +814,11 @@ def extract_s06(wb_oi, atm):
         if m:
             expiry = m.group(1)
             strike = int(m.group(2))
+            oi = safe_num(row[2].value if len(row) > 2 else None)
+            chg = safe_num(row[3].value if len(row) > 3 else None)
+            if strike % 500 == 0:
+                global_oi[strike]['put_oi'] += oi
             if low <= strike <= high and strike % 500 == 0:
-                oi = safe_num(row[2].value if len(row) > 2 else None)
-                chg = safe_num(row[3].value if len(row) > 3 else None)
                 by_expiry[expiry][strike]['put_oi'] += oi
                 by_expiry[expiry][strike]['put_change'] += chg
 
@@ -822,9 +827,11 @@ def extract_s06(wb_oi, atm):
         if m:
             expiry = m.group(1)
             strike = int(m.group(2))
+            oi = safe_num(row[8].value if len(row) > 8 else None)
+            chg = safe_num(row[9].value if len(row) > 9 else None)
+            if strike % 500 == 0:
+                global_oi[strike]['call_oi'] += oi
             if low <= strike <= high and strike % 500 == 0:
-                oi = safe_num(row[8].value if len(row) > 8 else None)
-                chg = safe_num(row[9].value if len(row) > 9 else None)
                 by_expiry[expiry][strike]['call_oi'] += oi
                 by_expiry[expiry][strike]['call_change'] += chg
 
@@ -877,11 +884,19 @@ def extract_s06(wb_oi, atm):
             'is_atm': (strike == atm_round),
         })
 
+    # Global top 3 strikes by OI (across all expiries, no range limit)
+    all_puts = sorted([(s, d['put_oi']) for s, d in global_oi.items() if d['put_oi'] > 0], key=lambda x: -x[1])
+    all_calls = sorted([(s, d['call_oi']) for s, d in global_oi.items() if d['call_oi'] > 0], key=lambda x: -x[1])
+    top_puts = [{'strike': s, 'oi': oi} for s, oi in all_puts[:5]]
+    top_calls = [{'strike': s, 'oi': oi} for s, oi in all_calls[:5]]
+
     return {
         'atm': atm,
         'atm_round': atm_round,
-        'distribution': combined,  # backward compat for Max Pain etc
+        'distribution': combined,
         'by_expiry': expiry_distributions,
+        'top_puts': top_puts,
+        'top_calls': top_calls,
     }
 
 
