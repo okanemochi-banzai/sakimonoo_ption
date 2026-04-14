@@ -1708,6 +1708,163 @@ def build_strategy_presets(atm, vi, T):
 
 
 # ============================================================
+# Technical Analysis
+# ============================================================
+
+def compute_technicals(ohlc_history):
+    """Compute Pivot, Fibonacci, Bollinger Bands, RSI from OHLC history.
+
+    Args:
+        ohlc_history: list of {date, open, high, low, close} sorted oldest-first
+
+    Returns:
+        dict with pivot, fibonacci, bollinger, rsi sections
+    """
+    result = {}
+    if not ohlc_history or len(ohlc_history) < 2:
+        return result
+
+    closes = [d['close'] for d in ohlc_history]
+    latest = ohlc_history[-1]
+
+    # --- Pivot Points (from previous day OHLC) ---
+    if len(ohlc_history) >= 2:
+        prev = ohlc_history[-2]
+        H = prev['high']
+        L = prev['low']
+        C = prev['close']
+        PP = round((H + L + C) / 3)
+        result['pivot'] = {
+            'date': prev['date'],
+            'high': H, 'low': L, 'close': C,
+            'pp': PP,
+            'r1': 2 * PP - L,
+            'r2': PP + (H - L),
+            'r3': H + 2 * (PP - L),
+            's1': 2 * PP - H,
+            's2': PP - (H - L),
+            's3': L - 2 * (H - PP),
+        }
+
+    # --- Fibonacci Retracement (20-day high/low) ---
+    n_fib = min(20, len(ohlc_history))
+    recent = ohlc_history[-n_fib:]
+    high_20 = max(d['high'] for d in recent)
+    low_20 = min(d['low'] for d in recent)
+    diff = high_20 - low_20
+
+    if diff > 0:
+        # Determine trend direction: if latest close > midpoint, downtrend fib (retracement from high)
+        # else uptrend fib (retracement from low)
+        mid = (high_20 + low_20) / 2
+        if latest['close'] >= mid:
+            # Price near high → measure pullback levels (support)
+            result['fibonacci'] = {
+                'trend': 'uptrend',
+                'high': round(high_20),
+                'low': round(low_20),
+                'period': n_fib,
+                'levels': {
+                    '0%': round(high_20),
+                    '23.6%': round(high_20 - diff * 0.236),
+                    '38.2%': round(high_20 - diff * 0.382),
+                    '50%': round(high_20 - diff * 0.5),
+                    '61.8%': round(high_20 - diff * 0.618),
+                    '78.6%': round(high_20 - diff * 0.786),
+                    '100%': round(low_20),
+                },
+                'label': '押し目水準（上昇トレンド中の戻り）',
+            }
+        else:
+            # Price near low → measure bounce levels (resistance)
+            result['fibonacci'] = {
+                'trend': 'downtrend',
+                'high': round(high_20),
+                'low': round(low_20),
+                'period': n_fib,
+                'levels': {
+                    '0%': round(low_20),
+                    '23.6%': round(low_20 + diff * 0.236),
+                    '38.2%': round(low_20 + diff * 0.382),
+                    '50%': round(low_20 + diff * 0.5),
+                    '61.8%': round(low_20 + diff * 0.618),
+                    '78.6%': round(low_20 + diff * 0.786),
+                    '100%': round(high_20),
+                },
+                'label': '戻り売り水準（下降トレンド中の反発）',
+            }
+
+    # --- Bollinger Bands (20-day, 1σ/2σ/3σ) ---
+    n_bb = min(20, len(closes))
+    bb_closes = closes[-n_bb:]
+    if len(bb_closes) >= 10:
+        mean = sum(bb_closes) / len(bb_closes)
+        variance = sum((c - mean) ** 2 for c in bb_closes) / len(bb_closes)
+        std = variance ** 0.5
+        current = closes[-1]
+
+        # How many sigma from mean
+        sigma_pos = (current - mean) / std if std > 0 else 0
+
+        result['bollinger'] = {
+            'period': n_bb,
+            'mean': round(mean),
+            'std': round(std),
+            'upper3': round(mean + 3 * std),
+            'upper2': round(mean + 2 * std),
+            'upper1': round(mean + 1 * std),
+            'lower1': round(mean - 1 * std),
+            'lower2': round(mean - 2 * std),
+            'lower3': round(mean - 3 * std),
+            'current_sigma': round(sigma_pos, 2),
+            'bandwidth': round((2 * 2 * std) / mean * 100, 2),  # 2σ bandwidth %
+        }
+
+    # --- RSI (14-day) ---
+    n_rsi = min(14, len(closes) - 1)
+    if n_rsi >= 5:
+        gains = []
+        losses = []
+        rsi_closes = closes[-(n_rsi + 1):]
+        for i in range(1, len(rsi_closes)):
+            delta = rsi_closes[i] - rsi_closes[i - 1]
+            if delta > 0:
+                gains.append(delta)
+                losses.append(0)
+            else:
+                gains.append(0)
+                losses.append(abs(delta))
+
+        avg_gain = sum(gains) / len(gains)
+        avg_loss = sum(losses) / len(losses)
+
+        if avg_loss > 0:
+            rs = avg_gain / avg_loss
+            rsi = 100 - (100 / (1 + rs))
+        else:
+            rsi = 100
+
+        if rsi >= 70:
+            signal = '買われすぎ（売りシグナル）'
+        elif rsi >= 60:
+            signal = 'やや過熱'
+        elif rsi <= 30:
+            signal = '売られすぎ（買いシグナル）'
+        elif rsi <= 40:
+            signal = 'やや割安'
+        else:
+            signal = 'ニュートラル'
+
+        result['rsi'] = {
+            'period': n_rsi,
+            'value': round(rsi, 1),
+            'signal': signal,
+        }
+
+    return result
+
+
+# ============================================================
 # Derived Indicators
 # ============================================================
 
@@ -2059,6 +2216,29 @@ def run(args):
     ind = output['indicators']
     print('[extract.py] Indicators: PCR=%.2f MaxPain=%s Basis=%s' % (
         ind.get('pcr_volume') or 0, ind.get('max_pain', '-'), ind.get('basis', '-')))
+
+    # Technical analysis (from OHLC history in market_latest.json)
+    market_json_path = os.path.join(data_dir, 'market_latest.json')
+    if os.path.exists(market_json_path):
+        try:
+            with open(market_json_path, 'r') as f:
+                market_data = json.load(f)
+            ohlc_history = market_data.get('ohlc_history', [])
+            if ohlc_history:
+                output['technicals'] = compute_technicals(ohlc_history)
+                tech = output['technicals']
+                pp = tech.get('pivot', {}).get('pp', '-')
+                rsi_val = tech.get('rsi', {}).get('value', '-')
+                bb_sig = tech.get('bollinger', {}).get('current_sigma', '-')
+                print('[extract.py] Technicals: PP=%s RSI=%s BB_sigma=%s (%d days)' % (pp, rsi_val, bb_sig, len(ohlc_history)))
+            else:
+                output['technicals'] = {}
+                print('[extract.py] No OHLC history in market_latest.json')
+        except Exception as e:
+            output['technicals'] = {}
+            print('[extract.py] Failed to read market_latest.json: %s' % e)
+    else:
+        output['technicals'] = {}
 
     # Write output
     out_path = args.out
