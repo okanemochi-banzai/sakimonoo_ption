@@ -471,12 +471,16 @@ def build_dashboard_html(data):
     h += '</div>\n'
 
     h += '<div style="max-width:1200px;margin:0 auto;padding:0 16px 10px;display:flex;gap:10px;flex-wrap:wrap">\n'
-    h += '  <div style="flex:1;min-width:300px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px">\n'
-    h += '    <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=D&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
-    h += '  </div>\n'
-    h += '  <div style="flex:1;min-width:300px;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:320px">\n'
-    h += '    <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
-    h += '  </div>\n</div>\n'
+    h += '  <div style="flex:1;min-width:300px">\n'
+    h += '    <div style="font-size:11px;color:var(--sub);text-align:center;padding:4px 0;font-family:Outfit">日足</div>\n'
+    h += '    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:310px">\n'
+    h += '      <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=D&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
+    h += '    </div>\n  </div>\n'
+    h += '  <div style="flex:1;min-width:300px">\n'
+    h += '    <div style="font-size:11px;color:var(--sub);text-align:center;padding:4px 0;font-family:Outfit">15分足</div>\n'
+    h += '    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:310px">\n'
+    h += '      <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
+    h += '    </div>\n  </div>\n</div>\n'
 
     h += '<div class="mobile-nav">\n  <a href="index.html">ダッシュボード</a>\n  <a href="pnl_simulator.html">P&L</a>\n  <a href="archive.html">アーカイブ</a>\n</div>\n'
 
@@ -605,9 +609,10 @@ def _preview_participants(s09):
     if 'error' in s09:
         return '<span class="mm-label">週次データなし</span>'
     sm = s09.get('strike_matrix', {})
-    n = len(sm.get('participants', []))
+    strikes = sm.get('strikes', [])
     h = '<div class="mini-metrics">'
-    h += '<div class="mini-metric"><div class="mm-label">参加者数</div><div class="mm-value">%d社</div></div>' % n
+    if strikes:
+        h += '<div class="mini-metric"><div class="mm-label">対象行使価格</div><div class="mm-value">%s〜%s</div></div>' % (fnum(strikes[0]), fnum(strikes[-1]))
     if s09.get('source') == 'cache':
         h += '<div class="mini-metric"><div class="mm-label" style="color:var(--yellow)">%s時点</div></div>' % esc(s09.get('data_date', '?')[:8])
     h += '</div>'
@@ -730,6 +735,26 @@ def _detail_dist_js(s06, ind=None):
     ind = ind or {}
     js = "var h='';"
     js += "h+='<div style=\"font-size:11px;color:var(--sub);margin-bottom:8px\">ATM = %s</div>';" % _js_str(fnum(s06.get('atm')))
+
+    # Top OI strikes (全行使価格)
+    top_puts = s06.get('top_puts', [])
+    top_calls = s06.get('top_calls', [])
+    if top_puts or top_calls:
+        js += "h+='<div style=\"display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px\">';"
+        if top_puts:
+            js += "h+='<div style=\"flex:1;min-width:140px;background:var(--card);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:8px\">';"
+            js += "h+='<div style=\"font-size:10px;font-weight:600;color:var(--put);margin-bottom:4px\">PUT \\u5EFA\\u7389 TOP5</div>';"
+            for i, tp in enumerate(top_puts[:5]):
+                js += "h+='<div style=\"font-size:11px;font-family:DM Mono;color:var(--text)\">%d. %s <span style=\"color:var(--sub)\">%s\\u679A</span></div>';" % (i + 1, _js_str(fnum(tp['strike'])), _js_str(fnum(tp['oi'])))
+            js += "h+='</div>';"
+        if top_calls:
+            js += "h+='<div style=\"flex:1;min-width:140px;background:var(--card);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:8px\">';"
+            js += "h+='<div style=\"font-size:10px;font-weight:600;color:var(--call);margin-bottom:4px\">CALL \\u5EFA\\u7389 TOP5</div>';"
+            for i, tc in enumerate(top_calls[:5]):
+                js += "h+='<div style=\"font-size:11px;font-family:DM Mono;color:var(--text)\">%d. %s <span style=\"color:var(--sub)\">%s\\u679A</span></div>';" % (i + 1, _js_str(fnum(tc['strike'])), _js_str(fnum(tc['oi'])))
+            js += "h+='</div>';"
+        js += "h+='</div>';"
+
     by_expiry = s06.get('by_expiry', [])
     if by_expiry:
         for ei, exp_data in enumerate(by_expiry):
@@ -950,7 +975,7 @@ def _strike_matrix_js(s09):
     js = ""
     js += "h+='<div style=\"margin-top:18px;padding-top:14px;border-top:1px solid var(--border)\">';"
     js += "h+='<div style=\"font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px\">';"
-    js += "h+='\\u2468-D \\u884C\\u4F7F\\u4FA1\\u683C\\u5225\\u30DD\\u30B8\\u30B7\\u30E7\\u30F3\\u5206\\u5E03';"
+    js += "h+='\\u884C\\u4F7F\\u4FA1\\u683C\\u5225\\u30DD\\u30B8\\u30B7\\u30E7\\u30F3\\u5206\\u5E03';"
     js += "h+='</div>';"
     js += "h+='<div style=\"font-size:10px;color:var(--sub);margin-bottom:10px\">';"
     js += "h+='ATM %s / \\u8CA0=\\u58F2\\u308A\\u8D8A\\u3057 \\u6B63=\\u8CB7\\u3044\\u8D8A\\u3057';" % _js_str(fnum(atm_r))
