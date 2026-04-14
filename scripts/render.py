@@ -493,6 +493,7 @@ def build_dashboard_html(data):
         ('dist', '🦋', '建玉分布', _preview_dist(s06), _detail_dist_js(s06, ind)),
         ('jnet', '🏛', '大口手口（J-NET）', _preview_jnet(s07), _detail_jnet_js(s07)),
         ('assess', '🎯', '総合評価', _preview_assess(s01, ind), _detail_assess_js(data)),
+        ('gemini', '🤖', 'AI予想', _preview_gemini(data), _detail_gemini_js(data)),
         ('participants', '🌏', '参加者別建玉分析', _preview_participants(s09), _detail_participants_js(s09)),
         ('strategy', '🎲', '戦略マップ', _preview_strategy(s11), _detail_strategy_js(s11, atm)),
     ]
@@ -927,21 +928,97 @@ def _detail_assess_js(data):
         max_c = max(dist, key=lambda d: d['call_oi'])
         js += "h+='<div class=\"analysis-card\"><div class=\"ac-title\">🎯 S/R水準</div><div class=\"ac-body\"><span style=\"color:var(--put)\">S: %s</span> (%s枚)<br><span style=\"color:var(--call)\">R: %s</span> (%s枚)</div></div>';" % (_js_str(fnum(max_p['strike'])), _js_str(fnum(max_p['put_oi'])), _js_str(fnum(max_c['strike'])), _js_str(fnum(max_c['call_oi'])))
     js += "h+='</div>';"
-    assessment = data.get('s08_assessment', '')
-    if assessment:
-        js += "h+='<div class=\"insight\" style=\"white-space:pre-wrap;line-height:1.8\">';"
-        parts = assessment.split('■')
-        for i, part in enumerate(parts):
-            part = part.strip()
-            if not part:
-                continue
-            lines = part.split('\n', 1)
-            header = lines[0].strip()
-            body = lines[1].strip() if len(lines) > 1 else ''
-            js += "h+='<div style=\"margin-top:%dpx\"><strong style=\"color:var(--accent)\">■ %s</strong><br>%s</div>';" % (0 if i <= 1 else 10, _js_str(esc(header)), _js_str(esc(body)))
+    # Technical Levels
+    tech = data.get('technicals', {})
+    pivot = tech.get('pivot', {})
+    fib = tech.get('fibonacci', {})
+    bb = tech.get('bollinger', {})
+    rsi = tech.get('rsi', {})
+
+    if pivot or fib or bb or rsi:
+        js += "h+='<div style=\"margin-top:12px;font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px\">テクニカルレベル</div>';"
+        js += "h+='<div style=\"display:flex;gap:10px;flex-wrap:wrap\">';"
+
+        # Pivot Points
+        if pivot:
+            js += "h+='<div style=\"flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px\">';"
+            js += "h+='<div style=\"font-size:10px;font-weight:600;color:var(--accent);margin-bottom:6px\">ピボットポイント</div>';"
+            for lbl, key, color in [('R3', 'r3', 'var(--call)'), ('R2', 'r2', 'var(--call)'), ('R1', 'r1', 'var(--call)'), ('PP', 'pp', 'var(--yellow)'), ('S1', 's1', 'var(--put)'), ('S2', 's2', 'var(--put)'), ('S3', 's3', 'var(--put)')]:
+                val = pivot.get(key, 0)
+                weight = 'font-weight:700;' if lbl == 'PP' else ''
+                js += "h+='<div style=\"display:flex;justify-content:space-between;padding:2px 4px;font-size:10px;%s\"><span style=\"color:%s\">%s</span><span style=\"font-family:DM Mono;color:%s\">%s</span></div>';" % (weight, color, lbl, color, _js_str(fnum(val)))
+            js += "h+='</div>';"
+
+        # Fibonacci
+        if fib:
+            js += "h+='<div style=\"flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px\">';"
+            fib_label = _js_str(esc(fib.get('label', '')))
+            js += "h+='<div style=\"font-size:10px;font-weight:600;color:var(--accent);margin-bottom:2px\">フィボナッチ (%d日)</div>';" % fib.get('period', 20)
+            js += "h+='<div style=\"font-size:9px;color:var(--sub);margin-bottom:4px\">%s</div>';" % fib_label
+            levels = fib.get('levels', {})
+            for pct in ['0%', '23.6%', '38.2%', '50%', '61.8%', '78.6%', '100%']:
+                val = levels.get(pct, 0)
+                is_key = pct in ('38.2%', '50%', '61.8%')
+                weight = 'font-weight:600;' if is_key else ''
+                color = 'var(--yellow)' if is_key else 'var(--sub)'
+                js += "h+='<div style=\"display:flex;justify-content:space-between;padding:2px 4px;font-size:10px;%s\"><span style=\"color:%s\">%s</span><span style=\"font-family:DM Mono;color:var(--text)\">%s</span></div>';" % (weight, color, pct, _js_str(fnum(val)))
+            js += "h+='</div>';"
+
+        # BB + RSI combined
+        if bb or rsi:
+            js += "h+='<div style=\"flex:1;min-width:140px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px\">';"
+            if bb:
+                js += "h+='<div style=\"font-size:10px;font-weight:600;color:var(--accent);margin-bottom:4px\">ボリンジャーバンド (%d日)</div>';" % bb.get('period', 20)
+                for lbl, key, color in [('+3\\u03c3', 'upper3', 'var(--call)'), ('+2\\u03c3', 'upper2', 'var(--call)'), ('+1\\u03c3', 'upper1', 'var(--call)'), ('SMA', 'mean', 'var(--yellow)'), ('-1\\u03c3', 'lower1', 'var(--put)'), ('-2\\u03c3', 'lower2', 'var(--put)'), ('-3\\u03c3', 'lower3', 'var(--put)')]:
+                    val = bb.get(key, 0)
+                    weight = 'font-weight:600;' if 'mean' in key else ''
+                    js += "h+='<div style=\"display:flex;justify-content:space-between;padding:2px 4px;font-size:10px;%s\"><span style=\"color:%s\">%s</span><span style=\"font-family:DM Mono;color:var(--text)\">%s</span></div>';" % (weight, color, lbl, _js_str(fnum(val)))
+                sig = bb.get('current_sigma', 0)
+                sig_color = 'var(--red)' if abs(sig) > 2 else 'var(--yellow)' if abs(sig) > 1 else 'var(--green)'
+                js += "h+='<div style=\"margin-top:4px;font-size:10px;color:var(--sub)\">現在位置: <span style=\"color:%s;font-weight:600\">%+.1f\\u03c3</span></div>';" % (sig_color, sig)
+            if rsi:
+                rsi_val = rsi.get('value', 50)
+                rsi_color = 'var(--red)' if rsi_val >= 70 else 'var(--green)' if rsi_val <= 30 else 'var(--text)'
+                js += "h+='<div style=\"margin-top:8px;font-size:10px;font-weight:600;color:var(--accent)\">RSI (%d日)</div>';" % rsi.get('period', 14)
+                js += "h+='<div style=\"font-family:DM Mono;font-size:16px;font-weight:700;color:%s\">%s</div>';" % (rsi_color, _js_str(rsi_val))
+                js += "h+='<div style=\"font-size:9px;color:var(--sub)\">%s</div>';" % _js_str(esc(rsi.get('signal', '')))
+            js += "h+='</div>';"
+
         js += "h+='</div>';"
-    else:
-        js += "h+='<div class=\"insight\"><strong>⑧ 総合評価</strong>: GEMINI_API_KEY を設定すると自動生成されます。</div>';"
+
+    js += "return h;"
+    return js
+
+
+def _preview_gemini(data):
+    assessment = data.get('s08_assessment', '')
+    if not assessment:
+        return '<span class="mm-label">生成待ち</span>'
+    # Extract first ■ header as preview
+    parts = assessment.split('■')
+    for part in parts[1:2]:
+        lines = part.strip().split('\n', 1)
+        header = lines[0].strip()[:20]
+        return '<div class="mini-metrics"><div class="mini-metric"><div class="mm-value" style="font-size:12px;color:var(--accent)">■ %s…</div></div></div>' % esc(header)
+    return '<span class="mm-label">生成済み</span>'
+
+
+def _detail_gemini_js(data):
+    assessment = data.get('s08_assessment', '')
+    if not assessment:
+        return "var h='<div class=\"insight\">GEMINI_API_KEY を設定するとAI予想が自動生成されます。</div>';return h;"
+    js = "var h='';"
+    js += "h+='<div class=\"insight\" style=\"white-space:pre-wrap;line-height:1.8\">';"
+    parts = assessment.split('■')
+    for i, part in enumerate(parts):
+        part = part.strip()
+        if not part:
+            continue
+        lines = part.split('\n', 1)
+        header = lines[0].strip()
+        body = lines[1].strip() if len(lines) > 1 else ''
+        js += "h+='<div style=\"margin-top:%dpx\"><strong style=\"color:var(--accent)\">■ %s</strong><br>%s</div>';" % (0 if i <= 1 else 10, _js_str(esc(header)), _js_str(esc(body)))
+    js += "h+='</div>';"
     js += "return h;"
     return js
 
