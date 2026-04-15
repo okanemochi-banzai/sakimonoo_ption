@@ -108,52 +108,103 @@ def fetch_yahoo_vi():
 def fetch_stooq_ohlc_history(days=30):
     """Fetch N225 daily OHLC history from stooq (last N calendar days).
 
+    Tries multiple symbols and Yahoo Finance as fallback.
     Returns list of {date, open, high, low, close} sorted oldest-first.
     """
+    end = datetime.now()
+    start = end - timedelta(days=days + 15)
+    d1 = start.strftime('%Y%m%d')
+    d2 = end.strftime('%Y%m%d')
+
+    # Try multiple stooq symbols
+    symbols = ['^nkx', 'nk225.jp', '^nki']
+    for sym in symbols:
+        try:
+            url = 'https://stooq.com/q/d/l/?s=%s&d1=%s&d2=%s&i=d' % (sym, d1, d2)
+            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            resp = urlopen(req, timeout=15)
+            text = resp.read().decode('utf-8').strip()
+            lines = text.split('\n')
+            print('[fetch] stooq %s: %d lines, first=%s' % (sym, len(lines), lines[0][:60] if lines else ''), file=sys.stderr)
+
+            history = _parse_ohlc_csv(lines)
+            if history:
+                history = history[-days:]
+                print('[fetch] OHLC history from stooq(%s): %d trading days' % (sym, len(history)), file=sys.stderr)
+                return history
+        except Exception as e:
+            print('[fetch] stooq %s failed: %s' % (sym, e), file=sys.stderr)
+
+    # Fallback: Yahoo Finance chart API
     try:
-        end = datetime.now()
-        start = end - timedelta(days=days + 10)  # extra buffer for weekends/holidays
-        d1 = start.strftime('%Y%m%d')
-        d2 = end.strftime('%Y%m%d')
-        url = 'https://stooq.com/q/d/l/?s=^nkx&d1=%s&d2=%s&i=d' % (d1, d2)
+        period2 = int(end.timestamp())
+        period1 = int(start.timestamp())
+        url = 'https://query1.finance.yahoo.com/v8/finance/chart/%%5EN225?period1=%d&period2=%d&interval=1d' % (period1, period2)
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         resp = urlopen(req, timeout=15)
-        text = resp.read().decode('utf-8').strip()
-        lines = text.split('\n')
-
-        # CSV: Date,Open,High,Low,Close,Volume
-        history = []
-        for line in lines[1:]:  # skip header
-            parts = line.strip().split(',')
-            if len(parts) < 5:
-                continue
-            try:
-                o = float(parts[1])
-                h = float(parts[2])
-                l = float(parts[3])
-                c = float(parts[4])
-                if 20000 < c < 80000:
-                    history.append({
-                        'date': parts[0],
-                        'open': o,
-                        'high': h,
-                        'low': l,
-                        'close': c,
-                    })
-            except (ValueError, IndexError):
-                continue
-
-        # Sort oldest first
-        history.sort(key=lambda x: x['date'])
-
-        # Keep last N trading days
-        history = history[-days:]
-        print('[fetch] OHLC history: %d trading days' % len(history), file=sys.stderr)
-        return history
-
+        data = json.loads(resp.read().decode('utf-8'))
+        result = data.get('chart', {}).get('result', [])
+        if result:
+            timestamps = result[0].get('timestamp', [])
+            quotes = result[0].get('indicators', {}).get('quote', [{}])[0]
+            opens = quotes.get('open', [])
+            highs = quotes.get('high', [])
+            lows = quotes.get('low', [])
+            closes = quotes.get('close', [])
+            history = []
+            for i in range(len(timestamps)):
+                try:
+                    o = opens[i]
+                    h = highs[i]
+                    l = lows[i]
+                    c = closes[i]
+                    if o and h and l and c and 20000 < c < 80000:
+                        dt = datetime.fromtimestamp(timestamps[i])
+                        history.append({
+                            'date': dt.strftime('%Y-%m-%d'),
+                            'open': round(o, 2),
+                            'high': round(h, 2),
+                            'low': round(l, 2),
+                            'close': round(c, 2),
+                        })
+                except (TypeError, IndexError):
+                    continue
+            if history:
+                history.sort(key=lambda x: x['date'])
+                history = history[-days:]
+                print('[fetch] OHLC history from Yahoo: %d trading days' % len(history), file=sys.stderr)
+                return history
     except Exception as e:
-        print('[fetch] stooq OHLC history failed: %s' % e, file=sys.stderr)
+        print('[fetch] Yahoo OHLC history failed: %s' % e, file=sys.stderr)
+
+    print('[fetch] OHLC history: 0 trading days (all sources failed)', file=sys.stderr)
     return []
+
+
+def _parse_ohlc_csv(lines):
+    """Parse OHLC CSV lines (skip header). Returns list sorted oldest-first."""
+    history = []
+    for line in lines[1:]:
+        parts = line.strip().split(',')
+        if len(parts) < 5:
+            continue
+        try:
+            o = float(parts[1])
+            h = float(parts[2])
+            l = float(parts[3])
+            c = float(parts[4])
+            if 20000 < c < 80000:
+                history.append({
+                    'date': parts[0],
+                    'open': o,
+                    'high': h,
+                    'low': l,
+                    'close': c,
+                })
+        except (ValueError, IndexError):
+            continue
+    history.sort(key=lambda x: x['date'])
+    return history
 
 
 def run(args):
