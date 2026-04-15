@@ -14,13 +14,13 @@
       "fut_participants": "20260410_indexfut_oi_by_tp.xlsx",
       "stock_vol": "stock_val_1_260401.xls"
     },
-    "atm": 58000,
+    "atm": 58500,
     "ohlc": {},
-    "nikkei_close": 57877.39,
+    "nikkei_close": 58506.92,
     "vi": null
   },
   "s01": {
-    "nikkei_close": 57877.39,
+    "nikkei_close": 58506.92,
     "vi": null
   },
   "s02": {
@@ -529,17 +529,9 @@
     }
   ],
   "s06": {
-    "atm": 58000,
-    "atm_round": 58000,
+    "atm": 58500,
+    "atm_round": 58500,
     "distribution": [
-      {
-        "strike": 53000,
-        "put_oi": 4480,
-        "put_change": -54,
-        "call_oi": 1842,
-        "call_change": -40,
-        "is_atm": false
-      },
       {
         "strike": 53500,
         "put_oi": 2518,
@@ -618,7 +610,7 @@
         "put_change": 127,
         "call_oi": 7255,
         "call_change": 40,
-        "is_atm": true
+        "is_atm": false
       },
       {
         "strike": 58500,
@@ -626,7 +618,7 @@
         "put_change": 0,
         "call_oi": 2260,
         "call_change": 156,
-        "is_atm": false
+        "is_atm": true
       },
       {
         "strike": 59000,
@@ -699,22 +691,22 @@
         "call_oi": 4715,
         "call_change": 1406,
         "is_atm": false
+      },
+      {
+        "strike": 63500,
+        "put_oi": 0,
+        "put_change": 0,
+        "call_oi": 0,
+        "call_change": 0,
+        "is_atm": false
       }
     ],
     "by_expiry": [
       {
         "expiry": "2605",
         "label": "2026年05月限",
-        "total_oi": 49074,
+        "total_oi": 47554,
         "distribution": [
-          {
-            "strike": 53000,
-            "put_oi": 1063,
-            "put_change": 1,
-            "call_oi": 457,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 53500,
             "put_oi": 1942,
@@ -793,7 +785,7 @@
             "put_change": 14,
             "call_oi": 3163,
             "call_change": 57,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 58500,
@@ -801,7 +793,7 @@
             "put_change": 0,
             "call_oi": 631,
             "call_change": 156,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 59000,
@@ -874,22 +866,22 @@
             "call_oi": 2903,
             "call_change": 1294,
             "is_atm": false
+          },
+          {
+            "strike": 63500,
+            "put_oi": 0,
+            "put_change": 0,
+            "call_oi": 0,
+            "call_change": 0,
+            "is_atm": false
           }
         ]
       },
       {
         "expiry": "2606",
         "label": "2026年06月限",
-        "total_oi": 47316,
+        "total_oi": 42915,
         "distribution": [
-          {
-            "strike": 53000,
-            "put_oi": 3016,
-            "put_change": -55,
-            "call_oi": 1385,
-            "call_change": -40,
-            "is_atm": false
-          },
           {
             "strike": 53500,
             "put_oi": 576,
@@ -968,7 +960,7 @@
             "put_change": 113,
             "call_oi": 3349,
             "call_change": -97,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 58500,
@@ -976,7 +968,7 @@
             "put_change": 0,
             "call_oi": 504,
             "call_change": 0,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 59000,
@@ -1049,22 +1041,22 @@
             "call_oi": 1811,
             "call_change": 112,
             "is_atm": false
+          },
+          {
+            "strike": 63500,
+            "put_oi": 0,
+            "put_change": 0,
+            "call_oi": 0,
+            "call_change": 0,
+            "is_atm": false
           }
         ]
       },
       {
         "expiry": "2607",
         "label": "2026年07月限",
-        "total_oi": 5152,
+        "total_oi": 4751,
         "distribution": [
-          {
-            "strike": 53000,
-            "put_oi": 401,
-            "put_change": 0,
-            "call_oi": 0,
-            "call_change": 0,
-            "is_atm": false
-          },
           {
             "strike": 53500,
             "put_oi": 0,
@@ -1143,7 +1135,7 @@
             "put_change": 0,
             "call_oi": 743,
             "call_change": 80,
-            "is_atm": true
+            "is_atm": false
           },
           {
             "strike": 58500,
@@ -1151,7 +1143,7 @@
             "put_change": 0,
             "call_oi": 1125,
             "call_change": 0,
-            "is_atm": false
+            "is_atm": true
           },
           {
             "strike": 59000,
@@ -1222,6 +1214,14 @@
             "put_oi": 0,
             "put_change": 0,
             "call_oi": 1,
+            "call_change": 0,
+            "is_atm": false
+          },
+          {
+            "strike": 63500,
+            "put_oi": 0,
+            "put_change": 0,
+            "call_oi": 0,
             "call_change": 0,
             "is_atm": false
           }
@@ -2632,8 +2632,8 @@
     "source": "live",
     "data_date": "20260414",
     "strike_matrix": {
-      "atm": 58000,
-      "atm_round": 58000,
+      "atm": 58500,
+      "atm_round": 58500,
       "strikes": [
         56625,
         56750,
@@ -4833,12 +4833,12 @@
     "pcr_volume": 1.97,
     "pcr_oi": 1.87,
     "pcr_signal": "強い弱気（逆張り買いシグナル）",
-    "max_pain": 55000,
-    "max_pain_total": 24940000,
+    "max_pain": 55500,
+    "max_pain_total": 20979000,
     "max_pain_diff": -3000,
-    "basis": 123,
-    "basis_pct": 0.21,
-    "basis_signal": "コンタンゴ（先物プレミアム）",
+    "basis": -7,
+    "basis_pct": -0.01,
+    "basis_signal": "バックワーデーション（先物ディスカウント）",
     "walls_reinforced": [
       {
         "strike": 63000,
@@ -4868,5 +4868,5 @@
     "walls_weakened": []
   },
   "technicals": {},
-  "s08_assessment": "JPXデリバティブ市場のデータに基づき、日経225先物・オプションを売買する個人トレーダー向けのトレード判断材料を提示します。\n\n■ 先物の方向性\n現在の市場は「ロング寄り」と判断します。ラージ先物が前日比+1995枚、TOPIX先物も+486枚と大口の買い増しが確認されており、先物市場は強気を示唆しています。また、PCR(取引高)が1.97と極端な弱"
+  "s08_assessment": "■ 先物の方向性\nラージ先物が前日比+1995枚の買い増しを示しており、大口の買い意欲は確認できます。しかし、先物ベーシスが-7のバックワーデーション（先物ディスカウント）であり、先物市場全体は弱気を示唆しています。また、PCR（取引高）が1.97と「強い弱気」を示しており、これは逆張り買いのシグナルと解釈できます。これらのデータから、市場心理は弱気ながらも、短期的な反発"
 }

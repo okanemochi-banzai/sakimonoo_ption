@@ -1313,8 +1313,8 @@
   "source": "live",
   "data_date": "20260414",
   "strike_matrix": {
-    "atm": 58000,
-    "atm_round": 58000,
+    "atm": 58500,
+    "atm_round": 58500,
     "strikes": [
       56625,
       56750,
