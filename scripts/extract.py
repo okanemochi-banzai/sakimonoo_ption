@@ -1206,11 +1206,12 @@ def estimate_strategy(fut_dir, put_net, call_net):
     return 'ニュートラル'
 
 
-def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, max_strikes=11):
+def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, max_strikes=11, prev_s09=None):
     """Build participant x strike matrix for ATM-nearby options positions.
 
     Auto-detects strike intervals from actual data (125/250/500 yen).
     Selects up to max_strikes nearest ATM that have participant data.
+    If prev_s09 is provided, computes week-over-week deltas.
     """
     if not wb_op or not atm:
         return {}
@@ -1365,12 +1366,53 @@ def build_strike_matrix(wb_op, fut_data, atm, half_range=2500, max_strikes=11):
 
     # Sort by significance descending, keep top 25
     participants.sort(key=lambda p: -p['significance'])
+    participants = participants[:25]
+
+    # Week-over-week deltas from previous cache
+    prev_date = None
+    if prev_s09:
+        prev_sm = prev_s09.get('strike_matrix', {})
+        prev_parts = {p['name']: p for p in prev_sm.get('participants', [])}
+        prev_date = prev_s09.get('data_date', None)
+
+        if prev_parts:
+            for p in participants:
+                pp = prev_parts.get(p['name'])
+                if not pp:
+                    # New participant - all positions are new
+                    p['is_new'] = True
+                    continue
+                p['is_new'] = False
+
+                # Per-strike deltas
+                prev_pos = pp.get('positions', {})
+                deltas = {}
+                for strike in strikes:
+                    sk = str(strike)
+                    cur_p = p['positions'].get(sk, {}).get('put', 0)
+                    cur_c = p['positions'].get(sk, {}).get('call', 0)
+                    prv_p = prev_pos.get(sk, {}).get('put', 0)
+                    prv_c = prev_pos.get(sk, {}).get('call', 0)
+                    dp = cur_p - prv_p
+                    dc = cur_c - prv_c
+                    if dp != 0 or dc != 0:
+                        deltas[sk] = {'put': dp, 'call': dc}
+                p['deltas'] = deltas
+
+                # Total deltas
+                p['put_total_delta'] = p['put_total'] - pp.get('put_total', 0)
+                p['call_total_delta'] = p['call_total'] - pp.get('call_total', 0)
+
+                # Futures delta (N225 large)
+                prev_fut = pp.get('futures', {})
+                p['futures']['nk225_large_delta'] = p['futures'].get('nk225_large', 0) - prev_fut.get('nk225_large', 0)
 
     return {
         'atm': atm,
         'atm_round': atm_round,
         'strikes': strikes,
-        'participants': participants[:25],
+        'participants': participants,
+        'prev_date': prev_date,
     }
 
 
@@ -2110,8 +2152,19 @@ def run(args):
 
     # ⑨ Participant analysis (with caching)
     cache_s09_path = os.path.join(data_dir, 'cache_s09.json')
+    cache_s09_prev_path = os.path.join(data_dir, 'cache_s09_prev.json')
     fut_data = None
     op_data = None
+    prev_s09 = None
+
+    # Load previous week's cache for comparison
+    if os.path.exists(cache_s09_path):
+        try:
+            with open(cache_s09_path, 'r', encoding='utf-8') as f:
+                prev_s09 = json.load(f)
+            print('[extract.py] Loaded prev ⑨ cache (%s時点)' % prev_s09.get('data_date', '?'))
+        except:
+            prev_s09 = None
 
     if wb_fut:
         fut_data = extract_s09_futures(wb_fut)
@@ -2134,11 +2187,19 @@ def run(args):
 
         # ⑨-D: Strike matrix (participant x strike near ATM)
         if wb_op and atm:
-            strike_matrix = build_strike_matrix(wb_op, fut_data, atm)
+            strike_matrix = build_strike_matrix(wb_op, fut_data, atm, prev_s09=prev_s09)
             output['s09']['strike_matrix'] = strike_matrix
             sm_p = len(strike_matrix.get('participants', []))
             sm_s = len(strike_matrix.get('strikes', []))
             print('[extract.py] ⑨-D strike matrix: %d participants x %d strikes' % (sm_p, sm_s))
+
+        # Save previous cache as backup, then save new
+        if prev_s09:
+            try:
+                with open(cache_s09_prev_path, 'w', encoding='utf-8') as f:
+                    json.dump(prev_s09, f, ensure_ascii=False, indent=2)
+            except:
+                pass
 
         # Save to cache
         try:
