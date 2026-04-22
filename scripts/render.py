@@ -1027,14 +1027,26 @@ def _detail_gemini_js(data):
 # === PATCH: Strike Matrix Functions (NEW) ===
 # ============================================================
 
-def _val_cell(val, is_atm):
+def _val_cell(val, is_atm, delta=None):
     """Return JS string fragment for one value cell in the strike matrix."""
     abdr = 'border-left:2px solid rgba(251,191,36,.4);' if is_atm else ''
     if val != 0:
         bg = 'rgba(248,113,113,.15)' if val < 0 else 'rgba(74,222,128,.15)'
         cl = 'var(--red)' if val < 0 else 'var(--green)'
-        return "h+='<td style=\"%sfont-family:DM Mono;font-size:9px;text-align:right;padding:3px 3px;color:%s;background:%s\">%s</td>';" % (abdr, cl, bg, _js_str(fnum(val, plus=False)))
-    return "h+='<td style=\"%spadding:3px 1px\"></td>';" % abdr
+        # Main value
+        s = "h+='<td style=\"%sfont-family:DM Mono;font-size:9px;text-align:right;padding:2px 3px;color:%s;background:%s\">" % (abdr, cl, bg)
+        s += "%s" % _js_str(fnum(val, plus=False))
+        # Delta (small text below)
+        if delta and delta != 0:
+            d_cl = 'var(--green)' if delta > 0 else 'var(--red)'
+            s += "<br><span style=\"font-size:7px;color:%s\">%s</span>" % (d_cl, _js_str(fnum(delta, plus=True)))
+        s += "</td>';"
+        return s
+    elif delta and delta != 0:
+        # No current position but there was a change (position closed)
+        d_cl = 'var(--green)' if delta > 0 else 'var(--red)'
+        return "h+='<td style=\"%sfont-family:DM Mono;font-size:7px;text-align:right;padding:2px 3px;color:%s\">%s</td>';" % (abdr, d_cl, _js_str(fnum(delta, plus=True)))
+    return "h+='<td style=\"%spadding:2px 1px\"></td>';" % abdr
 
 
 def _strike_matrix_js(s09):
@@ -1055,7 +1067,11 @@ def _strike_matrix_js(s09):
     js += "h+='\\u884C\\u4F7F\\u4FA1\\u683C\\u5225\\u30DD\\u30B8\\u30B7\\u30E7\\u30F3\\u5206\\u5E03';"
     js += "h+='</div>';"
     js += "h+='<div style=\"font-size:10px;color:var(--sub);margin-bottom:10px\">';"
-    js += "h+='ATM %s / \\u8CA0=\\u58F2\\u308A\\u8D8A\\u3057 \\u6B63=\\u8CB7\\u3044\\u8D8A\\u3057';" % _js_str(fnum(atm_r))
+    prev_date = sm.get('prev_date', '')
+    if prev_date:
+        js += "h+='ATM %s / \\u8CA0=\\u58F2\\u308A\\u8D8A\\u3057 \\u6B63=\\u8CB7\\u3044\\u8D8A\\u3057 / \\u5C0F\\u6587\\u5B57=\\u524D\\u9031\\u6BD4(%s\\u6642\\u70B9)';" % (_js_str(fnum(atm_r)), _js_str(prev_date[:8]))
+    else:
+        js += "h+='ATM %s / \\u8CA0=\\u58F2\\u308A\\u8D8A\\u3057 \\u6B63=\\u8CB7\\u3044\\u8D8A\\u3057';" % _js_str(fnum(atm_r))
     js += "h+='</div>';"
     # Customer type legend
     js += "h+='<div style=\"display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:12px;font-size:10px;color:var(--sub);line-height:1.7\">';"
@@ -1074,7 +1090,7 @@ def _strike_matrix_js(s09):
     js += "h+='<tr style=\"border-bottom:2px solid var(--border)\">';"
     js += "h+='<th rowspan=\"2\" style=\"%s\">\\u9867\\u5BA2\\u30BF\\u30A4\\u30D7</th>';" % sty0
     js += "h+='<th rowspan=\"2\" style=\"%s\">\\u8A3C\\u5238\\u4F1A\\u793E</th>';" % sty1
-    js += "h+='<th rowspan=\"2\" style=\"%s\">\\u5148\\u7269</th>';" % sty2
+    js += "h+='<th rowspan=\"2\" style=\"%s\">N225</th>';" % sty2
     js += "h+='<th colspan=\"%d\" style=\"text-align:center;padding:4px;color:var(--put);border-bottom:2px solid var(--put)\">\\u30D7\\u30C3\\u30C8</th>';" % ns
     js += "h+='<th colspan=\"%d\" style=\"text-align:center;padding:4px;color:var(--call);border-bottom:2px solid var(--call)\">\\u30B3\\u30FC\\u30EB</th>';" % ns
     js += "h+='</tr>';"
@@ -1114,9 +1130,12 @@ def _strike_matrix_js(s09):
     for ctype, members in groups.items():
         for idx, p in enumerate(members):
             pos = p.get('positions', {})
+            deltas = p.get('deltas', {})
             fut = p.get('futures', {})
             d_label = fut.get('direction', '\u30fc')
             d_sum = fut.get('summary', '')
+            nk_large = fut.get('nk225_large', 0)
+            nk_delta = fut.get('nk225_large_delta', None)
             if '\u30ed\u30f3\u30b0' in d_label:
                 d_color = 'var(--green)'
             elif '\u30b7\u30e7\u30fc\u30c8' in d_label:
@@ -1124,18 +1143,30 @@ def _strike_matrix_js(s09):
             else:
                 d_color = 'var(--sub)'
             r_bdr = 'border-top:1px solid var(--border);' if idx == 0 else ''
+            new_tag = ' <span style="font-size:7px;color:var(--accent)">[NEW]</span>' if p.get('is_new') else ''
             js += "h+='<tr style=\"%s\">';" % r_bdr
             if idx == 0:
                 js += "h+='<td rowspan=\"%d\" style=\"font-size:9px;color:var(--sub);padding:3px 6px;vertical-align:top;position:sticky;left:0;background:var(--panel);border-right:1px solid var(--border)\">%s</td>';" % (len(members), _js_str(esc(ctype)))
-            js += "h+='<td style=\"font-size:10px;padding:3px 6px;position:sticky;left:72px;background:var(--panel)\">%s</td>';" % _js_str(esc(p['name'][:14]))
+            js += "h+='<td style=\"font-size:10px;padding:3px 6px;position:sticky;left:72px;background:var(--panel)\">%s%s</td>';" % (_js_str(esc(p['name'][:14])), new_tag)
+            # Futures column: show position number + delta
+            fut_text = _js_str(esc(d_label))
+            if nk_large != 0:
+                fut_text = _js_str(fnum(nk_large, plus=True))
+                if nk_delta and nk_delta != 0:
+                    d_cl = 'var(--green)' if nk_delta > 0 else 'var(--red)'
+                    fut_text += '<br><span style=\"font-size:7px;color:%s\">%s</span>' % (d_cl, _js_str(fnum(nk_delta, plus=True)))
             ttl = ' title=\"%s\"' % _js_str(esc(d_sum)) if d_sum else ''
-            js += "h+='<td style=\"font-size:9px;text-align:center;color:%s;padding:3px 4px;position:sticky;left:156px;background:var(--panel);border-right:1px solid var(--border)\"%s>%s</td>';" % (d_color, ttl, _js_str(esc(d_label)))
+            js += "h+='<td style=\"font-size:9px;text-align:center;color:%s;padding:2px 4px;position:sticky;left:156px;background:var(--panel);border-right:1px solid var(--border)\"%s>%s</td>';" % (d_color, ttl, fut_text)
             for strike in strikes:
-                val = pos.get(str(strike), {}).get('put', 0)
-                js += _val_cell(val, strike == atm_r)
+                sk = str(strike)
+                val = pos.get(sk, {}).get('put', 0)
+                d = deltas.get(sk, {}).get('put', None)
+                js += _val_cell(val, strike == atm_r, delta=d)
             for strike in strikes:
-                val = pos.get(str(strike), {}).get('call', 0)
-                js += _val_cell(val, strike == atm_r)
+                sk = str(strike)
+                val = pos.get(sk, {}).get('call', 0)
+                d = deltas.get(sk, {}).get('call', None)
+                js += _val_cell(val, strike == atm_r, delta=d)
             js += "h+='</tr>';"
 
     js += "h+='</table></div></div>';"
