@@ -1260,15 +1260,16 @@
     }
   ],
   "source": "live",
-  "data_date": "20260903",
+  "data_date": "20260904",
   "strike_matrix": {
-    "atm": 64000,
-    "atm_round": 64000,
+    "atm": 66000,
+    "atm_round": 66000,
     "strikes": [
       66125,
       66250,
       66375,
-      66500
+      66500,
+      66625
     ],
     "participants": [
       {
@@ -1300,15 +1301,24 @@
           "66500": {
             "put": 1015.0,
             "call": -1710.0
+          },
+          "66625": {
+            "put": -25.0,
+            "call": -4.0
           }
         },
-        "put_total": 1054.0,
-        "call_total": -1658.0,
-        "significance": 2712.0,
+        "put_total": 1029.0,
+        "call_total": -1662.0,
+        "significance": 2691.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "66625": {
+            "put": -25.0,
+            "call": -4.0
+          }
+        },
+        "put_total_delta": -25.0,
+        "call_total_delta": -4.0
       },
       {
         "name": "ビーオブエー証券",
@@ -1339,6 +1349,10 @@
           "66500": {
             "put": -1130.0,
             "call": 280.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": -1130.0,
@@ -1378,15 +1392,24 @@
           "66500": {
             "put": -615.0,
             "call": 656.0
+          },
+          "66625": {
+            "put": 0,
+            "call": -1.0
           }
         },
         "put_total": -614.0,
-        "call_total": 656.0,
-        "significance": 1270.0,
+        "call_total": 655.0,
+        "significance": 1269.0,
         "is_new": false,
-        "deltas": {},
+        "deltas": {
+          "66625": {
+            "put": 0,
+            "call": -1.0
+          }
+        },
         "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "call_total_delta": -1.0
       },
       {
         "name": "ＪＰモルガン証券",
@@ -1417,15 +1440,24 @@
           "66500": {
             "put": 273.0,
             "call": 463.0
+          },
+          "66625": {
+            "put": 7.0,
+            "call": 3.0
           }
         },
-        "put_total": 277.0,
-        "call_total": 463.0,
-        "significance": 740.0,
+        "put_total": 284.0,
+        "call_total": 466.0,
+        "significance": 750.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "66625": {
+            "put": 7.0,
+            "call": 3.0
+          }
+        },
+        "put_total_delta": 7.0,
+        "call_total_delta": 3.0
       },
       {
         "name": "モルガンＭＵＦＧ証券",
@@ -1456,6 +1488,10 @@
           "66500": {
             "put": 623.0,
             "call": -8.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": 632.0,
@@ -1495,6 +1531,10 @@
           "66500": {
             "put": -99.0,
             "call": 350.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": -98.0,
@@ -1534,14 +1574,23 @@
           "66500": {
             "put": -101.0,
             "call": 199.0
+          },
+          "66625": {
+            "put": 15.0,
+            "call": 0
           }
         },
-        "put_total": -97.0,
+        "put_total": -82.0,
         "call_total": 200.0,
-        "significance": 297.0,
+        "significance": 282.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
+        "deltas": {
+          "66625": {
+            "put": 15.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 15.0,
         "call_total_delta": 0.0
       },
       {
@@ -1573,6 +1622,10 @@
           "66500": {
             "put": 0,
             "call": -100.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": -4.0,
@@ -1610,6 +1663,10 @@
             "call": 0
           },
           "66500": {
+            "put": 0,
+            "call": 0
+          },
+          "66625": {
             "put": 0,
             "call": 0
           }
@@ -1651,6 +1708,10 @@
           "66500": {
             "put": 0,
             "call": -100.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": 0,
@@ -1690,6 +1751,10 @@
           "66500": {
             "put": 25.0,
             "call": -25.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": 25.0,
@@ -1727,6 +1792,10 @@
             "call": 0
           },
           "66500": {
+            "put": 0,
+            "call": 0
+          },
+          "66625": {
             "put": 0,
             "call": 0
           }
@@ -1768,14 +1837,23 @@
           "66500": {
             "put": 2.0,
             "call": -11.0
+          },
+          "66625": {
+            "put": 2.0,
+            "call": 0
           }
         },
-        "put_total": 4.0,
+        "put_total": 6.0,
         "call_total": -12.0,
-        "significance": 16.0,
+        "significance": 18.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
+        "deltas": {
+          "66625": {
+            "put": 2.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 2.0,
         "call_total_delta": 0.0
       },
       {
@@ -1807,15 +1885,24 @@
           "66500": {
             "put": 5.0,
             "call": 12.0
+          },
+          "66625": {
+            "put": 1.0,
+            "call": 2.0
           }
         },
-        "put_total": 2.0,
-        "call_total": 12.0,
-        "significance": 14.0,
+        "put_total": 3.0,
+        "call_total": 14.0,
+        "significance": 17.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "66625": {
+            "put": 1.0,
+            "call": 2.0
+          }
+        },
+        "put_total_delta": 1.0,
+        "call_total_delta": 2.0
       },
       {
         "name": "日産証券",
@@ -1846,6 +1933,10 @@
           "66500": {
             "put": -3.0,
             "call": -3.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": -3.0,
@@ -1885,6 +1976,10 @@
           "66500": {
             "put": 1.0,
             "call": -2.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": -2.0,
@@ -1924,6 +2019,10 @@
           "66500": {
             "put": 2.0,
             "call": -2.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": 2.0,
@@ -1962,6 +2061,10 @@
           },
           "66500": {
             "put": 2.0,
+            "call": 0
+          },
+          "66625": {
+            "put": 0,
             "call": 0
           }
         },
@@ -2002,6 +2105,10 @@
           "66500": {
             "put": 0,
             "call": 1.0
+          },
+          "66625": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": 0,
@@ -2013,6 +2120,6 @@
         "call_total_delta": 0.0
       }
     ],
-    "prev_date": "20260902"
+    "prev_date": "20260903"
   }
 }
