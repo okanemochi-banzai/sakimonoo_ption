@@ -4,349 +4,329 @@
       "sellers": [
         {
           "name": "ＨＳＢＣ証券",
-          "volume": 32873.0,
+          "volume": 31579.0,
           "category": "eu"
         },
         {
           "name": "ゴールドマン証券",
-          "volume": 16941.0,
+          "volume": 14147.0,
           "category": "us"
         },
         {
           "name": "モルガンＭＵＦＧ証券",
-          "volume": 12283.0,
-          "category": "us"
-        },
-        {
-          "name": "ＢＮＰパリバ証券",
-          "volume": 5363.0,
-          "category": "hf"
-        },
-        {
-          "name": "三菱ＵＦＪ証券",
-          "volume": 3396.0,
-          "category": "domestic"
-        },
-        {
-          "name": "ビーオブエー証券",
-          "volume": 2435.0,
+          "volume": 10738.0,
           "category": "us"
         },
         {
           "name": "みずほ証券",
-          "volume": 2165.0,
+          "volume": 4946.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ＪＰモルガン証券",
+          "volume": 4856.0,
+          "category": "us"
+        },
+        {
+          "name": "三菱ＵＦＪ証券",
+          "volume": 4693.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ＳＢＩ証券",
+          "volume": 1614.0,
           "category": "domestic"
         },
         {
           "name": "ナティクシス証券",
-          "volume": 856.0,
+          "volume": 653.0,
           "category": "eu"
         },
         {
-          "name": "インタラクティブ証券",
-          "volume": 447.0,
+          "name": "フィリップ・キャ証券",
+          "volume": 628.0,
           "category": "hf"
         },
         {
-          "name": "ＳＢＩ証券",
-          "volume": 343.0,
-          "category": "domestic"
-        },
-        {
           "name": "立花証券",
-          "volume": 128.0,
+          "volume": 126.0,
           "category": "domestic"
         },
         {
-          "name": "日産証券",
-          "volume": 123.0,
-          "category": "domestic"
-        },
-        {
-          "name": "松井証券",
-          "volume": 47.0,
+          "name": "岡三証券",
+          "volume": 59.0,
           "category": "domestic"
         },
         {
           "name": "光世証券",
-          "volume": 44.0,
+          "volume": 52.0,
           "category": "domestic"
         },
         {
           "name": "広田証券",
-          "volume": 42.0,
+          "volume": 32.0,
           "category": "domestic"
-        }
-      ],
-      "buyers": [
-        {
-          "name": "野村証券",
-          "volume": 34665.0,
-          "category": "domestic"
-        },
-        {
-          "name": "バークレイズ証券",
-          "volume": 12573.0,
-          "category": "eu"
-        },
-        {
-          "name": "ＪＰモルガン証券",
-          "volume": 9312.0,
-          "category": "us"
-        },
-        {
-          "name": "ＳＭＢＣ日興証券",
-          "volume": 5508.0,
-          "category": "domestic"
-        },
-        {
-          "name": "シティグループ証券",
-          "volume": 5343.0,
-          "category": "us"
-        },
-        {
-          "name": "ソシエテＧ証券",
-          "volume": 2543.0,
-          "category": "eu"
-        },
-        {
-          "name": "ＵＢＳ証券",
-          "volume": 2470.0,
-          "category": "eu"
-        },
-        {
-          "name": "ドイツ証券",
-          "volume": 2231.0,
-          "category": "eu"
-        },
-        {
-          "name": "大和証券",
-          "volume": 1379.0,
-          "category": "domestic"
-        },
-        {
-          "name": "サスケハナ・ホンコン",
-          "volume": 452.0,
-          "category": "hf"
-        },
-        {
-          "name": "楽天証券",
-          "volume": 272.0,
-          "category": "domestic"
-        },
-        {
-          "name": "ＡＢＮクリアリン証券",
-          "volume": 223.0,
-          "category": "hf"
-        },
-        {
-          "name": "三菱ＵＦＪｅスマート",
-          "volume": 172.0,
-          "category": "domestic"
-        },
-        {
-          "name": "ＪＩＡ証券",
-          "volume": 102.0,
-          "category": "other"
-        },
-        {
-          "name": "岩井コスモ証券",
-          "volume": 93.0,
-          "category": "domestic"
-        }
-      ],
-      "overseas_net": -36051.0,
-      "domestic_net": 35903.0
-    },
-    "nk225_mini": {
-      "sellers": [
-        {
-          "name": "バークレイズ証券",
-          "volume": 70936.0,
-          "category": "eu"
-        },
-        {
-          "name": "ソシエテＧ証券",
-          "volume": 29858.0,
-          "category": "eu"
-        },
-        {
-          "name": "ＪＰモルガン証券",
-          "volume": 14052.0,
-          "category": "us"
-        },
-        {
-          "name": "野村証券",
-          "volume": 11586.0,
-          "category": "domestic"
-        },
-        {
-          "name": "ゴールドマン証券",
-          "volume": 1222.0,
-          "category": "us"
         },
         {
           "name": "安藤証券",
-          "volume": 205.0,
-          "category": "domestic"
-        },
-        {
-          "name": "山和証券",
-          "volume": 33.0,
-          "category": "other"
-        },
-        {
-          "name": "岡三証券",
-          "volume": 18.0,
-          "category": "domestic"
-        },
-        {
-          "name": "三晃証券",
-          "volume": 5.0,
-          "category": "domestic"
-        },
-        {
-          "name": "豊証券",
-          "volume": 5.0,
-          "category": "domestic"
-        },
-        {
-          "name": "Ｊトラストグローバル",
-          "volume": 3.0,
-          "category": "other"
-        },
-        {
-          "name": "むさし証券",
-          "volume": 3.0,
+          "volume": 2.0,
           "category": "domestic"
         }
       ],
       "buyers": [
         {
-          "name": "ビーオブエー証券",
-          "volume": 24303.0,
-          "category": "us"
-        },
-        {
-          "name": "ＡＢＮクリアリン証券",
-          "volume": 21621.0,
-          "category": "hf"
-        },
-        {
-          "name": "日産証券",
-          "volume": 16232.0,
+          "name": "野村証券",
+          "volume": 31627.0,
           "category": "domestic"
         },
         {
-          "name": "モルガンＭＵＦＧ証券",
-          "volume": 12705.0,
-          "category": "us"
+          "name": "バークレイズ証券",
+          "volume": 7367.0,
+          "category": "eu"
+        },
+        {
+          "name": "ＵＢＳ証券",
+          "volume": 6743.0,
+          "category": "eu"
         },
         {
           "name": "シティグループ証券",
-          "volume": 7890.0,
+          "volume": 5413.0,
           "category": "us"
         },
         {
           "name": "ＳＭＢＣ日興証券",
-          "volume": 7534.0,
+          "volume": 5148.0,
           "category": "domestic"
         },
         {
-          "name": "ＵＢＳ証券",
-          "volume": 6793.0,
+          "name": "ビーオブエー証券",
+          "volume": 4508.0,
+          "category": "us"
+        },
+        {
+          "name": "ソシエテＧ証券",
+          "volume": 3439.0,
+          "category": "eu"
+        },
+        {
+          "name": "ＡＢＮクリアリン証券",
+          "volume": 3130.0,
+          "category": "hf"
+        },
+        {
+          "name": "大和証券",
+          "volume": 1735.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ドイツ証券",
+          "volume": 1665.0,
           "category": "eu"
         },
         {
           "name": "ＢＮＰパリバ証券",
-          "volume": 6295.0,
+          "volume": 1065.0,
           "category": "hf"
         },
         {
-          "name": "みずほ証券",
-          "volume": 4148.0,
+          "name": "日産証券",
+          "volume": 876.0,
           "category": "domestic"
         },
         {
-          "name": "ＨＳＢＣ証券",
-          "volume": 2882.0,
-          "category": "eu"
-        },
-        {
-          "name": "三菱ＵＦＪ証券",
-          "volume": 2799.0,
-          "category": "domestic"
-        },
-        {
-          "name": "大和証券",
-          "volume": 2477.0,
-          "category": "domestic"
-        },
-        {
-          "name": "ＳＢＩ証券",
-          "volume": 2135.0,
-          "category": "domestic"
+          "name": "サスケハナ・ホンコン",
+          "volume": 548.0,
+          "category": "hf"
         },
         {
           "name": "楽天証券",
-          "volume": 2058.0,
+          "volume": 387.0,
+          "category": "domestic"
+        },
+        {
+          "name": "三菱ＵＦＪｅスマート",
+          "volume": 112.0,
+          "category": "domestic"
+        }
+      ],
+      "overseas_net": -28723.0,
+      "domestic_net": 28361.0
+    },
+    "nk225_mini": {
+      "sellers": [
+        {
+          "name": "ＢＮＰパリバ証券",
+          "volume": 45258.0,
+          "category": "hf"
+        },
+        {
+          "name": "ビーオブエー証券",
+          "volume": 2870.0,
+          "category": "us"
+        },
+        {
+          "name": "ソシエテＧ証券",
+          "volume": 1723.0,
+          "category": "eu"
+        },
+        {
+          "name": "ＪＰモルガン証券",
+          "volume": 1499.0,
+          "category": "us"
+        },
+        {
+          "name": "野村証券",
+          "volume": 993.0,
+          "category": "domestic"
+        },
+        {
+          "name": "広田証券",
+          "volume": 9.0,
+          "category": "domestic"
+        },
+        {
+          "name": "立花証券",
+          "volume": 8.0,
+          "category": "domestic"
+        },
+        {
+          "name": "モルガンＭＵＦＧ証券",
+          "volume": 4.0,
+          "category": "us"
+        }
+      ],
+      "buyers": [
+        {
+          "name": "ゴールドマン証券",
+          "volume": 29600.0,
+          "category": "us"
+        },
+        {
+          "name": "ＵＢＳ証券",
+          "volume": 15250.0,
+          "category": "eu"
+        },
+        {
+          "name": "ＳＭＢＣ日興証券",
+          "volume": 3000.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ＡＢＮクリアリン証券",
+          "volume": 1091.0,
+          "category": "hf"
+        },
+        {
+          "name": "ＳＢＩ証券",
+          "volume": 953.0,
+          "category": "domestic"
+        },
+        {
+          "name": "バークレイズ証券",
+          "volume": 729.0,
+          "category": "eu"
+        },
+        {
+          "name": "楽天証券",
+          "volume": 651.0,
+          "category": "domestic"
+        },
+        {
+          "name": "松井証券",
+          "volume": 303.0,
+          "category": "domestic"
+        },
+        {
+          "name": "三菱ＵＦＪｅスマート",
+          "volume": 250.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ドイツ証券",
+          "volume": 231.0,
+          "category": "eu"
+        },
+        {
+          "name": "マネックス証券",
+          "volume": 206.0,
+          "category": "other"
+        },
+        {
+          "name": "日産証券",
+          "volume": 65.0,
           "category": "domestic"
         },
         {
           "name": "フィリップ・キャ証券",
-          "volume": 2040.0,
+          "volume": 30.0,
+          "category": "hf"
+        },
+        {
+          "name": "インタラクティブ証券",
+          "volume": 5.0,
           "category": "hf"
         }
       ],
-      "overseas_net": -31539.0,
-      "domestic_net": 25525.0
+      "overseas_net": -4418.0,
+      "domestic_net": 4418.0
     },
     "topix": {
       "sellers": [
         {
           "name": "ゴールドマン証券",
-          "volume": 30529.0,
+          "volume": 46956.0,
           "category": "us"
         },
         {
           "name": "ＢＮＰパリバ証券",
-          "volume": 23432.0,
+          "volume": 37129.0,
           "category": "hf"
         },
         {
-          "name": "野村証券",
-          "volume": 11816.0,
-          "category": "domestic"
-        },
-        {
           "name": "ＨＳＢＣ証券",
-          "volume": 11464.0,
+          "volume": 17437.0,
           "category": "eu"
         },
         {
-          "name": "ＵＢＳ証券",
-          "volume": 6433.0,
-          "category": "eu"
-        },
-        {
-          "name": "ＳＢＩ証券",
-          "volume": 5742.0,
-          "category": "domestic"
-        },
-        {
-          "name": "大和証券",
-          "volume": 4985.0,
-          "category": "domestic"
-        },
-        {
-          "name": "ＳＭＢＣ日興証券",
-          "volume": 4773.0,
+          "name": "みずほ証券",
+          "volume": 8696.0,
           "category": "domestic"
         },
         {
           "name": "三菱ＵＦＪ証券",
-          "volume": 1397.0,
+          "volume": 7599.0,
           "category": "domestic"
+        },
+        {
+          "name": "ＵＢＳ証券",
+          "volume": 7272.0,
+          "category": "eu"
+        },
+        {
+          "name": "野村証券",
+          "volume": 6986.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ＳＢＩ証券",
+          "volume": 5933.0,
+          "category": "domestic"
+        },
+        {
+          "name": "大和証券",
+          "volume": 2733.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ＳＭＢＣ日興証券",
+          "volume": 2115.0,
+          "category": "domestic"
+        },
+        {
+          "name": "ＡＢＮクリアリン証券",
+          "volume": 1782.0,
+          "category": "hf"
         },
         {
           "name": "立花証券",
@@ -354,481 +334,313 @@
           "category": "domestic"
         },
         {
-          "name": "ＡＢＮクリアリン証券",
-          "volume": 749.0,
-          "category": "hf"
-        },
-        {
           "name": "サスケハナ・ホンコン",
-          "volume": 238.0,
-          "category": "hf"
-        },
-        {
-          "name": "インタラクティブ証券",
-          "volume": 39.0,
+          "volume": 555.0,
           "category": "hf"
         },
         {
           "name": "岡三証券",
-          "volume": 38.0,
+          "volume": 144.0,
           "category": "domestic"
         },
         {
-          "name": "豊証券",
-          "volume": 14.0,
+          "name": "東海東京証券",
+          "volume": 18.0,
           "category": "domestic"
         }
       ],
       "buyers": [
         {
           "name": "シティグループ証券",
-          "volume": 30312.0,
-          "category": "us"
-        },
-        {
-          "name": "ビーオブエー証券",
-          "volume": 18676.0,
-          "category": "us"
-        },
-        {
-          "name": "モルガンＭＵＦＧ証券",
-          "volume": 17301.0,
+          "volume": 54424.0,
           "category": "us"
         },
         {
           "name": "ＪＰモルガン証券",
-          "volume": 16225.0,
+          "volume": 39334.0,
+          "category": "us"
+        },
+        {
+          "name": "モルガンＭＵＦＧ証券",
+          "volume": 25489.0,
+          "category": "us"
+        },
+        {
+          "name": "ビーオブエー証券",
+          "volume": 14802.0,
           "category": "us"
         },
         {
           "name": "ソシエテＧ証券",
-          "volume": 11162.0,
+          "volume": 8608.0,
           "category": "eu"
         },
         {
-          "name": "みずほ証券",
-          "volume": 6465.0,
-          "category": "domestic"
+          "name": "バークレイズ証券",
+          "volume": 1681.0,
+          "category": "eu"
         },
         {
-          "name": "バークレイズ証券",
-          "volume": 971.0,
+          "name": "ドイツ証券",
+          "volume": 1547.0,
           "category": "eu"
         },
         {
           "name": "日産証券",
-          "volume": 923.0,
+          "volume": 636.0,
           "category": "domestic"
         },
         {
-          "name": "ドイツ証券",
-          "volume": 679.0,
-          "category": "eu"
-        },
-        {
           "name": "三菱ＵＦＪｅスマート",
-          "volume": 142.0,
+          "volume": 48.0,
           "category": "domestic"
         },
         {
           "name": "フィリップ・キャ証券",
-          "volume": 28.0,
+          "volume": 38.0,
           "category": "hf"
         },
         {
           "name": "松井証券",
-          "volume": 22.0,
+          "volume": 26.0,
           "category": "domestic"
         },
         {
-          "name": "広田証券",
-          "volume": 16.0,
-          "category": "domestic"
+          "name": "インタラクティブ証券",
+          "volume": 8.0,
+          "category": "hf"
         },
         {
-          "name": "安藤証券",
-          "volume": 4.0,
-          "category": "domestic"
+          "name": "山和証券",
+          "volume": 1.0,
+          "category": "other"
         }
       ],
-      "overseas_net": 22470.0,
-      "domestic_net": -22433.0
+      "overseas_net": 34800.0,
+      "domestic_net": -34753.0
     }
   },
   "options": {
     "ＡＢＮクリアリン証券": {
       "category": "hf",
       "category_label": "HF代理",
-      "put_sell": 1405.0,
-      "put_buy": 31.0,
-      "put_net": -1374.0,
-      "call_sell": 38.0,
-      "call_buy": 1290.0,
-      "call_net": 1252.0,
-      "total_volume": 2764.0,
+      "put_sell": 1052.0,
+      "put_buy": 0,
+      "put_net": -1052.0,
+      "call_sell": 1.0,
+      "call_buy": 80.0,
+      "call_net": 79.0,
+      "total_volume": 1133.0,
       "put_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 1049.0
+          "strike": 64000,
+          "volume": 864.0
         },
         {
-          "strike": 64750,
-          "volume": 292.0
+          "strike": 63750,
+          "volume": 131.0
         },
         {
-          "strike": 65250,
-          "volume": 64.0
+          "strike": 64125,
+          "volume": 57.0
         }
       ],
-      "put_buy_detail": [
-        {
-          "strike": 65125,
-          "volume": 31.0
-        }
-      ],
+      "put_buy_detail": [],
       "call_sell_detail": [
         {
-          "strike": 64875,
-          "volume": 31.0
-        },
-        {
-          "strike": 65125,
-          "volume": 7.0
-        }
-      ],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 1073.0
-        },
-        {
-          "strike": 64750,
-          "volume": 211.0
-        },
-        {
-          "strike": 65250,
-          "volume": 6.0
-        }
-      ]
-    },
-    "ＪＰモルガン証券": {
-      "category": "us",
-      "category_label": "米系",
-      "put_sell": 173.0,
-      "put_buy": 409.0,
-      "put_net": 236.0,
-      "call_sell": 1356.0,
-      "call_buy": 39.0,
-      "call_net": -1317.0,
-      "total_volume": 1977.0,
-      "put_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 171.0
-        },
-        {
-          "strike": 64875,
-          "volume": 2.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 64750,
-          "volume": 396.0
-        },
-        {
-          "strike": 65250,
-          "volume": 9.0
-        },
-        {
-          "strike": 65125,
-          "volume": 4.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 1156.0
-        },
-        {
-          "strike": 64750,
-          "volume": 200.0
-        }
-      ],
-      "call_buy_detail": [
-        {
-          "strike": 64875,
-          "volume": 30.0
-        },
-        {
-          "strike": 65125,
-          "volume": 9.0
-        }
-      ]
-    },
-    "ＵＢＳ証券": {
-      "category": "eu",
-      "category_label": "欧系",
-      "put_sell": 150.0,
-      "put_buy": 10.0,
-      "put_net": -140.0,
-      "call_sell": 0,
-      "call_buy": 110.0,
-      "call_net": 110.0,
-      "total_volume": 270.0,
-      "put_sell_detail": [
-        {
-          "strike": 64750,
-          "volume": 120.0
-        },
-        {
-          "strike": 65000,
-          "volume": 30.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65250,
-          "volume": 10.0
-        }
-      ],
-      "call_sell_detail": [],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 100.0
-        },
-        {
-          "strike": 65250,
-          "volume": 10.0
-        }
-      ]
-    },
-    "ゴールドマン証券": {
-      "category": "us",
-      "category_label": "米系",
-      "put_sell": 984.0,
-      "put_buy": 60.0,
-      "put_net": -924.0,
-      "call_sell": 0,
-      "call_buy": 1129.0,
-      "call_net": 1129.0,
-      "total_volume": 2173.0,
-      "put_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 951.0
-        },
-        {
-          "strike": 65125,
-          "volume": 33.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 64750,
-          "volume": 60.0
-        }
-      ],
-      "call_sell_detail": [],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 1129.0
-        }
-      ]
-    },
-    "楽天証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 2.0,
-      "put_buy": 16.0,
-      "put_net": 14.0,
-      "call_sell": 9.0,
-      "call_buy": 25.0,
-      "call_net": 16.0,
-      "total_volume": 52.0,
-      "put_sell_detail": [
-        {
-          "strike": 65125,
-          "volume": 1.0
-        },
-        {
-          "strike": 65250,
-          "volume": 1.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 16.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 64750,
-          "volume": 8.0
-        },
-        {
-          "strike": 65250,
+          "strike": 64250,
           "volume": 1.0
         }
       ],
       "call_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 25.0
-        }
-      ]
-    },
-    "インタラクティブ証券": {
-      "category": "hf",
-      "category_label": "HF代理",
-      "put_sell": 5.0,
-      "put_buy": 1.0,
-      "put_net": -4.0,
-      "call_sell": 0,
-      "call_buy": 29.0,
-      "call_net": 29.0,
-      "total_volume": 35.0,
-      "put_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 5.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65125,
-          "volume": 1.0
-        }
-      ],
-      "call_sell_detail": [],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 28.0
-        },
-        {
-          "strike": 64750,
-          "volume": 1.0
+          "strike": 64000,
+          "volume": 80.0
         }
       ]
     },
     "モルガンＭＵＦＧ証券": {
       "category": "us",
       "category_label": "米系",
-      "put_sell": 120.0,
-      "put_buy": 2.0,
-      "put_net": -118.0,
-      "call_sell": 2.0,
-      "call_buy": 302.0,
-      "call_net": 300.0,
-      "total_volume": 426.0,
-      "put_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 90.0
-        },
-        {
-          "strike": 64750,
-          "volume": 30.0
-        }
-      ],
+      "put_sell": 0,
+      "put_buy": 1576.0,
+      "put_net": 1576.0,
+      "call_sell": 0,
+      "call_buy": 0,
+      "call_net": 0,
+      "total_volume": 1576.0,
+      "put_sell_detail": [],
       "put_buy_detail": [
         {
-          "strike": 65250,
-          "volume": 2.0
+          "strike": 64125,
+          "volume": 970.0
+        },
+        {
+          "strike": 63875,
+          "volume": 465.0
+        },
+        {
+          "strike": 63750,
+          "volume": 131.0
+        },
+        {
+          "strike": 64000,
+          "volume": 10.0
         }
       ],
+      "call_sell_detail": [],
+      "call_buy_detail": []
+    },
+    "ビーオブエー証券": {
+      "category": "us",
+      "category_label": "米系",
+      "put_sell": 448.0,
+      "put_buy": 0,
+      "put_net": -448.0,
+      "call_sell": 66.0,
+      "call_buy": 0,
+      "call_net": -66.0,
+      "total_volume": 514.0,
+      "put_sell_detail": [
+        {
+          "strike": 63875,
+          "volume": 428.0
+        },
+        {
+          "strike": 64000,
+          "volume": 20.0
+        }
+      ],
+      "put_buy_detail": [],
       "call_sell_detail": [
         {
-          "strike": 65250,
-          "volume": 2.0
+          "strike": 63875,
+          "volume": 50.0
+        },
+        {
+          "strike": 64000,
+          "volume": 16.0
         }
       ],
+      "call_buy_detail": []
+    },
+    "ＪＰモルガン証券": {
+      "category": "us",
+      "category_label": "米系",
+      "put_sell": 166.0,
+      "put_buy": 0,
+      "put_net": -166.0,
+      "call_sell": 0,
+      "call_buy": 50.0,
+      "call_net": 50.0,
+      "total_volume": 216.0,
+      "put_sell_detail": [
+        {
+          "strike": 64250,
+          "volume": 97.0
+        },
+        {
+          "strike": 64000,
+          "volume": 69.0
+        }
+      ],
+      "put_buy_detail": [],
+      "call_sell_detail": [],
       "call_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 302.0
+          "strike": 63875,
+          "volume": 50.0
         }
       ]
     },
     "バークレイズ証券": {
       "category": "eu",
       "category_label": "欧系",
-      "put_sell": 9.0,
-      "put_buy": 621.0,
-      "put_net": 612.0,
-      "call_sell": 604.0,
-      "call_buy": 0,
-      "call_net": -604.0,
-      "total_volume": 1234.0,
+      "put_sell": 70.0,
+      "put_buy": 0,
+      "put_net": -70.0,
+      "call_sell": 0,
+      "call_buy": 1.0,
+      "call_net": 1.0,
+      "total_volume": 71.0,
       "put_sell_detail": [
         {
-          "strike": 64875,
-          "volume": 9.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 615.0
+          "strike": 63875,
+          "volume": 37.0
         },
         {
-          "strike": 64750,
-          "volume": 6.0
+          "strike": 64000,
+          "volume": 33.0
         }
       ],
-      "call_sell_detail": [
+      "put_buy_detail": [],
+      "call_sell_detail": [],
+      "call_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 604.0
+          "strike": 64250,
+          "volume": 1.0
         }
-      ],
-      "call_buy_detail": []
+      ]
     },
     "ＢＮＰパリバ証券": {
       "category": "hf",
       "category_label": "HF代理",
-      "put_sell": 42.0,
-      "put_buy": 0,
-      "put_net": -42.0,
-      "call_sell": 142.0,
+      "put_sell": 973.0,
+      "put_buy": 858.0,
+      "put_net": -115.0,
+      "call_sell": 95.0,
       "call_buy": 0,
-      "call_net": -142.0,
-      "total_volume": 184.0,
+      "call_net": -95.0,
+      "total_volume": 1926.0,
       "put_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 24.0
-        },
-        {
-          "strike": 64750,
-          "volume": 17.0
-        },
-        {
-          "strike": 65250,
-          "volume": 1.0
+          "strike": 64125,
+          "volume": 973.0
         }
       ],
-      "put_buy_detail": [],
+      "put_buy_detail": [
+        {
+          "strike": 64000,
+          "volume": 757.0
+        },
+        {
+          "strike": 64250,
+          "volume": 101.0
+        }
+      ],
       "call_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 136.0
+          "strike": 64000,
+          "volume": 95.0
+        }
+      ],
+      "call_buy_detail": []
+    },
+    "ゴールドマン証券": {
+      "category": "us",
+      "category_label": "米系",
+      "put_sell": 0,
+      "put_buy": 142.0,
+      "put_net": 142.0,
+      "call_sell": 96.0,
+      "call_buy": 0,
+      "call_net": -96.0,
+      "total_volume": 238.0,
+      "put_sell_detail": [],
+      "put_buy_detail": [
+        {
+          "strike": 64000,
+          "volume": 82.0
         },
         {
-          "strike": 64750,
-          "volume": 3.0
-        },
+          "strike": 64125,
+          "volume": 60.0
+        }
+      ],
+      "call_sell_detail": [
         {
-          "strike": 65125,
-          "volume": 2.0
-        },
-        {
-          "strike": 65250,
-          "volume": 1.0
+          "strike": 64000,
+          "volume": 96.0
         }
       ],
       "call_buy_detail": []
@@ -836,260 +648,68 @@
     "ソシエテＧ証券": {
       "category": "eu",
       "category_label": "欧系",
-      "put_sell": 0,
-      "put_buy": 590.0,
-      "put_net": 590.0,
-      "call_sell": 526.0,
-      "call_buy": 0,
-      "call_net": -526.0,
-      "total_volume": 1116.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 510.0
-        },
-        {
-          "strike": 65250,
-          "volume": 78.0
-        },
-        {
-          "strike": 64750,
-          "volume": 1.0
-        },
-        {
-          "strike": 64875,
-          "volume": 1.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 515.0
-        },
-        {
-          "strike": 65250,
-          "volume": 11.0
-        }
-      ],
-      "call_buy_detail": []
-    },
-    "ＳＢＩ証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 7.0,
-      "put_buy": 340.0,
-      "put_net": 333.0,
-      "call_sell": 251.0,
-      "call_buy": 1.0,
-      "call_net": -250.0,
-      "total_volume": 599.0,
-      "put_sell_detail": [
-        {
-          "strike": 64750,
-          "volume": 3.0
-        },
-        {
-          "strike": 65125,
-          "volume": 2.0
-        },
-        {
-          "strike": 65250,
-          "volume": 2.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 340.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 250.0
-        },
-        {
-          "strike": 64750,
-          "volume": 1.0
-        }
-      ],
-      "call_buy_detail": [
-        {
-          "strike": 65250,
-          "volume": 1.0
-        }
-      ]
-    },
-    "三菱ＵＦＪｅスマート": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 1.0,
-      "put_buy": 1.0,
-      "put_net": 0.0,
+      "put_sell": 5.0,
+      "put_buy": 51.0,
+      "put_net": 46.0,
       "call_sell": 0,
-      "call_buy": 3.0,
-      "call_net": 3.0,
-      "total_volume": 5.0,
+      "call_buy": 117.0,
+      "call_net": 117.0,
+      "total_volume": 173.0,
       "put_sell_detail": [
         {
-          "strike": 64750,
-          "volume": 1.0
+          "strike": 64250,
+          "volume": 5.0
         }
       ],
       "put_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 1.0
+          "strike": 64000,
+          "volume": 51.0
         }
       ],
       "call_sell_detail": [],
       "call_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 3.0
+          "strike": 64000,
+          "volume": 117.0
         }
       ]
-    },
-    "みずほ証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 250.0,
-      "put_buy": 10.0,
-      "put_net": -240.0,
-      "call_sell": 0,
-      "call_buy": 300.0,
-      "call_net": 300.0,
-      "total_volume": 560.0,
-      "put_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 250.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 64875,
-          "volume": 10.0
-        }
-      ],
-      "call_sell_detail": [],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 300.0
-        }
-      ]
-    },
-    "松井証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 3.0,
-      "put_buy": 4.0,
-      "put_net": 1.0,
-      "call_sell": 3.0,
-      "call_buy": 1.0,
-      "call_net": -2.0,
-      "total_volume": 11.0,
-      "put_sell_detail": [
-        {
-          "strike": 65250,
-          "volume": 3.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 4.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65250,
-          "volume": 2.0
-        },
-        {
-          "strike": 65000,
-          "volume": 1.0
-        }
-      ],
-      "call_buy_detail": [
-        {
-          "strike": 64875,
-          "volume": 1.0
-        }
-      ]
-    },
-    "ビーオブエー証券": {
-      "category": "us",
-      "category_label": "米系",
-      "put_sell": 0,
-      "put_buy": 152.0,
-      "put_net": 152.0,
-      "call_sell": 0,
-      "call_buy": 652.0,
-      "call_net": 652.0,
-      "total_volume": 804.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 152.0
-        }
-      ],
-      "call_sell_detail": [],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 652.0
-        }
-      ]
-    },
-    "大和証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 28.0,
-      "put_buy": 300.0,
-      "put_net": 272.0,
-      "call_sell": 250.0,
-      "call_buy": 0,
-      "call_net": -250.0,
-      "total_volume": 578.0,
-      "put_sell_detail": [
-        {
-          "strike": 65250,
-          "volume": 28.0
-        }
-      ],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 300.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 250.0
-        }
-      ],
-      "call_buy_detail": []
     },
     "サスケハナ・ホンコン": {
       "category": "hf",
       "category_label": "HF代理",
-      "put_sell": 0,
-      "put_buy": 300.0,
-      "put_net": 300.0,
+      "put_sell": 250.0,
+      "put_buy": 0,
+      "put_net": -250.0,
       "call_sell": 0,
       "call_buy": 0,
       "call_net": 0,
-      "total_volume": 300.0,
+      "total_volume": 250.0,
+      "put_sell_detail": [
+        {
+          "strike": 64000,
+          "volume": 250.0
+        }
+      ],
+      "put_buy_detail": [],
+      "call_sell_detail": [],
+      "call_buy_detail": []
+    },
+    "野村証券": {
+      "category": "domestic",
+      "category_label": "国内",
+      "put_sell": 0,
+      "put_buy": 136.0,
+      "put_net": 136.0,
+      "call_sell": 0,
+      "call_buy": 0,
+      "call_net": 0,
+      "total_volume": 136.0,
       "put_sell_detail": [],
       "put_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 300.0
+          "strike": 64000,
+          "volume": 136.0
         }
       ],
       "call_sell_detail": [],
@@ -1099,255 +719,210 @@
       "category": "us",
       "category_label": "米系",
       "put_sell": 0,
-      "put_buy": 0,
-      "put_net": 0,
-      "call_sell": 221.0,
-      "call_buy": 0,
-      "call_net": -221.0,
-      "total_volume": 221.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 221.0
-        }
-      ],
-      "call_buy_detail": []
-    },
-    "東海東京証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 0,
-      "put_buy": 110.0,
-      "put_net": 110.0,
-      "call_sell": 175.0,
-      "call_buy": 0,
-      "call_net": -175.0,
-      "total_volume": 285.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 110.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 175.0
-        }
-      ],
-      "call_buy_detail": []
-    },
-    "ＳＭＢＣ日興証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 17.0,
-      "put_buy": 0,
-      "put_net": -17.0,
+      "put_buy": 130.0,
+      "put_net": 130.0,
       "call_sell": 0,
       "call_buy": 0,
       "call_net": 0,
-      "total_volume": 17.0,
-      "put_sell_detail": [
+      "total_volume": 130.0,
+      "put_sell_detail": [],
+      "put_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 17.0
+          "strike": 64000,
+          "volume": 130.0
         }
       ],
-      "put_buy_detail": [],
       "call_sell_detail": [],
       "call_buy_detail": []
     },
-    "三菱ＵＦＪ証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 0,
-      "put_buy": 100.0,
-      "put_net": 100.0,
-      "call_sell": 40.0,
-      "call_buy": 0,
-      "call_net": -40.0,
-      "total_volume": 140.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [
+    "インタラクティブ証券": {
+      "category": "hf",
+      "category_label": "HF代理",
+      "put_sell": 5.0,
+      "put_buy": 1.0,
+      "put_net": -4.0,
+      "call_sell": 0,
+      "call_buy": 35.0,
+      "call_net": 35.0,
+      "total_volume": 41.0,
+      "put_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 100.0
+          "strike": 64000,
+          "volume": 5.0
         }
       ],
+      "put_buy_detail": [
+        {
+          "strike": 64250,
+          "volume": 1.0
+        }
+      ],
+      "call_sell_detail": [],
+      "call_buy_detail": [
+        {
+          "strike": 64000,
+          "volume": 35.0
+        }
+      ]
+    },
+    "フィリップ・キャ証券": {
+      "category": "hf",
+      "category_label": "HF代理",
+      "put_sell": 12.0,
+      "put_buy": 0,
+      "put_net": -12.0,
+      "call_sell": 13.0,
+      "call_buy": 0,
+      "call_net": -13.0,
+      "total_volume": 25.0,
+      "put_sell_detail": [
+        {
+          "strike": 64000,
+          "volume": 12.0
+        }
+      ],
+      "put_buy_detail": [],
       "call_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 40.0
+          "strike": 64000,
+          "volume": 13.0
         }
       ],
       "call_buy_detail": []
     },
-    "野村証券": {
+    "楽天証券": {
       "category": "domestic",
       "category_label": "国内",
       "put_sell": 0,
-      "put_buy": 30.0,
-      "put_net": 30.0,
-      "call_sell": 152.0,
+      "put_buy": 2.0,
+      "put_net": 2.0,
+      "call_sell": 5.0,
       "call_buy": 0,
-      "call_net": -152.0,
-      "total_volume": 182.0,
+      "call_net": -5.0,
+      "total_volume": 7.0,
       "put_sell_detail": [],
       "put_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 30.0
+          "strike": 64000,
+          "volume": 2.0
         }
       ],
       "call_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 152.0
+          "strike": 64000,
+          "volume": 5.0
         }
       ],
       "call_buy_detail": []
     },
-    "ＨＳＢＣ証券": {
+    "ＳＢＩ証券": {
+      "category": "domestic",
+      "category_label": "国内",
+      "put_sell": 15.0,
+      "put_buy": 0,
+      "put_net": -15.0,
+      "call_sell": 3.0,
+      "call_buy": 0,
+      "call_net": -3.0,
+      "total_volume": 18.0,
+      "put_sell_detail": [
+        {
+          "strike": 64000,
+          "volume": 15.0
+        }
+      ],
+      "put_buy_detail": [],
+      "call_sell_detail": [
+        {
+          "strike": 64000,
+          "volume": 3.0
+        }
+      ],
+      "call_buy_detail": []
+    },
+    "ＵＢＳ証券": {
       "category": "eu",
       "category_label": "欧系",
       "put_sell": 0,
-      "put_buy": 100.0,
-      "put_net": 100.0,
-      "call_sell": 100.0,
+      "put_buy": 50.0,
+      "put_net": 50.0,
+      "call_sell": 0,
       "call_buy": 0,
-      "call_net": -100.0,
-      "total_volume": 200.0,
+      "call_net": 0,
+      "total_volume": 50.0,
       "put_sell_detail": [],
       "put_buy_detail": [
         {
-          "strike": 65000,
-          "volume": 100.0
+          "strike": 64000,
+          "volume": 50.0
         }
       ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 100.0
-        }
-      ],
+      "call_sell_detail": [],
       "call_buy_detail": []
     },
-    "岩井コスモ証券": {
+    "松井証券": {
       "category": "domestic",
       "category_label": "国内",
       "put_sell": 1.0,
       "put_buy": 0,
       "put_net": -1.0,
-      "call_sell": 0,
-      "call_buy": 1.0,
-      "call_net": 1.0,
-      "total_volume": 2.0,
+      "call_sell": 4.0,
+      "call_buy": 0,
+      "call_net": -4.0,
+      "total_volume": 5.0,
       "put_sell_detail": [
         {
-          "strike": 65000,
+          "strike": 64000,
           "volume": 1.0
         }
       ],
       "put_buy_detail": [],
-      "call_sell_detail": [],
-      "call_buy_detail": [
+      "call_sell_detail": [
         {
-          "strike": 65000,
-          "volume": 1.0
+          "strike": 64000,
+          "volume": 4.0
         }
-      ]
+      ],
+      "call_buy_detail": []
+    },
+    "大和証券": {
+      "category": "domestic",
+      "category_label": "国内",
+      "put_sell": 0,
+      "put_buy": 50.0,
+      "put_net": 50.0,
+      "call_sell": 0,
+      "call_buy": 0,
+      "call_net": 0,
+      "total_volume": 50.0,
+      "put_sell_detail": [],
+      "put_buy_detail": [
+        {
+          "strike": 64000,
+          "volume": 50.0
+        }
+      ],
+      "call_sell_detail": [],
+      "call_buy_detail": []
     },
     "マネックス証券": {
       "category": "other",
       "category_label": "その他",
       "put_sell": 0,
-      "put_buy": 0,
-      "put_net": 0,
+      "put_buy": 1.0,
+      "put_net": 1.0,
       "call_sell": 0,
-      "call_buy": 2.0,
-      "call_net": 2.0,
-      "total_volume": 2.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [],
-      "call_sell_detail": [],
-      "call_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 2.0
-        }
-      ]
-    },
-    "Ｊトラストグローバル": {
-      "category": "other",
-      "category_label": "その他",
-      "put_sell": 0,
-      "put_buy": 0,
-      "put_net": 0,
-      "call_sell": 0,
-      "call_buy": 1.0,
-      "call_net": 1.0,
+      "call_buy": 0,
+      "call_net": 0,
       "total_volume": 1.0,
       "put_sell_detail": [],
-      "put_buy_detail": [],
-      "call_sell_detail": [],
-      "call_buy_detail": [
+      "put_buy_detail": [
         {
-          "strike": 65000,
+          "strike": 64000,
           "volume": 1.0
         }
-      ]
-    },
-    "安藤証券": {
-      "category": "domestic",
-      "category_label": "国内",
-      "put_sell": 0,
-      "put_buy": 6.0,
-      "put_net": 6.0,
-      "call_sell": 6.0,
-      "call_buy": 0,
-      "call_net": -6.0,
-      "total_volume": 12.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 6.0
-        }
       ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 6.0
-        }
-      ],
-      "call_buy_detail": []
-    },
-    "フィリップ・キャ証券": {
-      "category": "hf",
-      "category_label": "HF代理",
-      "put_sell": 0,
-      "put_buy": 2.0,
-      "put_net": 2.0,
-      "call_sell": 10.0,
-      "call_buy": 0,
-      "call_net": -10.0,
-      "total_volume": 12.0,
-      "put_sell_detail": [],
-      "put_buy_detail": [
-        {
-          "strike": 65000,
-          "volume": 2.0
-        }
-      ],
-      "call_sell_detail": [
-        {
-          "strike": 65000,
-          "volume": 10.0
-        }
-      ],
+      "call_sell_detail": [],
       "call_buy_detail": []
     }
   },
@@ -1356,425 +931,330 @@
       "name": "ゴールドマン証券",
       "category": "us",
       "category_label": "米系",
-      "nk225_large": -16941.0,
-      "nk225_mini": -1222.0,
-      "topix": -30529.0,
-      "put_net": -924.0,
-      "call_net": 1129.0,
-      "op_detail": "P65000売951 / P65125売33 / P64750買60 / C65000買1129",
-      "strategy": "リバーサル（強気転換）",
-      "significance": 49645.2
-    },
-    {
-      "name": "野村証券",
-      "category": "domestic",
-      "category_label": "国内",
-      "nk225_large": 34665.0,
-      "nk225_mini": -11586.0,
-      "topix": -11816.0,
-      "put_net": 30.0,
-      "call_net": -152.0,
-      "op_detail": "P65000買30 / C65000売152",
-      "strategy": "カバードコール",
-      "significance": 47821.6
-    },
-    {
-      "name": "ＨＳＢＣ証券",
-      "category": "eu",
-      "category_label": "欧系",
-      "nk225_large": -32873.0,
-      "nk225_mini": 2882.0,
-      "topix": -11464.0,
-      "put_net": 100.0,
-      "call_net": -100.0,
-      "op_detail": "P65000買100 / C65000売100",
+      "nk225_large": -14147.0,
+      "nk225_mini": 29600.0,
+      "topix": -46956.0,
+      "put_net": 142.0,
+      "call_net": -96.0,
+      "op_detail": "P64000買82 / P64125買60 / C64000売96",
       "strategy": "ベア（全方位弱気）",
-      "significance": 44825.2
+      "significance": 64301.0
     },
     {
       "name": "シティグループ証券",
       "category": "us",
       "category_label": "米系",
-      "nk225_large": 5343.0,
-      "nk225_mini": 7890.0,
-      "topix": 30312.0,
+      "nk225_large": 5413.0,
+      "nk225_mini": 0,
+      "topix": 54424.0,
+      "put_net": 130.0,
+      "call_net": 0,
+      "op_detail": "P64000買130",
+      "strategy": "プロテクティブ・プット",
+      "significance": 59967.0
+    },
+    {
+      "name": "ＨＳＢＣ証券",
+      "category": "eu",
+      "category_label": "欧系",
+      "nk225_large": -31579.0,
+      "nk225_mini": 0,
+      "topix": -17437.0,
       "put_net": 0,
-      "call_net": -221.0,
-      "op_detail": "C65000売221",
-      "strategy": "カバードコール",
-      "significance": 36665.0
-    },
-    {
-      "name": "モルガンＭＵＦＧ証券",
-      "category": "us",
-      "category_label": "米系",
-      "nk225_large": -12283.0,
-      "nk225_mini": 12705.0,
-      "topix": 17301.0,
-      "put_net": -118.0,
-      "call_net": 300.0,
-      "op_detail": "P65000売90 / P64750売30 / P65250買2 / C65250売2 / C65000買302",
-      "strategy": "リバーサル（強気転換）",
-      "significance": 31272.5
-    },
-    {
-      "name": "ＢＮＰパリバ証券",
-      "category": "hf",
-      "category_label": "HF代理",
-      "nk225_large": -5363.0,
-      "nk225_mini": 6295.0,
-      "topix": -23432.0,
-      "put_net": -42.0,
-      "call_net": -142.0,
-      "op_detail": "P65000売24 / P64750売17 / P65250売1 / C65000売136 / C64750売3 / C65125売2",
-      "strategy": "ベア（全方位弱気）",
-      "significance": 29608.5
+      "call_net": 0,
+      "op_detail": "",
+      "strategy": "ベア（弱気）",
+      "significance": 49016.0
     },
     {
       "name": "ＪＰモルガン証券",
       "category": "us",
       "category_label": "米系",
-      "nk225_large": 9312.0,
-      "nk225_mini": -14052.0,
-      "topix": 16225.0,
-      "put_net": 236.0,
-      "call_net": -1317.0,
-      "op_detail": "P65000売171 / P64875売2 / P64750買396 / P65250買9 / P65125買4 / C65000売1156 / C64750売200 / C64875買30 / C65125買9",
-      "strategy": "カバードコール",
-      "significance": 28495.2
+      "nk225_large": -4856.0,
+      "nk225_mini": -1499.0,
+      "topix": 39334.0,
+      "put_net": -166.0,
+      "call_net": 50.0,
+      "op_detail": "P64250売97 / P64000売69 / C63875買50",
+      "strategy": "リバーサル（強気転換）",
+      "significance": 44555.9
+    },
+    {
+      "name": "ＢＮＰパリバ証券",
+      "category": "hf",
+      "category_label": "HF代理",
+      "nk225_large": 1065.0,
+      "nk225_mini": -45258.0,
+      "topix": -37129.0,
+      "put_net": -115.0,
+      "call_net": -95.0,
+      "op_detail": "P64125売973 / P64000買757 / P64250買101 / C64000売95",
+      "strategy": "ベア（全方位弱気）",
+      "significance": 42929.8
+    },
+    {
+      "name": "野村証券",
+      "category": "domestic",
+      "category_label": "国内",
+      "nk225_large": 31627.0,
+      "nk225_mini": -993.0,
+      "topix": -6986.0,
+      "put_net": 136.0,
+      "call_net": 0,
+      "op_detail": "P64000買136",
+      "strategy": "プロテクティブ・プット",
+      "significance": 38848.3
+    },
+    {
+      "name": "モルガンＭＵＦＧ証券",
+      "category": "us",
+      "category_label": "米系",
+      "nk225_large": -10738.0,
+      "nk225_mini": -4.0,
+      "topix": 25489.0,
+      "put_net": 1576.0,
+      "call_net": 0,
+      "op_detail": "P64125買970 / P63875買465 / P63750買131",
+      "strategy": "ベア（弱気）",
+      "significance": 37803.4
     },
     {
       "name": "ビーオブエー証券",
       "category": "us",
       "category_label": "米系",
-      "nk225_large": -2435.0,
-      "nk225_mini": 24303.0,
-      "topix": 18676.0,
-      "put_net": 152.0,
-      "call_net": 652.0,
-      "op_detail": "P65000買152 / C65000買652",
-      "strategy": "ベア（弱気）",
-      "significance": 24345.3
-    },
-    {
-      "name": "バークレイズ証券",
-      "category": "eu",
-      "category_label": "欧系",
-      "nk225_large": 12573.0,
-      "nk225_mini": -70936.0,
-      "topix": 971.0,
-      "put_net": 612.0,
-      "call_net": -604.0,
-      "op_detail": "P64875売9 / P65000買615 / P64750買6 / C65000売604",
+      "nk225_large": 4508.0,
+      "nk225_mini": -2870.0,
+      "topix": 14802.0,
+      "put_net": -448.0,
+      "call_net": -66.0,
+      "op_detail": "P63875売428 / P64000売20 / C63875売50 / C64000売16",
       "strategy": "カバードコール",
-      "significance": 21853.6
-    },
-    {
-      "name": "ソシエテＧ証券",
-      "category": "eu",
-      "category_label": "欧系",
-      "nk225_large": 2543.0,
-      "nk225_mini": -29858.0,
-      "topix": 11162.0,
-      "put_net": 590.0,
-      "call_net": -526.0,
-      "op_detail": "P65000買510 / P65250買78 / P64750買1 / C65000売515 / C65250売11",
-      "strategy": "ベア（全方位弱気）",
-      "significance": 17806.8
-    },
-    {
-      "name": "ＳＭＢＣ日興証券",
-      "category": "domestic",
-      "category_label": "国内",
-      "nk225_large": 5508.0,
-      "nk225_mini": 7534.0,
-      "topix": -4773.0,
-      "put_net": -17.0,
-      "call_net": 0,
-      "op_detail": "P65000売17",
-      "strategy": "ブル（強気）",
-      "significance": 11051.4
+      "significance": 20111.0
     },
     {
       "name": "ＵＢＳ証券",
       "category": "eu",
       "category_label": "欧系",
-      "nk225_large": 2470.0,
-      "nk225_mini": 6793.0,
-      "topix": -6433.0,
-      "put_net": -140.0,
-      "call_net": 110.0,
-      "op_detail": "P64750売120 / P65000売30 / P65250買10 / C65000買100 / C65250買10",
-      "strategy": "リバーサル（強気転換）",
-      "significance": 9832.3
+      "nk225_large": 6743.0,
+      "nk225_mini": 15250.0,
+      "topix": -7272.0,
+      "put_net": 50.0,
+      "call_net": 0,
+      "op_detail": "P64000買50",
+      "strategy": "プロテクティブ・プット",
+      "significance": 15590.0
     },
     {
       "name": "みずほ証券",
       "category": "domestic",
       "category_label": "国内",
-      "nk225_large": -2165.0,
-      "nk225_mini": 4148.0,
-      "topix": 6465.0,
-      "put_net": -240.0,
-      "call_net": 300.0,
-      "op_detail": "P65000売250 / P64875買10 / C65000買300",
-      "strategy": "リバーサル（強気転換）",
-      "significance": 9584.8
+      "nk225_large": -4946.0,
+      "nk225_mini": 0,
+      "topix": -8696.0,
+      "put_net": 0,
+      "call_net": 0,
+      "op_detail": "",
+      "strategy": "ベア（弱気）",
+      "significance": 13642.0
     },
     {
-      "name": "大和証券",
+      "name": "ソシエテＧ証券",
+      "category": "eu",
+      "category_label": "欧系",
+      "nk225_large": 3439.0,
+      "nk225_mini": -1723.0,
+      "topix": 8608.0,
+      "put_net": 46.0,
+      "call_net": 117.0,
+      "op_detail": "P64250売5 / P64000買51 / C64000買117",
+      "strategy": "プロテクティブ・プット",
+      "significance": 12382.3
+    },
+    {
+      "name": "三菱ＵＦＪ証券",
       "category": "domestic",
       "category_label": "国内",
-      "nk225_large": 1379.0,
-      "nk225_mini": 2477.0,
-      "topix": -4985.0,
-      "put_net": 272.0,
-      "call_net": -250.0,
-      "op_detail": "P65250売28 / P65000買300 / C65000売250",
-      "strategy": "カバードコール",
-      "significance": 7133.7
+      "nk225_large": -4693.0,
+      "nk225_mini": 0,
+      "topix": -7599.0,
+      "put_net": 0,
+      "call_net": 0,
+      "op_detail": "",
+      "strategy": "ベア（弱気）",
+      "significance": 12292.0
+    },
+    {
+      "name": "バークレイズ証券",
+      "category": "eu",
+      "category_label": "欧系",
+      "nk225_large": 7367.0,
+      "nk225_mini": 729.0,
+      "topix": 1681.0,
+      "put_net": -70.0,
+      "call_net": 1.0,
+      "op_detail": "P63875売37 / P64000売33 / C64250買1",
+      "strategy": "リバーサル（強気転換）",
+      "significance": 9191.9
     },
     {
       "name": "ＳＢＩ証券",
       "category": "domestic",
       "category_label": "国内",
-      "nk225_large": -343.0,
-      "nk225_mini": 2135.0,
-      "topix": -5742.0,
-      "put_net": 333.0,
-      "call_net": -250.0,
-      "op_detail": "P64750売3 / P65125売2 / P65250売2 / P65000買340 / C65000売250 / C64750売1 / C65250買1",
+      "nk225_large": -1614.0,
+      "nk225_mini": 953.0,
+      "topix": -5933.0,
+      "put_net": -15.0,
+      "call_net": -3.0,
+      "op_detail": "P64000売15 / C64000売3",
       "strategy": "ベア（全方位弱気）",
-      "significance": 6881.5
+      "significance": 7660.3
+    },
+    {
+      "name": "ＳＭＢＣ日興証券",
+      "category": "domestic",
+      "category_label": "国内",
+      "nk225_large": 5148.0,
+      "nk225_mini": 3000.0,
+      "topix": -2115.0,
+      "put_net": 0,
+      "call_net": 0,
+      "op_detail": "",
+      "strategy": "ブル（強気）",
+      "significance": 7563.0
     }
   ],
   "source": "live",
-  "data_date": "20260909",
+  "data_date": "20260914",
   "strike_matrix": {
     "atm": 63000,
     "atm_round": 63000,
     "strikes": [
-      64750,
-      64875,
-      65000,
-      65125,
-      65250
+      63750,
+      63875,
+      64000,
+      64125,
+      64250
     ],
     "participants": [
+      {
+        "name": "モルガンＭＵＦＧ証券",
+        "category": "us",
+        "category_label": "米系",
+        "customer_type": "トレンドフォロー（CTA）",
+        "futures": {
+          "nk225_large": -10738.0,
+          "nk225_mini": -4.0,
+          "topix": 25489.0,
+          "direction": "ショート",
+          "summary": "N225 -10738 / mini -4 / TOPIX +25489",
+          "nk225_large_delta": 1545.0
+        },
+        "positions": {
+          "63750": {
+            "put": 131.0,
+            "call": 0
+          },
+          "63875": {
+            "put": 465.0,
+            "call": 0
+          },
+          "64000": {
+            "put": 10.0,
+            "call": 0
+          },
+          "64125": {
+            "put": 970.0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
+          }
+        },
+        "put_total": 1576.0,
+        "call_total": 0,
+        "significance": 1576.0,
+        "is_new": false,
+        "deltas": {
+          "63750": {
+            "put": 131.0,
+            "call": 0
+          },
+          "63875": {
+            "put": 465.0,
+            "call": 0
+          },
+          "64000": {
+            "put": 10.0,
+            "call": 0
+          },
+          "64125": {
+            "put": 970.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 1694.0,
+        "call_total_delta": -300.0
+      },
       {
         "name": "ＡＢＮクリアリン証券",
         "category": "hf",
         "category_label": "HF代理",
         "customer_type": "アービトラージ（裁定取引）",
         "futures": {
-          "nk225_large": 223.0,
-          "nk225_mini": 21621.0,
-          "topix": -749.0,
+          "nk225_large": 3130.0,
+          "nk225_mini": 1091.0,
+          "topix": -1782.0,
           "direction": "ロング",
-          "summary": "N225 +223 / mini +21621 / TOPIX -749",
-          "nk225_large_delta": 0.0
+          "summary": "N225 +3130 / mini +1091 / TOPIX -1782",
+          "nk225_large_delta": 2907.0
         },
         "positions": {
-          "64750": {
-            "put": -292.0,
-            "call": 211.0
+          "63750": {
+            "put": -131.0,
+            "call": 0
           },
-          "64875": {
+          "63875": {
             "put": 0,
-            "call": -31.0
+            "call": 0
           },
-          "65000": {
-            "put": -1049.0,
-            "call": 1073.0
+          "64000": {
+            "put": -864.0,
+            "call": 80.0
           },
-          "65125": {
-            "put": 31.0,
-            "call": -7.0
+          "64125": {
+            "put": -57.0,
+            "call": 0
           },
-          "65250": {
-            "put": -64.0,
-            "call": 6.0
+          "64250": {
+            "put": 0,
+            "call": -1.0
           }
         },
-        "put_total": -1374.0,
-        "call_total": 1252.0,
-        "significance": 2626.0,
+        "put_total": -1052.0,
+        "call_total": 79.0,
+        "significance": 1131.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "ゴールドマン証券",
-        "category": "us",
-        "category_label": "米系",
-        "customer_type": "グローバルマクロ",
-        "futures": {
-          "nk225_large": -16941.0,
-          "nk225_mini": -1222.0,
-          "topix": -30529.0,
-          "direction": "ショート",
-          "summary": "N225 -16941 / mini -1222 / TOPIX -30529",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 60.0,
+        "deltas": {
+          "63750": {
+            "put": -131.0,
             "call": 0
           },
-          "64875": {
+          "64000": {
+            "put": -864.0,
+            "call": 80.0
+          },
+          "64125": {
+            "put": -57.0,
+            "call": 0
+          },
+          "64250": {
             "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": -951.0,
-            "call": 1129.0
-          },
-          "65125": {
-            "put": -33.0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
+            "call": -1.0
           }
         },
-        "put_total": -924.0,
-        "call_total": 1129.0,
-        "significance": 2053.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "ＪＰモルガン証券",
-        "category": "us",
-        "category_label": "米系",
-        "customer_type": "グローバルマクロ",
-        "futures": {
-          "nk225_large": 9312.0,
-          "nk225_mini": -14052.0,
-          "topix": 16225.0,
-          "direction": "ロング",
-          "summary": "N225 +9312 / mini -14052 / TOPIX +16225",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 396.0,
-            "call": -200.0
-          },
-          "64875": {
-            "put": -2.0,
-            "call": 30.0
-          },
-          "65000": {
-            "put": -171.0,
-            "call": -1156.0
-          },
-          "65125": {
-            "put": 4.0,
-            "call": 9.0
-          },
-          "65250": {
-            "put": 9.0,
-            "call": 0
-          }
-        },
-        "put_total": 236.0,
-        "call_total": -1317.0,
-        "significance": 1553.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "バークレイズ証券",
-        "category": "eu",
-        "category_label": "欧系",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 12573.0,
-          "nk225_mini": -70936.0,
-          "topix": 971.0,
-          "direction": "ロング",
-          "summary": "N225 +12573 / mini -70936 / TOPIX +971",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 6.0,
-            "call": 0
-          },
-          "64875": {
-            "put": -9.0,
-            "call": 0
-          },
-          "65000": {
-            "put": 615.0,
-            "call": -604.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          }
-        },
-        "put_total": 612.0,
-        "call_total": -604.0,
-        "significance": 1216.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "ソシエテＧ証券",
-        "category": "eu",
-        "category_label": "欧系",
-        "customer_type": "アービトラージ（裁定取引）",
-        "futures": {
-          "nk225_large": 2543.0,
-          "nk225_mini": -29858.0,
-          "topix": 11162.0,
-          "direction": "ショート",
-          "summary": "N225 +2543 / mini -29858 / TOPIX +11162",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 1.0,
-            "call": 0
-          },
-          "64875": {
-            "put": 1.0,
-            "call": 0
-          },
-          "65000": {
-            "put": 510.0,
-            "call": -515.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 78.0,
-            "call": -11.0
-          }
-        },
-        "put_total": 590.0,
-        "call_total": -526.0,
-        "significance": 1116.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "put_total_delta": 322.0,
+        "call_total_delta": -1173.0
       },
       {
         "name": "ビーオブエー証券",
@@ -1782,214 +1262,51 @@
         "category_label": "米系",
         "customer_type": "長期投資志向",
         "futures": {
-          "nk225_large": -2435.0,
-          "nk225_mini": 24303.0,
-          "topix": 18676.0,
-          "direction": "TOPIX ロング",
-          "summary": "N225 -2435 / mini +24303 / TOPIX +18676",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 0,
-            "call": 0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": 152.0,
-            "call": 652.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          }
-        },
-        "put_total": 152.0,
-        "call_total": 652.0,
-        "significance": 804.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "ＳＢＩ証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "国内個人投資家（ネットトレーダー）",
-        "futures": {
-          "nk225_large": -343.0,
-          "nk225_mini": 2135.0,
-          "topix": -5742.0,
-          "direction": "ショート",
-          "summary": "N225 -343 / mini +2135 / TOPIX -5742",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": -3.0,
-            "call": -1.0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": 340.0,
-            "call": -250.0
-          },
-          "65125": {
-            "put": -2.0,
-            "call": 0
-          },
-          "65250": {
-            "put": -2.0,
-            "call": 1.0
-          }
-        },
-        "put_total": 333.0,
-        "call_total": -250.0,
-        "significance": 583.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "みずほ証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "国内機関投資家",
-        "futures": {
-          "nk225_large": -2165.0,
-          "nk225_mini": 4148.0,
-          "topix": 6465.0,
-          "direction": "ショート",
-          "summary": "N225 -2165 / mini +4148 / TOPIX +6465",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 0,
-            "call": 0
-          },
-          "64875": {
-            "put": 10.0,
-            "call": 0
-          },
-          "65000": {
-            "put": -250.0,
-            "call": 300.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          }
-        },
-        "put_total": -240.0,
-        "call_total": 300.0,
-        "significance": 540.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "大和証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 1379.0,
-          "nk225_mini": 2477.0,
-          "topix": -4985.0,
+          "nk225_large": 4508.0,
+          "nk225_mini": -2870.0,
+          "topix": 14802.0,
           "direction": "ロング",
-          "summary": "N225 +1379 / mini +2477 / TOPIX -4985",
-          "nk225_large_delta": 0.0
+          "summary": "N225 +4508 / mini -2870 / TOPIX +14802",
+          "nk225_large_delta": 6943.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
+            "put": -428.0,
+            "call": -50.0
+          },
+          "64000": {
+            "put": -20.0,
+            "call": -16.0
+          },
+          "64125": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": 300.0,
-            "call": -250.0
-          },
-          "65125": {
+          "64250": {
             "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": -28.0,
             "call": 0
           }
         },
-        "put_total": 272.0,
-        "call_total": -250.0,
-        "significance": 522.0,
+        "put_total": -448.0,
+        "call_total": -66.0,
+        "significance": 514.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "モルガンＭＵＦＧ証券",
-        "category": "us",
-        "category_label": "米系",
-        "customer_type": "トレンドフォロー（CTA）",
-        "futures": {
-          "nk225_large": -12283.0,
-          "nk225_mini": 12705.0,
-          "topix": 17301.0,
-          "direction": "ショート",
-          "summary": "N225 -12283 / mini +12705 / TOPIX +17301",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": -30.0,
-            "call": 0
+        "deltas": {
+          "63875": {
+            "put": -428.0,
+            "call": -50.0
           },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": -90.0,
-            "call": 302.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 2.0,
-            "call": -2.0
+          "64000": {
+            "put": -20.0,
+            "call": -16.0
           }
         },
-        "put_total": -118.0,
-        "call_total": 300.0,
-        "significance": 418.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "put_total_delta": -600.0,
+        "call_total_delta": -718.0
       },
       {
         "name": "サスケハナ・ホンコン",
@@ -1997,214 +1314,155 @@
         "category_label": "HF代理",
         "customer_type": "ー",
         "futures": {
-          "nk225_large": 452.0,
+          "nk225_large": 548.0,
           "nk225_mini": 0,
-          "topix": -238.0,
+          "topix": -555.0,
           "direction": "ロング",
-          "summary": "N225 +452 / TOPIX -238",
-          "nk225_large_delta": 0.0
+          "summary": "N225 +548 / TOPIX -555",
+          "nk225_large_delta": 96.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": 300.0,
+          "64000": {
+            "put": -250.0,
             "call": 0
           },
-          "65125": {
+          "64125": {
             "put": 0,
             "call": 0
           },
-          "65250": {
+          "64250": {
             "put": 0,
             "call": 0
           }
         },
-        "put_total": 300.0,
+        "put_total": -250.0,
         "call_total": 0,
-        "significance": 300.0,
+        "significance": 250.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
+        "deltas": {
+          "64000": {
+            "put": -250.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": -550.0,
         "call_total_delta": 0
       },
       {
-        "name": "東海東京証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 0,
-          "nk225_mini": 0,
-          "topix": 0,
-          "direction": "OP専業",
-          "summary": "",
-          "nk225_large_delta": 0
-        },
-        "positions": {
-          "64750": {
-            "put": 0,
-            "call": 0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": 110.0,
-            "call": -175.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          }
-        },
-        "put_total": 110.0,
-        "call_total": -175.0,
-        "significance": 285.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "ＵＢＳ証券",
-        "category": "eu",
-        "category_label": "欧系",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 2470.0,
-          "nk225_mini": 6793.0,
-          "topix": -6433.0,
-          "direction": "ロング",
-          "summary": "N225 +2470 / mini +6793 / TOPIX -6433",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": -120.0,
-            "call": 0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": -30.0,
-            "call": 100.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 10.0,
-            "call": 10.0
-          }
-        },
-        "put_total": -140.0,
-        "call_total": 110.0,
-        "significance": 250.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "シティグループ証券",
+        "name": "ゴールドマン証券",
         "category": "us",
         "category_label": "米系",
         "customer_type": "グローバルマクロ",
         "futures": {
-          "nk225_large": 5343.0,
-          "nk225_mini": 7890.0,
-          "topix": 30312.0,
-          "direction": "ロング",
-          "summary": "N225 +5343 / mini +7890 / TOPIX +30312",
-          "nk225_large_delta": 0.0
+          "nk225_large": -14147.0,
+          "nk225_mini": 29600.0,
+          "topix": -46956.0,
+          "direction": "ショート",
+          "summary": "N225 -14147 / mini +29600 / TOPIX -46956",
+          "nk225_large_delta": 2794.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": 0,
-            "call": -221.0
+          "64000": {
+            "put": 82.0,
+            "call": -96.0
           },
-          "65125": {
-            "put": 0,
+          "64125": {
+            "put": 60.0,
             "call": 0
           },
-          "65250": {
+          "64250": {
             "put": 0,
             "call": 0
           }
         },
-        "put_total": 0,
-        "call_total": -221.0,
-        "significance": 221.0,
+        "put_total": 142.0,
+        "call_total": -96.0,
+        "significance": 238.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "64000": {
+            "put": 82.0,
+            "call": -96.0
+          },
+          "64125": {
+            "put": 60.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 1066.0,
+        "call_total_delta": -1225.0
       },
       {
-        "name": "ＨＳＢＣ証券",
-        "category": "eu",
-        "category_label": "欧系",
-        "customer_type": "ー",
+        "name": "ＪＰモルガン証券",
+        "category": "us",
+        "category_label": "米系",
+        "customer_type": "グローバルマクロ",
         "futures": {
-          "nk225_large": -32873.0,
-          "nk225_mini": 2882.0,
-          "topix": -11464.0,
+          "nk225_large": -4856.0,
+          "nk225_mini": -1499.0,
+          "topix": 39334.0,
           "direction": "ショート",
-          "summary": "N225 -32873 / mini +2882 / TOPIX -11464",
-          "nk225_large_delta": 0.0
+          "summary": "N225 -4856 / mini -1499 / TOPIX +39334",
+          "nk225_large_delta": -14168.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
+            "put": 0,
+            "call": 50.0
+          },
+          "64000": {
+            "put": -69.0,
+            "call": 0
+          },
+          "64125": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": 100.0,
-            "call": -100.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
+          "64250": {
+            "put": -97.0,
             "call": 0
           }
         },
-        "put_total": 100.0,
-        "call_total": -100.0,
-        "significance": 200.0,
+        "put_total": -166.0,
+        "call_total": 50.0,
+        "significance": 216.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "63875": {
+            "put": 0,
+            "call": 50.0
+          },
+          "64000": {
+            "put": -69.0,
+            "call": 0
+          },
+          "64250": {
+            "put": -97.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": -402.0,
+        "call_total_delta": 1367.0
       },
       {
         "name": "ＢＮＰパリバ証券",
@@ -2212,42 +1470,107 @@
         "category_label": "HF代理",
         "customer_type": "アービトラージ（裁定取引）",
         "futures": {
-          "nk225_large": -5363.0,
-          "nk225_mini": 6295.0,
-          "topix": -23432.0,
+          "nk225_large": 1065.0,
+          "nk225_mini": -45258.0,
+          "topix": -37129.0,
           "direction": "ショート",
-          "summary": "N225 -5363 / mini +6295 / TOPIX -23432",
-          "nk225_large_delta": 0.0
+          "summary": "N225 +1065 / mini -45258 / TOPIX -37129",
+          "nk225_large_delta": 6428.0
         },
         "positions": {
-          "64750": {
-            "put": -17.0,
-            "call": -3.0
-          },
-          "64875": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": -24.0,
-            "call": -136.0
-          },
-          "65125": {
+          "63875": {
             "put": 0,
-            "call": -2.0
+            "call": 0
           },
-          "65250": {
-            "put": -1.0,
-            "call": -1.0
+          "64000": {
+            "put": 757.0,
+            "call": -95.0
+          },
+          "64125": {
+            "put": -973.0,
+            "call": 0
+          },
+          "64250": {
+            "put": 101.0,
+            "call": 0
           }
         },
-        "put_total": -42.0,
-        "call_total": -142.0,
-        "significance": 184.0,
+        "put_total": -115.0,
+        "call_total": -95.0,
+        "significance": 210.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "64000": {
+            "put": 757.0,
+            "call": -95.0
+          },
+          "64125": {
+            "put": -973.0,
+            "call": 0
+          },
+          "64250": {
+            "put": 101.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": -73.0,
+        "call_total_delta": 47.0
+      },
+      {
+        "name": "ソシエテＧ証券",
+        "category": "eu",
+        "category_label": "欧系",
+        "customer_type": "アービトラージ（裁定取引）",
+        "futures": {
+          "nk225_large": 3439.0,
+          "nk225_mini": -1723.0,
+          "topix": 8608.0,
+          "direction": "ロング",
+          "summary": "N225 +3439 / mini -1723 / TOPIX +8608",
+          "nk225_large_delta": 896.0
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
+            "put": 51.0,
+            "call": 117.0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": -5.0,
+            "call": 0
+          }
+        },
+        "put_total": 46.0,
+        "call_total": 117.0,
+        "significance": 163.0,
+        "is_new": false,
+        "deltas": {
+          "64000": {
+            "put": 51.0,
+            "call": 117.0
+          },
+          "64250": {
+            "put": -5.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": -544.0,
+        "call_total_delta": 643.0
       },
       {
         "name": "野村証券",
@@ -2255,85 +1578,247 @@
         "category_label": "国内",
         "customer_type": "国内機関投資家",
         "futures": {
-          "nk225_large": 34665.0,
-          "nk225_mini": -11586.0,
-          "topix": -11816.0,
+          "nk225_large": 31627.0,
+          "nk225_mini": -993.0,
+          "topix": -6986.0,
           "direction": "ロング",
-          "summary": "N225 +34665 / mini -11586 / TOPIX -11816",
-          "nk225_large_delta": 0.0
+          "summary": "N225 +31627 / mini -993 / TOPIX -6986",
+          "nk225_large_delta": -3038.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": 30.0,
-            "call": -152.0
+          "64000": {
+            "put": 136.0,
+            "call": 0
           },
-          "65125": {
+          "64125": {
             "put": 0,
             "call": 0
           },
-          "65250": {
+          "64250": {
             "put": 0,
             "call": 0
           }
         },
-        "put_total": 30.0,
-        "call_total": -152.0,
-        "significance": 182.0,
+        "put_total": 136.0,
+        "call_total": 0,
+        "significance": 136.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "64000": {
+            "put": 136.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 106.0,
+        "call_total_delta": 152.0
       },
       {
-        "name": "三菱ＵＦＪ証券",
+        "name": "シティグループ証券",
+        "category": "us",
+        "category_label": "米系",
+        "customer_type": "グローバルマクロ",
+        "futures": {
+          "nk225_large": 5413.0,
+          "nk225_mini": 0,
+          "topix": 54424.0,
+          "direction": "ロング",
+          "summary": "N225 +5413 / TOPIX +54424",
+          "nk225_large_delta": 70.0
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
+            "put": 130.0,
+            "call": 0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
+          }
+        },
+        "put_total": 130.0,
+        "call_total": 0,
+        "significance": 130.0,
+        "is_new": false,
+        "deltas": {
+          "64000": {
+            "put": 130.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 130.0,
+        "call_total_delta": 221.0
+      },
+      {
+        "name": "バークレイズ証券",
+        "category": "eu",
+        "category_label": "欧系",
+        "customer_type": "ー",
+        "futures": {
+          "nk225_large": 7367.0,
+          "nk225_mini": 729.0,
+          "topix": 1681.0,
+          "direction": "ロング",
+          "summary": "N225 +7367 / mini +729 / TOPIX +1681",
+          "nk225_large_delta": -5206.0
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": -37.0,
+            "call": 0
+          },
+          "64000": {
+            "put": -33.0,
+            "call": 0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 1.0
+          }
+        },
+        "put_total": -70.0,
+        "call_total": 1.0,
+        "significance": 71.0,
+        "is_new": false,
+        "deltas": {
+          "63875": {
+            "put": -37.0,
+            "call": 0
+          },
+          "64000": {
+            "put": -33.0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 1.0
+          }
+        },
+        "put_total_delta": -682.0,
+        "call_total_delta": 605.0
+      },
+      {
+        "name": "ＵＢＳ証券",
+        "category": "eu",
+        "category_label": "欧系",
+        "customer_type": "ー",
+        "futures": {
+          "nk225_large": 6743.0,
+          "nk225_mini": 15250.0,
+          "topix": -7272.0,
+          "direction": "ロング",
+          "summary": "N225 +6743 / mini +15250 / TOPIX -7272",
+          "nk225_large_delta": 4273.0
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
+            "put": 50.0,
+            "call": 0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
+          }
+        },
+        "put_total": 50.0,
+        "call_total": 0,
+        "significance": 50.0,
+        "is_new": false,
+        "deltas": {
+          "64000": {
+            "put": 50.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": 190.0,
+        "call_total_delta": -110.0
+      },
+      {
+        "name": "大和証券",
         "category": "domestic",
         "category_label": "国内",
         "customer_type": "ー",
         "futures": {
-          "nk225_large": -3396.0,
-          "nk225_mini": 2799.0,
-          "topix": -1397.0,
-          "direction": "ショート",
-          "summary": "N225 -3396 / mini +2799 / TOPIX -1397",
-          "nk225_large_delta": 0.0
+          "nk225_large": 1735.0,
+          "nk225_mini": 0,
+          "topix": -2733.0,
+          "direction": "ロング",
+          "summary": "N225 +1735 / TOPIX -2733",
+          "nk225_large_delta": 356.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
             "put": 0,
             "call": 0
           },
-          "65000": {
-            "put": 100.0,
-            "call": -40.0
+          "64000": {
+            "put": 50.0,
+            "call": 0
           },
-          "65125": {
+          "64125": {
             "put": 0,
             "call": 0
           },
-          "65250": {
+          "64250": {
             "put": 0,
             "call": 0
           }
         },
-        "put_total": 100.0,
-        "call_total": -40.0,
-        "significance": 140.0,
+        "put_total": 50.0,
+        "call_total": 0,
+        "significance": 50.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "deltas": {
+          "64000": {
+            "put": 50.0,
+            "call": 0
+          }
+        },
+        "put_total_delta": -222.0,
+        "call_total_delta": 250.0
       },
       {
         "name": "インタラクティブ証券",
@@ -2341,171 +1826,51 @@
         "category_label": "HF代理",
         "customer_type": "ー",
         "futures": {
-          "nk225_large": -447.0,
-          "nk225_mini": 0,
-          "topix": -39.0,
-          "direction": "ショート",
-          "summary": "N225 -447 / TOPIX -39",
-          "nk225_large_delta": 0.0
+          "nk225_large": 0,
+          "nk225_mini": 5.0,
+          "topix": 8.0,
+          "direction": "フラット",
+          "summary": "mini +5 / TOPIX +8",
+          "nk225_large_delta": 447.0
         },
         "positions": {
-          "64750": {
-            "put": 0,
-            "call": 1.0
-          },
-          "64875": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "65000": {
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
             "put": -5.0,
-            "call": 28.0
+            "call": 35.0
           },
-          "65125": {
-            "put": 1.0,
+          "64125": {
+            "put": 0,
             "call": 0
           },
-          "65250": {
-            "put": 0,
+          "64250": {
+            "put": 1.0,
             "call": 0
           }
         },
         "put_total": -4.0,
-        "call_total": 29.0,
-        "significance": 33.0,
+        "call_total": 35.0,
+        "significance": 39.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "楽天証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "国内個人投資家（ネットトレーダー）",
-        "futures": {
-          "nk225_large": 272.0,
-          "nk225_mini": 2058.0,
-          "topix": 0,
-          "direction": "ロング",
-          "summary": "N225 +272 / mini +2058",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 0,
-            "call": -8.0
+        "deltas": {
+          "64000": {
+            "put": -5.0,
+            "call": 35.0
           },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": 16.0,
-            "call": 25.0
-          },
-          "65125": {
-            "put": -1.0,
-            "call": 0
-          },
-          "65250": {
-            "put": -1.0,
-            "call": -1.0
-          }
-        },
-        "put_total": 14.0,
-        "call_total": 16.0,
-        "significance": 30.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "ＳＭＢＣ日興証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 5508.0,
-          "nk225_mini": 7534.0,
-          "topix": -4773.0,
-          "direction": "ロング",
-          "summary": "N225 +5508 / mini +7534 / TOPIX -4773",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": 0,
-            "call": 0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": -17.0,
-            "call": 0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
+          "64250": {
+            "put": 1.0,
             "call": 0
           }
         },
-        "put_total": -17.0,
-        "call_total": 0,
-        "significance": 17.0,
-        "is_new": false,
-        "deltas": {},
         "put_total_delta": 0.0,
-        "call_total_delta": 0
-      },
-      {
-        "name": "安藤証券",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "ー",
-        "futures": {
-          "nk225_large": 0,
-          "nk225_mini": -205.0,
-          "topix": 4.0,
-          "direction": "フラット",
-          "summary": "mini -205 / TOPIX +4",
-          "nk225_large_delta": 0
-        },
-        "positions": {
-          "64750": {
-            "put": 0,
-            "call": 0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": 6.0,
-            "call": -6.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
-          }
-        },
-        "put_total": 6.0,
-        "call_total": -6.0,
-        "significance": 12.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "call_total_delta": 6.0
       },
       {
         "name": "フィリップ・キャ証券",
@@ -2513,85 +1878,143 @@
         "category_label": "HF代理",
         "customer_type": "ー",
         "futures": {
-          "nk225_large": 0,
-          "nk225_mini": 2040.0,
-          "topix": 28.0,
-          "direction": "ロング",
-          "summary": "mini +2040 / TOPIX +28",
-          "nk225_large_delta": 0
+          "nk225_large": -628.0,
+          "nk225_mini": 30.0,
+          "topix": 38.0,
+          "direction": "ショート",
+          "summary": "N225 -628 / mini +30 / TOPIX +38",
+          "nk225_large_delta": -628.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
+          "63875": {
             "put": 0,
             "call": 0
           },
-          "65000": {
+          "64000": {
+            "put": -12.0,
+            "call": -13.0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
+          }
+        },
+        "put_total": -12.0,
+        "call_total": -13.0,
+        "significance": 25.0,
+        "is_new": false,
+        "deltas": {
+          "64000": {
+            "put": -12.0,
+            "call": -13.0
+          }
+        },
+        "put_total_delta": -14.0,
+        "call_total_delta": -3.0
+      },
+      {
+        "name": "ＳＢＩ証券",
+        "category": "domestic",
+        "category_label": "国内",
+        "customer_type": "国内個人投資家（ネットトレーダー）",
+        "futures": {
+          "nk225_large": -1614.0,
+          "nk225_mini": 953.0,
+          "topix": -5933.0,
+          "direction": "ショート",
+          "summary": "N225 -1614 / mini +953 / TOPIX -5933",
+          "nk225_large_delta": -1271.0
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
+            "put": -15.0,
+            "call": -3.0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
+          }
+        },
+        "put_total": -15.0,
+        "call_total": -3.0,
+        "significance": 18.0,
+        "is_new": false,
+        "deltas": {
+          "64000": {
+            "put": -15.0,
+            "call": -3.0
+          }
+        },
+        "put_total_delta": -348.0,
+        "call_total_delta": 247.0
+      },
+      {
+        "name": "楽天証券",
+        "category": "domestic",
+        "category_label": "国内",
+        "customer_type": "国内個人投資家（ネットトレーダー）",
+        "futures": {
+          "nk225_large": 387.0,
+          "nk225_mini": 651.0,
+          "topix": 0,
+          "direction": "ロング",
+          "summary": "N225 +387 / mini +651",
+          "nk225_large_delta": 115.0
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
             "put": 2.0,
-            "call": -10.0
+            "call": -5.0
           },
-          "65125": {
+          "64125": {
             "put": 0,
             "call": 0
           },
-          "65250": {
+          "64250": {
             "put": 0,
             "call": 0
           }
         },
         "put_total": 2.0,
-        "call_total": -10.0,
-        "significance": 12.0,
+        "call_total": -5.0,
+        "significance": 7.0,
         "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
-      },
-      {
-        "name": "三菱ＵＦＪｅスマート",
-        "category": "domestic",
-        "category_label": "国内",
-        "customer_type": "国内個人投資家（ネットトレーダー）",
-        "futures": {
-          "nk225_large": 172.0,
-          "nk225_mini": 0,
-          "topix": 142.0,
-          "direction": "ロング",
-          "summary": "N225 +172 / TOPIX +142",
-          "nk225_large_delta": 0.0
-        },
-        "positions": {
-          "64750": {
-            "put": -1.0,
-            "call": 0
-          },
-          "64875": {
-            "put": 0,
-            "call": 0
-          },
-          "65000": {
-            "put": 1.0,
-            "call": 3.0
-          },
-          "65125": {
-            "put": 0,
-            "call": 0
-          },
-          "65250": {
-            "put": 0,
-            "call": 0
+        "deltas": {
+          "64000": {
+            "put": 2.0,
+            "call": -5.0
           }
         },
-        "put_total": 0.0,
-        "call_total": 3.0,
-        "significance": 3.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "put_total_delta": -12.0,
+        "call_total_delta": -21.0
       },
       {
         "name": "松井証券",
@@ -2599,44 +2022,88 @@
         "category_label": "国内",
         "customer_type": "国内個人投資家（ネットトレーダー）",
         "futures": {
-          "nk225_large": -47.0,
-          "nk225_mini": 0,
-          "topix": 22.0,
+          "nk225_large": 0,
+          "nk225_mini": 303.0,
+          "topix": 26.0,
           "direction": "フラット",
-          "summary": "N225 -47 / TOPIX +22",
-          "nk225_large_delta": 0.0
+          "summary": "mini +303 / TOPIX +26",
+          "nk225_large_delta": 47.0
         },
         "positions": {
-          "64750": {
+          "63750": {
             "put": 0,
             "call": 0
           },
-          "64875": {
-            "put": 0,
-            "call": 1.0
-          },
-          "65000": {
-            "put": 4.0,
-            "call": -1.0
-          },
-          "65125": {
+          "63875": {
             "put": 0,
             "call": 0
           },
-          "65250": {
-            "put": -3.0,
-            "call": -2.0
+          "64000": {
+            "put": -1.0,
+            "call": -4.0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
+          }
+        },
+        "put_total": -1.0,
+        "call_total": -4.0,
+        "significance": 5.0,
+        "is_new": false,
+        "deltas": {
+          "64000": {
+            "put": -1.0,
+            "call": -4.0
+          }
+        },
+        "put_total_delta": -2.0,
+        "call_total_delta": -2.0
+      },
+      {
+        "name": "マネックス証券",
+        "category": "other",
+        "category_label": "その他",
+        "customer_type": "国内個人投資家（ネットトレーダー）",
+        "futures": {
+          "nk225_large": 0,
+          "nk225_mini": 206.0,
+          "topix": 0,
+          "direction": "フラット",
+          "summary": "mini +206"
+        },
+        "positions": {
+          "63750": {
+            "put": 0,
+            "call": 0
+          },
+          "63875": {
+            "put": 0,
+            "call": 0
+          },
+          "64000": {
+            "put": 1.0,
+            "call": 0
+          },
+          "64125": {
+            "put": 0,
+            "call": 0
+          },
+          "64250": {
+            "put": 0,
+            "call": 0
           }
         },
         "put_total": 1.0,
-        "call_total": -2.0,
-        "significance": 3.0,
-        "is_new": false,
-        "deltas": {},
-        "put_total_delta": 0.0,
-        "call_total_delta": 0.0
+        "call_total": 0,
+        "significance": 1.0,
+        "is_new": true
       }
     ],
-    "prev_date": "20260908"
+    "prev_date": "20260909"
   }
 }
