@@ -1124,10 +1124,10 @@
     }
   ],
   "source": "live",
-  "data_date": "20260916",
+  "data_date": "20260917",
   "strike_matrix": {
-    "atm": 64500,
-    "atm_round": 64500,
+    "atm": 65000,
+    "atm_round": 65000,
     "strikes": [
       63750,
       63875,
@@ -1954,6 +1954,6 @@
         "call_total_delta": 0
       }
     ],
-    "prev_date": "20260915"
+    "prev_date": "20260916"
   }
 }
