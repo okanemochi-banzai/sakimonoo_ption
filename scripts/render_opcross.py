@@ -45,6 +45,10 @@ function ocBuildHTML(){
     }).join('<span class="oc-x">⟷</span>');
     var exp = c.expiry ? ('20'+String(c.expiry).slice(0,2)+'/'+String(c.expiry).slice(2,4)) : '—';
     var kind = c.is_cross ? '' : '<span class="oc-solo">単独</span>';
+    var ses = (c.sessions||[]);
+    if(ses.length && !(ses.length===1 && ses[0]==='日中')){
+      kind += '<span class="oc-solo">'+ses.join('+')+'</span>';
+    }
     h += '<tr class="'+(c.domestic_vs_overseas?'oc-big':'')+'">'
        + '<td class="oc-exp">'+exp+'</td>'
        + '<td>'+star+c.side+ocNum(c.strike)+'</td>'

@@ -74,34 +74,48 @@ def _broker_opt_pc(path):
     return dict(out)
 
 
-def parse_option_crosses(path, min_vol=100, keep=8):
+def parse_option_crosses(paths, min_vol=99, keep=8):
     """Detect notable J-NET option blocks, grouped by (expiry, side, strike).
 
     A "cross" shows up as two brokers with large, near-equal volume at the same
     contract (e.g. みずほ600 / ＡＢＮ600). We surface these dynamically — whoever
     the counterparties are that day — and flag the domestic<->overseas blocks.
 
+    `paths` may be a single J-NET file or a list (day + night). Blocks placed in
+    the night session are real blocks too — a 100-lot cross at night is exactly
+    as meaningful as one during the day — so both files are scanned and the same
+    contract is merged across sessions, with `sessions` recording where it came
+    from. `min_vol` is 99 so that a block of exactly 100 lots is kept.
+
     Note on `size`: J-NET volume is reported per participant, and a matched
     cross is the same contracts counted on both sides. We therefore report the
     larger leg as the block size (not the sum), which is the number of
     contracts that actually changed hands.
     """
-    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
-    ws = wb['手口上位一覧'] if '手口上位一覧' in wb.sheetnames else wb.worksheets[0]
-    groups = {}   # (expiry, side, strike) -> list[(broker, vol)]
-    for r in ws.iter_rows(values_only=True):
-        if not r or str(r[0]).strip() != 'NK225E':
-            continue
-        side, expiry, strike = _parse_opt_name(r[2] if len(r) > 2 else None)
-        if side is None:
-            continue
-        broker = str(r[5]).strip() if len(r) > 5 and r[5] else None
-        vol = r[7] if len(r) > 7 and isinstance(r[7], (int, float)) else None
-        if broker and vol:
-            groups.setdefault((expiry, side, strike), []).append((broker, float(vol)))
+    if isinstance(paths, str):
+        paths = [paths]
+    groups = {}   # (expiry, side, strike) -> {broker: vol}
+    sessions = {}  # same key -> set of session labels
+    for path in paths:
+        label = '夜間' if '_night' in os.path.basename(path) else '日中'
+        wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+        ws = wb['手口上位一覧'] if '手口上位一覧' in wb.sheetnames else wb.worksheets[0]
+        for r in ws.iter_rows(values_only=True):
+            if not r or str(r[0]).strip() != 'NK225E':
+                continue
+            side, expiry, strike = _parse_opt_name(r[2] if len(r) > 2 else None)
+            if side is None:
+                continue
+            broker = str(r[5]).strip() if len(r) > 5 and r[5] else None
+            vol = r[7] if len(r) > 7 and isinstance(r[7], (int, float)) else None
+            if broker and vol:
+                key = (expiry, side, strike)
+                g = groups.setdefault(key, {})
+                g[broker] = g.get(broker, 0.0) + float(vol)
+                sessions.setdefault(key, set()).add(label)
     crosses = []
-    for (expiry, side, strike), legs in groups.items():
-        legs.sort(key=lambda x: -x[1])
+    for (expiry, side, strike), legmap in groups.items():
+        legs = sorted(legmap.items(), key=lambda x: -x[1])
         top = legs[0][1]
         if top < min_vol:
             continue
@@ -116,6 +130,7 @@ def parse_option_crosses(path, min_vol=100, keep=8):
             'side': side, 'strike': strike, 'expiry': expiry,
             'size': round(top), 'total': round(sum(v for _, v in legs)),
             'is_cross': matched, 'domestic_vs_overseas': dom_vs_ovs,
+            'sessions': sorted(sessions.get((expiry, side, strike), [])),
             'legs': named,
         })
     # rank: domestic<->overseas crosses first, then by size
@@ -212,7 +227,10 @@ def build_jnet(data_dir, spot=None):
 
     # notable option cross blocks by strike (dynamic — whoever moved big today)
     try:
-        out['option_crosses'] = parse_option_crosses(files[-1])
+        night = sorted(glob.glob(os.path.join(
+            data_dir, '*volume_by_participant_night_J-NET*.xlsx')))
+        night = [p for p in night if _digits(os.path.basename(p))[:8] == date]
+        out['option_crosses'] = parse_option_crosses([files[-1]] + night)
     except Exception:
         out['option_crosses'] = []
 
