@@ -304,7 +304,9 @@ def preview_greeks(greeks):
     zb = (e.get('zero_gamma_B') or {}).get('flip')
     sign = (e.get('zero_gamma_A') or {}).get('sign_at_spot')
     sgn_txt = '正(ピン)' if sign == 'positive' else '負(加速)'
-    sgn_col = '#4ade80' if sign == 'positive' else '#f87171'
+    # Blue/amber, not green/red: on this dashboard green and red mean a number
+    # went up or down, and the gamma regime is not an up/down number.
+    sgn_col = '#93c5fd' if sign == 'positive' else '#fbbf24'
 
     def f(x):
         return '{:,}'.format(int(x)) if x else '—'

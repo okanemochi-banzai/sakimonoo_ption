@@ -31,6 +31,7 @@ try:
     import render_broker_watch as _bw
     import render_flow_map as _fm
     import render_strike_breakdown as _sb
+    import render_range as _rr
 except Exception:
     _rj = None
     _ow = None
@@ -39,6 +40,7 @@ except Exception:
     _bw = None
     _fm = None
     _sb = None
+    _rr = None
 import sys
 import copy
 
@@ -140,8 +142,15 @@ def build_markdown(data):
             if months:
                 md.append('')
                 md.append('**%s 限月別**:' % label)
-                for m in months:
+                # Skip dead months: a line of "OI 0 (前日比 0)" for 2034年06月限
+                # is noise, and there are a dozen of them under every market.
+                shown = [m for m in months
+                         if (m.get('oi') or 0) != 0 or (m.get('change') or 0) != 0]
+                for m in shown:
                     md.append('- %s: OI %s (前日比 %s)' % (m['label'], fnum(m.get('oi')), fnum(m.get('change'), plus=True)))
+                hidden = len(months) - len(shown)
+                if hidden:
+                    md.append('- （建玉・増減とも0の%d限月は省略）' % hidden)
     else:
         md.append('データなし')
     md.append('')
@@ -402,6 +411,16 @@ tr.atm-row{background:rgba(251,191,36,.08)}
 .zone-card .zc-name{font-weight:600;font-size:13px}
 .zone-card .zc-stars{color:var(--yellow);font-size:14px}
 .zone-card .zc-detail{font-size:10px;color:var(--sub);margin-top:4px}
+.hero-close{font-family:'DM Mono',monospace;font-size:20px;margin:2px 0 4px}
+.hero-chg{font-size:14px;margin-left:8px}
+.hero-chg.positive{color:#4ade80}
+.hero-chg.negative{color:#f87171}
+.hero-badge{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;font-size:11px;border:1px solid var(--border)}
+.rg-pos{color:#93c5fd;background:rgba(147,197,253,.12)}
+.rg-neg{color:#fbbf24;background:rgba(251,191,36,.12)}
+.rg-mix{color:#cbd5e1;background:rgba(203,213,225,.10)}
+.legend-note{max-width:1200px;margin:0 auto;padding:0 16px 8px;font-size:10.5px;color:var(--sub)}
+@media(max-width:700px){.chart-intraday{display:none}}
 .footer{text-align:center;padding:24px;color:var(--sub);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
 .footer a{margin:0 8px}
 .positive{color:var(--green)}
@@ -1546,7 +1565,7 @@ def _detail_ivtrend_js(ivts):
 
 
 
-def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None):
+def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=None, jnet=None, optw=None, positions=None, broker_hist=None, venue_flow=None, greeks_hist=None):
     meta = data['metadata']
     s01 = data.get('s01', {})
     s02 = data.get('s02', {})
@@ -1567,13 +1586,50 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     h += '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
     h += '<title>JPX Market Analysis %s</title>\n' % esc(meta.get('date_formatted', ''))
     h += '<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">\n'
-    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_fm.FM_CARD_CSS if _fm else ''), (_sb.SB_CARD_CSS if _sb else ''))
+    h += '<style>\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n</style>\n' % (DASHBOARD_CSS, OI_CHART_CSS, WEEKLY_TREND_CSS, IV_CARD_CSS, IV_TREND_CSS, (_rg.GREEKS_CARD_CSS if _rg else ''), (_rj.JNET_CARD_CSS if _rj else ''), (_ow.OPTW_CARD_CSS if _ow else ''), (_ps.POS_CARD_CSS if _ps else ''), (_oc.OPCROSS_CARD_CSS if _oc else ''), FLOW_VERDICT_CSS, (_bw.BW_CARD_CSS if _bw else ''), (_sb.SB_CARD_CSS if _sb else ''), (_rr.RANGE_CARD_CSS if _rr else ''))
     h += '</head>\n<body>\n'
 
     h += '<div class="topbar">\n  <span class="logo">JPX Dashboard</span>\n  <nav>\n'
     h += '    <a href="index.html">ダッシュボード</a>\n    <a href="pnl_simulator.html">P&Lシミュレーター</a>\n    <a href="weekly_trend.html">週次推移</a>\n    <a href="archive.html">アーカイブ</a>\n  </nav>\n</div>\n'
 
-    h += '<div class="hero">\n  <h1>%s</h1>\n  <div class="sub">%s / SQまで%d営業日</div>\n</div>\n' % (esc(meta.get('date_formatted', '')), esc(meta.get('sq_label', '')), meta.get('days_to_sq', 0))
+    # Hero: the close and its change come first — they were missing entirely,
+    # and "ATM" (a rounded strike) was standing in for them. The regime badge
+    # summarises the three GEX conventions rather than quoting one of them.
+    _close = (s01 or {}).get('nikkei_close')
+    _prev = None
+    _rh = (greeks or {}).get('regime_history') or []
+    if len(_rh) >= 2 and _rh[-1].get('spot') and _rh[-2].get('spot'):
+        _prev = _rh[-2]['spot']
+    _chg_html = ''
+    if _close and _prev:
+        _d = _close - _prev
+        _cls = 'positive' if _d > 0 else 'negative' if _d < 0 else ''
+        _chg_html = ('<span class="hero-chg %s">%s（%+.2f%%）</span>'
+                     % (_cls, fnum(round(_d), plus=True), _d / _prev * 100))
+    _regime_html = ''
+    _fe = ((greeks or {}).get('expiries') or [None])[0]
+    if _fe:
+        _g = [(_fe.get('net_A') or {}).get('gamma'), (_fe.get('net_B') or {}).get('gamma'),
+              (_fe.get('net_B2') or {}).get('gamma')]
+        _g = [x for x in _g if x is not None]
+        _pos = sum(1 for x in _g if x > 0)
+        if len(_g) == 3:
+            if _pos == 3:
+                _regime_html = '<span class="hero-badge rg-pos">地合い 正ガンマ（3規約一致）</span>'
+            elif _pos == 0:
+                _regime_html = '<span class="hero-badge rg-neg">地合い 負ガンマ（3規約一致）</span>'
+            else:
+                _regime_html = '<span class="hero-badge rg-mix">地合い まちまち（%d/3が正）</span>' % _pos
+    _cal = (_fe or {}).get('T_days')
+    _sq_txt = 'SQまで%d営業日' % meta.get('days_to_sq', 0)
+    if _cal:
+        _sq_txt += '（暦日%d日）' % _cal
+    h += ('<div class="hero">\n  <h1>%s</h1>\n'
+          '  <div class="hero-close">%s %s</div>\n'
+          '  <div class="sub">%s / %s %s</div>\n</div>\n'
+          % (esc(meta.get('date_formatted', '')),
+             ('日経平均 ' + fnum(round(_close))) if _close else '',
+             _chg_html, esc(meta.get('sq_label', '')), _sq_txt, _regime_html))
 
     # ATM sanity warning banner (set by extract.py's self-correction)
     atm_warn = meta.get('atm_warning')
@@ -1589,29 +1645,47 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     mp = ind.get('max_pain')
     if mp:
         h += '  <div class="kpi"><div class="label">Max Pain</div><div class="value">%s</div></div>\n' % fnum(mp)
-    dist = s06.get('distribution', [])
-    if dist:
-        max_p = max(dist, key=lambda d: d['put_oi'])
-        max_c = max(dist, key=lambda d: d['call_oi'])
-        if max_p['put_oi'] > 0:
-            h += '  <div class="kpi"><div class="label">P壁</div><div class="value" style="color:var(--put)">%s</div></div>\n' % fnum(max_p['strike'])
-        if max_c['call_oi'] > 0:
-            h += '  <div class="kpi"><div class="label">C壁</div><div class="value" style="color:var(--call)">%s</div></div>\n' % fnum(max_c['strike'])
+    # Walls: taken from the FRONT expiry and labelled as such. The old version
+    # used the all-expiry distribution, so the number silently mixed months.
+    _front_strikes = (_fe or {}).get('per_strike') or []
+    _wl = (_fe or {}).get('label') or ''
+    if _front_strikes:
+        max_p = max(_front_strikes, key=lambda d: d.get('put_oi') or 0)
+        max_c = max(_front_strikes, key=lambda d: d.get('call_oi') or 0)
+        if (max_p.get('put_oi') or 0) > 0:
+            h += '  <div class="kpi"><div class="label">P壁（%s）</div><div class="value" style="color:var(--put)">%s</div></div>\n' % (esc(_wl), fnum(max_p['strike']))
+        if (max_c.get('call_oi') or 0) > 0:
+            h += '  <div class="kpi"><div class="label">C壁（%s）</div><div class="value" style="color:var(--call)">%s</div></div>\n' % (esc(_wl), fnum(max_c['strike']))
+    else:
+        dist = s06.get('distribution', [])
+        if dist:
+            max_p = max(dist, key=lambda d: d['put_oi'])
+            max_c = max(dist, key=lambda d: d['call_oi'])
+            if max_p['put_oi'] > 0:
+                h += '  <div class="kpi"><div class="label">P壁（全限月）</div><div class="value" style="color:var(--put)">%s</div></div>\n' % fnum(max_p['strike'])
+            if max_c['call_oi'] > 0:
+                h += '  <div class="kpi"><div class="label">C壁（全限月）</div><div class="value" style="color:var(--call)">%s</div></div>\n' % fnum(max_c['strike'])
     h += '</div>\n'
 
-    h += '<div style="max-width:1200px;margin:0 auto;padding:0 16px 10px;display:flex;gap:10px;flex-wrap:wrap">\n'
-    h += '  <div style="flex:1;min-width:300px">\n'
-    h += '    <div style="font-size:11px;color:var(--sub);text-align:center;padding:4px 0;font-family:Outfit">日足</div>\n'
-    h += '    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:310px">\n'
-    h += '      <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=D&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
-    h += '    </div>\n  </div>\n'
-    h += '  <div style="flex:1;min-width:300px">\n'
-    h += '    <div style="font-size:11px;color:var(--sub);text-align:center;padding:4px 0;font-family:Outfit">15分足</div>\n'
-    h += '    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:310px">\n'
-    h += '      <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
-    h += '    </div>\n  </div>\n</div>\n'
+    _charts_html = ''
+    def _chart_block():
+        h = ''
+        h += '<div style="max-width:1200px;margin:0 auto;padding:0 16px 10px;display:flex;gap:10px;flex-wrap:wrap" class="chart-row">\n'
+        h += '  <div style="flex:1;min-width:300px">\n'
+        h += '    <div style="font-size:11px;color:var(--sub);text-align:center;padding:4px 0;font-family:Outfit">日足</div>\n'
+        h += '    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:310px">\n'
+        h += '      <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=D&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
+        h += '    </div>\n  </div>\n'
+        h += '  <div style="flex:1;min-width:300px" class="chart-intraday">\n'
+        h += '    <div style="font-size:11px;color:var(--sub);text-align:center;padding:4px 0;font-family:Outfit">15分足</div>\n'
+        h += '    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:310px">\n'
+        h += '      <iframe src="https://s.tradingview.com/widgetembed/?symbol=OSE%3ANK2251!&interval=15&theme=dark&style=1&hide_top_toolbar=1&hide_legend=0&save_image=0&hide_volume=0&locale=ja&studies=BB%40tv-basicstudies%1F25" style="width:100%;height:100%;border:none"></iframe>\n'
+        h += '    </div>\n  </div>\n</div>\n'
 
-    h += '<div class="mobile-nav">\n  <a href="index.html">ダッシュボード</a>\n  <a href="pnl_simulator.html">P&L</a>\n  <a href="weekly_trend.html">週次</a>\n  <a href="archive.html">アーカイブ</a>\n</div>\n'
+        return h
+    _charts_html = _chart_block()
+
+    h += '<div class="mobile-nav">\n  <a href="pnl_simulator.html">P&L</a>\n  <a href="weekly_trend.html">週次</a>\n  <a href="archive.html">アーカイブ</a>\n</div>\n'
 
     # Resolve data-vintage badges
     def _short_date(yyyymmdd):
@@ -1638,37 +1712,45 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
     # reflects (daily 5/28 vs weekly 5/22).
     DB = (daily_badge, False)
     WB = (weekly_badge, True)
+    # Card set kept deliberately small: every card here answers a question the
+    # others do not. Merged cards (大口手口 / 週次手口) keep the original card_id
+    # so their JS init hooks (window['init_'+id]) still fire.
+    _jnet_js = (_rj.detail_jnet_js(jnet) if (_rj and jnet) else _detail_jnet_js(s07))
+    _oc_js = (_oc.detail_opcross_js(jnet) if (_oc and jnet)
+              else "return '<div class=\\'insight\\'>J-NETデータ未取込</div>';")
+    _big_js = "return (function(){%s})() + (function(){%s})();" % (_jnet_js, _oc_js)
+    _wt_js = _detail_weekly_trend_js(wt)
+    _bw_js = (_bw.BW_CARD_JS + "return bwBuild();" if (_bw and broker_hist)
+              else "return '<div class=\\'insight\\'>週次データを2週以上蓄積すると表示されます</div>';")
+    _week_js = "return (function(){%s})() + (function(){%s})();" % (_wt_js, _bw_js)
+
     card_groups = [
+        # ⑧ first: it is the one card read every day, so it leads the page.
+        ('今日のまとめ', [
+            ('gemini', '📝', '市況評価（⑧）', _preview_gemini(data), _detail_gemini_js(data), DB),
+        ]),
         ('先物', [
-            ('futures', '📈', '先物建玉増減', _preview_futures(s02), _detail_futures_js(s02), DB),
+            ('futures', '📈', '先物建玉増減', _preview_futures(s02, oi_ts), _detail_futures_js(s02), DB),
         ]),
         ('オプション', [
             ('opval', '💰', 'OP取引代金', _preview_opval(s03), _detail_opval_js(s03), DB),
             ('oichg', '📊', 'OP建玉増減', _preview_oichg(s04), _detail_oichg_js(s04), DB),
             ('op_oi_timeseries', '📉', 'OP建玉推移', _preview_op_oi_timeseries(oi_ts), _detail_op_oi_timeseries_js(oi_ts), DB),
-            ('important', '⚡', 'OP重要建玉変化', _preview_important(s05), _detail_important_js(s05, greeks), DB),
-            ('flow_map', '🗺', '売買推定マップ（価格軸）',
-             (_fm.preview_flow_map(greeks, data.get('indicators')) if _fm and greeks else '<span class="mm-label">データ待ち</span>'),
-             (_fm.FM_CARD_JS + "return fmBuild();" if _fm and greeks else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
-            ('strike_breakdown', '🔬', '価格帯の内訳（建玉×手口×IV）',
+            ('strike_breakdown', '🔬', '建玉の動きと売買推定（価格帯別）',
              (_sb.preview_strike_breakdown(greeks, venue_flow) if _sb else '<span class="mm-label">データ待ち</span>'),
              (_sb.SB_CARD_JS + "return sbBuild();" if (_sb and greeks) else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
             ('dist', '🦋', 'OP建玉分布', _preview_dist(s06), _detail_dist_js(s06, ind), DB),
             ('ivtrend', '📈', 'IV推移', _preview_ivtrend(ivts), _detail_ivtrend_js(ivts), DB),
+            ('range', '📐', 'IVから見た想定レンジ',
+             (_rr.preview_range(greeks, ivts, oi_ts) if _rr else '<span class="mm-label">データ待ち</span>'),
+             (_rr.detail_range_js(greeks) if _rr else "return '<div class=\\'insight\\'>データなし</div>';"), DB),
             ('greeks', '🧮', '相場の地合い（GEX）', (_rg.preview_greeks(greeks) if _rg else ''), (_rg.detail_greeks_js(greeks) if _rg else ''), DB),
         ]),
         ('参加者・手口', [
-            ('jnet', '🏛', '大口先物クロス（日次）', (_rj.preview_jnet(jnet) if (_rj and jnet) else _preview_jnet(s07)), (_rj.detail_jnet_js(jnet) if (_rj and jnet) else _detail_jnet_js(s07)), DB),
-            ('opcross', '🔀', '大口オプションクロス（日次）', (_oc.preview_opcross(jnet) if (_oc and jnet) else '<span class="mm-label">OPクロス 未取込</span>'), (_oc.detail_opcross_js(jnet) if (_oc and jnet) else "return '<div class=\\'insight\\'>J-NETデータ未取込</div>';"), DB),
+            ('jnet', '🏛', '大口手口（日次・先物＋オプション）',
+             (_rj.preview_jnet(jnet) if (_rj and jnet) else _preview_jnet(s07)), _big_js, DB),
             ('positions', '🧩', '大口ポジション統合（週次 先物＋OP建玉）', (_ps.preview_positions(positions) if (_ps and positions) else '<span class="mm-label">統合ポジション 未取込</span>'), (_ps.detail_positions_js(positions) if (_ps and positions) else "return '<div class=\\'insight\\'>週次データ未取込</div>';"), DB),
-            ('weekly_trend', '📅', '週次手口推移（先物）', _preview_weekly_trend(wt), _detail_weekly_trend_js(wt), WB),
-            ('broker_watch', '👥', '大口動向（週次の推移）',
-             (_bw.preview_broker_watch(broker_hist) if (_bw and broker_hist) else '<span class="mm-label">週次履歴を蓄積中</span>'),
-             (_bw.BW_CARD_JS + "return bwBuild();" if (_bw and broker_hist) else "return '<div class=\\'insight\\'>週次データを2週以上蓄積すると表示されます</div>';"), WB),
-        ]),
-        ('総合', [
-            ('assess', '🎯', '総合評価', _preview_assess(s01, ind), _detail_assess_js(data), DB),
-            ('gemini', '📝', '市況評価（⑧）', _preview_gemini(data), _detail_gemini_js(data), DB),
+            ('weekly_trend', '📅', '週次手口（先物の推移＋大口動向）', _preview_weekly_trend(wt), _week_js, WB),
         ]),
     ]
     # Flat list for the JS function registration below
@@ -1686,7 +1768,16 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
             h += '  <div class="card-preview">%s</div>\n  <div class="card-detail"></div>\n</div>\n' % preview_html
     h += '</div>\n'
 
-    h += '<div class="footer">\n  <a href="pnl_simulator.html">P&Lシミュレーター</a>\n  <a href="weekly_trend.html">週次推移</a>\n  <a href="archive.html">アーカイブ一覧</a>\n  <span>Generated by JPX Analysis Pipeline</span>\n</div>\n'
+    h += ('<div class="legend-note">色の意味：<span style="color:#4ade80">緑＝数値の増加</span>／'
+          '<span style="color:#f87171">赤＝数値の減少</span>。'
+          'ガンマの地合いは<span style="color:#93c5fd">青＝正</span>／'
+          '<span style="color:#fbbf24">黄＝負</span>で示し、増減の色とは分けています。</div>\n')
+
+    h += _charts_html
+
+    # Footer carries no nav: the same four links already sit in the top bar
+    # (desktop) and the mobile nav, so a third copy is pure duplication.
+    h += '<div class="footer">\n  <span>Generated by JPX Analysis Pipeline</span>\n</div>\n'
 
     h += '<script>\n'
     # Strip the heavy '_snapshots' raw history before inlining — the dashboard
@@ -1716,10 +1807,11 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
         h += _oc.OPCROSS_CARD_JS
     if _bw and broker_hist:
         h += _bw.bw_data_script(broker_hist)
-    if _fm and greeks:
-        h += _fm.fm_data_script(greeks, data.get('indicators'))
     if _sb and greeks:
         h += _sb.sb_data_script(greeks, venue_flow, data.get('indicators'))
+    if _rr and greeks:
+        h += _rr.range_data_script(greeks, ivts, oi_ts, greeks_hist)
+        h += _rr.RANGE_CARD_JS
     for card_id, _, _, _, detail_js in cards:
         h += 'function b_%s(){' % card_id
         h += detail_js
@@ -1731,15 +1823,42 @@ def build_dashboard_html(data, oi_ts=None, wt=None, iv=None, ivts=None, greeks=N
 
 # --- Preview builders (unchanged) ---
 
-def _preview_futures(s02):
+def _preview_futures(s02, oi_ts=None):
+    """Futures OI change, with a flag when the day is out of scale.
+
+    A raw "+225,764" tells the reader nothing about whether that is a normal
+    Tuesday or the largest build of the month, so a day whose absolute change
+    is more than three times the recent average is marked. That is the whole
+    point of the card at a glance: noticing the day that is not like the others.
+    """
     if 'error' in s02:
         return '<span class="mm-label">データなし</span>'
+
+    def _typical(key):
+        try:
+            series = [x for x in ((oi_ts or {}).get('futures', {})
+                                  .get(key, {}).get('total') or []) if x]
+        except Exception:
+            return None
+        if len(series) < 6:
+            return None
+        diffs = [abs(series[i] - series[i - 1]) for i in range(1, len(series))]
+        diffs = diffs[-20:-1] if len(diffs) > 3 else diffs
+        return (sum(diffs) / len(diffs)) if diffs else None
+
     h = '<div class="mini-metrics">'
     for key, label in [('nk225_large', 'ラージ'), ('nk225_mini', 'mini'), ('topix', 'TOPIX')]:
         sec = s02.get(key, {})
         chg = sec.get('total_change', 0)
         cls = 'positive' if chg > 0 else 'negative' if chg < 0 else ''
-        h += '<div class="mini-metric"><div class="mm-label">%s</div><div class="mm-value %s">%s</div></div>' % (label, cls, fnum(chg, plus=True))
+        typ = _typical(key)
+        flag = ''
+        if typ and abs(chg) > typ * 3:
+            flag = ('<span style="font-size:9.5px;color:#fcd34d;margin-left:4px">'
+                    '平均の%.0f倍</span>' % (abs(chg) / typ))
+        h += ('<div class="mini-metric"><div class="mm-label">%s</div>'
+              '<div class="mm-value %s">%s%s</div></div>'
+              % (label, cls, fnum(chg, plus=True), flag))
     h += '</div>'
     return h
 
@@ -2782,6 +2901,17 @@ def run(args):
                 print('[render.py] Loaded positions.json: %d participants' % len(positions.get('rows', [])))
         except Exception as e:
             print('[render.py] positions.json load error: %s' % e)
+    greeks_hist = None
+    _ghpath = os.path.join(data_dir, 'greeks_history.json')
+    if os.path.exists(_ghpath):
+        try:
+            with open(_ghpath, encoding='utf-8') as f:
+                greeks_hist = json.load(f)
+            if greeks_hist:
+                print('[render.py] Loaded greeks_history: %d days' % len(greeks_hist))
+        except Exception as e:
+            print('[render.py] greeks_history.json load error: %s' % e)
+
     venue_flow = None
     _vfpath = os.path.join(data_dir, 'venue_flow.json')
     if os.path.exists(_vfpath):
@@ -2827,7 +2957,7 @@ def run(args):
         f.write(build_markdown(data))
     print('[render.py] Markdown: %s (%.1f KB)' % (md_path, os.path.getsize(md_path) / 1024))
     html_path = os.path.join(outdir, 'index.html')
-    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow)
+    html = build_dashboard_html(data, oi_ts=oi_ts, wt=wt, iv=iv, ivts=ivts, greeks=greeks, jnet=jnet, optw=optw, positions=positions, broker_hist=broker_hist, venue_flow=venue_flow, greeks_hist=greeks_hist)
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print('[render.py] Dashboard: %s (%.1f KB)' % (html_path, os.path.getsize(html_path) / 1024))
