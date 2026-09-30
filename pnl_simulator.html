@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>P&L Simulator 2026/9/29（火）</title>
+<title>P&L Simulator 2026/9/30（水）</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 
@@ -98,6 +98,16 @@ tr.atm-row{background:rgba(251,191,36,.08)}
 .zone-card .zc-name{font-weight:600;font-size:13px}
 .zone-card .zc-stars{color:var(--yellow);font-size:14px}
 .zone-card .zc-detail{font-size:10px;color:var(--sub);margin-top:4px}
+.hero-close{font-family:'DM Mono',monospace;font-size:20px;margin:2px 0 4px}
+.hero-chg{font-size:14px;margin-left:8px}
+.hero-chg.positive{color:#4ade80}
+.hero-chg.negative{color:#f87171}
+.hero-badge{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;font-size:11px;border:1px solid var(--border)}
+.rg-pos{color:#93c5fd;background:rgba(147,197,253,.12)}
+.rg-neg{color:#fbbf24;background:rgba(251,191,36,.12)}
+.rg-mix{color:#cbd5e1;background:rgba(203,213,225,.10)}
+.legend-note{max-width:1200px;margin:0 auto;padding:0 16px 8px;font-size:10.5px;color:var(--sub)}
+@media(max-width:700px){.chart-intraday{display:none}}
 .footer{text-align:center;padding:24px;color:var(--sub);font-size:11px;border-top:1px solid var(--border);margin-top:20px}
 .footer a{margin:0 8px}
 .positive{color:var(--green)}
@@ -127,11 +137,11 @@ tr.atm-row{background:rgba(251,191,36,.08)}
 </head>
 <body>
 <div class="topbar"><span class="logo">P&L Simulator</span><nav><a href="index.html">← ダッシュボード</a><a href="weekly_trend.html">週次推移</a><a href="archive.html">アーカイブ</a></nav></div>
-<div class="hero"><h1>P&L Simulator</h1><div class="sub">2026/9/29（火） / ATM 66,000 / VI None / SQまで8日</div></div>
+<div class="hero"><h1>P&L Simulator</h1><div class="sub">2026/9/30（水） / ATM 67,500 / VI None / SQまで7日</div></div>
 <div class="kpi-strip">
-  <div class="kpi"><div class="label">ATM</div><div class="value">66,000</div></div>
+  <div class="kpi"><div class="label">ATM</div><div class="value">67,500</div></div>
   <div class="kpi"><div class="label">SQ</div><div class="value">2026-10-09</div></div>
-  <div class="kpi"><div class="label">残り営業日</div><div class="value">8</div></div>
+  <div class="kpi"><div class="label">残り営業日</div><div class="value">7</div></div>
 </div>
 <div class="sim-section">
 <div style="margin:12px 0"><div style="color:var(--sub);font-size:11px;margin-bottom:6px">プリセット戦略</div>
@@ -152,7 +162,7 @@ tr.atm-row{background:rgba(251,191,36,.08)}
 </div>
 <div class="footer"><a href="index.html">ダッシュボード</a> <a href="weekly_trend.html">週次推移</a> <a href="archive.html">アーカイブ</a></div>
 <script>
-var ATM=66000,VI=0,T=0.032,DAYS=8;
+var ATM=67500,VI=0,T=0.028,DAYS=7;
 var PRESETS=[];
 
 var legs=[];var legId=0;
