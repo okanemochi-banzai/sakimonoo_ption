@@ -1,204 +1,224 @@
 {
-  "date": "20260930",
-  "spot": 66753.72,
+  "date": "20261001",
+  "spot": 68956.72,
   "brokers": [
     {
       "broker": "ＳＢＩ証券",
-      "large": 846.0,
-      "mini": 36162.0,
-      "topix": 144.0,
-      "option": 58.0,
-      "fut": 37008.0,
+      "large": 1185.0,
+      "mini": 45320.0,
+      "topix": 122.0,
+      "option": 390.0,
+      "fut": 46505.0,
       "opt_p": 44,
-      "opt_c": 14
+      "opt_c": 346
     },
     {
       "broker": "楽天証券",
-      "large": 336.0,
-      "mini": 25818.0,
+      "large": 438.0,
+      "mini": 27194.0,
       "topix": 0.0,
-      "option": 2.0,
-      "fut": 26154.0,
+      "option": 26.0,
+      "fut": 27632.0,
       "opt_p": 0,
-      "opt_c": 2
-    },
-    {
-      "broker": "ＪＰモルガン証券",
-      "large": 3229.0,
-      "mini": 3500.0,
-      "topix": 7708.0,
-      "option": 100.0,
-      "fut": 6729.0,
-      "opt_p": 50,
-      "opt_c": 50
-    },
-    {
-      "broker": "野村証券",
-      "large": 5949.0,
-      "mini": 113.0,
-      "topix": 443.0,
-      "option": 150.0,
-      "fut": 6062.0,
-      "opt_p": 75,
-      "opt_c": 75
-    },
-    {
-      "broker": "三菱ＵＦＪｅスマート",
-      "large": 100.0,
-      "mini": 4298.0,
-      "topix": 14.0,
-      "option": 0.0,
-      "fut": 4398.0,
-      "opt_p": 0,
-      "opt_c": 0
-    },
-    {
-      "broker": "ゴールドマン証券",
-      "large": 2664.0,
-      "mini": 38.0,
-      "topix": 9719.0,
-      "option": 0.0,
-      "fut": 2702.0,
-      "opt_p": 0,
-      "opt_c": 0
-    },
-    {
-      "broker": "ソシエテＧ証券",
-      "large": 662.0,
-      "mini": 2000.0,
-      "topix": 3.0,
-      "option": 0.0,
-      "fut": 2662.0,
-      "opt_p": 0,
-      "opt_c": 0
+      "opt_c": 26
     },
     {
       "broker": "ＡＢＮクリアリン証券",
-      "large": 1692.0,
-      "mini": 500.0,
-      "topix": 242.0,
-      "option": 680.0,
-      "fut": 2192.0,
-      "opt_p": 250,
-      "opt_c": 430
+      "large": 3508.0,
+      "mini": 8500.0,
+      "topix": 563.0,
+      "option": 1645.0,
+      "fut": 12008.0,
+      "opt_p": 0,
+      "opt_c": 1645
     },
     {
-      "broker": "モルガンＭＵＦＧ証券",
-      "large": 1440.0,
-      "mini": 0.0,
-      "topix": 286.0,
+      "broker": "ＪＰモルガン証券",
+      "large": 1572.0,
+      "mini": 4538.0,
+      "topix": 8335.0,
+      "option": 948.0,
+      "fut": 6110.0,
+      "opt_p": 0,
+      "opt_c": 948
+    },
+    {
+      "broker": "三菱ＵＦＪｅスマート",
+      "large": 168.0,
+      "mini": 4924.0,
+      "topix": 12.0,
       "option": 0.0,
-      "fut": 1440.0,
+      "fut": 5092.0,
       "opt_p": 0,
       "opt_c": 0
-    },
-    {
-      "broker": "ＳＭＢＣ日興証券",
-      "large": 220.0,
-      "mini": 1077.0,
-      "topix": 5838.0,
-      "option": 0.0,
-      "fut": 1297.0,
-      "opt_p": 0,
-      "opt_c": 0
-    },
-    {
-      "broker": "三菱ＵＦＪ証券",
-      "large": 1079.0,
-      "mini": 0.0,
-      "topix": 1500.0,
-      "option": 150.0,
-      "fut": 1079.0,
-      "opt_p": 75,
-      "opt_c": 75
     },
     {
       "broker": "ＢＮＰパリバ証券",
-      "large": 904.0,
-      "mini": 0.0,
-      "topix": 36.0,
-      "option": 100.0,
-      "fut": 904.0,
-      "opt_p": 50,
-      "opt_c": 50
-    },
-    {
-      "broker": "みずほ証券",
-      "large": 422.0,
-      "mini": 32.0,
-      "topix": 153.0,
-      "option": 100.0,
-      "fut": 454.0,
+      "large": 584.0,
+      "mini": 4000.0,
+      "topix": 8752.0,
+      "option": 200.0,
+      "fut": 4584.0,
       "opt_p": 0,
-      "opt_c": 100
-    },
-    {
-      "broker": "日産証券",
-      "large": 389.0,
-      "mini": 0.0,
-      "topix": 0.0,
-      "option": 0.0,
-      "fut": 389.0,
-      "opt_p": 0,
-      "opt_c": 0
+      "opt_c": 200
     },
     {
       "broker": "ビーオブエー証券",
-      "large": 366.0,
-      "mini": 0.0,
-      "topix": 399.0,
-      "option": 180.0,
-      "fut": 366.0,
+      "large": 1789.0,
+      "mini": 2000.0,
+      "topix": 54.0,
+      "option": 420.0,
+      "fut": 3789.0,
       "opt_p": 0,
-      "opt_c": 180
+      "opt_c": 420
     },
     {
-      "broker": "バークレイズ証券",
-      "large": 303.0,
-      "mini": 0.0,
-      "topix": 965.0,
-      "option": 100.0,
-      "fut": 303.0,
-      "opt_p": 100,
-      "opt_c": 0
+      "broker": "野村証券",
+      "large": 2916.0,
+      "mini": 94.0,
+      "topix": 446.0,
+      "option": 346.0,
+      "fut": 3010.0,
+      "opt_p": 0,
+      "opt_c": 346
     },
     {
-      "broker": "シティグループ証券",
-      "large": 237.0,
-      "mini": 0.0,
-      "topix": 5054.0,
+      "broker": "ＳＭＢＣ日興証券",
+      "large": 1637.0,
+      "mini": 1000.0,
+      "topix": 559.0,
       "option": 0.0,
-      "fut": 237.0,
+      "fut": 2637.0,
       "opt_p": 0,
       "opt_c": 0
     },
     {
       "broker": "ＵＢＳ証券",
-      "large": 212.0,
-      "mini": 0.0,
-      "topix": 42.0,
+      "large": 755.0,
+      "mini": 1000.0,
+      "topix": 1012.0,
+      "option": 450.0,
+      "fut": 1755.0,
+      "opt_p": 0,
+      "opt_c": 450
+    },
+    {
+      "broker": "ゴールドマン証券",
+      "large": 1588.0,
+      "mini": 154.0,
+      "topix": 4096.0,
       "option": 0.0,
-      "fut": 212.0,
+      "fut": 1742.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "ソシエテＧ証券",
+      "large": 856.0,
+      "mini": 0.0,
+      "topix": 209.0,
+      "option": 1225.0,
+      "fut": 856.0,
+      "opt_p": 100,
+      "opt_c": 1125
+    },
+    {
+      "broker": "三菱ＵＦＪ証券",
+      "large": 602.0,
+      "mini": 0.0,
+      "topix": 2600.0,
+      "option": 0.0,
+      "fut": 602.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "バークレイズ証券",
+      "large": 574.0,
+      "mini": 0.0,
+      "topix": 192.0,
+      "option": 100.0,
+      "fut": 574.0,
+      "opt_p": 100,
+      "opt_c": 0
+    },
+    {
+      "broker": "シティグループ証券",
+      "large": 458.0,
+      "mini": 0.0,
+      "topix": 2529.0,
+      "option": 0.0,
+      "fut": 458.0,
       "opt_p": 0,
       "opt_c": 0
     },
     {
       "broker": "大和証券",
-      "large": 76.0,
+      "large": 305.0,
+      "mini": 0.0,
+      "topix": 387.0,
+      "option": 0.0,
+      "fut": 305.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "岡三証券",
+      "large": 296.0,
       "mini": 0.0,
       "topix": 0.0,
       "option": 0.0,
-      "fut": 76.0,
+      "fut": 296.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "モルガンＭＵＦＧ証券",
+      "large": 210.0,
+      "mini": 0.0,
+      "topix": 2397.0,
+      "option": 0.0,
+      "fut": 210.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "日産証券",
+      "large": 184.0,
+      "mini": 0.0,
+      "topix": 200.0,
+      "option": 0.0,
+      "fut": 184.0,
       "opt_p": 0,
       "opt_c": 0
     },
     {
       "broker": "東海東京証券",
-      "large": 8.0,
-      "mini": 20.0,
+      "large": 132.0,
+      "mini": 29.0,
       "topix": 0.0,
       "option": 0.0,
-      "fut": 28.0,
+      "fut": 161.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "みずほ証券",
+      "large": 0.0,
+      "mini": 29.0,
+      "topix": 1486.0,
+      "option": 0.0,
+      "fut": 29.0,
+      "opt_p": 0,
+      "opt_c": 0
+    },
+    {
+      "broker": "サスケハナ・ホンコン",
+      "large": 0.0,
+      "mini": 0.0,
+      "topix": 17.0,
+      "option": 0.0,
+      "fut": 0.0,
       "opt_p": 0,
       "opt_c": 0
     }
@@ -206,10 +226,49 @@
   "option_crosses": [
     {
       "side": "C",
-      "strike": 67000,
+      "strike": 70000,
       "expiry": "2610",
-      "size": 430,
-      "total": 980,
+      "size": 400,
+      "total": 1682,
+      "is_cross": true,
+      "domestic_vs_overseas": true,
+      "sessions": [
+        "夜間",
+        "日中"
+      ],
+      "legs": [
+        {
+          "broker": "ＵＢＳ証券",
+          "vol": 400.0,
+          "cat": "eu",
+          "cat_label": "欧系"
+        },
+        {
+          "broker": "ＪＰモルガン証券",
+          "vol": 348.0,
+          "cat": "us",
+          "cat_label": "米系"
+        },
+        {
+          "broker": "ＳＢＩ証券",
+          "vol": 312.0,
+          "cat": "domestic",
+          "cat_label": "国内"
+        },
+        {
+          "broker": "ソシエテＧ証券",
+          "vol": 200.0,
+          "cat": "eu",
+          "cat_label": "欧系"
+        }
+      ]
+    },
+    {
+      "side": "C",
+      "strike": 69500,
+      "expiry": "2610",
+      "size": 200,
+      "total": 332,
       "is_cross": false,
       "domestic_vs_overseas": true,
       "sessions": [
@@ -218,8 +277,74 @@
       ],
       "legs": [
         {
+          "broker": "野村証券",
+          "vol": 200.0,
+          "cat": "domestic",
+          "cat_label": "国内"
+        },
+        {
           "broker": "ＡＢＮクリアリン証券",
-          "vol": 430.0,
+          "vol": 100.0,
+          "cat": "hf",
+          "cat_label": "HF代理"
+        }
+      ]
+    },
+    {
+      "side": "C",
+      "strike": 69000,
+      "expiry": "2610",
+      "size": 1165,
+      "total": 3292,
+      "is_cross": true,
+      "domestic_vs_overseas": false,
+      "sessions": [
+        "夜間",
+        "日中"
+      ],
+      "legs": [
+        {
+          "broker": "ＡＢＮクリアリン証券",
+          "vol": 1165.0,
+          "cat": "hf",
+          "cat_label": "HF代理"
+        },
+        {
+          "broker": "ソシエテＧ証券",
+          "vol": 925.0,
+          "cat": "eu",
+          "cat_label": "欧系"
+        },
+        {
+          "broker": "ＪＰモルガン証券",
+          "vol": 600.0,
+          "cat": "us",
+          "cat_label": "米系"
+        },
+        {
+          "broker": "ビーオブエー証券",
+          "vol": 240.0,
+          "cat": "us",
+          "cat_label": "米系"
+        }
+      ]
+    },
+    {
+      "side": "C",
+      "strike": 68750,
+      "expiry": "2610",
+      "size": 180,
+      "total": 364,
+      "is_cross": true,
+      "domestic_vs_overseas": false,
+      "sessions": [
+        "夜間",
+        "日中"
+      ],
+      "legs": [
+        {
+          "broker": "ＡＢＮクリアリン証券",
+          "vol": 180.0,
           "cat": "hf",
           "cat_label": "HF代理"
         },
@@ -228,62 +353,38 @@
           "vol": 180.0,
           "cat": "us",
           "cat_label": "米系"
-        },
-        {
-          "broker": "みずほ証券",
-          "vol": 100.0,
-          "cat": "domestic",
-          "cat_label": "国内"
-        },
-        {
-          "broker": "三菱ＵＦＪ証券",
-          "vol": 75.0,
-          "cat": "domestic",
-          "cat_label": "国内"
         }
       ]
     },
     {
       "side": "P",
-      "strike": 67000,
+      "strike": 68000,
       "expiry": "2610",
-      "size": 250,
-      "total": 604,
-      "is_cross": false,
-      "domestic_vs_overseas": true,
+      "size": 100,
+      "total": 234,
+      "is_cross": true,
+      "domestic_vs_overseas": false,
       "sessions": [
+        "夜間",
         "日中"
       ],
       "legs": [
         {
-          "broker": "ＡＢＮクリアリン証券",
-          "vol": 250.0,
-          "cat": "hf",
-          "cat_label": "HF代理"
+          "broker": "ソシエテＧ証券",
+          "vol": 100.0,
+          "cat": "eu",
+          "cat_label": "欧系"
         },
         {
           "broker": "バークレイズ証券",
           "vol": 100.0,
           "cat": "eu",
           "cat_label": "欧系"
-        },
-        {
-          "broker": "三菱ＵＦＪ証券",
-          "vol": 75.0,
-          "cat": "domestic",
-          "cat_label": "国内"
-        },
-        {
-          "broker": "野村証券",
-          "vol": 75.0,
-          "cat": "domestic",
-          "cat_label": "国内"
         }
       ]
     }
   ],
   "history_dates": [
-    "20260724",
     "20260727",
     "20260728",
     "20260729",
@@ -322,6 +423,7 @@
     "20260925",
     "20260928",
     "20260929",
-    "20260930"
+    "20260930",
+    "20261001"
   ]
 }
